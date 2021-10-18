@@ -399,7 +399,8 @@ fn sub_string(s: &str, start: usize, end: usize) -> &str {
 }
 
 fn char_code_at(s: &str, n: usize) -> char {
-    s.chars().nth(n).unwrap_or('\0')
+    s.as_bytes()[n] as char
+    // s.chars().nth(n).unwrap_or('\0')
 }
 
 #[cfg(test)]
