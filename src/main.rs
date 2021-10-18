@@ -10,7 +10,9 @@ fn main() {
     let mut processor = Tokenizer::new(input, false);
     while !processor.end_of_file() {
         let start = Instant::now();
-        println!("{:?}: {:?}", processor.next_token(false), start.elapsed());
+        let token = processor.next_token(false);
+        let end = start.elapsed();
+        println!("{:?}: {:?}", token, end);
     }
 
     // let input = Input::new("/* hello */\n.cls { font-size: 16px; } .c {".to_string(), None);
