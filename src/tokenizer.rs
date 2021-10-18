@@ -118,7 +118,6 @@ impl Tokenizer {
 
         match code {
             NEWLINE | SPACE | TAB | CR | FEED => {
-                println!("NEWLINE | SPACE | TAB | CR | FEED");
                 self.next = self.pos;
                 loop {
                     self.next += 1;
@@ -139,7 +138,6 @@ impl Tokenizer {
             }
             OPEN_SQUARE | CLOSE_SQUARE | OPEN_CURLY | CLOSE_CURLY | COLON | SEMICOLON
             | CLOSE_PARENTHESES => {
-                println!("OPEN_SQUARE | CLOSE_SQUARE | OPEN_CURLY | CLOSE_CURLY | COLON | SEMICOLON | CLOSE_PARENTHESES");
                 self.current_token = Token(
                     code.clone().to_string(),
                     code.clone().to_string(),
@@ -148,7 +146,6 @@ impl Tokenizer {
                 );
             }
             OPEN_PARENTHESES => {
-                println!("OPEN_PARENTHESES");
                 self.prev = match self.buffer.pop() {
                     Some(b) => b.1,
                     None => String::new(),
@@ -225,10 +222,8 @@ impl Tokenizer {
                 }
             }
             SINGLE_QUOTE | DOUBLE_QUOTE => {
-                println!("SINGLE_QUOTE | DOUBLE_QUOTE");
                 self.quote = if code == SINGLE_QUOTE { '\'' } else { '"' };
                 self.next = self.pos;
-                println!("quot={},next={}", self.quote, self.next);
                 loop {
                     self.escaped = false;
                     match index_of_char(&self.css, self.quote, self.next + 1) {
@@ -264,7 +259,6 @@ impl Tokenizer {
                 self.pos = self.next;
             }
             AT => {
-                println!("AT");
                 self.next = match RE_AT_END.find(&self.css.as_str()[self.pos + 1..]).unwrap() {
                     Some(mat) => self.pos + 1 + mat.end() - 2,
                     None => self.length - 1,
@@ -278,7 +272,6 @@ impl Tokenizer {
                 self.pos = self.next;
             }
             BACKSLASH => {
-                println!("BACKSLASH");
                 self.next = self.pos;
                 self.escape = true;
                 while char_code_at(&self.css, self.next + 1) == BACKSLASH {
@@ -286,7 +279,6 @@ impl Tokenizer {
                     self.escape = !self.escape;
                 }
                 code = char_code_at(&self.css, self.next + 1);
-                println!("escape={}, code={}", self.escape, code);
                 if self.escape
                     && code != SLASH
                     && code != SPACE
@@ -311,7 +303,6 @@ impl Tokenizer {
                         }
                     }
                 }
-                println!("pos={} next={}", self.pos, self.next);
 
                 self.current_token = Token(
                     "word".to_string(),
@@ -322,7 +313,6 @@ impl Tokenizer {
                 self.pos = self.next;
             }
             _ => {
-                println!("_");
                 if code == SLASH && char_code_at(&self.css, self.pos + 1) == ASTERISK {
                     match index_of(&self.css, "*/", self.pos + 2) {
                         Some(i) => {
@@ -349,7 +339,6 @@ impl Tokenizer {
                         .unwrap()
                     {
                         Some(mat) => {
-                            println!("mat={:?}", mat);
                             self.pos + mat.end() - 1
                         }
                         None => self.length - 1,
@@ -368,7 +357,6 @@ impl Tokenizer {
         }
 
         self.pos += 1;
-        println!("{:?}", self);
         Some(self.current_token.clone())
     }
 }
