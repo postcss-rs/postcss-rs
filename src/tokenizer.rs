@@ -223,7 +223,7 @@ impl Tokenizer {
                             self.next = next + self.pos + 1;
                             let content = &self.css[self.pos..next + 1];
 
-                            if RE_BAD_BRACKET.is_match(&content).unwrap_or(false) {
+                            if RE_BAD_BRACKET.is_match(content).unwrap_or(false) {
                                 self.current_token =
                                     Token("(", "(".to_string(), Some(self.pos), None);
                             } else {
