@@ -27,11 +27,21 @@ const COLON: char = ':';
 const AT: char = '@';
 
 #[derive(Debug, Clone, Eq, PartialEq)]
-pub struct Token(pub String, pub String, pub Option<usize>, pub Option<usize>);
+pub struct Token(
+    pub &'static str,
+    pub String,
+    pub Option<usize>,
+    pub Option<usize>,
+);
 
 impl Token {
-    pub fn new(kind: &str, content: &str, pos: Option<usize>, next: Option<usize>) -> Token {
-        Token(kind.to_string(), content.to_string(), pos, next)
+    pub fn new(
+        kind: &'static str,
+        content: &str,
+        pos: Option<usize>,
+        next: Option<usize>,
+    ) -> Token {
+        Token(kind, content.to_string(), pos, next)
     }
 }
 
@@ -68,7 +78,7 @@ impl Tokenizer {
             escape_pos: 0,
             prev: String::new(),
             n: '\0',
-            current_token: Token(String::new(), String::new(), None, None),
+            current_token: Token("", String::new(), None, None),
             length,
             pos: 0,
             buffer: vec![],
@@ -128,7 +138,7 @@ impl Tokenizer {
                 }
 
                 self.current_token = Token(
-                    String::from("space"),
+                    "space",
                     self.css.as_str()[self.pos..self.next].to_string(),
                     None,
                     None,
@@ -136,14 +146,26 @@ impl Tokenizer {
 
                 self.pos = self.next - 1;
             }
-            OPEN_SQUARE | CLOSE_SQUARE | OPEN_CURLY | CLOSE_CURLY | COLON | SEMICOLON
-            | CLOSE_PARENTHESES => {
-                self.current_token = Token(
-                    code.clone().to_string(),
-                    code.clone().to_string(),
-                    Some(self.pos),
-                    None,
-                );
+            OPEN_SQUARE => {
+                self.current_token = Token("[", "[".to_string(), Some(self.pos), None);
+            }
+            CLOSE_SQUARE => {
+                self.current_token = Token("]", "]".to_string(), Some(self.pos), None);
+            }
+            OPEN_CURLY => {
+                self.current_token = Token("{", "{".to_string(), Some(self.pos), None);
+            }
+            CLOSE_CURLY => {
+                self.current_token = Token("}", "}".to_string(), Some(self.pos), None);
+            }
+            COLON => {
+                self.current_token = Token(":", ":".to_string(), Some(self.pos), None);
+            }
+            SEMICOLON => {
+                self.current_token = Token(";", ";".to_string(), Some(self.pos), None);
+            }
+            CLOSE_PARENTHESES => {
+                self.current_token = Token(")", ")".to_string(), Some(self.pos), None);
             }
             OPEN_PARENTHESES => {
                 self.prev = match self.buffer.pop() {
@@ -188,7 +210,7 @@ impl Tokenizer {
                     }
 
                     self.current_token = Token(
-                        "brackets".to_string(),
+                        "brackets",
                         sub_string(&self.css, self.pos, self.next + 1).to_string(),
                         Some(self.pos),
                         Some(self.next),
@@ -199,15 +221,15 @@ impl Tokenizer {
                     match index_of_char(&self.css, ')', self.pos + 1) {
                         Some(next) => {
                             self.next = next + self.pos + 1;
-                            let content = self.css[self.pos..next + 1].to_string();
+                            let content = &self.css[self.pos..next + 1];
 
-                            if RE_BAD_BRACKET.is_match(content.as_str()).unwrap_or(false) {
+                            if RE_BAD_BRACKET.is_match(&content).unwrap_or(false) {
                                 self.current_token =
-                                    Token("(".to_string(), "(".to_string(), Some(self.pos), None);
+                                    Token("(", "(".to_string(), Some(self.pos), None);
                             } else {
                                 self.current_token = Token(
-                                    "brackets".to_string(),
-                                    content,
+                                    "brackets",
+                                    content.to_string(),
                                     Some(self.pos),
                                     Some(next),
                                 );
@@ -215,8 +237,7 @@ impl Tokenizer {
                             }
                         }
                         None => {
-                            self.current_token =
-                                Token("(".to_string(), "(".to_string(), Some(self.pos), None);
+                            self.current_token = Token("(", "(".to_string(), Some(self.pos), None);
                         }
                     };
                 }
@@ -251,7 +272,7 @@ impl Tokenizer {
                 }
 
                 self.current_token = Token(
-                    "string".to_string(),
+                    "string",
                     sub_string(&self.css, self.pos, self.next + 1).to_string(),
                     Some(self.pos),
                     Some(self.next),
@@ -264,7 +285,7 @@ impl Tokenizer {
                     None => self.length - 1,
                 };
                 self.current_token = Token(
-                    "at-word".to_string(),
+                    "at-word",
                     sub_string(&self.css, self.pos, self.next + 1).to_string(),
                     Some(self.pos),
                     Some(self.next),
@@ -305,7 +326,7 @@ impl Tokenizer {
                 }
 
                 self.current_token = Token(
-                    "word".to_string(),
+                    "word",
                     sub_string(&self.css, self.pos, self.next + 1).to_string(),
                     Some(self.pos),
                     Some(self.next),
@@ -328,7 +349,7 @@ impl Tokenizer {
                     }
 
                     self.current_token = Token(
-                        "comment".to_string(),
+                        "comment",
                         sub_string(&self.css, self.pos, self.next + 1).to_string(),
                         Some(self.pos),
                         Some(self.next),
@@ -338,13 +359,11 @@ impl Tokenizer {
                         .find(&self.css.as_str()[self.pos + 1..])
                         .unwrap()
                     {
-                        Some(mat) => {
-                            self.pos + mat.end() - 1
-                        }
+                        Some(mat) => self.pos + mat.end() - 1,
                         None => self.length - 1,
                     };
                     self.current_token = Token(
-                        "word".to_string(),
+                        "word",
                         sub_string(&self.css, self.pos, self.next + 1).to_string(),
                         Some(self.pos),
                         Some(self.next),
