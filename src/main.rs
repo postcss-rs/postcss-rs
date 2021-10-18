@@ -13,7 +13,7 @@ fn main() {
         processor.next_token(false);
     }
     let end = start.elapsed();
-    println!("postcss-rs: {:?}",end);
+    println!("postcss-rs: {:?}", end);
 
     // let input = Input::new("/* hello */\n.cls { font-size: 16px; } .c {".to_string(), None);
     // let mut processor = Tokenizer::new(input, true);
