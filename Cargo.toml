@@ -1,6 +1,6 @@
 [package]
 name = "postcss"
-version = "0.0.1"
+version = "0.0.2"
 description = ""
 authors = ["迷渡 <justjavac@gmail.com>"]
 edition = "2018"
@@ -13,7 +13,6 @@ categories = ["hardware-support"]
 [dependencies]
 fancy-regex = "0.7.1"
 lazy_static = "1"
-regex = "1"
 
 [profile.release]
 codegen-units = 1
