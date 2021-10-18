@@ -1,0 +1,21 @@
+[package]
+name = "postcss"
+version = "0.1.0"
+description = ""
+authors = ["迷渡 <justjavac@gmail.com>"]
+edition = "2018"
+readme = "README.md"
+repository = "https://github.com/justjavac/postcss"
+license = "MIT"
+keywords = ["css", "syntax", "postcss", "parser", "ast"]
+categories = ["hardware-support"]
+
+[dependencies]
+fancy-regex = "0.7.1"
+lazy_static = "1"
+regex = "1"
+
+[profile.release]
+codegen-units = 1
+lto = true
+panic = "abort"
