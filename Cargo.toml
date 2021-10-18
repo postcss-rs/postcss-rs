@@ -5,10 +5,9 @@ description = "🚀 Fast and 100% API compatible postcss replacer"
 authors = ["迷渡 <justjavac@gmail.com>"]
 edition = "2018"
 readme = "README.md"
-repository = "https://github.com/justjavac/postcss"
+repository = "https://github.com/justjavac/postcss-rs"
 license = "MIT"
 keywords = ["css", "syntax", "postcss", "parser", "ast"]
-categories = ["hardware-support"]
 
 [dependencies]
 fancy-regex = "0.7.1"
