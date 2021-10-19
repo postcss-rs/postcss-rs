@@ -5,8 +5,8 @@ use postcss::input::Input;
 use postcss::tokenizer::Tokenizer;
 
 fn main() {
-    let start = Instant::now();
     let css = fs::read_to_string("./app.css").unwrap();
+    let start = Instant::now();
     let input = Input::new(css, None);
     let mut processor = Tokenizer::new(input, false);
     while !processor.end_of_file() {
