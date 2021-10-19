@@ -59,27 +59,3 @@ pub fn space(input: &str) -> Vec<String> {
 pub fn comma(input: &str) -> Vec<String> {
     split(input, vec![','], true)
 }
-
-#[cfg(test)]
-mod test {
-    use super::*;
-
-    #[test]
-    fn test_split() {
-        let input = "1px calc(10% + 1px)";
-        let s = vec![' ', '\n', '\t'];
-        assert_eq!(split(input, s, false), vec!["1px", "calc(10% + 1px)"]);
-    }
-
-    #[test]
-    fn test_space() {
-        let input = "1px calc(10% + 1px)";
-        assert_eq!(space(input), vec!["1px", "calc(10% + 1px)"]);
-    }
-
-    #[test]
-    fn test_comma() {
-        let input = "black, linear-gradient(white, black)";
-        assert_eq!(comma(input), vec!["black", "linear-gradient(white, black)"]);
-    }
-}
