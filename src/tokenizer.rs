@@ -35,12 +35,7 @@ pub struct Token(
 );
 
 impl Token {
-  pub fn new(
-    kind: &'static str,
-    content: &str,
-    pos: Option<usize>,
-    next: Option<usize>,
-  ) -> Token {
+  pub fn new(kind: &'static str, content: &str, pos: Option<usize>, next: Option<usize>) -> Token {
     Token(kind, content.to_string(), pos, next)
   }
 }
@@ -109,8 +104,7 @@ impl Tokenizer {
 
   pub fn next_token(&mut self, ignore_unclosed: bool) -> Option<Token> {
     lazy_static! {
-      static ref RE_AT_END: Regex =
-        Regex::new(r##"[\t\n\u{12}\r "#'()/;\[\\\]{}]"##).unwrap();
+      static ref RE_AT_END: Regex = Regex::new(r##"[\t\n\u{12}\r "#'()/;\[\\\]{}]"##).unwrap();
       static ref RE_WORD_END: Regex =
         Regex::new(r##"[\t\n\u{12}\r !"#'():;@\[\\\]{}]|/(?=\*)"##).unwrap();
       static ref RE_BAD_BRACKET: Regex = Regex::new(r#".[\n"'(/\\]"#).unwrap();
@@ -133,8 +127,7 @@ impl Tokenizer {
         loop {
           self.next += 1;
           code = char_code_at(&self.css, self.next);
-          if !(code == SPACE || code == NEWLINE || code == TAB || code == FEED)
-          {
+          if !(code == SPACE || code == NEWLINE || code == TAB || code == FEED) {
             break;
           }
         }
@@ -226,21 +219,15 @@ impl Tokenizer {
               let content = &self.css[self.pos..next + 1];
 
               if RE_BAD_BRACKET.is_match(content).unwrap_or(false) {
-                self.current_token =
-                  Token("(", "(".to_string(), Some(self.pos), None);
+                self.current_token = Token("(", "(".to_string(), Some(self.pos), None);
               } else {
-                self.current_token = Token(
-                  "brackets",
-                  content.to_string(),
-                  Some(self.pos),
-                  Some(next),
-                );
+                self.current_token =
+                  Token("brackets", content.to_string(), Some(self.pos), Some(next));
                 self.pos = next;
               }
             }
             None => {
-              self.current_token =
-                Token("(", "(".to_string(), Some(self.pos), None);
+              self.current_token = Token("(", "(".to_string(), Some(self.pos), None);
             }
           };
         }
@@ -283,11 +270,10 @@ impl Tokenizer {
         self.pos = self.next;
       }
       AT => {
-        self.next =
-          match RE_AT_END.find(&self.css.as_str()[self.pos + 1..]).unwrap() {
-            Some(mat) => self.pos + 1 + mat.end() - 2,
-            None => self.length - 1,
-          };
+        self.next = match RE_AT_END.find(&self.css.as_str()[self.pos + 1..]).unwrap() {
+          Some(mat) => self.pos + 1 + mat.end() - 2,
+          None => self.length - 1,
+        };
         self.current_token = Token(
           "at-word",
           sub_string(&self.css, self.pos, self.next + 1).to_string(),
@@ -384,24 +370,19 @@ impl Tokenizer {
   }
 }
 
-fn index_of(
-  value: &str,
-  search_value: &str,
-  from_index: usize,
-) -> Option<usize> {
+#[inline]
+fn index_of(value: &str, search_value: &str, from_index: usize) -> Option<usize> {
   let (_, last) = value.split_at(from_index);
   last.find(search_value).map(|v| v + from_index)
 }
 
-fn index_of_char(
-  value: &str,
-  search_value: char,
-  from_index: usize,
-) -> Option<usize> {
+#[inline]
+fn index_of_char(value: &str, search_value: char, from_index: usize) -> Option<usize> {
   let (_, last) = value.split_at(from_index);
   last.find(search_value).map(|v| v + from_index)
 }
 
+#[inline]
 fn sub_string(s: &str, start: usize, end: usize) -> &str {
   if end + 1 > s.len() {
     &s[start..]
@@ -410,6 +391,7 @@ fn sub_string(s: &str, start: usize, end: usize) -> &str {
   }
 }
 
+#[inline]
 fn char_code_at(s: &str, n: usize) -> char {
   if n >= s.len() {
     '\0'
