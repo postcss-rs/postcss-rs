@@ -60,7 +60,6 @@ pub struct Tokenizer {
   current_token: Token,
   length: usize,
   pos: usize,
-  next: usize,
   buffer: Vec<Token>,
   returned: Vec<Token>,
 }
@@ -71,7 +70,6 @@ impl Tokenizer {
     Tokenizer {
       css: input.css,
       ignore: ignore_errors,
-      next: 0,
       quote: '\0',
       escape: false,
       escaped: false,
@@ -119,10 +117,10 @@ impl Tokenizer {
 
     match code {
       NEWLINE | SPACE | TAB | CR | FEED => {
-        self.next = self.pos;
+        let mut next = self.pos;
         loop {
-          self.next += 1;
-          code = char_code_at(&self.css, self.next);
+          next += 1;
+          code = char_code_at(&self.css, next);
           if !(code == SPACE || code == NEWLINE || code == TAB || code == FEED) {
             break;
           }
@@ -130,12 +128,12 @@ impl Tokenizer {
 
         self.current_token = Token(
           "space",
-          self.css.as_str()[self.pos..self.next].to_string(),
+          self.css.as_str()[self.pos..next].to_string(),
           None,
           None,
         );
 
-        self.pos = self.next - 1;
+        self.pos = next - 1;
       }
       OPEN_SQUARE => {
         self.current_token = Token("[", "[".to_string(), Some(self.pos), None);
@@ -173,23 +171,23 @@ impl Tokenizer {
           && n != FEED
           && n != CR
         {
-          self.next = self.pos;
+          let mut next = self.pos;
           loop {
             self.escaped = false;
-            match index_of(&self.css, ")", self.next + 1) {
+            match index_of(&self.css, ")", next + 1) {
               Some(i) => {
-                self.next = i;
+                next = i;
               }
               None => {
                 if self.ignore || ignore_unclosed {
-                  self.next = self.pos;
+                  next = self.pos;
                   break;
                 } else {
                   self.unclosed("bracket")
                 }
               }
             }
-            self.escape_pos = self.next;
+            self.escape_pos = next;
             while char_code_at(&self.css, self.escape_pos - 1) == BACKSLASH {
               self.escape_pos -= 1;
               self.escaped = !self.escaped;
@@ -202,24 +200,23 @@ impl Tokenizer {
 
           self.current_token = Token(
             "brackets",
-            sub_string(&self.css, self.pos, self.next + 1).to_string(),
+            sub_string(&self.css, self.pos, next + 1).to_string(),
             Some(self.pos),
-            Some(self.next),
+            Some(next),
           );
 
-          self.pos = self.next;
+          self.pos = next;
         } else {
           match index_of_char(&self.css, ')', self.pos + 1) {
-            Some(next) => {
-              self.next = next + self.pos + 1;
-              let content = &self.css[self.pos..next + 1];
+            Some(i) => {
+              let content = &self.css[self.pos..i + 1];
 
               if RE_BAD_BRACKET.is_match(content).unwrap_or(false) {
                 self.current_token = Token("(", "(".to_string(), Some(self.pos), None);
               } else {
                 self.current_token =
-                  Token("brackets", content.to_string(), Some(self.pos), Some(next));
-                self.pos = next;
+                  Token("brackets", content.to_string(), Some(self.pos), Some(i));
+                self.pos = i;
               }
             }
             None => {
@@ -230,23 +227,23 @@ impl Tokenizer {
       }
       SINGLE_QUOTE | DOUBLE_QUOTE => {
         self.quote = if code == SINGLE_QUOTE { '\'' } else { '"' };
-        self.next = self.pos;
+        let mut next = self.pos;
         loop {
           self.escaped = false;
-          match index_of_char(&self.css, self.quote, self.next + 1) {
+          match index_of_char(&self.css, self.quote, next + 1) {
             Some(i) => {
-              self.next = i;
+              next = i;
             }
             None => {
               if self.ignore || ignore_unclosed {
-                self.next = self.pos + 1;
+                next = self.pos + 1;
                 break;
               } else {
                 self.unclosed("string")
               }
             }
           }
-          self.escape_pos = self.next;
+          self.escape_pos = next;
           while char_code_at(&self.css, self.escape_pos - 1) == BACKSLASH {
             self.escape_pos -= 1;
             self.escaped = !self.escaped;
@@ -259,33 +256,33 @@ impl Tokenizer {
 
         self.current_token = Token(
           "string",
-          sub_string(&self.css, self.pos, self.next + 1).to_string(),
+          sub_string(&self.css, self.pos, next + 1).to_string(),
           Some(self.pos),
-          Some(self.next),
+          Some(next),
         );
-        self.pos = self.next;
+        self.pos = next;
       }
       AT => {
-        self.next = match RE_AT_END.find(&self.css.as_str()[self.pos + 1..]).unwrap() {
+        let next = match RE_AT_END.find(&self.css.as_str()[self.pos + 1..]).unwrap() {
           Some(mat) => self.pos + 1 + mat.end() - 2,
           None => self.length - 1,
         };
         self.current_token = Token(
           "at-word",
-          sub_string(&self.css, self.pos, self.next + 1).to_string(),
+          sub_string(&self.css, self.pos, next + 1).to_string(),
           Some(self.pos),
-          Some(self.next),
+          Some(next),
         );
-        self.pos = self.next;
+        self.pos = next;
       }
       BACKSLASH => {
-        self.next = self.pos;
+        let mut next = self.pos;
         self.escape = true;
-        while char_code_at(&self.css, self.next + 1) == BACKSLASH {
-          self.next += 1;
+        while char_code_at(&self.css, next + 1) == BACKSLASH {
+          next += 1;
           self.escape = !self.escape;
         }
-        code = char_code_at(&self.css, self.next + 1);
+        code = char_code_at(&self.css, next + 1);
         if self.escape
           && code != SLASH
           && code != SPACE
@@ -294,54 +291,52 @@ impl Tokenizer {
           && code != CR
           && code != FEED
         {
-          self.next += 1;
+          next += 1;
           if RE_HEX_ESCAPE
-            .is_match(sub_string(&self.css, self.next, self.next + 1))
+            .is_match(sub_string(&self.css, next, next + 1))
             .unwrap_or(false)
           {
             while RE_HEX_ESCAPE
-              .is_match(sub_string(&self.css, self.next + 1, self.next + 2))
+              .is_match(sub_string(&self.css, next + 1, next + 2))
               .unwrap_or(false)
             {
-              self.next += 1;
+              next += 1;
             }
-            if char_code_at(&self.css, self.next + 1) == SPACE {
-              self.next += 1;
+            if char_code_at(&self.css, next + 1) == SPACE {
+              next += 1;
             }
           }
         }
 
         self.current_token = Token(
           "word",
-          sub_string(&self.css, self.pos, self.next + 1).to_string(),
+          sub_string(&self.css, self.pos, next + 1).to_string(),
           Some(self.pos),
-          Some(self.next),
+          Some(next),
         );
-        self.pos = self.next;
+        self.pos = next;
       }
       _ => {
-        if code == SLASH && char_code_at(&self.css, self.pos + 1) == ASTERISK {
-          match index_of(&self.css, "*/", self.pos + 2) {
-            Some(i) => {
-              self.next = i + 1;
-            }
+        self.pos = if code == SLASH && char_code_at(&self.css, self.pos + 1) == ASTERISK {
+          let next = match index_of(&self.css, "*/", self.pos + 2) {
+            Some(i) => i + 1,
             None => {
-              if self.ignore || ignore_unclosed {
-                self.next = self.length;
-              } else {
-                self.unclosed("comment")
+              if !self.ignore && !ignore_unclosed {
+                self.unclosed("comment");
               }
+              self.length
             }
-          }
+          };
 
           self.current_token = Token(
             "comment",
-            sub_string(&self.css, self.pos, self.next + 1).to_string(),
+            sub_string(&self.css, self.pos, next + 1).to_string(),
             Some(self.pos),
-            Some(self.next),
+            Some(next),
           );
+          next
         } else {
-          self.next = match RE_WORD_END
+          let next = match RE_WORD_END
             .find(&self.css.as_str()[self.pos + 1..])
             .unwrap()
           {
@@ -350,14 +345,13 @@ impl Tokenizer {
           };
           self.current_token = Token(
             "word",
-            sub_string(&self.css, self.pos, self.next + 1).to_string(),
+            sub_string(&self.css, self.pos, next + 1).to_string(),
             Some(self.pos),
-            Some(self.next),
+            Some(next),
           );
           self.push(self.current_token.clone());
+          next
         }
-
-        self.pos = self.next;
       }
     }
 
