@@ -56,7 +56,6 @@ pub struct Tokenizer {
   escape: bool,
   escaped: bool,
   escape_pos: usize,
-  prev: String,
   current_token: Token,
   length: usize,
   pos: usize,
@@ -74,7 +73,6 @@ impl Tokenizer {
       escape: false,
       escaped: false,
       escape_pos: 0,
-      prev: String::new(),
       current_token: Token("", String::new(), None, None),
       length,
       pos: 0,
@@ -157,12 +155,12 @@ impl Tokenizer {
         self.current_token = Token(")", ")".to_string(), Some(self.pos), None);
       }
       OPEN_PARENTHESES => {
-        self.prev = match self.buffer.pop() {
+        let prev = match self.buffer.pop() {
           Some(b) => b.1,
           None => String::new(),
         };
         let n = char_code_at(&self.css, self.pos + 1);
-        if self.prev == "url"
+        if prev == "url"
           && n != SINGLE_QUOTE
           && n != DOUBLE_QUOTE
           && n != SPACE
