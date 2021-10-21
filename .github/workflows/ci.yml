@@ -14,8 +14,8 @@ jobs:
           - windows-latest
         rust:
           - stable
-          - beta
-          - nightly
+          # - beta
+          # - nightly
 
     env:
       CARGO_INCREMENTAL: 0
