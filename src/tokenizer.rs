@@ -54,7 +54,6 @@ pub struct Tokenizer {
   ignore: bool,
   quote: char,
   escape: bool,
-  escape_pos: usize,
   current_token: Token,
   length: usize,
   pos: usize,
@@ -70,7 +69,6 @@ impl Tokenizer {
       ignore: ignore_errors,
       quote: '\0',
       escape: false,
-      escape_pos: 0,
       current_token: Token("", String::new(), None, None),
       length,
       pos: 0,
@@ -183,9 +181,10 @@ impl Tokenizer {
                 }
               }
             }
-            self.escape_pos = next;
-            while char_code_at(&self.css, self.escape_pos - 1) == BACKSLASH {
-              self.escape_pos -= 1;
+
+            let mut escape_pos = next;
+            while char_code_at(&self.css, escape_pos - 1) == BACKSLASH {
+              escape_pos -= 1;
               escaped = !escaped;
             }
 
@@ -239,9 +238,10 @@ impl Tokenizer {
               }
             }
           }
-          self.escape_pos = next;
-          while char_code_at(&self.css, self.escape_pos - 1) == BACKSLASH {
-            self.escape_pos -= 1;
+
+          let mut escape_pos = next;
+          while char_code_at(&self.css, escape_pos - 1) == BACKSLASH {
+            escape_pos -= 1;
             escaped = !escaped;
           }
 
