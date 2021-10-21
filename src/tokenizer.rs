@@ -52,7 +52,6 @@ impl Token {
 pub struct Tokenizer {
   css: String,
   ignore: bool,
-  quote: char,
   escape: bool,
   current_token: Token,
   length: usize,
@@ -67,7 +66,6 @@ impl Tokenizer {
     Tokenizer {
       css: input.css,
       ignore: ignore_errors,
-      quote: '\0',
       escape: false,
       current_token: Token("", String::new(), None, None),
       length,
@@ -221,11 +219,11 @@ impl Tokenizer {
         }
       }
       SINGLE_QUOTE | DOUBLE_QUOTE => {
-        self.quote = if code == SINGLE_QUOTE { '\'' } else { '"' };
+        let quote = if code == SINGLE_QUOTE { '\'' } else { '"' };
         let mut next = self.pos;
         loop {
           let mut escaped = false;
-          match index_of_char(&self.css, self.quote, next + 1) {
+          match index_of_char(&self.css, quote, next + 1) {
             Some(i) => {
               next = i;
             }
