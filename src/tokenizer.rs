@@ -54,7 +54,6 @@ pub struct Tokenizer {
   ignore: bool,
   quote: char,
   escape: bool,
-  escaped: bool,
   escape_pos: usize,
   current_token: Token,
   length: usize,
@@ -71,7 +70,6 @@ impl Tokenizer {
       ignore: ignore_errors,
       quote: '\0',
       escape: false,
-      escaped: false,
       escape_pos: 0,
       current_token: Token("", String::new(), None, None),
       length,
@@ -171,7 +169,7 @@ impl Tokenizer {
         {
           let mut next = self.pos;
           loop {
-            self.escaped = false;
+            let mut escaped = false;
             match index_of(&self.css, ")", next + 1) {
               Some(i) => {
                 next = i;
@@ -188,10 +186,10 @@ impl Tokenizer {
             self.escape_pos = next;
             while char_code_at(&self.css, self.escape_pos - 1) == BACKSLASH {
               self.escape_pos -= 1;
-              self.escaped = !self.escaped;
+              escaped = !escaped;
             }
 
-            if !self.escaped {
+            if !escaped {
               break;
             }
           }
@@ -227,7 +225,7 @@ impl Tokenizer {
         self.quote = if code == SINGLE_QUOTE { '\'' } else { '"' };
         let mut next = self.pos;
         loop {
-          self.escaped = false;
+          let mut escaped = false;
           match index_of_char(&self.css, self.quote, next + 1) {
             Some(i) => {
               next = i;
@@ -244,10 +242,10 @@ impl Tokenizer {
           self.escape_pos = next;
           while char_code_at(&self.css, self.escape_pos - 1) == BACKSLASH {
             self.escape_pos -= 1;
-            self.escaped = !self.escaped;
+            escaped = !escaped;
           }
 
-          if !self.escaped {
+          if !escaped {
             break;
           }
         }
