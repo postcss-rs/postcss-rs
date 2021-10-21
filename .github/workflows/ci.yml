@@ -8,16 +8,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macOS-latest, ubuntu-latest, windows-latest]
-
-      # Always run master branch builds to completion. This allows the cache to
-      # stay mostly up-to-date in situations where a single job fails due to
-      # e.g. a flaky test.
-      # Don't fast-fail on tag build because publishing binaries shouldn't be
-      # prevented if 'cargo publish' fails (which can be a false negative).
-      fail-fast:
-        ${{ github.event_name == 'pull_request' || (github.ref !=
-        'refs/heads/master' && !startsWith(github.ref, 'refs/tags/')) }}
+        os: 
+          - macOS-latest
+          - ubuntu-latest
+          - windows-latest
+        rust:
+          - stable
+          - beta
+          - nightly
 
     env:
       CARGO_INCREMENTAL: 0
@@ -28,21 +26,13 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v2
 
-      - name: Install stable toolchain
+      - name: Install rust (${{ matrix.rust }}) toolchain
         uses: actions-rs/toolchain@v1
         with:
+          toolchain: ${{ matrix.rust }}
           profile: minimal
-          toolchain: stable
           override: true
           components: rustfmt, clippy
-
-      - name: Install rust
-        uses: hecrj/setup-rust-action@v1
-
-      - name: Install clippy and rustfmt
-        run: |
-          rustup component add clippy
-          rustup component add rustfmt
 
       - name: Log versions
         run: |
@@ -71,9 +61,9 @@ jobs:
             target/*/build
             target/*/deps
           key:
-            ${{ matrix.config.os }}-${{ hashFiles('Cargo.lock') }}
+            ${{ matrix.config.os }}-${{ matrix.config.rust }}-${{ hashFiles('Cargo.lock') }}
           restore-keys: |
-            ${{ matrix.config.os }}-
+            ${{ matrix.config.os }}-${{ matrix.config.rust }}
 
       - name: Run cargo fmt
         run: cargo fmt --all -- --check
@@ -91,19 +81,19 @@ jobs:
         run: cargo test --locked
 
       - name: Pre-release (linux)
-        if: startsWith(matrix.os, 'ubuntu')
+        if: startsWith(matrix.os, 'ubuntu') && matrix.rust == 'stable'
         run: |
           cd target/release
           strip postcss
           zip -r postcss-x86_64-unknown-linux-gnu.zip postcss
       - name: Pre-release (mac)
-        if: startsWith(matrix.os, 'macOS')
+        if: startsWith(matrix.os, 'macOS') && matrix.rust == 'stable'
         run: |
           cd target/release
           strip postcss
           zip -r postcss-x86_64-apple-darwin.zip postcss
       - name: Pre-release (windows)
-        if: startsWith(matrix.os, 'windows')
+        if: startsWith(matrix.os, 'windows') && matrix.rust == 'stable'
         run: |
           Compress-Archive -CompressionLevel Optimal -Force -Path target/release/postcss.exe -DestinationPath target/release/postcss-x86_64-pc-windows-msvc.zip
 
@@ -111,7 +101,8 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: |
           startsWith(github.repository, 'justjavac') &&
-          startsWith(github.ref, 'refs/tags/')
+          startsWith(github.ref, 'refs/tags/') &&
+          matrix.rust == 'stable'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -137,6 +128,7 @@ jobs:
       - name: Publish
         if: |
           startsWith(matrix.os, 'ubuntu') &&
+          && matrix.rust == 'stable' &&
           startsWith(github.repository, 'justjavac') &&
           startsWith(github.ref, 'refs/tags/')
         env:
