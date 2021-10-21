@@ -52,7 +52,6 @@ impl Token {
 pub struct Tokenizer {
   css: String,
   ignore: bool,
-  escape: bool,
   current_token: Token,
   length: usize,
   pos: usize,
@@ -66,7 +65,6 @@ impl Tokenizer {
     Tokenizer {
       css: input.css,
       ignore: ignore_errors,
-      escape: false,
       current_token: Token("", String::new(), None, None),
       length,
       pos: 0,
@@ -271,13 +269,13 @@ impl Tokenizer {
       }
       BACKSLASH => {
         let mut next = self.pos;
-        self.escape = true;
+        let mut escape = true;
         while char_code_at(&self.css, next + 1) == BACKSLASH {
           next += 1;
-          self.escape = !self.escape;
+          escape = !escape;
         }
         code = char_code_at(&self.css, next + 1);
-        if self.escape
+        if escape
           && code != SLASH
           && code != SPACE
           && code != NEWLINE
