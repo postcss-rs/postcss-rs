@@ -1,12 +1,12 @@
 use crate::node::{ChildNode, ChildNodeOrProps, Source};
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct RawValue {
   pub value: String,
   pub raw: String,
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct AtRuleRaws {
   /// The space symbols before the node. It also stores `*`
   /// and `_` symbols before the declaration (IE hack).
@@ -49,7 +49,7 @@ pub struct AtRuleProps {
 ///
 /// If it’s followed in the CSS by a {} block, this node will have
 /// a nodes property representing its children.
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct AtRule {
   /// tring representing the node’s type. Possible values are `root`, `atrule`,
   /// `rule`, `decl`, or `comment`.
