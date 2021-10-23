@@ -17,6 +17,7 @@ pub enum AnyNode {
   // Comment(Comment),
   // Root(Root),
   // Document(Document),
+  UnknownNode,
 }
 
 #[derive(Debug, PartialEq)]
