@@ -31,7 +31,7 @@ impl Stringifier {
         };
         match &node.raws.after_name {
           Some(after_name) => {
-            name.push_str(&after_name);
+            name.push_str(after_name);
           }
           None => {
             if !params.is_empty() {
@@ -40,7 +40,7 @@ impl Stringifier {
           }
         };
 
-        name.push_str(&params);
+        name.push_str(params);
 
         match node.nodes {
           Some(_) => self.block(node, &name),
