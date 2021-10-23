@@ -45,13 +45,15 @@ impl Stringifier {
                 match node.nodes {
                     Some(_) => self.block(node, &name),
                     None => {
-                        node.raws.between.as_ref().map(|x| name.push_str(x));
+                        if let Some(ref between) = node.raws.between {
+                            name.push_str(between);
+                        }
 
                         if semicolon {
                             name.push(';');
                         }
 
-                        (self.builder)(name, Some(AnyNode::AtRule(*node)), None);
+                        (self.builder)(name, Some(AnyNode::AtRule(node.clone())), None);
                     }
                 }
             }

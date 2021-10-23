@@ -25,7 +25,7 @@ impl fmt::Display for FilePosition {
   }
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct Input {
   pub css: String,
   // map: PreviousMap,
