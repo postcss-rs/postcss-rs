@@ -1,7 +1,7 @@
 use crate::at_rule::{AtRule, AtRuleProps};
 use crate::input::Input;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum ChildNode {
   AtRule(AtRule),
   // Rule(Rule),
@@ -9,7 +9,7 @@ pub enum ChildNode {
   // Comment(Comment),
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum AnyNode {
   AtRule(AtRule),
   // Rule(Rule),
@@ -17,6 +17,7 @@ pub enum AnyNode {
   // Comment(Comment),
   // Root(Root),
   // Document(Document),
+  UnknownNode,
 }
 
 #[derive(Debug, PartialEq)]
@@ -33,7 +34,7 @@ pub enum ChildNodeOrProps {
   ChildProps(ChildProps),
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct Position {
   /// Source offset in file. It starts from 0.
   pub offset: usize,
@@ -45,7 +46,7 @@ pub struct Position {
   pub line: usize,
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct Source {
   /// The file source of the node.
   pub input: Input,
