@@ -7,7 +7,7 @@ use postcss::tokenizer::Tokenizer;
 fn main() {
   let css = fs::read_to_string("assets/bootstrap.css").unwrap();
   let input = Input::new(css, None);
-  let mut processor = Tokenizer::new(input, false);
+  let mut processor = Tokenizer::new(&input, false);
   let start = Instant::now();
   while !processor.end_of_file() {
     processor.next_token(false);
