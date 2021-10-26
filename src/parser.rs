@@ -58,26 +58,32 @@ impl<'a> Parser<'a> {
     }
   }
 
+  #[inline]
   fn end(&self, token: &Token) {
     todo!()
   }
 
+  #[inline]
   fn comment(&self, token: &Token) {
     todo!()
   }
 
+  #[inline]
   fn atrule(&self, token: &Token) {
     todo!()
   }
 
+  #[inline]
   fn empty_rule(&self, token: &Token) {
     todo!()
   }
 
+  #[inline]
   fn other(&self, token: &Token) {
     todo!()
   }
 
+  #[inline]
   fn end_file(&self) {
     todo!()
   }
