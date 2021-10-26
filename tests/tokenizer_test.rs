@@ -184,8 +184,8 @@ fn tokenizes_string() {
   run(
     "'\"'\"\\\"\"",
     vec![
-      Token::new("string", "'\"'", Some(0), Some(2)),
-      Token::new("string", "\"\\\"\"", Some(3), Some(6)),
+      Token::String(Span::new(Default::default(), "'\"'", Some(0), Some(2))),
+      Token::String(Span::new(Default::default(), "\"\\\"\"", Some(3), Some(6))),
     ],
   );
 }
@@ -194,7 +194,12 @@ fn tokenizes_string() {
 fn tokenizes_escaped_string() {
   run(
     "\"\\\\\"",
-    vec![Token::new("string", "\"\\\\\"", Some(0), Some(3))],
+    vec![Token::String(Span::new(
+      Default::default(),
+      "\"\\\\\"",
+      Some(0),
+      Some(3),
+    ))],
   );
 }
 
@@ -203,8 +208,8 @@ fn changes_lines_in_strings() {
   run(
     "\"\n\n\"\"\n\n\"",
     vec![
-      Token::new("string", "\"\n\n\"", Some(0), Some(3)),
-      Token::new("string", "\"\n\n\"", Some(4), Some(7)),
+      Token::String(Span::new(Default::default(), "\"\n\n\"", Some(0), Some(3))),
+      Token::String(Span::new(Default::default(), "\"\n\n\"", Some(4), Some(7))),
     ],
   );
 }
@@ -214,8 +219,8 @@ fn tokenizes_at_word() {
   run(
     "@word ",
     vec![
-      Token::new("at-word", "@word", Some(0), Some(4)),
-      Token::new("space", " ", None, None),
+      Token::AtWord(Span::new(Default::default(), "@word", Some(0), Some(4))),
+      Token::Space(Span::new(Default::default(), " ", None, None)),
     ],
   );
 }
@@ -225,14 +230,14 @@ fn tokenizes_at_word_end() {
   run(
     "@one{@two()@three\"\"@four;",
     vec![
-      Token::new("at-word", "@one", Some(0), Some(3)),
-      Token::new("{", "{", Some(4), None),
-      Token::new("at-word", "@two", Some(5), Some(8)),
-      Token::new("brackets", "()", Some(9), Some(10)),
-      Token::new("at-word", "@three", Some(11), Some(16)),
-      Token::new("string", "\"\"", Some(17), Some(18)),
-      Token::new("at-word", "@four", Some(19), Some(23)),
-      Token::new(";", ";", Some(24), None),
+      Token::AtWord(Span::new(Default::default(), "@one", Some(0), Some(3))),
+      Token::Control(SpanControl::new(TokenSymbol::OpenCurly, 4)),
+      Token::AtWord(Span::new(Default::default(), "@two", Some(5), Some(8))),
+      Token::Brackets(Span::new(Default::default(), "()", Some(9), Some(10))),
+      Token::AtWord(Span::new(Default::default(), "@three", Some(11), Some(16))),
+      Token::String(Span::new(Default::default(), "\"\"", Some(17), Some(18))),
+      Token::AtWord(Span::new(Default::default(), "@four", Some(19), Some(23))),
+      Token::Control(SpanControl::new(TokenSymbol::semicolon, 24)),
     ],
   );
 }
@@ -242,8 +247,8 @@ fn tokenizes_urls() {
   run(
     "url(/*\\))",
     vec![
-      Token::new("word", "url", Some(0), Some(2)),
-      Token::new("brackets", "(/*\\))", Some(3), Some(8)),
+      Token::Word(Span::new(Default::default(), "url", Some(0), Some(2))),
+      Token::Brackets(Span::new(Default::default(), "(/*\\))", Some(3), Some(8))),
     ],
   );
 }
@@ -370,8 +375,8 @@ fn ignores_unclosing_string_on_request() {
   run_ignore_errors(
     " \"",
     vec![
-      Token::new("space", " ", None, None),
-      Token::new("string", "\"", Some(1), Some(2)),
+      Token::Space(Span::new(Default::default(), " ", None, None)),
+      Token::String(Span::new(Default::default(), "\"", Some(1), Some(2))),
     ],
   );
 }
@@ -381,8 +386,8 @@ fn ignores_unclosing_comment_on_request() {
   run_ignore_errors(
     " /*",
     vec![
-      Token::new("space", " ", None, None),
-      Token::new("comment", "/*", Some(1), Some(3)),
+      Token::Space(Span::new(Default::default(), " ", None, None)),
+      Token::Comment(Span::new(Default::default(), "/*", Some(1), Some(3))),
     ],
   );
 }
@@ -392,8 +397,8 @@ fn ignores_unclosing_function_on_request() {
   run_ignore_errors(
     "url(",
     vec![
-      Token::new("word", "url", Some(0), Some(2)),
-      Token::new("brackets", "(", Some(3), Some(3)),
+      Token::Word(Span::new(Default::default(), "url", Some(0), Some(2))),
+      Token::Brackets(Span::new(Default::default(), "(", Some(3), Some(3))),
     ],
   );
 }
@@ -403,10 +408,10 @@ fn tokenizes_hexadecimal_escape() {
   run(
     "\\0a \\09 \\z ",
     vec![
-      Token::new("word", "\\0a ", Some(0), Some(3)),
-      Token::new("word", "\\09 ", Some(4), Some(7)),
-      Token::new("word", "\\z", Some(8), Some(9)),
-      Token::new("space", " ", None, None),
+      Token::Word(Span::new(Default::default(), "\\0a ", Some(0), Some(3))),
+      Token::Word(Span::new(Default::default(), "\\09 ", Some(4), Some(7))),
+      Token::Word(Span::new(Default::default(), "\\z", Some(8), Some(9))),
+      Token::Word(Span::new(Default::default(), " ", None, None)),
     ],
   );
 }
@@ -418,21 +423,22 @@ fn ignore_unclosed_per_token_request() {
     let mut processor = Tokenizer::new(&input, false);
     let mut tokens = vec![];
     while !processor.end_of_file() {
-      tokens.push(processor.next_token(true))
+      tokens.push(processor.next_token(true).unwrap())
     }
     return tokens;
   }
 
   let tokens = tokn("How's it going (");
   let expected = vec![
-    Token::new("word", "How", Some(0), Some(2)),
-    Token::new("string", "'s", Some(3), Some(4)),
-    Token::new("space", " ", None, None),
-    Token::new("word", "it", Some(6), Some(7)),
-    Token::new("space", " ", None, None),
-    Token::new("word", "going", Some(9), Some(13)),
-    Token::new("space", " ", None, None),
-    Token::new("(", "(", Some(15), None),
+    Token::Word(Span::new(Default::default(), "How", Some(0), Some(2))),
+    Token::Space(Span::new(Default::default(), " ", None, None)),
+    Token::String(Span::new(Default::default(), "'s", Some(3), Some(4))),
+    Token::Space(Span::new(Default::default(), " ", None, None)),
+    Token::Word(Span::new(Default::default(), "it", Some(6), Some(7))),
+    Token::Space(Span::new(Default::default(), " ", None, None)),
+    Token::Word(Span::new(Default::default(), "going", Some(9), Some(13))),
+    Token::Space(Span::new(Default::default(), " ", None, None)),
+    Token::Control(SpanControl::new(TokenSymbol::OpenParentheses, 15)),
   ];
   assert_eq!(tokens, expected);
 }
