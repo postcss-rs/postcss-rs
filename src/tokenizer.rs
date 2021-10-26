@@ -64,7 +64,7 @@ pub struct Span {
 }
 
 impl Span {
-  pub fn new(
+  pub fn new_with_symbol(
     symbol: TokenSymbol,
     content: &str,
     pos: Option<Number>,
@@ -72,6 +72,18 @@ impl Span {
   ) -> Self {
     Span {
       symbol,
+      pos,
+      next,
+      content: content.to_string(),
+    }
+  }
+  pub fn new(content: &str, pos: Option<Number>, next: Option<Number>) -> Self {
+    Span {
+      symbol: if content.len() == 1 {
+        content.chars().next().unwrap().into()
+      } else {
+        Default::default()
+      },
       pos,
       next,
       content: content.to_string(),
@@ -327,7 +339,7 @@ impl<'a> Tokenizer<'a> {
           }
         }
 
-        self.current_token = Some(Token::Space(Span::new(
+        self.current_token = Some(Token::Space(Span::new_with_symbol(
           code.into(),
           &self.css[(self.pos as usize)..(next as usize)],
           None,
@@ -397,7 +409,7 @@ impl<'a> Tokenizer<'a> {
             }
           }
 
-          self.current_token = Some(Token::Brackets(Span::new(
+          self.current_token = Some(Token::Brackets(Span::new_with_symbol(
             code,
             sub_string(self.css, self.pos, next + 1),
             Some(self.pos),
@@ -417,7 +429,7 @@ impl<'a> Tokenizer<'a> {
                   pos: self.pos,
                 }));
               } else {
-                self.current_token = Some(Token::Brackets(Span::new(
+                self.current_token = Some(Token::Brackets(Span::new_with_symbol(
                   code.into(),
                   content,
                   Some(self.pos),
@@ -471,7 +483,7 @@ impl<'a> Tokenizer<'a> {
           }
         }
 
-        self.current_token = Some(Token::String(Span::new(
+        self.current_token = Some(Token::String(Span::new_with_symbol(
           code,
           sub_string(self.css, self.pos, next + 1),
           Some(self.pos),
@@ -484,7 +496,7 @@ impl<'a> Tokenizer<'a> {
           Some(mat) => self.pos + 1 + mat.end() as Number - 2,
           None => self.length - 1,
         };
-        self.current_token = Some(Token::AtWord(Span::new(
+        self.current_token = Some(Token::AtWord(Span::new_with_symbol(
           code.into(),
           sub_string(self.css, self.pos, next + 1),
           Some(self.pos),
@@ -525,7 +537,7 @@ impl<'a> Tokenizer<'a> {
           }
         }
 
-        self.current_token = Some(Token::Word(Span::new(
+        self.current_token = Some(Token::Word(Span::new_with_symbol(
           code.into(),
           sub_string(self.css, self.pos, next + 1),
           Some(self.pos),
@@ -547,7 +559,7 @@ impl<'a> Tokenizer<'a> {
             }
           };
 
-          self.current_token = Some(Token::Comment(Span::new(
+          self.current_token = Some(Token::Comment(Span::new_with_symbol(
             code.into(),
             sub_string(self.css, self.pos, next + 1),
             Some(self.pos),
@@ -563,7 +575,7 @@ impl<'a> Tokenizer<'a> {
             Some(mat) => self.pos + mat.end() as i32 - 1,
             None => self.length - 1,
           };
-          self.current_token = Some(Token::Word(Span::new(
+          self.current_token = Some(Token::Word(Span::new_with_symbol(
             code.into(),
             sub_string(self.css, self.pos, next + 1),
             Some(self.pos),
