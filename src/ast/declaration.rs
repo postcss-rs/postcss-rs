@@ -1,4 +1,4 @@
-use crate::node::{ChildNode, Source};
+use crate::ast::{Node, Source};
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct RawValue {
@@ -39,13 +39,12 @@ pub struct DeclarationProps {
 }
 
 /// Represents a CSS declaration.
-#[derive(Debug, PartialEq, Clone)]
 pub struct Declaration {
   /// tring representing the node’s type. Possible values are `root`, `atrule`,
   /// `rule`, `decl`, or `comment`.
   pub r#type: &'static str,
   // pub parent: Option<Container>,
-  pub nodes: Option<Vec<ChildNode>>,
+  pub nodes: Option<Vec<Box<dyn Node>>>,
 
   /// The declaration's property name.
   pub prop: String,
