@@ -1,5 +1,7 @@
+use std::any::Any;
+
 use crate::ast::document::Document;
-use crate::node::{ChildNode, ChildNodeOrProps, Source};
+use crate::ast::{Node, Props, Source};
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct RawValue {
@@ -28,7 +30,6 @@ pub struct RootRaws {
   pub semicolon: Option<bool>,
 }
 
-#[derive(Debug, PartialEq)]
 pub struct RootProps {
   /// Name of the root.
   pub name: String,
@@ -39,21 +40,20 @@ pub struct RootProps {
   /// Information used to generate byte-to-byte equal node string as it was in the origin input.
   pub raws: Option<RootRaws>,
 
-  nodes: Option<Vec<ChildNodeOrProps>>,
+  nodes: Option<Vec<Box<dyn Props>>>,
 
   source: Option<Source>,
 }
 
 /// Represents a CSS file and contains all its parsed nodes.
-#[derive(Debug, PartialEq, Clone)]
 pub struct Root {
   /// tring representing the node’s type. Possible values are `root`, `atrule`,
   /// `rule`, `decl`, or `comment`.
   pub r#type: &'static str,
 
-  pub nodes: Vec<ChildNode>,
+  pub nodes: Vec<Box<dyn Node>>,
 
-  pub parent: Option<Document>,
+  pub parent: Option<Box<Document>>,
 
   /// The node’s parent node.
   // pub parent: Option<Container>,
@@ -69,8 +69,8 @@ pub struct Root {
 
 impl Root {
   pub fn new(
-    nodes: Option<Vec<ChildNode>>,
-    parent: Option<Document>,
+    nodes: Option<Vec<Box<dyn Node>>>,
+    parent: Option<Box<Document>>,
     raws: Option<RootRaws>,
     source: Option<Source>,
   ) -> Self {
@@ -81,5 +81,33 @@ impl Root {
       raws,
       source,
     }
+  }
+}
+
+impl Props for RootProps {
+  fn name(&self) -> String {
+    todo!()
+  }
+}
+
+impl Node for Root {
+  #[inline]
+  fn nodes(&self) -> Option<&Vec<Box<dyn Node>>> {
+    Some(&self.nodes)
+  }
+
+  #[inline]
+  fn nodes_mut(&mut self) -> Option<&mut Vec<Box<dyn Node>>> {
+    Some(self.nodes.as_mut())
+  }
+
+  #[inline]
+  fn as_any(&self) -> &dyn Any {
+    self
+  }
+
+  #[inline]
+  fn as_any_mut(&mut self) -> &mut dyn Any {
+    self
   }
 }
