@@ -29,7 +29,7 @@ fn tokenizes_space() {
   run(
     "\r\n \u{12}\t",
     vec![Token::Space(Span::new_with_symbol(
-      ' '.into(),
+      Default::default(),
       "\r\n \u{12}\t",
       None,
       None,
@@ -146,22 +146,46 @@ fn tokenizes_complicated_brackets() {
   run(
     "(())(\"\")(/**/)(\\\\)(\n)(",
     vec![
-      Token::Control(SpanControl::new(TokenSymbol::OpenCurly, 0)),
+      Token::LeftParent(SpanMalformed {
+        symbol: '('.into(),
+        content: "(".to_string(),
+        pos: 0,
+      }),
       Token::Brackets(Span::new("()", Some(1), Some(2))),
-      Token::Control(SpanControl::new(TokenSymbol::CloseCurly, 3)),
-      Token::Control(SpanControl::new(TokenSymbol::OpenCurly, 4)),
+      Token::Control(SpanControl::new(TokenSymbol::CloseParentheses, 3)),
+      Token::LeftParent(SpanMalformed {
+        symbol: '('.into(),
+        content: "(".to_string(),
+        pos: 4,
+      }),
       Token::String(Span::new("\"\"", Some(5), Some(6))),
-      Token::Control(SpanControl::new(TokenSymbol::CloseCurly, 7)),
-      Token::Control(SpanControl::new(TokenSymbol::OpenCurly, 8)),
+      Token::Control(SpanControl::new(TokenSymbol::CloseParentheses, 7)),
+      Token::LeftParent(SpanMalformed {
+        symbol: '('.into(),
+        content: "(".to_string(),
+        pos: 8,
+      }),
       Token::Comment(Span::new("/**/", Some(9), Some(12))),
-      Token::Control(SpanControl::new(TokenSymbol::CloseCurly, 13)),
-      Token::Control(SpanControl::new(TokenSymbol::OpenCurly, 14)),
+      Token::Control(SpanControl::new(TokenSymbol::CloseParentheses, 13)),
+      Token::LeftParent(SpanMalformed {
+        symbol: '('.into(),
+        content: "(".to_string(),
+        pos: 14,
+      }),
       Token::Word(Span::new("\\\\", Some(15), Some(16))),
-      Token::Control(SpanControl::new(TokenSymbol::CloseCurly, 17)),
-      Token::Control(SpanControl::new(TokenSymbol::OpenCurly, 18)),
+      Token::Control(SpanControl::new(TokenSymbol::CloseParentheses, 17)),
+      Token::LeftParent(SpanMalformed {
+        symbol: '('.into(),
+        content: "(".to_string(),
+        pos: 18,
+      }),
       Token::Space(Span::new("\n", None, None)),
-      Token::Control(SpanControl::new(TokenSymbol::CloseCurly, 20)),
-      Token::Control(SpanControl::new(TokenSymbol::OpenCurly, 21)),
+      Token::Control(SpanControl::new(TokenSymbol::CloseParentheses, 20)),
+      Token::LeftParent(SpanMalformed {
+        symbol: '('.into(),
+        content: "(".to_string(),
+        pos: 21,
+      }),
     ],
   );
 }
@@ -241,7 +265,11 @@ fn tokenizes_quoted_urls() {
     "url(\")\")",
     vec![
       Token::Word(Span::new("url", Some(0), Some(2))),
-      Token::Control(SpanControl::new(TokenSymbol::OpenParentheses, 3)),
+      Token::LeftParent(SpanMalformed {
+        symbol: '('.into(),
+        content: "(".to_string(),
+        pos: 3,
+      }),
       Token::String(Span::new("\")\"", Some(4), Some(6))),
       Token::Control(SpanControl::new(TokenSymbol::CloseParentheses, 7)),
     ],
@@ -393,7 +421,7 @@ fn tokenizes_hexadecimal_escape() {
       Token::Word(Span::new("\\0a ", Some(0), Some(3))),
       Token::Word(Span::new("\\09 ", Some(4), Some(7))),
       Token::Word(Span::new("\\z", Some(8), Some(9))),
-      Token::Word(Span::new(" ", None, None)),
+      Token::Space(Span::new(" ", None, None)),
     ],
   );
 }
@@ -413,14 +441,17 @@ fn ignore_unclosed_per_token_request() {
   let tokens = tokn("How's it going (");
   let expected = vec![
     Token::Word(Span::new("How", Some(0), Some(2))),
-    Token::Space(Span::new(" ", None, None)),
     Token::String(Span::new("'s", Some(3), Some(4))),
     Token::Space(Span::new(" ", None, None)),
     Token::Word(Span::new("it", Some(6), Some(7))),
     Token::Space(Span::new(" ", None, None)),
     Token::Word(Span::new("going", Some(9), Some(13))),
     Token::Space(Span::new(" ", None, None)),
-    Token::Control(SpanControl::new(TokenSymbol::OpenParentheses, 15)),
+    Token::LeftParent(SpanMalformed {
+      symbol: '('.into(),
+      content: "(".to_string(),
+      pos: 15,
+    }),
   ];
   assert_eq!(tokens, expected);
 }
