@@ -1,4 +1,6 @@
-use crate::node::{ChildNode, ChildNodeOrProps, Source};
+use crate::ast::{Node, Source};
+
+use super::Props;
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct RawValue {
@@ -29,7 +31,6 @@ pub struct AtRuleRaws {
   pub params: Option<RawValue>,
 }
 
-#[derive(Debug, PartialEq)]
 pub struct AtRuleProps {
   /// Name of the at-rule.
   pub name: String,
@@ -40,7 +41,7 @@ pub struct AtRuleProps {
   /// Information used to generate byte-to-byte equal node string as it was in the origin input.
   pub raws: Option<AtRuleRaws>,
 
-  nodes: Option<Vec<ChildNodeOrProps>>,
+  nodes: Option<Vec<Box<dyn Props>>>,
 
   source: Option<Source>,
 }
@@ -49,13 +50,12 @@ pub struct AtRuleProps {
 ///
 /// If it’s followed in the CSS by a {} block, this node will have
 /// a nodes property representing its children.
-#[derive(Debug, PartialEq, Clone)]
 pub struct AtRule {
   /// tring representing the node’s type. Possible values are `root`, `atrule`,
   /// `rule`, `decl`, or `comment`.
   pub r#type: &'static str,
 
-  pub nodes: Option<Vec<ChildNode>>,
+  pub nodes: Option<Vec<Box<dyn Node>>>,
 
   /// The node’s parent node.
   // pub parent: Option<Container>,

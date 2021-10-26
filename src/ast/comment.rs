@@ -1,4 +1,4 @@
-use crate::node::{ChildNode, ChildNodeOrProps, Source};
+use crate::ast::{Node, Props, Source};
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct RawValue {
@@ -18,7 +18,6 @@ pub struct CommentRaws {
   pub right: Option<String>,
 }
 
-#[derive(Debug, PartialEq)]
 pub struct CommentProps {
   /// Name of the at-rule.
   pub name: String,
@@ -32,7 +31,7 @@ pub struct CommentProps {
   /// Information used to generate byte-to-byte equal node string as it was in the origin input.
   pub raws: Option<CommentRaws>,
 
-  nodes: Option<Vec<ChildNodeOrProps>>,
+  nodes: Option<Vec<Box<dyn Props>>>,
 
   source: Option<Source>,
 }
@@ -41,13 +40,12 @@ pub struct CommentProps {
 ///
 /// Comments inside selectors, at-rule parameters, or declaration values
 /// will be stored in the `raws` properties explained above.
-#[derive(Debug, PartialEq, Clone)]
 pub struct Comment {
   /// tring representing the node’s type. Possible values are `root`, `atrule`,
   /// `rule`, `decl`, or `comment`.
   pub r#type: &'static str,
 
-  pub nodes: Option<Vec<ChildNode>>,
+  pub nodes: Option<Vec<Box<dyn Node>>>,
 
   /// The node’s parent node.
   // pub parent: Container,

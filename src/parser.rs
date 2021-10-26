@@ -1,11 +1,12 @@
 use crate::ast::root::Root;
+use crate::ast::rule::Rule;
+use crate::ast::Node;
 use crate::input::Input;
 use crate::tokenizer::{Token, Tokenizer};
 
-#[derive(Debug)]
 pub struct Parser<'a> {
   input: &'a Input,
-  current: Root,
+  current: Box<dyn Node>,
   tokenizer: Tokenizer<'a>,
   spaces: String,
   semicolon: bool,
@@ -14,10 +15,10 @@ pub struct Parser<'a> {
 
 impl<'a> Parser<'a> {
   pub fn new(input: &'a Input) -> Self {
-    let root = Root::new(None, None, None, None);
+    let root: Root = Root::new(None, None, None, None);
     Self {
       input,
-      current: root,
+      current: Box::new(root),
       spaces: "".to_string(),
       semicolon: false,
       custom_property: false,
@@ -41,9 +42,20 @@ impl<'a> Parser<'a> {
     self.end_file();
   }
 
+  #[inline]
   fn free_semicolon(&mut self, token: &Token) {
     self.spaces += &token.1;
-    todo!()
+    if let Some(node) = self
+      .current
+      .nodes_mut()
+      .and_then(|nodes| nodes.last_mut())
+      .and_then(|prev| prev.as_any_mut().downcast_mut::<&mut Rule>())
+    {
+      if node.raws.own_semicolon.unwrap_or(false) {
+        node.raws.own_semicolon = Some(!self.spaces.is_empty());
+        self.spaces = "".to_owned();
+      }
+    }
   }
 
   fn end(&self, token: &Token) {
