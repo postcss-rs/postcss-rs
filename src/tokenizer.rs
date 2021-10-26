@@ -26,6 +26,100 @@ const ASTERISK: char = '*';
 const COLON: char = ':';
 const AT: char = '@';
 
+#[derive(Clone, Debug)]
+pub enum TokenSymbol {
+  SingleQuote,
+  DoubleQuote,
+  Backslash,
+  Slash,
+  NewLine,
+  Space,
+  Feed,
+  Tab,
+  CR,
+  OpenSquare,
+  CloseSquare,
+  OpenParentheses,
+  CloseParentheses,
+  OpenCurly,
+  CloseCurly,
+  Semicolon,
+  Asterisk,
+  Colon,
+  At,
+  InvalidToken,
+}
+
+pub enum Expression {
+  Brackets(String),
+}
+
+impl Default for TokenSymbol {
+  fn default() -> Self {
+    TokenSymbol::InvalidToken
+  }
+}
+
+impl ToString for TokenSymbol {
+  fn to_string(&self) -> String {
+    self.into()
+  }
+}
+
+impl From<TokenSymbol> for char {
+  fn from(input: TokenSymbol) -> Self {
+    match input {
+      TokenSymbol::SingleQuote => SINGLE_QUOTE,
+      TokenSymbol::DoubleQuote => DOUBLE_QUOTE,
+      TokenSymbol::Backslash => BACKSLASH,
+      TokenSymbol::Slash => SLASH,
+      TokenSymbol::NewLine => NEWLINE,
+      TokenSymbol::Space => SPACE,
+      TokenSymbol::Feed => FEED,
+      TokenSymbol::Tab => TAB,
+      TokenSymbol::CR => CR,
+      TokenSymbol::OpenSquare => OPEN_SQUARE,
+      TokenSymbol::CloseSquare => CLOSE_SQUARE,
+      TokenSymbol::OpenParentheses => OPEN_PARENTHESES,
+      TokenSymbol::CloseParentheses => CLOSE_PARENTHESES,
+      TokenSymbol::OpenCurly => OPEN_CURLY,
+      TokenSymbol::CloseCurly => CLOSE_CURLY,
+      TokenSymbol::Semicolon => SEMICOLON,
+      TokenSymbol::Asterisk => ASTERISK,
+      TokenSymbol::Colon => COLON,
+      TokenSymbol::At => AT,
+      TokenSymbol::InvalidToken => '\0',
+    }
+  }
+}
+
+impl From<char> for TokenSymbol {
+  fn from(input: char) -> Self {
+    match input {
+      SINGLE_QUOTE => TokenSymbol::SingleQuote,
+      DOUBLE_QUOTE => TokenSymbol::DoubleQuote,
+      BACKSLASH => TokenSymbol::Backslash,
+      SLASH => TokenSymbol::Slash,
+      NEWLINE => TokenSymbol::Newline,
+      SPACE => TokenSymbol::Space,
+      FEED => TokenSymbol::Feed,
+      TAB => TokenSymbol::Tab,
+      CR => TokenSymbol::CR,
+      OPEN_SQUARE => TokenSymbol::OpenSquare,
+      CLOSE_SQUARE => TokenSymbol::CloseSquare,
+      OPEN_PARENTHESES => TokenSymbol::OpenParentheses,
+      CLOSE_PARENTHESES => TokenSymbol::CloseParentheses,
+      OPEN_CURLY => TokenSymbol::OpenCurly,
+      CLOSE_CURLY => TokenSymbol::CloseCurly,
+      SEMICOLON => TokenSymbol::Semicolon,
+      ASTERISK => TokenSymbol::Asterisk,
+      COLON => TokenSymbol::Colon,
+      AT => TokenSymbol::At,
+      _ => TokenSymbol::InvalidToken,
+    }
+  }
+}
+
 lazy_static! {
   static ref RE_AT_END: Regex = Regex::new(r##"[\t\n\u{12}\r "#'()/;\[\\\]{}]"##).unwrap();
   static ref RE_WORD_END: Regex =
