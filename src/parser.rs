@@ -2,7 +2,7 @@ use crate::ast::root::Root;
 use crate::ast::rule::Rule;
 use crate::ast::Node;
 use crate::input::Input;
-use crate::tokenizer::{GetContent, Span, SpanControl, Token, Tokenizer};
+use crate::tokenizer::{Span, SpanControl, Token, TokenSymbol, TokenTrait, Tokenizer};
 
 pub struct Parser<'a> {
   input: &'a Input,
@@ -32,17 +32,17 @@ impl<'a> Parser<'a> {
       match token {
         Token::Space(it) => self.spaces += it.get_content().as_str(),
         Token::Control(SpanControl {
-          symbol: ';',
+          symbol: TokenSymbol::Semicolon,
           content: c,
           ..
         }) => self.free_semicolon(c.as_str()),
         Token::Control(SpanControl {
-          symbol: '}',
+          symbol: TokenSymbol::CloseCurly,
           content: c,
           ..
         }) => self.end(c.as_str()),
         Token::Control(SpanControl {
-          symbol: '{',
+          symbol: TokenSymbol::OpenCurly,
           content: c,
           ..
         }) => self.empty_rule(c.as_str()),

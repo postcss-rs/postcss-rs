@@ -25,7 +25,7 @@ const ASTERISK: char = '*';
 const COLON: char = ':';
 const AT: char = '@';
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum TokenSymbol {
   SingleQuote,
   DoubleQuote,
@@ -47,26 +47,37 @@ pub enum TokenSymbol {
   Colon,
   At,
   InvalidToken,
+  Other(char),
 }
 
-pub trait GetContent {
+pub trait TokenTrait {
+  fn get_type(&self) -> TokenSymbol;
   fn get_content(&self) -> String;
 }
 
 #[derive(Debug, Clone)]
 pub struct Span {
+  symbol: TokenSymbol,
   content: String,
   pos: Option<Number>,
   next: Option<Number>,
 }
 
 impl Span {
-  fn new(content: String, pos: Option<Number>, next: Option<Number>) -> Self {
-    Span { content, pos, next }
+  fn new(symbol: TokenSymbol, content: String, pos: Option<Number>, next: Option<Number>) -> Self {
+    Span {
+      symbol,
+      content,
+      pos,
+      next,
+    }
   }
 }
 
-impl GetContent for Span {
+impl TokenTrait for Span {
+  fn get_type(&self) -> TokenSymbol {
+    self.symbol.clone()
+  }
   fn get_content(&self) -> String {
     self.content.clone()
   }
@@ -74,11 +85,15 @@ impl GetContent for Span {
 
 #[derive(Debug, Clone)]
 pub struct SpanMalformed {
+  symbol: TokenSymbol,
   content: String,
   pos: Number,
 }
 
-impl GetContent for SpanMalformed {
+impl TokenTrait for SpanMalformed {
+  fn get_type(&self) -> TokenSymbol {
+    self.symbol.clone()
+  }
   fn get_content(&self) -> String {
     self.content.clone()
   }
@@ -86,12 +101,15 @@ impl GetContent for SpanMalformed {
 
 #[derive(Debug, Clone)]
 pub struct SpanControl {
-  pub symbol: char,
+  pub symbol: TokenSymbol,
   pub content: String,
   pub pos: Number,
 }
 
-impl GetContent for SpanControl {
+impl TokenTrait for SpanControl {
+  fn get_type(&self) -> TokenSymbol {
+    self.symbol.clone()
+  }
   fn get_content(&self) -> String {
     self.content.clone()
   }
@@ -109,7 +127,19 @@ pub enum Token {
   Control(SpanControl),
 }
 
-impl GetContent for Token {
+impl TokenTrait for Token {
+  fn get_type(&self) -> TokenSymbol {
+    match self {
+      Token::Space(it) => it.get_type(),
+      Token::Brackets(it) => it.get_type(),
+      Token::String(it) => it.get_type(),
+      Token::AtWord(it) => it.get_type(),
+      Token::Word(it) => it.get_type(),
+      Token::Comment(it) => it.get_type(),
+      Token::LeftParent(it) => it.get_type(),
+      Token::Control(it) => it.get_type(),
+    }
+  }
   fn get_content(&self) -> String {
     match self {
       Token::Space(it) => it.get_content(),
@@ -159,6 +189,7 @@ impl From<&TokenSymbol> for char {
       TokenSymbol::Colon => COLON,
       TokenSymbol::At => AT,
       TokenSymbol::InvalidToken => '\0',
+      TokenSymbol::Other(ch) => *ch,
     }
   }
 }
@@ -191,7 +222,8 @@ impl From<char> for TokenSymbol {
       ASTERISK => TokenSymbol::Asterisk,
       COLON => TokenSymbol::Colon,
       AT => TokenSymbol::At,
-      _ => TokenSymbol::InvalidToken,
+      '\0' => TokenSymbol::InvalidToken,
+      other => TokenSymbol::Other(other),
     }
   }
 }
@@ -259,20 +291,29 @@ impl<'a> Tokenizer<'a> {
       return None;
     }
 
-    let mut code = char_code_at(self.css, self.pos);
+    let mut code: TokenSymbol = char_code_at(self.css, self.pos).into();
 
     match code {
-      NEWLINE | SPACE | TAB | CR | FEED => {
+      TokenSymbol::NewLine
+      | TokenSymbol::Space
+      | TokenSymbol::Tab
+      | TokenSymbol::CR
+      | TokenSymbol::Feed => {
         let mut next = self.pos;
         loop {
           next += 1;
-          code = char_code_at(self.css, next);
-          if !(code == SPACE || code == NEWLINE || code == TAB || code == FEED) {
+          code = char_code_at(self.css, next).into();
+          if !(code == TokenSymbol::Space
+            || code == TokenSymbol::NewLine
+            || code == TokenSymbol::Tab
+            || code == TokenSymbol::Feed)
+          {
             break;
           }
         }
 
         self.current_token = Some(Token::Space(Span::new(
+          code.into(),
           self.css[(self.pos as usize)..(next as usize)].to_string(),
           None,
           None,
@@ -283,16 +324,21 @@ impl<'a> Tokenizer<'a> {
 
       ch
       @
-      (OPEN_SQUARE | CLOSE_SQUARE | OPEN_CURLY | CLOSE_CURLY | COLON | SEMICOLON
-      | CLOSE_PARENTHESES) => {
+      (TokenSymbol::OpenSquare
+      | TokenSymbol::CloseSquare
+      | TokenSymbol::OpenCurly
+      | TokenSymbol::CloseCurly
+      | TokenSymbol::Colon
+      | TokenSymbol::Semicolon
+      | TokenSymbol::CloseParentheses) => {
         self.current_token = Some(Token::Control(SpanControl {
-          symbol: ch,
+          symbol: ch.clone(),
           content: ch.to_string(),
           pos: self.pos,
         }));
       }
 
-      OPEN_PARENTHESES => {
+      TokenSymbol::OpenParentheses => {
         let prev = self
           .buffer
           .pop()
@@ -300,13 +346,13 @@ impl<'a> Tokenizer<'a> {
           .unwrap_or("".to_string());
         let n = char_code_at(self.css, self.pos + 1);
         if prev == "url"
-          && n != SINGLE_QUOTE
-          && n != DOUBLE_QUOTE
-          && n != SPACE
-          && n != NEWLINE
-          && n != TAB
-          && n != FEED
-          && n != CR
+          && n != TokenSymbol::SingleQuote
+          && n != TokenSymbol::DoubleQuote
+          && n != TokenSymbol::Space
+          && n != TokenSymbol::NewLine
+          && n != TokenSymbol::Tab
+          && n != TokenSymbol::Feed
+          && n != TokenSymbol::CR
         {
           let mut next = self.pos;
           loop {
@@ -326,7 +372,7 @@ impl<'a> Tokenizer<'a> {
             }
 
             let mut escape_pos = next;
-            while char_code_at(self.css, escape_pos - 1) == BACKSLASH {
+            while char_code_at(self.css, escape_pos - 1) == TokenSymbol::Backslash {
               escape_pos -= 1;
               escaped = !escaped;
             }
@@ -337,6 +383,7 @@ impl<'a> Tokenizer<'a> {
           }
 
           self.current_token = Some(Token::Brackets(Span::new(
+            code.into(),
             sub_string(self.css, self.pos, next + 1).to_string(),
             Some(self.pos),
             Some(next),
@@ -350,11 +397,13 @@ impl<'a> Tokenizer<'a> {
 
               if RE_BAD_BRACKET.is_match(content).unwrap_or(false) {
                 self.current_token = Some(Token::LeftParent(SpanMalformed {
+                  symbol: '('.into(),
                   content: "(".to_string(),
                   pos: self.pos,
                 }));
               } else {
                 self.current_token = Some(Token::Brackets(Span::new(
+                  code.into(),
                   content.to_string(),
                   Some(self.pos),
                   Some(i),
@@ -365,6 +414,7 @@ impl<'a> Tokenizer<'a> {
             None => {
               // self.current_token = Token("(", "(".to_string(), Some(self.pos), None);
               self.current_token = Some(Token::LeftParent(SpanMalformed {
+                symbol: '('.into(),
                 content: "(".to_string(),
                 pos: self.pos,
               }));
@@ -372,8 +422,12 @@ impl<'a> Tokenizer<'a> {
           };
         }
       }
-      SINGLE_QUOTE | DOUBLE_QUOTE => {
-        let quote = if code == SINGLE_QUOTE { '\'' } else { '"' };
+      TokenSymbol::SingleQuote | TokenSymbol::DoubleQuote => {
+        let quote = if code == SINGLE_QUOTE.into() {
+          '\''
+        } else {
+          '"'
+        };
         let mut next = self.pos;
         loop {
           let mut escaped = false;
@@ -392,7 +446,7 @@ impl<'a> Tokenizer<'a> {
           }
 
           let mut escape_pos = next;
-          while char_code_at(self.css, escape_pos - 1) == BACKSLASH {
+          while char_code_at(self.css, escape_pos - 1) == TokenSymbol::Backslash {
             escape_pos -= 1;
             escaped = !escaped;
           }
@@ -403,39 +457,41 @@ impl<'a> Tokenizer<'a> {
         }
 
         self.current_token = Some(Token::String(Span::new(
+          code.into(),
           sub_string(self.css, self.pos, next + 1).to_string(),
           Some(self.pos),
           Some(next),
         )));
         self.pos = next;
       }
-      AT => {
+      TokenSymbol::At => {
         let next = match RE_AT_END.find(&self.css[self.pos as usize + 1..]).unwrap() {
           Some(mat) => self.pos + 1 + mat.end() as Number - 2,
           None => self.length - 1,
         };
         self.current_token = Some(Token::AtWord(Span::new(
+          code.into(),
           sub_string(self.css, self.pos, next + 1).to_string(),
           Some(self.pos),
           Some(next),
         )));
         self.pos = next;
       }
-      BACKSLASH => {
+      TokenSymbol::Backslash => {
         let mut next = self.pos;
         let mut escape = true;
-        while char_code_at(self.css, next + 1) == BACKSLASH {
+        while char_code_at(self.css, next + 1) == TokenSymbol::Backslash {
           next += 1;
           escape = !escape;
         }
-        code = char_code_at(self.css, next + 1);
+        code = char_code_at(self.css, next + 1).into();
         if escape
-          && code != SLASH
-          && code != SPACE
-          && code != NEWLINE
-          && code != TAB
-          && code != CR
-          && code != FEED
+          && code != TokenSymbol::Slash
+          && code != TokenSymbol::Space
+          && code != TokenSymbol::NewLine
+          && code != TokenSymbol::Tab
+          && code != TokenSymbol::CR
+          && code != TokenSymbol::Feed
         {
           next += 1;
           if RE_HEX_ESCAPE
@@ -448,13 +504,14 @@ impl<'a> Tokenizer<'a> {
             {
               next += 1;
             }
-            if char_code_at(self.css, next + 1) == SPACE {
+            if char_code_at(self.css, next + 1) == TokenSymbol::Space {
               next += 1;
             }
           }
         }
 
         self.current_token = Some(Token::Word(Span::new(
+          code.into(),
           sub_string(self.css, self.pos, next + 1).to_string(),
           Some(self.pos),
           Some(next),
@@ -462,7 +519,9 @@ impl<'a> Tokenizer<'a> {
         self.pos = next;
       }
       _ => {
-        self.pos = if code == SLASH && char_code_at(self.css, self.pos + 1) == ASTERISK {
+        self.pos = if code == TokenSymbol::Slash
+          && char_code_at(self.css, self.pos + 1) == TokenSymbol::Asterisk
+        {
           let next = match index_of(self.css, "*/", self.pos + 2) {
             Some(i) => i + 1,
             None => {
@@ -474,6 +533,7 @@ impl<'a> Tokenizer<'a> {
           };
 
           self.current_token = Some(Token::Comment(Span::new(
+            code.into(),
             sub_string(self.css, self.pos, next + 1).to_string(),
             Some(self.pos),
             Some(next),
@@ -489,6 +549,7 @@ impl<'a> Tokenizer<'a> {
             None => self.length - 1,
           };
           self.current_token = Some(Token::Word(Span::new(
+            code.into(),
             sub_string(self.css, self.pos, next + 1).to_string(),
             Some(self.pos),
             Some(next),
@@ -528,11 +589,11 @@ fn sub_string(s: &str, start: Number, end: Number) -> &str {
 }
 
 #[inline]
-fn char_code_at(s: &str, n: Number) -> char {
+fn char_code_at(s: &str, n: Number) -> TokenSymbol {
   if n >= s.len() as Number {
-    '\0'
+    '\0'.into()
   } else {
-    s.as_bytes()[n as usize] as char
+    (s.as_bytes()[n as usize] as char).into()
   }
   // s.chars().nth(n).unwrap_or('\0')
 }
@@ -544,8 +605,8 @@ mod test {
   #[test]
   fn test_char_code_at() {
     let s = "0123456789abc";
-    assert_eq!(char_code_at(s, 0), '0');
-    assert_eq!(char_code_at(s, 1), '1');
-    assert_eq!(char_code_at(s, 100), '\0');
+    assert_eq!(char_code_at(s, 0), '0'.into());
+    assert_eq!(char_code_at(s, 1), '1'.into());
+    assert_eq!(char_code_at(s, 100), '\0'.into());
   }
 }
