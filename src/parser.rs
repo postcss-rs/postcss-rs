@@ -2,7 +2,7 @@ use crate::ast::root::Root;
 use crate::ast::rule::Rule;
 use crate::ast::Node;
 use crate::input::Input;
-use crate::tokenizer::{Token, Tokenizer};
+use crate::tokenizer::{GetContent, Span, SpanControl, Token, Tokenizer};
 
 pub struct Parser<'a> {
   input: &'a Input,
@@ -28,14 +28,26 @@ impl<'a> Parser<'a> {
 
   pub fn parse(&mut self) {
     while !self.tokenizer.end_of_file() {
-      let token = self.tokenizer.next_token(true);
-      match token.0 {
-        "space" => self.spaces += &token.1,
-        ";" => self.free_semicolon(&token),
-        "}" => self.end(&token),
-        "comment" => self.comment(&token),
-        "at-word" => self.atrule(&token),
-        "{" => self.empty_rule(&token),
+      let token = self.tokenizer.next_token(true).unwrap();
+      match token {
+        Token::Space(it) => self.spaces += it.get_content().as_str(),
+        Token::Control(SpanControl {
+          symbol: ';',
+          content: c,
+          ..
+        }) => self.free_semicolon(c.as_str()),
+        Token::Control(SpanControl {
+          symbol: '}',
+          content: c,
+          ..
+        }) => self.end(c.as_str()),
+        Token::Control(SpanControl {
+          symbol: '{',
+          content: c,
+          ..
+        }) => self.empty_rule(c.as_str()),
+        Token::Comment(it) => self.comment(&it),
+        Token::AtWord(it) => self.atrule(&it),
         _ => self.other(&token),
       }
     }
@@ -43,8 +55,8 @@ impl<'a> Parser<'a> {
   }
 
   #[inline]
-  fn free_semicolon(&mut self, token: &Token) {
-    self.spaces += &token.1;
+  fn free_semicolon(&mut self, token: &str) {
+    self.spaces += token;
     if let Some(node) = self
       .current
       .nodes_mut()
@@ -59,22 +71,22 @@ impl<'a> Parser<'a> {
   }
 
   #[inline]
-  fn end(&self, token: &Token) {
+  fn end(&self, token: &str) {
     todo!()
   }
 
   #[inline]
-  fn comment(&self, token: &Token) {
+  fn comment(&self, token: &Span) {
     todo!()
   }
 
   #[inline]
-  fn atrule(&self, token: &Token) {
+  fn atrule(&self, token: &Span) {
     todo!()
   }
 
   #[inline]
-  fn empty_rule(&self, token: &Token) {
+  fn empty_rule(&self, token: &str) {
     todo!()
   }
 

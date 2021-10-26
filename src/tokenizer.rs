@@ -1,10 +1,9 @@
 use fancy_regex::Regex;
 use lazy_static::lazy_static;
 use std::clone::Clone;
-use std::cmp::Eq;
-use std::cmp::PartialEq;
 
 use crate::input::Input;
+use crate::number_type::Number;
 
 const SINGLE_QUOTE: char = '\'';
 const DOUBLE_QUOTE: char = '"';
@@ -50,8 +49,79 @@ pub enum TokenSymbol {
   InvalidToken,
 }
 
-pub enum Expression {
-  Brackets(String),
+pub trait GetContent {
+  fn get_content(&self) -> String;
+}
+
+#[derive(Debug, Clone)]
+pub struct Span {
+  content: String,
+  pos: Option<Number>,
+  next: Option<Number>,
+}
+
+impl Span {
+  fn new(content: String, pos: Option<Number>, next: Option<Number>) -> Self {
+    Span { content, pos, next }
+  }
+}
+
+impl GetContent for Span {
+  fn get_content(&self) -> String {
+    self.content.clone()
+  }
+}
+
+#[derive(Debug, Clone)]
+pub struct SpanMalformed {
+  content: String,
+  pos: Number,
+}
+
+impl GetContent for SpanMalformed {
+  fn get_content(&self) -> String {
+    self.content.clone()
+  }
+}
+
+#[derive(Debug, Clone)]
+pub struct SpanControl {
+  pub symbol: char,
+  pub content: String,
+  pub pos: Number,
+}
+
+impl GetContent for SpanControl {
+  fn get_content(&self) -> String {
+    self.content.clone()
+  }
+}
+
+#[derive(Debug, Clone)]
+pub enum Token {
+  Space(Span),
+  Brackets(Span),
+  String(Span),
+  AtWord(Span),
+  Word(Span),
+  Comment(Span),
+  LeftParent(SpanMalformed),
+  Control(SpanControl),
+}
+
+impl GetContent for Token {
+  fn get_content(&self) -> String {
+    match self {
+      Token::Space(it) => it.get_content(),
+      Token::Brackets(it) => it.get_content(),
+      Token::String(it) => it.get_content(),
+      Token::AtWord(it) => it.get_content(),
+      Token::Word(it) => it.get_content(),
+      Token::Comment(it) => it.get_content(),
+      Token::LeftParent(it) => it.get_content(),
+      Token::Control(it) => it.get_content(),
+    }
+  }
 }
 
 impl Default for TokenSymbol {
@@ -62,12 +132,12 @@ impl Default for TokenSymbol {
 
 impl ToString for TokenSymbol {
   fn to_string(&self) -> String {
-    self.into()
+    char::from(self).to_string()
   }
 }
 
-impl From<TokenSymbol> for char {
-  fn from(input: TokenSymbol) -> Self {
+impl From<&TokenSymbol> for char {
+  fn from(input: &TokenSymbol) -> Self {
     match input {
       TokenSymbol::SingleQuote => SINGLE_QUOTE,
       TokenSymbol::DoubleQuote => DOUBLE_QUOTE,
@@ -93,6 +163,12 @@ impl From<TokenSymbol> for char {
   }
 }
 
+impl From<TokenSymbol> for char {
+  fn from(input: TokenSymbol) -> Self {
+    char::from(&input)
+  }
+}
+
 impl From<char> for TokenSymbol {
   fn from(input: char) -> Self {
     match input {
@@ -100,7 +176,7 @@ impl From<char> for TokenSymbol {
       DOUBLE_QUOTE => TokenSymbol::DoubleQuote,
       BACKSLASH => TokenSymbol::Backslash,
       SLASH => TokenSymbol::Slash,
-      NEWLINE => TokenSymbol::Newline,
+      NEWLINE => TokenSymbol::NewLine,
       SPACE => TokenSymbol::Space,
       FEED => TokenSymbol::Feed,
       TAB => TokenSymbol::Tab,
@@ -128,38 +204,24 @@ lazy_static! {
   static ref RE_HEX_ESCAPE: Regex = Regex::new(r"[\da-f]").unwrap();
 }
 
-#[derive(Debug, Clone, Eq, PartialEq)]
-pub struct Token(
-  pub &'static str,
-  pub String,
-  pub Option<usize>,
-  pub Option<usize>,
-);
-
-impl Token {
-  pub fn new(kind: &'static str, content: &str, pos: Option<usize>, next: Option<usize>) -> Token {
-    Token(kind, content.to_string(), pos, next)
-  }
-}
-
 #[derive(Debug)]
 pub struct Tokenizer<'a> {
   css: &'a str,
   ignore: bool,
-  current_token: Token,
-  length: usize,
-  pos: usize,
+  current_token: Option<Token>,
+  length: Number,
+  pos: Number,
   buffer: Vec<Token>,
   returned: Vec<Token>,
 }
 
 impl<'a> Tokenizer<'a> {
   pub fn new(input: &'a Input, ignore_errors: bool) -> Tokenizer {
-    let length = input.css.chars().count();
+    let length = input.css.chars().count() as Number;
     Tokenizer {
       css: &input.css,
       ignore: ignore_errors,
-      current_token: Token("", String::new(), None, None),
+      current_token: None,
       length,
       pos: 0,
       buffer: vec![],
@@ -172,7 +234,7 @@ impl<'a> Tokenizer<'a> {
     self.buffer.push(t);
   }
 
-  pub fn position(&self) -> usize {
+  pub fn position(&self) -> Number {
     self.pos
   }
 
@@ -188,9 +250,13 @@ impl<'a> Tokenizer<'a> {
     self.returned.push(token);
   }
 
-  pub fn next_token(&mut self, ignore_unclosed: bool) -> Token {
+  pub fn next_token(&mut self, ignore_unclosed: bool) -> Option<Token> {
     if !self.returned.is_empty() {
-      return self.returned.pop().unwrap();
+      return self.returned.pop();
+    }
+
+    if self.end_of_file() {
+      return None;
     }
 
     let mut code = char_code_at(self.css, self.pos);
@@ -206,36 +272,32 @@ impl<'a> Tokenizer<'a> {
           }
         }
 
-        self.current_token = Token("space", self.css[self.pos..next].to_string(), None, None);
+        self.current_token = Some(Token::Space(Span::new(
+          self.css[(self.pos as usize)..(next as usize)].to_string(),
+          None,
+          None,
+        )));
 
         self.pos = next - 1;
       }
-      OPEN_SQUARE => {
-        self.current_token = Token("[", "[".to_string(), Some(self.pos), None);
+
+      ch
+      @
+      (OPEN_SQUARE | CLOSE_SQUARE | OPEN_CURLY | CLOSE_CURLY | COLON | SEMICOLON
+      | CLOSE_PARENTHESES) => {
+        self.current_token = Some(Token::Control(SpanControl {
+          symbol: ch,
+          content: ch.to_string(),
+          pos: self.pos,
+        }));
       }
-      CLOSE_SQUARE => {
-        self.current_token = Token("]", "]".to_string(), Some(self.pos), None);
-      }
-      OPEN_CURLY => {
-        self.current_token = Token("{", "{".to_string(), Some(self.pos), None);
-      }
-      CLOSE_CURLY => {
-        self.current_token = Token("}", "}".to_string(), Some(self.pos), None);
-      }
-      COLON => {
-        self.current_token = Token(":", ":".to_string(), Some(self.pos), None);
-      }
-      SEMICOLON => {
-        self.current_token = Token(";", ";".to_string(), Some(self.pos), None);
-      }
-      CLOSE_PARENTHESES => {
-        self.current_token = Token(")", ")".to_string(), Some(self.pos), None);
-      }
+
       OPEN_PARENTHESES => {
-        let prev = match self.buffer.pop() {
-          Some(b) => b.1,
-          None => String::new(),
-        };
+        let prev = self
+          .buffer
+          .pop()
+          .map(|it| it.get_content())
+          .unwrap_or("".to_string());
         let n = char_code_at(self.css, self.pos + 1);
         if prev == "url"
           && n != SINGLE_QUOTE
@@ -274,29 +336,38 @@ impl<'a> Tokenizer<'a> {
             }
           }
 
-          self.current_token = Token(
-            "brackets",
+          self.current_token = Some(Token::Brackets(Span::new(
             sub_string(self.css, self.pos, next + 1).to_string(),
             Some(self.pos),
             Some(next),
-          );
+          )));
 
           self.pos = next;
         } else {
           match index_of_char(self.css, ')', self.pos + 1) {
             Some(i) => {
-              let content = &self.css[self.pos..i + 1];
+              let content = &self.css[self.pos as usize..i as usize + 1];
 
               if RE_BAD_BRACKET.is_match(content).unwrap_or(false) {
-                self.current_token = Token("(", "(".to_string(), Some(self.pos), None);
+                self.current_token = Some(Token::LeftParent(SpanMalformed {
+                  content: "(".to_string(),
+                  pos: self.pos,
+                }));
               } else {
-                self.current_token =
-                  Token("brackets", content.to_string(), Some(self.pos), Some(i));
+                self.current_token = Some(Token::Brackets(Span::new(
+                  content.to_string(),
+                  Some(self.pos),
+                  Some(i),
+                )));
                 self.pos = i;
               }
             }
             None => {
-              self.current_token = Token("(", "(".to_string(), Some(self.pos), None);
+              // self.current_token = Token("(", "(".to_string(), Some(self.pos), None);
+              self.current_token = Some(Token::LeftParent(SpanMalformed {
+                content: "(".to_string(),
+                pos: self.pos,
+              }));
             }
           };
         }
@@ -331,25 +402,23 @@ impl<'a> Tokenizer<'a> {
           }
         }
 
-        self.current_token = Token(
-          "string",
+        self.current_token = Some(Token::String(Span::new(
           sub_string(self.css, self.pos, next + 1).to_string(),
           Some(self.pos),
           Some(next),
-        );
+        )));
         self.pos = next;
       }
       AT => {
-        let next = match RE_AT_END.find(&self.css[self.pos + 1..]).unwrap() {
-          Some(mat) => self.pos + 1 + mat.end() - 2,
+        let next = match RE_AT_END.find(&self.css[self.pos as usize + 1..]).unwrap() {
+          Some(mat) => self.pos + 1 + mat.end() as Number - 2,
           None => self.length - 1,
         };
-        self.current_token = Token(
-          "at-word",
+        self.current_token = Some(Token::AtWord(Span::new(
           sub_string(self.css, self.pos, next + 1).to_string(),
           Some(self.pos),
           Some(next),
-        );
+        )));
         self.pos = next;
       }
       BACKSLASH => {
@@ -385,12 +454,11 @@ impl<'a> Tokenizer<'a> {
           }
         }
 
-        self.current_token = Token(
-          "word",
+        self.current_token = Some(Token::Word(Span::new(
           sub_string(self.css, self.pos, next + 1).to_string(),
           Some(self.pos),
           Some(next),
-        );
+        )));
         self.pos = next;
       }
       _ => {
@@ -405,25 +473,28 @@ impl<'a> Tokenizer<'a> {
             }
           };
 
-          self.current_token = Token(
-            "comment",
+          self.current_token = Some(Token::Comment(Span::new(
             sub_string(self.css, self.pos, next + 1).to_string(),
             Some(self.pos),
             Some(next),
-          );
+          )));
+
           next
         } else {
-          let next = match RE_WORD_END.find(&self.css[self.pos + 1..]).unwrap() {
-            Some(mat) => self.pos + mat.end() - 1,
+          let next = match RE_WORD_END
+            .find(&self.css[self.pos as usize + 1..])
+            .unwrap()
+          {
+            Some(mat) => self.pos + mat.end() as i32 - 1,
             None => self.length - 1,
           };
-          self.current_token = Token(
-            "word",
+          self.current_token = Some(Token::Word(Span::new(
             sub_string(self.css, self.pos, next + 1).to_string(),
             Some(self.pos),
             Some(next),
-          );
-          self.push(self.current_token.clone());
+          )));
+
+          self.push(self.current_token.as_ref().unwrap().clone());
           next
         }
       }
@@ -435,32 +506,33 @@ impl<'a> Tokenizer<'a> {
 }
 
 #[inline]
-fn index_of(value: &str, search_value: &str, from_index: usize) -> Option<usize> {
-  let (_, last) = value.split_at(from_index);
-  last.find(search_value).map(|v| v + from_index)
+fn index_of(value: &str, search_value: &str, from_index: Number) -> Option<Number> {
+  assert!(from_index >= 0);
+  let (_, last) = value.split_at(from_index as usize);
+  last.find(search_value).map(|v| v as Number + from_index)
 }
 
 #[inline]
-fn index_of_char(value: &str, search_value: char, from_index: usize) -> Option<usize> {
-  let (_, last) = value.split_at(from_index);
-  last.find(search_value).map(|v| v + from_index)
+fn index_of_char(value: &str, search_value: char, from_index: Number) -> Option<Number> {
+  let (_, last) = value.split_at(from_index as usize);
+  last.find(search_value).map(|v| v as Number + from_index)
 }
 
 #[inline]
-fn sub_string(s: &str, start: usize, end: usize) -> &str {
-  if end + 1 > s.len() {
-    &s[start..]
+fn sub_string(s: &str, start: Number, end: Number) -> &str {
+  if end + 1 > s.len() as Number {
+    &s[start as usize..]
   } else {
-    &s[start..end]
+    &s[start as usize..end as usize]
   }
 }
 
 #[inline]
-fn char_code_at(s: &str, n: usize) -> char {
-  if n >= s.len() {
+fn char_code_at(s: &str, n: Number) -> char {
+  if n >= s.len() as Number {
     '\0'
   } else {
-    s.as_bytes()[n] as char
+    s.as_bytes()[n as usize] as char
   }
   // s.chars().nth(n).unwrap_or('\0')
 }
