@@ -318,7 +318,7 @@ impl<'a> Tokenizer<'a> {
       return None;
     }
 
-    let mut code: TokenSymbol = char_code_at(self.css, self.pos).into();
+    let mut code: TokenSymbol = char_code_at(self.css, self.pos);
 
     match code {
       TokenSymbol::NewLine
@@ -329,7 +329,7 @@ impl<'a> Tokenizer<'a> {
         let mut next = self.pos;
         loop {
           next += 1;
-          code = char_code_at(self.css, next).into();
+          code = char_code_at(self.css, next);
           if !(code == TokenSymbol::Space
             || code == TokenSymbol::NewLine
             || code == TokenSymbol::Tab
@@ -503,7 +503,7 @@ impl<'a> Tokenizer<'a> {
           next += 1;
           escape = !escape;
         }
-        code = char_code_at(self.css, next + 1).into();
+        code = char_code_at(self.css, next + 1);
         if escape
           && code != TokenSymbol::Slash
           && code != TokenSymbol::Space
