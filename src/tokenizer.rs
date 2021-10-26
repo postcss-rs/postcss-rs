@@ -55,7 +55,7 @@ pub trait TokenTrait {
   fn get_content(&self) -> String;
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub struct Span {
   symbol: TokenSymbol,
   content: String,
@@ -64,12 +64,17 @@ pub struct Span {
 }
 
 impl Span {
-  fn new(symbol: TokenSymbol, content: String, pos: Option<Number>, next: Option<Number>) -> Self {
+  pub fn new(
+    symbol: TokenSymbol,
+    content: &str,
+    pos: Option<Number>,
+    next: Option<Number>,
+  ) -> Self {
     Span {
       symbol,
-      content,
       pos,
       next,
+      content: content.to_string(),
     }
   }
 }
@@ -83,7 +88,7 @@ impl TokenTrait for Span {
   }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub struct SpanMalformed {
   symbol: TokenSymbol,
   content: String,
@@ -99,11 +104,21 @@ impl TokenTrait for SpanMalformed {
   }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub struct SpanControl {
   pub symbol: TokenSymbol,
   pub content: String,
   pub pos: Number,
+}
+
+impl SpanControl {
+  pub fn new(symbol: TokenSymbol, pos: Number) -> Self {
+    SpanControl {
+      symbol: symbol.clone(),
+      pos,
+      content: char::from(symbol).to_string(),
+    }
+  }
 }
 
 impl TokenTrait for SpanControl {
@@ -115,7 +130,7 @@ impl TokenTrait for SpanControl {
   }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum Token {
   Space(Span),
   Brackets(Span),
@@ -314,7 +329,7 @@ impl<'a> Tokenizer<'a> {
 
         self.current_token = Some(Token::Space(Span::new(
           code.into(),
-          self.css[(self.pos as usize)..(next as usize)].to_string(),
+          &self.css[(self.pos as usize)..(next as usize)],
           None,
           None,
         )));
@@ -343,7 +358,7 @@ impl<'a> Tokenizer<'a> {
           .buffer
           .pop()
           .map(|it| it.get_content())
-          .unwrap_or("".to_string());
+          .unwrap_or_else(|| "".to_string());
         let n = char_code_at(self.css, self.pos + 1);
         if prev == "url"
           && n != TokenSymbol::SingleQuote
@@ -383,8 +398,8 @@ impl<'a> Tokenizer<'a> {
           }
 
           self.current_token = Some(Token::Brackets(Span::new(
-            code.into(),
-            sub_string(self.css, self.pos, next + 1).to_string(),
+            code,
+            sub_string(self.css, self.pos, next + 1),
             Some(self.pos),
             Some(next),
           )));
@@ -404,7 +419,7 @@ impl<'a> Tokenizer<'a> {
               } else {
                 self.current_token = Some(Token::Brackets(Span::new(
                   code.into(),
-                  content.to_string(),
+                  content,
                   Some(self.pos),
                   Some(i),
                 )));
@@ -457,8 +472,8 @@ impl<'a> Tokenizer<'a> {
         }
 
         self.current_token = Some(Token::String(Span::new(
-          code.into(),
-          sub_string(self.css, self.pos, next + 1).to_string(),
+          code,
+          sub_string(self.css, self.pos, next + 1),
           Some(self.pos),
           Some(next),
         )));
@@ -471,7 +486,7 @@ impl<'a> Tokenizer<'a> {
         };
         self.current_token = Some(Token::AtWord(Span::new(
           code.into(),
-          sub_string(self.css, self.pos, next + 1).to_string(),
+          sub_string(self.css, self.pos, next + 1),
           Some(self.pos),
           Some(next),
         )));
@@ -512,7 +527,7 @@ impl<'a> Tokenizer<'a> {
 
         self.current_token = Some(Token::Word(Span::new(
           code.into(),
-          sub_string(self.css, self.pos, next + 1).to_string(),
+          sub_string(self.css, self.pos, next + 1),
           Some(self.pos),
           Some(next),
         )));
@@ -534,7 +549,7 @@ impl<'a> Tokenizer<'a> {
 
           self.current_token = Some(Token::Comment(Span::new(
             code.into(),
-            sub_string(self.css, self.pos, next + 1).to_string(),
+            sub_string(self.css, self.pos, next + 1),
             Some(self.pos),
             Some(next),
           )));
@@ -550,7 +565,7 @@ impl<'a> Tokenizer<'a> {
           };
           self.current_token = Some(Token::Word(Span::new(
             code.into(),
-            sub_string(self.css, self.pos, next + 1).to_string(),
+            sub_string(self.css, self.pos, next + 1),
             Some(self.pos),
             Some(next),
           )));

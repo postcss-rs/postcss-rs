@@ -6,7 +6,7 @@ fn tokenize(css: &str, ignore_errors: bool) -> Vec<Token> {
   let mut processor = Tokenizer::new(&input, ignore_errors);
   let mut tokens = vec![];
   while !processor.end_of_file() {
-    tokens.push(processor.next_token(false))
+    tokens.push(processor.next_token(false).unwrap())
   }
   return tokens;
 }
@@ -28,13 +28,26 @@ fn tokenizes_empty_file() {
 fn tokenizes_space() {
   run(
     "\r\n \u{12}\t",
-    vec![Token::new("space", "\r\n \u{12}\t", None, None)],
+    vec![Token::Space(Span::new(
+      ' '.into(),
+      "\r\n \u{12}\t",
+      None,
+      None,
+    ))],
   );
 }
 
 #[test]
 fn tokenizes_word() {
-  run("ab", vec![Token::new("word", "ab", Some(0), Some(1))]);
+  run(
+    "ab",
+    vec![Token::Word(Span::new(
+      Default::default(),
+      "ab",
+      Some(0),
+      Some(1),
+    ))],
+  );
 }
 
 #[test]
@@ -42,8 +55,8 @@ fn splits_word_by_exclamation_mark() {
   run(
     "aa!bb",
     vec![
-      Token::new("word", "aa", Some(0), Some(1)),
-      Token::new("word", "!bb", Some(2), Some(4)),
+      Token::Word(Span::new(Default::default(), "aa", Some(0), Some(1))),
+      Token::Word(Span::new(Default::default(), "!bb", Some(2), Some(4))),
     ],
   );
 }
@@ -53,9 +66,9 @@ fn changes_lines_in_spaces() {
   run(
     "a \n b",
     vec![
-      Token::new("word", "a", Some(0), Some(0)),
-      Token::new("space", " \n ", None, None),
-      Token::new("word", "b", Some(4), Some(4)),
+      Token::Word(Span::new(Default::default(), "a", Some(0), Some(0))),
+      Token::Space(Span::new(Default::default(), " \n ", None, None)),
+      Token::Word(Span::new(Default::default(), "b", Some(4), Some(4))),
     ],
   );
 }
@@ -65,10 +78,26 @@ fn tokenizes_control_chars() {
   run(
     "{:;}",
     vec![
-      Token::new("{", "{", Some(0), None),
-      Token::new(":", ":", Some(1), None),
-      Token::new(";", ";", Some(2), None),
-      Token::new("}", "}", Some(3), None),
+      Token::Control(SpanControl {
+        symbol: TokenSymbol::OpenCurly,
+        content: TokenSymbol::OpenCurly.to_string(),
+        pos: 0,
+      }),
+      Token::Control(SpanControl {
+        symbol: TokenSymbol::Colon,
+        content: TokenSymbol::Colon.to_string(),
+        pos: 1,
+      }),
+      Token::Control(SpanControl {
+        symbol: TokenSymbol::Semicolon,
+        content: TokenSymbol::Semicolon.to_string(),
+        pos: 2,
+      }),
+      Token::Control(SpanControl {
+        symbol: TokenSymbol::CloseCurly,
+        content: TokenSymbol::CloseCurly.to_string(),
+        pos: 3,
+      }),
     ],
   );
 }
@@ -78,12 +107,12 @@ fn escapes_control_symbols() {
   run(
     "\\(\\{\\\"\\@\\\\\"\"",
     vec![
-      Token::new("word", "\\(", Some(0), Some(1)),
-      Token::new("word", "\\{", Some(2), Some(3)),
-      Token::new("word", "\\\"", Some(4), Some(5)),
-      Token::new("word", "\\@", Some(6), Some(7)),
-      Token::new("word", "\\\\", Some(8), Some(9)),
-      Token::new("string", "\"\"", Some(10), Some(11)),
+      Token::Word(Span::new(Default::default(), "\\(", Some(0), Some(1))),
+      Token::Word(Span::new(Default::default(), "\\{", Some(2), Some(3))),
+      Token::Word(Span::new(Default::default(), "\\\"", Some(4), Some(5))),
+      Token::Word(Span::new(Default::default(), "\\@", Some(6), Some(7))),
+      Token::Word(Span::new(Default::default(), "\\\\", Some(8), Some(9))),
+      Token::String(Span::new(Default::default(), "\"\"", Some(10), Some(11))),
     ],
   );
 }
@@ -93,8 +122,8 @@ fn escapes_backslash() {
   run(
     "\\\\\\\\{",
     vec![
-      Token::new("word", "\\\\\\\\", Some(0), Some(3)),
-      Token::new("{", "{", Some(4), None),
+      Token::Word(Span::new(Default::default(), "\\\\\\\\", Some(0), Some(3))),
+      Token::Control(SpanControl::new(TokenSymbol::OpenCurly, 4)),
     ],
   );
 }
@@ -103,7 +132,12 @@ fn escapes_backslash() {
 fn tokenizes_simple_brackets() {
   run(
     "(ab)",
-    vec![Token::new("brackets", "(ab)", Some(0), Some(3))],
+    vec![Token::Brackets(Span::new(
+      Default::default(),
+      "(ab)",
+      Some(0),
+      Some(3),
+    ))],
   );
 }
 
@@ -112,10 +146,10 @@ fn tokenizes_square_brackets() {
   run(
     "a[bc]",
     vec![
-      Token::new("word", "a", Some(0), Some(0)),
-      Token::new("[", "[", Some(1), None),
-      Token::new("word", "bc", Some(2), Some(3)),
-      Token::new("]", "]", Some(4), None),
+      Token::Word(Span::new(Default::default(), "a", Some(0), Some(0))),
+      Token::Control(SpanControl::new(TokenSymbol::OpenSquare, 1)),
+      Token::Word(Span::new(Default::default(), "bc", Some(2), Some(3))),
+      Token::Control(SpanControl::new(TokenSymbol::CloseSquare, 4)),
     ],
   );
 }
@@ -125,22 +159,22 @@ fn tokenizes_complicated_brackets() {
   run(
     "(())(\"\")(/**/)(\\\\)(\n)(",
     vec![
-      Token::new("(", "(", Some(0), None),
-      Token::new("brackets", "()", Some(1), Some(2)),
-      Token::new(")", ")", Some(3), None),
-      Token::new("(", "(", Some(4), None),
-      Token::new("string", "\"\"", Some(5), Some(6)),
-      Token::new(")", ")", Some(7), None),
-      Token::new("(", "(", Some(8), None),
-      Token::new("comment", "/**/", Some(9), Some(12)),
-      Token::new(")", ")", Some(13), None),
-      Token::new("(", "(", Some(14), None),
-      Token::new("word", "\\\\", Some(15), Some(16)),
-      Token::new(")", ")", Some(17), None),
-      Token::new("(", "(", Some(18), None),
-      Token::new("space", "\n", None, None),
-      Token::new(")", ")", Some(20), None),
-      Token::new("(", "(", Some(21), None),
+      Token::Control(SpanControl::new(TokenSymbol::OpenCurly, 0)),
+      Token::Brackets(Span::new(Default::default(), "()", Some(1), Some(2))),
+      Token::Control(SpanControl::new(TokenSymbol::CloseCurly, 3)),
+      Token::Control(SpanControl::new(TokenSymbol::OpenCurly, 4)),
+      Token::String(Span::new(Default::default(), "\"\"", Some(5), Some(6))),
+      Token::Control(SpanControl::new(TokenSymbol::CloseCurly, 7)),
+      Token::Control(SpanControl::new(TokenSymbol::OpenCurly, 8)),
+      Token::Comment(Span::new(Default::default(), "/**/", Some(9), Some(12))),
+      Token::Control(SpanControl::new(TokenSymbol::CloseCurly, 13)),
+      Token::Control(SpanControl::new(TokenSymbol::OpenCurly, 14)),
+      Token::Word(Span::new(Default::default(), "\\\\", Some(15), Some(16))),
+      Token::Control(SpanControl::new(TokenSymbol::CloseCurly, 17)),
+      Token::Control(SpanControl::new(TokenSymbol::OpenCurly, 18)),
+      Token::Space(Span::new(Default::default(), "\n", None, None)),
+      Token::Control(SpanControl::new(TokenSymbol::CloseCurly, 20)),
+      Token::Control(SpanControl::new(TokenSymbol::OpenCurly, 21)),
     ],
   );
 }
