@@ -320,6 +320,7 @@ version = "0.0.1"
 dependencies = [
  "criterion",
  "lazy_static",
+ "memchr",
  "regex",
  "smol_str",
 ]

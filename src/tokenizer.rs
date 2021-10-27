@@ -1,5 +1,7 @@
 use crate::input::Input;
 use lazy_static::lazy_static;
+use memchr::memchr;
+use memchr::memmem::Finder;
 use regex::Regex;
 use smol_str::SmolStr;
 use std::clone::Clone;
@@ -32,6 +34,7 @@ lazy_static! {
     Regex::new(r##"[\t\n\u{12}\r !"#'():;@\[\\\]{}]|/(?:\*)"##).unwrap();
   static ref RE_BAD_BRACKET: Regex = Regex::new(r#".[\n"'(/\\]"#).unwrap();
   static ref RE_HEX_ESCAPE: Regex = Regex::new(r"[\da-f]").unwrap();
+  static ref FINDER_END_OF_COMMENTT: Finder<'static> = Finder::new("*/");
 }
 
 #[derive(Debug, Clone, Eq, PartialEq)]
@@ -155,7 +158,7 @@ impl<'a> Tokenizer<'a> {
           let mut next = self.pos;
           loop {
             let mut escaped = false;
-            match index_of(self.css, ")", next + 1) {
+            match index_of_char(self.css, ')', next + 1) {
               Some(i) => {
                 next = i;
               }
@@ -295,7 +298,7 @@ impl<'a> Tokenizer<'a> {
       }
       _ => {
         self.pos = if code == SLASH && char_code_at(self.css, self.pos + 1) == ASTERISK {
-          let next = match index_of(self.css, "*/", self.pos + 2) {
+          let next = match index_of_end_comment(self.css, self.pos + 2) {
             Some(i) => i + 1,
             None => {
               if !self.ignore && !ignore_unclosed {
@@ -341,15 +344,17 @@ impl<'a> Tokenizer<'a> {
 }
 
 #[inline]
-fn index_of(value: &str, search_value: &str, from_index: usize) -> Option<usize> {
+fn index_of_end_comment(value: &str, from_index: usize) -> Option<usize> {
   let (_, last) = value.split_at(from_index);
-  last.find(search_value).map(|v| v + from_index)
+  FINDER_END_OF_COMMENTT
+    .find(last.as_bytes())
+    .map(|v| v + from_index)
 }
 
 #[inline]
 fn index_of_char(value: &str, search_value: char, from_index: usize) -> Option<usize> {
   let (_, last) = value.split_at(from_index);
-  last.find(search_value).map(|v| v + from_index)
+  memchr(search_value as u8, last.as_bytes()).map(|v| v + from_index)
 }
 
 #[inline]
