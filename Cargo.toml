@@ -10,7 +10,7 @@ license = "MIT"
 keywords = ["css", "syntax", "postcss", "parser", "ast"]
 
 [dependencies]
-fancy-regex = "0.7.1"
+regex = "1"
 lazy_static = "1"
 
 [profile.release]

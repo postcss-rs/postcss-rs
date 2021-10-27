@@ -1,5 +1,5 @@
-use fancy_regex::Regex;
 use lazy_static::lazy_static;
+use regex::Regex;
 use std::clone::Clone;
 use std::cmp::Eq;
 use std::cmp::PartialEq;
@@ -193,7 +193,7 @@ impl<'a> Tokenizer<'a> {
             Some(i) => {
               let content = &self.css[self.pos..i + 1];
 
-              if RE_BAD_BRACKET.is_match(content).unwrap_or(false) {
+              if RE_BAD_BRACKET.is_match(content) {
                 self.current_token = Token("(", "(".to_string(), Some(self.pos), None);
               } else {
                 self.current_token =
@@ -246,7 +246,7 @@ impl<'a> Tokenizer<'a> {
         self.pos = next;
       }
       AT => {
-        let next = match RE_AT_END.find_from_pos(&self.css, self.pos + 1).unwrap() {
+        let next = match RE_AT_END.find_at(&self.css, self.pos + 1) {
           Some(mat) => mat.end() - 2,
           None => self.length - 1,
         };
@@ -275,14 +275,8 @@ impl<'a> Tokenizer<'a> {
           && code != FEED
         {
           next += 1;
-          if RE_HEX_ESCAPE
-            .is_match(sub_string(self.css, next, next + 1))
-            .unwrap_or(false)
-          {
-            while RE_HEX_ESCAPE
-              .is_match(sub_string(self.css, next + 1, next + 2))
-              .unwrap_or(false)
-            {
+          if RE_HEX_ESCAPE.is_match(sub_string(self.css, next, next + 1)) {
+            while RE_HEX_ESCAPE.is_match(sub_string(self.css, next + 1, next + 2)) {
               next += 1;
             }
             if char_code_at(self.css, next + 1) == SPACE {
@@ -319,14 +313,14 @@ impl<'a> Tokenizer<'a> {
           );
           next
         } else {
-          let next = match RE_WORD_END.find_from_pos(&self.css, self.pos + 1).unwrap() {
+          let next = match RE_WORD_END.find_at(&self.css, self.pos + 1) {
             Some(mat) => {
               if char_code_at(&self.css, mat.end() - 2) == '/' {
                 mat.end() - 3
               } else {
                 mat.end() - 2
               }
-            },
+            }
             None => self.length - 1,
           };
           self.current_token = Token(
