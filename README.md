@@ -6,11 +6,11 @@
 
 ## Performance Improvement 
 
-Benchmark:
+Tokenize [bootstrap.css](./assets/bootstrap.css) (Compare with postcss.js):
 
 ```bash
-tokenizer/small(7K)     time:   [418.15 us 422.79 us 428.63 us]
-tokenizer/large(201K)   time:   [12.828 ms 13.231 ms 13.660 ms]
+rust: 0.02s user 0.00s system  90% cpu 0.021 total
+js:   0.13s user 0.02s system 126% cpu 0.109 total
 ```
 
 🎉 Welcome contribute, here is a guide:
