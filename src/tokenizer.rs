@@ -246,8 +246,8 @@ impl<'a> Tokenizer<'a> {
         self.pos = next;
       }
       AT => {
-        let next = match RE_AT_END.find(&self.css[self.pos + 1..]).unwrap() {
-          Some(mat) => self.pos + 1 + mat.end() - 2,
+        let next = match RE_AT_END.find_from_pos(&self.css, self.pos + 1).unwrap() {
+          Some(mat) => mat.end() - 2,
           None => self.length - 1,
         };
         self.current_token = Token(
@@ -319,8 +319,8 @@ impl<'a> Tokenizer<'a> {
           );
           next
         } else {
-          let next = match RE_WORD_END.find(&self.css[self.pos + 1..]).unwrap() {
-            Some(mat) => self.pos + mat.end() - 1,
+          let next = match RE_WORD_END.find_from_pos(&self.css, self.pos + 1).unwrap() {
+            Some(mat) => mat.end() - 2,
             None => self.length - 1,
           };
           self.current_token = Token(
