@@ -346,7 +346,7 @@ impl<'a> Tokenizer<'a> {
 #[inline]
 fn index_of_end_comment(value: &str, from_index: usize) -> Option<usize> {
   let (_, last) = value.split_at(from_index);
-  FINDER_END_OF_COMMENTT
+  FINDER_END_OF_COMMENT
     .find(last.as_bytes())
     .map(|v| v + from_index)
 }
