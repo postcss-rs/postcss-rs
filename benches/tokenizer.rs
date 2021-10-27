@@ -1,4 +1,4 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion::{criterion_group, criterion_main, Criterion};
 use postcss::{
   input::Input,
   tokenizer::{Token, Tokenizer},
@@ -17,18 +17,14 @@ fn tokenize(css: &str, ignore_errors: bool) -> Vec<Token> {
   return tokens;
 }
 
-fn criterion_benchmark(c: &mut Criterion) {
+fn tokenize_bench(c: &mut Criterion) {
   c.bench_function("small css file 7K", |b| {
-    b.iter(|| {
-      tokenize(SMALL_CSS_FILE, false);
-    });
+    b.iter_with_large_drop(|| tokenize(SMALL_CSS_FILE, false));
   });
   c.bench_function("large css file 201K", |b| {
-    b.iter(|| {
-      tokenize(LARGE_CSS_FILE, false);
-    });
+    b.iter_with_large_drop(|| tokenize(LARGE_CSS_FILE, false));
   });
 }
 
-criterion_group!(benches, criterion_benchmark);
+criterion_group!(benches, tokenize_bench);
 criterion_main!(benches);
