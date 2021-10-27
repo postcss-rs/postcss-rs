@@ -29,7 +29,7 @@ const AT: char = '@';
 lazy_static! {
   static ref RE_AT_END: Regex = Regex::new(r##"[\t\n\u{12}\r "#'()/;\[\\\]{}]"##).unwrap();
   static ref RE_WORD_END: Regex =
-    Regex::new(r##"[\t\n\u{12}\r !"#'():;@\[\\\]{}]|/(?=\*)"##).unwrap();
+    Regex::new(r##"[\t\n\u{12}\r !"#'():;@\[\\\]{}]|/(?:\*)"##).unwrap();
   static ref RE_BAD_BRACKET: Regex = Regex::new(r#".[\n"'(/\\]"#).unwrap();
   static ref RE_HEX_ESCAPE: Regex = Regex::new(r"[\da-f]").unwrap();
 }
@@ -320,7 +320,13 @@ impl<'a> Tokenizer<'a> {
           next
         } else {
           let next = match RE_WORD_END.find_from_pos(&self.css, self.pos + 1).unwrap() {
-            Some(mat) => mat.end() - 2,
+            Some(mat) => {
+              if char_code_at(&self.css, mat.end() - 2) == '/' {
+                mat.end() - 3
+              } else {
+                mat.end() - 2
+              }
+            },
             None => self.length - 1,
           };
           self.current_token = Token(
