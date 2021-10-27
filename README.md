@@ -9,7 +9,7 @@
 Tokenize [bootstrap.css](./assets/bootstrap.css) (Compare with postcss.js):
 
 ```bash
-rust: 0.02s user 0.00s system  90% cpu 0.021 total
+rust: 0.01s user 0.00s system  79% cpu 0.009 total
 js:   0.13s user 0.02s system 126% cpu 0.109 total
 ```
 
