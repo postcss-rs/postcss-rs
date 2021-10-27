@@ -1,8 +1,6 @@
 use criterion::{criterion_group, criterion_main, Criterion};
-use postcss::{
-  input::Input,
-  tokenizer::{Token, Tokenizer},
-};
+use postcss::input::Input;
+use postcss::tokenizer::{Token, Tokenizer};
 
 const SMALL_CSS_FILE: &str = include_str!("../assets/bootstrap-reboot.css");
 const LARGE_CSS_FILE: &str = include_str!("../assets/bootstrap.css");
@@ -18,10 +16,10 @@ fn tokenize(css: &str, ignore_errors: bool) -> Vec<Token> {
 }
 
 fn tokenize_bench(c: &mut Criterion) {
-  c.bench_function("small css file 7K", |b| {
+  c.bench_function("tokenizer/small(7K)", |b| {
     b.iter_with_large_drop(|| tokenize(SMALL_CSS_FILE, false));
   });
-  c.bench_function("large css file 201K", |b| {
+  c.bench_function("tokenizer/large(201K)", |b| {
     b.iter_with_large_drop(|| tokenize(LARGE_CSS_FILE, false));
   });
 }
