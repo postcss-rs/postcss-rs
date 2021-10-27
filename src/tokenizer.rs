@@ -1,10 +1,10 @@
+use crate::input::Input;
 use lazy_static::lazy_static;
 use regex::Regex;
+use smol_str::SmolStr;
 use std::clone::Clone;
 use std::cmp::Eq;
 use std::cmp::PartialEq;
-use smol_str::SmolStr;
-use crate::input::Input;
 
 const SINGLE_QUOTE: char = '\'';
 const DOUBLE_QUOTE: char = '"';
