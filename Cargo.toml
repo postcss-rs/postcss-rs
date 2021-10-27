@@ -13,6 +13,7 @@ keywords = ["css", "syntax", "postcss", "parser", "ast"]
 regex = "1"
 lazy_static = "1"
 smol_str = "0.1.18"
+memchr = "2.4"
 
 [profile.release]
 codegen-units = 1
