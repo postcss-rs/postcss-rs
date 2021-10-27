@@ -29,7 +29,7 @@ impl<'a> Parser<'a> {
   pub fn parse(&mut self) {
     while !self.tokenizer.end_of_file() {
       let token = self.tokenizer.next_token(true);
-      match token.0 {
+      match token.0.as_str() {
         "space" => self.spaces += &token.1,
         ";" => self.free_semicolon(&token),
         "}" => self.end(&token),
