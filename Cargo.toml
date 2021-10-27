@@ -21,6 +21,17 @@ panic = "abort"
 [dev-dependencies]
 criterion = { version="0.3", features = ["html_reports"] }
 
+[lib]
+# `cargo bench` Gives "Unrecognized Option" Errors for Valid Command-line Options
+# https://bheisler.github.io/criterion.rs/book/faq.html#cargo-bench-gives-unrecognized-option-errors-for-valid-command-line-options
+bench = false
+
+[[bin]]
+name = "postcss"
+# `cargo bench` Gives "Unrecognized Option" Errors for Valid Command-line Options
+# https://bheisler.github.io/criterion.rs/book/faq.html#cargo-bench-gives-unrecognized-option-errors-for-valid-command-line-options
+bench = false
+
 [[bench]]
 name = "tokenizer"
 harness = false
