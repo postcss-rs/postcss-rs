@@ -63,6 +63,7 @@ impl<'a> Tokenizer<'a> {
       ignore: ignore_errors,
       length,
       pos: 0,
+      // buffer: Vec::with_capacity(length / 13),
       buffer: vec![],
       returned: vec![],
     }
@@ -247,7 +248,7 @@ impl<'a> Tokenizer<'a> {
         self.pos = next + 1;
       }
       AT => {
-        let next = index_of_at_end(&self.css, self.pos + 1) - 1;
+        let next = index_of_at_end(self.css, self.pos + 1) - 1;
         current_token = Token(
           "at-word".into(),
           sub_string(self.css, self.pos, next + 1).into(),
@@ -311,7 +312,7 @@ impl<'a> Tokenizer<'a> {
           );
           next
         } else {
-          let next = index_of_word_end(&self.css, self.pos + 1) - 1;
+          let next = index_of_word_end(self.css, self.pos + 1) - 1;
           let content = sub_string(self.css, self.pos, next + 1);
           current_token = Token("word".into(), content.into(), Some(self.pos), Some(next));
           self.push(content);
@@ -364,12 +365,7 @@ fn is_hex_char(s: &str, n: usize) -> bool {
     return false;
   }
 
-  match s.as_bytes()[n] {
-    b'A'..=b'F' => true,
-    b'a'..=b'f' => true,
-    b'0'..=b'9' => true,
-    _ => false,
-  }
+  matches!(s.as_bytes()[n], b'A'..=b'F' | b'a'..=b'f' | b'0'..=b'9')
 }
 
 #[inline]
@@ -402,7 +398,7 @@ fn index_of_at_end(s: &str, start: usize) -> usize {
     };
   }
 
-  return i;
+  i
 }
 
 #[inline]
@@ -427,7 +423,7 @@ fn index_of_word_end(s: &str, start: usize) -> usize {
       _ => i += 1,
     };
   }
-  return i;
+  i
 }
 
 #[cfg(test)]
