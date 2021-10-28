@@ -1,5 +1,3 @@
-extern crate lazy_static;
-
 pub mod error;
 pub mod input;
 pub mod list;
