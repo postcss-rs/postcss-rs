@@ -93,7 +93,7 @@ impl<'a> Tokenizer<'a> {
     if !self.returned.is_empty() {
       return self.returned.pop().unwrap();
     }
-    
+
     let mut code = char_code_at(self.css, self.pos);
 
     let current_token: Token;
@@ -197,8 +197,7 @@ impl<'a> Tokenizer<'a> {
               if is_bad_bracket(content) {
                 current_token = Token("(".into(), "(".into(), Some(self.pos), None);
               } else {
-                current_token =
-                  Token("brackets".into(), content.into(), Some(self.pos), Some(i));
+                current_token = Token("brackets".into(), content.into(), Some(self.pos), Some(i));
                 self.pos = i;
               }
             }
@@ -314,12 +313,7 @@ impl<'a> Tokenizer<'a> {
         } else {
           let next = index_of_word_end(&self.css, self.pos + 1) - 1;
           let content = sub_string(self.css, self.pos, next + 1);
-          current_token = Token(
-            "word".into(),
-            content.into(),
-            Some(self.pos),
-            Some(next),
-          );
+          current_token = Token("word".into(), content.into(), Some(self.pos), Some(next));
           self.push(content);
           next
         };
