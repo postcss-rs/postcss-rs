@@ -33,7 +33,7 @@ lazy_static! {
   static ref RE_WORD_END: Regex =
     Regex::new(r##"[\t\n\u{12}\r !"#'():;@\[\\\]{}]|/(?:\*)"##).unwrap();
   static ref RE_BAD_BRACKET: Regex = Regex::new(r#".[\n"'(/\\]"#).unwrap();
-  static ref RE_HEX_ESCAPE: Regex = Regex::new(r"[\da-f]").unwrap();
+  // static ref RE_HEX_ESCAPE: Regex = Regex::new(r"[\da-f]").unwrap();
   static ref FINDER_END_OF_COMMENTT: Finder<'static> = Finder::new("*/");
 }
 
@@ -278,8 +278,8 @@ impl<'a> Tokenizer<'a> {
           && code != FEED
         {
           next += 1;
-          if RE_HEX_ESCAPE.is_match(sub_string(self.css, next, next + 1)) {
-            while RE_HEX_ESCAPE.is_match(sub_string(self.css, next + 1, next + 2)) {
+          if is_hex_char(self.css, next) {
+            while is_hex_char(self.css, next + 1) {
               next += 1;
             }
             if char_code_at(self.css, next + 1) == SPACE {
@@ -374,6 +374,20 @@ fn char_code_at(s: &str, n: usize) -> char {
     s.as_bytes()[n] as char
   }
   // s.chars().nth(n).unwrap_or('\0')
+}
+
+#[inline]
+fn is_hex_char(s: &str, n: usize) -> bool {
+  if n >= s.len() {
+    return false;
+  }
+
+  match s.as_bytes()[n] {
+    b'A'..=b'F' => true,
+    b'a'..=b'f' => true,
+    b'0'..=b'9' => true,
+    _ => false,
+  }
 }
 
 #[cfg(test)]
