@@ -243,10 +243,7 @@ impl<'a> Tokenizer<'a> {
         self.pos = next;
       }
       AT => {
-        let next = match index_of_at_end(&self.css, self.pos + 1) {
-          Some(i) => i - 1,
-          None => self.length - 1,
-        };
+        let next = index_of_at_end(&self.css, self.pos + 1) - 1;
         self.current_token = Token(
           "at-word".into(),
           sub_string(self.css, self.pos, next + 1).into(),
@@ -310,10 +307,7 @@ impl<'a> Tokenizer<'a> {
           );
           next
         } else {
-          let next = match index_of_word_end(&self.css, self.pos + 1) {
-            Some(i) => i - 1,
-            None => self.length - 1,
-          };
+          let next = index_of_word_end(&self.css, self.pos + 1) - 1;
           self.current_token = Token(
             "word".into(),
             sub_string(self.css, self.pos, next + 1).into(),
@@ -393,38 +387,47 @@ fn is_bad_bracket(s: &str) -> bool {
 }
 
 #[inline]
-fn index_of_at_end(s: &str, start: usize) -> Option<usize> {
+fn index_of_at_end(s: &str, start: usize) -> usize {
   let bytes = s.as_bytes();
-  for i in start..bytes.len() {
+  let mut i = start;
+  let len = bytes.len();
+
+  while i < len {
     match bytes[i] as char {
       '\t' | '\n' | '\u{12}' | '\r' | ' ' | '"' | '#' | '\'' | '(' | ')' | '/' | ';' | '['
       | '\\' | ']' | '{' | '}' => {
-        return Some(i);
+        return i;
       }
-      _ => continue,
+      _ => i += 1,
     };
   }
-  None
+
+  return i;
 }
 
 #[inline]
-fn index_of_word_end(s: &str, start: usize) -> Option<usize> {
+fn index_of_word_end(s: &str, start: usize) -> usize {
   let bytes = s.as_bytes();
-  for i in start..bytes.len() {
+  let mut i = start;
+  let len = bytes.len();
+
+  while i < len {
     match bytes[i] as char {
       '\t' | '\n' | '\u{12}' | '\r' | ' ' | '!' | '"' | '#' | '\'' | '(' | ')' | ':' | ';'
       | '@' | '[' | '\\' | ']' | '{' | '}' => {
-        return Some(i);
+        return i;
       }
       '/' => {
         if bytes[i + 1] as char == '*' {
-          return Some(i);
+          return i;
+        } else {
+          i += 1;
         }
       }
-      _ => {}
+      _ => i += 1,
     };
   }
-  None
+  return i;
 }
 
 #[cfg(test)]
