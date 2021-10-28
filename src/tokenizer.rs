@@ -6,7 +6,7 @@ use smol_str::SmolStr;
 use std::clone::Clone;
 use std::cmp::Eq;
 use std::cmp::PartialEq;
-
+use std::borrow::Cow;
 const SINGLE_QUOTE: char = '\'';
 const DOUBLE_QUOTE: char = '"';
 const BACKSLASH: char = '\\';
@@ -32,16 +32,16 @@ lazy_static! {
 }
 
 #[derive(Debug, Clone, Eq, PartialEq)]
-pub struct Token(
+pub struct Token<'a>(
   pub SmolStr,
-  pub SmolStr,
+  pub Cow<'a, str>,
   pub Option<usize>,
   pub Option<usize>,
 );
 
-impl Token {
-  pub fn new(kind: &'static str, content: &str, pos: Option<usize>, next: Option<usize>) -> Token {
-    Token(kind.into(), content.into(), pos, next)
+impl<'a> Token<'a> {
+  pub fn new(kind: &'static str, content: &'a str, pos: Option<usize>, next: Option<usize>) -> Token<'a> {
+    Token(kind.into(), Cow::Borrowed(&content), pos, next)
   }
 }
 
@@ -52,7 +52,7 @@ pub struct Tokenizer<'a> {
   length: usize,
   pos: usize,
   buffer: Vec<&'a str>,
-  returned: Vec<Token>,
+  returned: Vec<Token<'a>>,
 }
 
 impl<'a> Tokenizer<'a> {
@@ -85,7 +85,7 @@ impl<'a> Tokenizer<'a> {
     self.returned.is_empty() && self.pos >= self.length
   }
 
-  pub fn back(&mut self, token: Token) {
+  pub fn back(&mut self, token: Token<'a>) {
     self.returned.push(token);
   }
 
@@ -324,6 +324,7 @@ impl<'a> Tokenizer<'a> {
     current_token
   }
 }
+
 
 #[inline]
 fn index_of_end_comment(value: &str, from_index: usize) -> Option<usize> {

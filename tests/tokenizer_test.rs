@@ -1,22 +1,31 @@
 use postcss::input::Input;
 use postcss::tokenizer::*;
 
-fn tokenize(css: &str, ignore_errors: bool) -> Vec<Token> {
-  let input = Input::new(css.to_string(), None);
-  let mut processor = Tokenizer::new(&input, ignore_errors);
-  let mut tokens = vec![];
-  while !processor.end_of_file() {
-    tokens.push(processor.next_token(false))
-  }
-  return tokens;
-}
+// fn tokenize(css: &str, ignore_errors: bool) -> Tokenizer {
+// }
 
 fn run(css: &str, tokens: Vec<Token>) {
-  assert_eq!(tokenize(css, false), tokens);
+  let input = Input::new(css.to_string(), None);
+  let mut tokenizer = Tokenizer::new(&input, false);
+  for token in tokens.iter() {
+    if tokenizer.end_of_file() {
+      panic!("expected {:?}, found none", token);
+    } else {
+      assert_eq!(&tokenizer.next_token(false), token);
+    }
+  }
 }
 
 fn run_ignore_errors(css: &str, tokens: Vec<Token>) {
-  assert_eq!(tokenize(css, true), tokens);
+  let input = Input::new(css.to_string(), None);
+  let mut tokenizer = Tokenizer::new(&input, true);
+  for token in tokens.iter() {
+    if tokenizer.end_of_file() {
+      panic!("expected {:?}, found none", token);
+    } else {
+      assert_eq!(&tokenizer.next_token(true), token);
+    }
+  }
 }
 
 #[test]
@@ -316,19 +325,33 @@ fn tokenizes_css() {
 #[test]
 #[should_panic(expected = "Unclosed string 1")]
 fn throws_error_on_unclosed_string() {
-  tokenize(" \"", false);
+  let input = Input::new(" \"".to_string(), None);
+  let mut tokenizer = Tokenizer::new(&input, false);
+  while !tokenizer.end_of_file() {
+    tokenizer.next_token(false);
+  }
+  // tokenize(, false);
 }
 
 #[test]
 #[should_panic(expected = "Unclosed comment 1")]
 fn throws_error_on_unclosed_comment() {
-  tokenize(" /*", false);
+  let input = Input::new(" /*".to_string(), None);
+  let mut tokenizer = Tokenizer::new(&input, false);
+  while !tokenizer.end_of_file() {
+    tokenizer.next_token(false);
+  }
 }
 
 #[test]
 #[should_panic(expected = "Unclosed bracket 3")]
 fn throws_error_on_unclosed_url() {
-  tokenize("url(", false);
+  let input = Input::new("url(".to_string(), None);
+  let mut tokenizer = Tokenizer::new(&input, false);
+  while !tokenizer.end_of_file() {
+    tokenizer.next_token(false);
+  }
+  // tokenize("url(", false);
 }
 
 #[test]
@@ -379,17 +402,6 @@ fn tokenizes_hexadecimal_escape() {
 
 #[test]
 fn ignore_unclosed_per_token_request() {
-  fn tokn(css: &str) -> Vec<Token> {
-    let input = Input::new(css.to_string(), None);
-    let mut processor = Tokenizer::new(&input, false);
-    let mut tokens = vec![];
-    while !processor.end_of_file() {
-      tokens.push(processor.next_token(true))
-    }
-    return tokens;
-  }
-
-  let tokens = tokn("How's it going (");
   let expected = vec![
     Token::new("word", "How", Some(0), Some(2)),
     Token::new("string", "'s", Some(3), Some(4)),
@@ -400,7 +412,7 @@ fn ignore_unclosed_per_token_request() {
     Token::new("space", " ", None, None),
     Token::new("(", "(", Some(15), None),
   ];
-  assert_eq!(tokens, expected);
+  run_ignore_errors("How's it going (", expected);
 }
 
 #[test]
