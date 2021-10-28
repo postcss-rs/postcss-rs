@@ -51,7 +51,7 @@ pub struct Tokenizer<'a> {
   ignore: bool,
   length: usize,
   pos: usize,
-  buffer: Vec<Token>,
+  buffer: Vec<SmolStr>,
   returned: Vec<Token>,
 }
 
@@ -69,7 +69,7 @@ impl<'a> Tokenizer<'a> {
   }
 
   #[inline]
-  fn push(&mut self, t: Token) {
+  fn push(&mut self, t: SmolStr) {
     self.buffer.push(t);
   }
 
@@ -142,10 +142,7 @@ impl<'a> Tokenizer<'a> {
         self.pos += 1;
       }
       OPEN_PARENTHESES => {
-        let prev = match self.buffer.pop() {
-          Some(b) => b.1,
-          None => String::new().into(),
-        };
+        let prev = self.buffer.pop().unwrap_or(SmolStr::new(""));
         let n = char_code_at(self.css, self.pos + 1);
         if prev == "url"
           && n != SINGLE_QUOTE
@@ -316,13 +313,14 @@ impl<'a> Tokenizer<'a> {
           next
         } else {
           let next = index_of_word_end(&self.css, self.pos + 1) - 1;
+          let content = sub_string(self.css, self.pos, next + 1);
           current_token = Token(
             "word".into(),
-            sub_string(self.css, self.pos, next + 1).into(),
+            content.into(),
             Some(self.pos),
             Some(next),
           );
-          self.push(current_token.clone());
+          self.push(content.into());
           next
         };
         self.pos += 1;
