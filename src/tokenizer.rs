@@ -142,7 +142,7 @@ impl<'a> Tokenizer<'a> {
         self.pos += 1;
       }
       OPEN_PARENTHESES => {
-        let prev = self.buffer.pop().unwrap_or(SmolStr::new(""));
+        let prev = self.buffer.pop().unwrap_or(SmolStr::new_inline(""));
         let n = char_code_at(self.css, self.pos + 1);
         if prev == "url"
           && n != SINGLE_QUOTE
