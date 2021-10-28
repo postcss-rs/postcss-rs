@@ -2,7 +2,6 @@ use crate::input::Input;
 use lazy_static::lazy_static;
 use memchr::memchr;
 use memchr::memmem::Finder;
-use regex::Regex;
 use smol_str::SmolStr;
 use std::clone::Clone;
 use std::cmp::Eq;
@@ -29,8 +28,6 @@ const COLON: char = ':';
 const AT: char = '@';
 
 lazy_static! {
-  static ref RE_WORD_END: Regex =
-    Regex::new(r##"[\t\n\u{12}\r !"#'():;@\[\\\]{}]|/(?:\*)"##).unwrap();
   static ref FINDER_END_OF_COMMENT: Finder<'static> = Finder::new("*/");
 }
 
@@ -313,14 +310,8 @@ impl<'a> Tokenizer<'a> {
           );
           next
         } else {
-          let next = match RE_WORD_END.find_at(&self.css, self.pos + 1) {
-            Some(mat) => {
-              if char_code_at(&self.css, mat.end() - 2) == '/' {
-                mat.end() - 3
-              } else {
-                mat.end() - 2
-              }
-            }
+          let next = match index_of_word_end(&self.css, self.pos + 1) {
+            Some(i) => i - 1,
             None => self.length - 1,
           };
           self.current_token = Token(
@@ -411,6 +402,26 @@ fn index_of_at_end(s: &str, start: usize) -> Option<usize> {
         return Some(i);
       }
       _ => continue,
+    };
+  }
+  None
+}
+
+#[inline]
+fn index_of_word_end(s: &str, start: usize) -> Option<usize> {
+  let bytes = s.as_bytes();
+  for i in start..bytes.len() {
+    match bytes[i] as char {
+      '\t' | '\n' | '\u{12}' | '\r' | ' ' | '!' | '"' | '#' | '\'' | '(' | ')' | ':' | ';'
+      | '@' | '[' | '\\' | ']' | '{' | '}' => {
+        return Some(i);
+      }
+      '/' => {
+        if bytes[i + 1] as char == '*' {
+          return Some(i);
+        }
+      }
+      _ => {}
     };
   }
   None
