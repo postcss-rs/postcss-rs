@@ -29,7 +29,6 @@ const COLON: char = ':';
 const AT: char = '@';
 
 lazy_static! {
-  static ref RE_AT_END: Regex = Regex::new(r##"[\t\n\u{12}\r "#'()/;\[\\\]{}]"##).unwrap();
   static ref RE_WORD_END: Regex =
     Regex::new(r##"[\t\n\u{12}\r !"#'():;@\[\\\]{}]|/(?:\*)"##).unwrap();
   static ref FINDER_END_OF_COMMENT: Finder<'static> = Finder::new("*/");
@@ -247,8 +246,8 @@ impl<'a> Tokenizer<'a> {
         self.pos = next;
       }
       AT => {
-        let next = match RE_AT_END.find_at(&self.css, self.pos + 1) {
-          Some(mat) => mat.end() - 2,
+        let next = match index_of_at_end(&self.css, self.pos + 1) {
+          Some(i) => i - 1,
           None => self.length - 1,
         };
         self.current_token = Token(
@@ -400,6 +399,21 @@ fn is_bad_bracket(s: &str) -> bool {
     };
   }
   false
+}
+
+#[inline]
+fn index_of_at_end(s: &str, start: usize) -> Option<usize> {
+  let bytes = s.as_bytes();
+  for i in start..bytes.len() {
+    match bytes[i] as char {
+      '\t' | '\n' | '\u{12}' | '\r' | ' ' | '"' | '#' | '\'' | '(' | ')' | '/' | ';' | '['
+      | '\\' | ']' | '{' | '}' => {
+        return Some(i);
+      }
+      _ => continue,
+    };
+  }
+  None
 }
 
 #[cfg(test)]
