@@ -32,7 +32,6 @@ lazy_static! {
   static ref RE_AT_END: Regex = Regex::new(r##"[\t\n\u{12}\r "#'()/;\[\\\]{}]"##).unwrap();
   static ref RE_WORD_END: Regex =
     Regex::new(r##"[\t\n\u{12}\r !"#'():;@\[\\\]{}]|/(?:\*)"##).unwrap();
-  static ref RE_BAD_BRACKET: Regex = Regex::new(r#".[\n"'(/\\]"#).unwrap();
   static ref FINDER_END_OF_COMMENT: Finder<'static> = Finder::new("*/");
 }
 
@@ -195,7 +194,7 @@ impl<'a> Tokenizer<'a> {
             Some(i) => {
               let content = &self.css[self.pos..i + 1];
 
-              if RE_BAD_BRACKET.is_match(content) {
+              if is_bad_bracket(content) {
                 self.current_token = Token("(".into(), "(".into(), Some(self.pos), None);
               } else {
                 self.current_token =
@@ -387,6 +386,20 @@ fn is_hex_char(s: &str, n: usize) -> bool {
     b'0'..=b'9' => true,
     _ => false,
   }
+}
+
+#[inline]
+fn is_bad_bracket(s: &str) -> bool {
+  let bytes = s.as_bytes();
+  for i in 1..bytes.len() {
+    match bytes[i] as char {
+      '\n' | '"' | '\'' | '(' | '/' | '\\' => {
+        return true;
+      }
+      _ => continue,
+    };
+  }
+  false
 }
 
 #[cfg(test)]
