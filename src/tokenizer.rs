@@ -49,7 +49,6 @@ impl Token {
 pub struct Tokenizer<'a> {
   css: &'a str,
   ignore: bool,
-  current_token: Token,
   length: usize,
   pos: usize,
   buffer: Vec<Token>,
@@ -62,7 +61,6 @@ impl<'a> Tokenizer<'a> {
     Tokenizer {
       css: &input.css,
       ignore: ignore_errors,
-      current_token: Token("".into(), String::new().into(), None, None),
       length,
       pos: 0,
       buffer: vec![],
@@ -95,8 +93,10 @@ impl<'a> Tokenizer<'a> {
     if !self.returned.is_empty() {
       return self.returned.pop().unwrap();
     }
-
+    
     let mut code = char_code_at(self.css, self.pos);
+
+    let current_token: Token;
 
     match code {
       NEWLINE | SPACE | TAB | CR | FEED => {
@@ -109,30 +109,37 @@ impl<'a> Tokenizer<'a> {
           }
         }
 
-        self.current_token = Token("space".into(), self.css[self.pos..next].into(), None, None);
+        current_token = Token("space".into(), self.css[self.pos..next].into(), None, None);
 
-        self.pos = next - 1;
+        self.pos = next;
       }
       OPEN_SQUARE => {
-        self.current_token = Token("[".into(), "[".into(), Some(self.pos), None);
+        current_token = Token("[".into(), "[".into(), Some(self.pos), None);
+        self.pos += 1;
       }
       CLOSE_SQUARE => {
-        self.current_token = Token("]".into(), "]".into(), Some(self.pos), None);
+        current_token = Token("]".into(), "]".into(), Some(self.pos), None);
+        self.pos += 1;
       }
       OPEN_CURLY => {
-        self.current_token = Token("{".into(), "{".into(), Some(self.pos), None);
+        current_token = Token("{".into(), "{".into(), Some(self.pos), None);
+        self.pos += 1;
       }
       CLOSE_CURLY => {
-        self.current_token = Token("}".into(), "}".into(), Some(self.pos), None);
+        current_token = Token("}".into(), "}".into(), Some(self.pos), None);
+        self.pos += 1;
       }
       COLON => {
-        self.current_token = Token(":".into(), ":".into(), Some(self.pos), None);
+        current_token = Token(":".into(), ":".into(), Some(self.pos), None);
+        self.pos += 1;
       }
       SEMICOLON => {
-        self.current_token = Token(";".into(), ";".into(), Some(self.pos), None);
+        current_token = Token(";".into(), ";".into(), Some(self.pos), None);
+        self.pos += 1;
       }
       CLOSE_PARENTHESES => {
-        self.current_token = Token(")".into(), ")".into(), Some(self.pos), None);
+        current_token = Token(")".into(), ")".into(), Some(self.pos), None);
+        self.pos += 1;
       }
       OPEN_PARENTHESES => {
         let prev = match self.buffer.pop() {
@@ -177,31 +184,32 @@ impl<'a> Tokenizer<'a> {
             }
           }
 
-          self.current_token = Token(
+          current_token = Token(
             "brackets".into(),
             sub_string(self.css, self.pos, next + 1).into(),
             Some(self.pos),
             Some(next),
           );
 
-          self.pos = next;
+          self.pos = next + 1;
         } else {
           match index_of_char(self.css, ')', self.pos + 1) {
             Some(i) => {
               let content = &self.css[self.pos..i + 1];
 
               if is_bad_bracket(content) {
-                self.current_token = Token("(".into(), "(".into(), Some(self.pos), None);
+                current_token = Token("(".into(), "(".into(), Some(self.pos), None);
               } else {
-                self.current_token =
+                current_token =
                   Token("brackets".into(), content.into(), Some(self.pos), Some(i));
                 self.pos = i;
               }
             }
             None => {
-              self.current_token = Token("(".into(), "(".into(), Some(self.pos), None);
+              current_token = Token("(".into(), "(".into(), Some(self.pos), None);
             }
           };
+          self.pos += 1;
         }
       }
       SINGLE_QUOTE | DOUBLE_QUOTE => {
@@ -234,23 +242,23 @@ impl<'a> Tokenizer<'a> {
           }
         }
 
-        self.current_token = Token(
+        current_token = Token(
           "string".into(),
           sub_string(self.css, self.pos, next + 1).into(),
           Some(self.pos),
           Some(next),
         );
-        self.pos = next;
+        self.pos = next + 1;
       }
       AT => {
         let next = index_of_at_end(&self.css, self.pos + 1) - 1;
-        self.current_token = Token(
+        current_token = Token(
           "at-word".into(),
           sub_string(self.css, self.pos, next + 1).into(),
           Some(self.pos),
           Some(next),
         );
-        self.pos = next;
+        self.pos = next + 1;
       }
       BACKSLASH => {
         let mut next = self.pos;
@@ -279,13 +287,13 @@ impl<'a> Tokenizer<'a> {
           }
         }
 
-        self.current_token = Token(
+        current_token = Token(
           "word".into(),
           sub_string(self.css, self.pos, next + 1).into(),
           Some(self.pos),
           Some(next),
         );
-        self.pos = next;
+        self.pos = next + 1;
       }
       _ => {
         self.pos = if code == SLASH && char_code_at(self.css, self.pos + 1) == ASTERISK {
@@ -299,7 +307,7 @@ impl<'a> Tokenizer<'a> {
             }
           };
 
-          self.current_token = Token(
+          current_token = Token(
             "comment".into(),
             sub_string(self.css, self.pos, next + 1).into(),
             Some(self.pos),
@@ -308,20 +316,20 @@ impl<'a> Tokenizer<'a> {
           next
         } else {
           let next = index_of_word_end(&self.css, self.pos + 1) - 1;
-          self.current_token = Token(
+          current_token = Token(
             "word".into(),
             sub_string(self.css, self.pos, next + 1).into(),
             Some(self.pos),
             Some(next),
           );
-          self.push(self.current_token.clone());
+          self.push(current_token.clone());
           next
-        }
+        };
+        self.pos += 1;
       }
     }
 
-    self.pos += 1;
-    self.current_token.clone()
+    current_token
   }
 }
 
