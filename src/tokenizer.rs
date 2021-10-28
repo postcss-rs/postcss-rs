@@ -57,7 +57,7 @@ pub struct Tokenizer<'a> {
 
 impl<'a> Tokenizer<'a> {
   pub fn new(input: &'a Input, ignore_errors: bool) -> Tokenizer {
-    let length = input.css.chars().count();
+    let length = input.css.len();
     Tokenizer {
       css: &input.css,
       ignore: ignore_errors,
@@ -355,7 +355,6 @@ fn char_code_at(s: &str, n: usize) -> char {
   } else {
     s.as_bytes()[n] as char
   }
-  // s.chars().nth(n).unwrap_or('\0')
 }
 
 #[inline]
