@@ -3,10 +3,10 @@ use lazy_static::lazy_static;
 use memchr::memchr;
 use memchr::memmem::Finder;
 use smol_str::SmolStr;
+use std::borrow::Cow;
 use std::clone::Clone;
 use std::cmp::Eq;
 use std::cmp::PartialEq;
-use std::borrow::Cow;
 const SINGLE_QUOTE: char = '\'';
 const DOUBLE_QUOTE: char = '"';
 const BACKSLASH: char = '\\';
@@ -40,7 +40,12 @@ pub struct Token<'a>(
 );
 
 impl<'a> Token<'a> {
-  pub fn new(kind: &'static str, content: &'a str, pos: Option<usize>, next: Option<usize>) -> Token<'a> {
+  pub fn new(
+    kind: &'static str,
+    content: &'a str,
+    pos: Option<usize>,
+    next: Option<usize>,
+  ) -> Token<'a> {
     Token(kind.into(), Cow::Borrowed(&content), pos, next)
   }
 }
@@ -325,7 +330,6 @@ impl<'a> Tokenizer<'a> {
     current_token
   }
 }
-
 
 #[inline]
 fn index_of_end_comment(value: &str, from_index: usize) -> Option<usize> {
