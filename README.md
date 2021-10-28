@@ -14,11 +14,11 @@ js:   0.13s user 0.02s system 126% cpu 0.109 total
 
 # tokenize bootstrap-reboot.css
 js:   tokenizer/small(7K)       : 2.274ms
-rust: tokenizer/small(7K)       : 0.403ms
+rust: tokenizer/small(7K)       : 0.160ms
 
 # tokenize bootstrap.css
 js:   tokenizer/small(201K)     : 31.367ms
-rust: tokenizer/small(201K)     : 3.2419ms
+rust: tokenizer/small(201K)     : 2.4582ms
 ```
 
 🎉 Welcome contribute, here is a guide:
