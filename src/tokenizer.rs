@@ -390,8 +390,9 @@ fn is_hex_char(s: &str, n: usize) -> bool {
 
 #[inline]
 fn is_bad_bracket(s: &str) -> bool {
-  for c in s.chars().skip(1) {
-    match c {
+  let bytes = s.as_bytes();
+  for i in 1..bytes.len() {
+    match bytes[i] as char {
       '\n' | '"' | '\'' | '(' | '/' | '\\' => {
         return true;
       }
