@@ -8,7 +8,7 @@ fn tokenize(css: &str, ignore_errors: bool) -> Vec<Token> {
   while !processor.end_of_file() {
     tokens.push(processor.next_token(false))
   }
-  return tokens;
+  tokens
 }
 
 fn run(css: &str, tokens: Vec<Token>) {
@@ -386,7 +386,7 @@ fn ignore_unclosed_per_token_request() {
     while !processor.end_of_file() {
       tokens.push(processor.next_token(true))
     }
-    return tokens;
+    tokens
   }
 
   let tokens = tokn("How's it going (");

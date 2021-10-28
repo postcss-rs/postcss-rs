@@ -12,7 +12,7 @@ fn tokenize(css: &str, ignore_errors: bool) -> Vec<Token> {
   while !processor.end_of_file() {
     tokens.push(processor.next_token(false))
   }
-  return tokens;
+  tokens
 }
 
 fn tokenize_bench(c: &mut Criterion) {
