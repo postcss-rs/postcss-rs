@@ -33,8 +33,7 @@ lazy_static! {
   static ref RE_WORD_END: Regex =
     Regex::new(r##"[\t\n\u{12}\r !"#'():;@\[\\\]{}]|/(?:\*)"##).unwrap();
   static ref RE_BAD_BRACKET: Regex = Regex::new(r#".[\n"'(/\\]"#).unwrap();
-  // static ref RE_HEX_ESCAPE: Regex = Regex::new(r"[\da-f]").unwrap();
-  static ref FINDER_END_OF_COMMENTT: Finder<'static> = Finder::new("*/");
+  static ref FINDER_END_OF_COMMENT: Finder<'static> = Finder::new("*/");
 }
 
 #[derive(Debug, Clone, Eq, PartialEq)]
@@ -346,7 +345,7 @@ impl<'a> Tokenizer<'a> {
 #[inline]
 fn index_of_end_comment(value: &str, from_index: usize) -> Option<usize> {
   let (_, last) = value.split_at(from_index);
-  FINDER_END_OF_COMMENTT
+  FINDER_END_OF_COMMENT
     .find(last.as_bytes())
     .map(|v| v + from_index)
 }
