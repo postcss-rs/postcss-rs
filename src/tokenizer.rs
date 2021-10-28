@@ -2,7 +2,6 @@ use crate::input::Input;
 use lazy_static::lazy_static;
 use memchr::memchr;
 use memchr::memmem::Finder;
-use regex::Regex;
 use smol_str::SmolStr;
 use std::clone::Clone;
 use std::cmp::Eq;
@@ -29,9 +28,6 @@ const COLON: char = ':';
 const AT: char = '@';
 
 lazy_static! {
-  static ref RE_AT_END: Regex = Regex::new(r##"[\t\n\u{12}\r "#'()/;\[\\\]{}]"##).unwrap();
-  static ref RE_WORD_END: Regex =
-    Regex::new(r##"[\t\n\u{12}\r !"#'():;@\[\\\]{}]|/(?:\*)"##).unwrap();
   static ref FINDER_END_OF_COMMENT: Finder<'static> = Finder::new("*/");
 }
 
@@ -283,10 +279,7 @@ impl<'a> Tokenizer<'a> {
         self.pos = next;
       }
       AT => {
-        let next = match RE_AT_END.find_at(&self.css, self.pos + 1) {
-          Some(mat) => mat.end() - 2,
-          None => self.length - 1,
-        };
+        let next = index_of_at_end(&self.css, self.pos + 1) - 1;
         self.current_token = Token::new(
           TokenType::AtWord,
           sub_string(self.css, self.pos, next + 1).into(),
@@ -350,16 +343,7 @@ impl<'a> Tokenizer<'a> {
           );
           next
         } else {
-          let next = match RE_WORD_END.find_at(&self.css, self.pos + 1) {
-            Some(mat) => {
-              if char_code_at(&self.css, mat.end() - 2) == '/' {
-                mat.end() - 3
-              } else {
-                mat.end() - 2
-              }
-            }
-            None => self.length - 1,
-          };
+          let next = index_of_word_end(&self.css, self.pos + 1) - 1;
           self.current_token = Token::new(
             TokenType::Word,
             sub_string(self.css, self.pos, next + 1).into(),
@@ -436,6 +420,50 @@ fn is_bad_bracket(s: &str) -> bool {
     };
   }
   false
+}
+
+#[inline]
+fn index_of_at_end(s: &str, start: usize) -> usize {
+  let bytes = s.as_bytes();
+  let mut i = start;
+  let len = bytes.len();
+
+  while i < len {
+    match bytes[i] as char {
+      '\t' | '\n' | '\u{12}' | '\r' | ' ' | '"' | '#' | '\'' | '(' | ')' | '/' | ';' | '['
+      | '\\' | ']' | '{' | '}' => {
+        return i;
+      }
+      _ => i += 1,
+    };
+  }
+
+  return i;
+}
+
+#[inline]
+fn index_of_word_end(s: &str, start: usize) -> usize {
+  let bytes = s.as_bytes();
+  let mut i = start;
+  let len = bytes.len();
+
+  while i < len {
+    match bytes[i] as char {
+      '\t' | '\n' | '\u{12}' | '\r' | ' ' | '!' | '"' | '#' | '\'' | '(' | ')' | ':' | ';'
+      | '@' | '[' | '\\' | ']' | '{' | '}' => {
+        return i;
+      }
+      '/' => {
+        if bytes[i + 1] as char == '*' {
+          return i;
+        } else {
+          i += 1;
+        }
+      }
+      _ => i += 1,
+    };
+  }
+  return i;
 }
 
 #[cfg(test)]
