@@ -36,5 +36,5 @@ name = "postcss"
 bench = false
 
 [[bench]]
-name = "tokenizer"
+name = "tokenizer_bench"
 harness = false
