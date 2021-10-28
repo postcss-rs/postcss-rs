@@ -2,7 +2,7 @@ use crate::ast::root::Root;
 use crate::ast::rule::Rule;
 use crate::ast::Node;
 use crate::input::Input;
-use crate::tokenizer::{Token, Tokenizer};
+use crate::tokenizer::{Token, Tokenizer, TokenType};
 
 pub struct Parser<'a> {
   input: &'a Input,
@@ -27,15 +27,16 @@ impl<'a> Parser<'a> {
   }
 
   pub fn parse(&mut self) {
+    use TokenType::*;
     while !self.tokenizer.end_of_file() {
       let token = self.tokenizer.next_token(true);
-      match token.0.as_str() {
-        "space" => self.spaces += &token.1,
-        ";" => self.free_semicolon(&token),
-        "}" => self.end(&token),
-        "comment" => self.comment(&token),
-        "at-word" => self.atrule(&token),
-        "{" => self.empty_rule(&token),
+      match token.kind {
+        Space => self.spaces += &token.content,
+        Semicolon => self.free_semicolon(&token),
+        CloseCurly => self.end(&token),
+        Comment => self.comment(&token),
+        AtWord => self.atrule(&token),
+        OpenCurly => self.empty_rule(&token),
         _ => self.other(&token),
       }
     }
@@ -44,7 +45,7 @@ impl<'a> Parser<'a> {
 
   #[inline]
   fn free_semicolon(&mut self, token: &Token) {
-    self.spaces += &token.1;
+    self.spaces += &token.content;
     if let Some(node) = self
       .current
       .nodes_mut()
