@@ -33,7 +33,7 @@ lazy_static! {
 
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub struct Token(
-  pub SmolStr,
+  pub &'static str,
   pub SmolStr,
   pub Option<usize>,
   pub Option<usize>,
@@ -41,7 +41,7 @@ pub struct Token(
 
 impl Token {
   pub fn new(kind: &'static str, content: &str, pos: Option<usize>, next: Option<usize>) -> Token {
-    Token(kind.into(), content.into(), pos, next)
+    Token(kind, content.into(), pos, next)
   }
 }
 
@@ -110,36 +110,36 @@ impl<'a> Tokenizer<'a> {
           }
         }
 
-        current_token = Token("space".into(), self.css[self.pos..next].into(), None, None);
+        current_token = Token("space", self.css[self.pos..next].into(), None, None);
 
         self.pos = next;
       }
       OPEN_SQUARE => {
-        current_token = Token("[".into(), "[".into(), Some(self.pos), None);
+        current_token = Token("[", "[".into(), Some(self.pos), None);
         self.pos += 1;
       }
       CLOSE_SQUARE => {
-        current_token = Token("]".into(), "]".into(), Some(self.pos), None);
+        current_token = Token("]", "]".into(), Some(self.pos), None);
         self.pos += 1;
       }
       OPEN_CURLY => {
-        current_token = Token("{".into(), "{".into(), Some(self.pos), None);
+        current_token = Token("{", "{".into(), Some(self.pos), None);
         self.pos += 1;
       }
       CLOSE_CURLY => {
-        current_token = Token("}".into(), "}".into(), Some(self.pos), None);
+        current_token = Token("}", "}".into(), Some(self.pos), None);
         self.pos += 1;
       }
       COLON => {
-        current_token = Token(":".into(), ":".into(), Some(self.pos), None);
+        current_token = Token(":", ":".into(), Some(self.pos), None);
         self.pos += 1;
       }
       SEMICOLON => {
-        current_token = Token(";".into(), ";".into(), Some(self.pos), None);
+        current_token = Token(";", ";".into(), Some(self.pos), None);
         self.pos += 1;
       }
       CLOSE_PARENTHESES => {
-        current_token = Token(")".into(), ")".into(), Some(self.pos), None);
+        current_token = Token(")", ")".into(), Some(self.pos), None);
         self.pos += 1;
       }
       OPEN_PARENTHESES => {
@@ -183,7 +183,7 @@ impl<'a> Tokenizer<'a> {
           }
 
           current_token = Token(
-            "brackets".into(),
+            "brackets",
             sub_string(self.css, self.pos, next + 1).into(),
             Some(self.pos),
             Some(next),
@@ -196,14 +196,14 @@ impl<'a> Tokenizer<'a> {
               let content = &self.css[self.pos..i + 1];
 
               if is_bad_bracket(content) {
-                current_token = Token("(".into(), "(".into(), Some(self.pos), None);
+                current_token = Token("(", "(".into(), Some(self.pos), None);
               } else {
-                current_token = Token("brackets".into(), content.into(), Some(self.pos), Some(i));
+                current_token = Token("brackets", content.into(), Some(self.pos), Some(i));
                 self.pos = i;
               }
             }
             None => {
-              current_token = Token("(".into(), "(".into(), Some(self.pos), None);
+              current_token = Token("(", "(".into(), Some(self.pos), None);
             }
           };
           self.pos += 1;
@@ -240,7 +240,7 @@ impl<'a> Tokenizer<'a> {
         }
 
         current_token = Token(
-          "string".into(),
+          "string",
           sub_string(self.css, self.pos, next + 1).into(),
           Some(self.pos),
           Some(next),
@@ -250,7 +250,7 @@ impl<'a> Tokenizer<'a> {
       AT => {
         let next = index_of_at_end(self.css, self.pos + 1) - 1;
         current_token = Token(
-          "at-word".into(),
+          "at-word",
           sub_string(self.css, self.pos, next + 1).into(),
           Some(self.pos),
           Some(next),
@@ -285,7 +285,7 @@ impl<'a> Tokenizer<'a> {
         }
 
         current_token = Token(
-          "word".into(),
+          "word",
           sub_string(self.css, self.pos, next + 1).into(),
           Some(self.pos),
           Some(next),
@@ -305,7 +305,7 @@ impl<'a> Tokenizer<'a> {
           };
 
           current_token = Token(
-            "comment".into(),
+            "comment",
             sub_string(self.css, self.pos, next + 1).into(),
             Some(self.pos),
             Some(next),
@@ -314,7 +314,7 @@ impl<'a> Tokenizer<'a> {
         } else {
           let next = index_of_word_end(self.css, self.pos + 1) - 1;
           let content = sub_string(self.css, self.pos, next + 1);
-          current_token = Token("word".into(), content.into(), Some(self.pos), Some(next));
+          current_token = Token("word", content.into(), Some(self.pos), Some(next));
           self.push(content);
           next
         };
