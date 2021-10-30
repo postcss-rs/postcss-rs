@@ -1,10 +1,11 @@
-use fancy_regex::Regex;
+use crate::input::Input;
 use lazy_static::lazy_static;
+use memchr::memchr;
+use memchr::memmem::Finder;
+use smol_str::SmolStr;
 use std::clone::Clone;
 use std::cmp::Eq;
 use std::cmp::PartialEq;
-
-use crate::input::Input;
 
 const SINGLE_QUOTE: char = '\'';
 const DOUBLE_QUOTE: char = '"';
@@ -27,54 +28,49 @@ const COLON: char = ':';
 const AT: char = '@';
 
 lazy_static! {
-  static ref RE_AT_END: Regex = Regex::new(r##"[\t\n\u{12}\r "#'()/;\[\\\]{}]"##).unwrap();
-  static ref RE_WORD_END: Regex =
-    Regex::new(r##"[\t\n\u{12}\r !"#'():;@\[\\\]{}]|/(?=\*)"##).unwrap();
-  static ref RE_BAD_BRACKET: Regex = Regex::new(r#".[\n"'(/\\]"#).unwrap();
-  static ref RE_HEX_ESCAPE: Regex = Regex::new(r"[\da-f]").unwrap();
+  static ref FINDER_END_OF_COMMENT: Finder<'static> = Finder::new("*/");
 }
 
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub struct Token(
   pub &'static str,
-  pub String,
+  pub SmolStr,
   pub Option<usize>,
   pub Option<usize>,
 );
 
 impl Token {
   pub fn new(kind: &'static str, content: &str, pos: Option<usize>, next: Option<usize>) -> Token {
-    Token(kind, content.to_string(), pos, next)
+    Token(kind, content.into(), pos, next)
   }
 }
 
 #[derive(Debug)]
-pub struct Tokenizer {
-  css: String,
+pub struct Tokenizer<'a> {
+  css: &'a str,
   ignore: bool,
-  current_token: Token,
   length: usize,
   pos: usize,
-  buffer: Vec<Token>,
+  buffer: Vec<&'a str>,
   returned: Vec<Token>,
 }
 
-impl Tokenizer {
-  pub fn new(input: Input, ignore_errors: bool) -> Tokenizer {
-    let length = input.css.chars().count();
+impl<'a> Tokenizer<'a> {
+  pub fn new(input: &'a Input, ignore_errors: bool) -> Tokenizer {
+    let length = input.css.len();
     Tokenizer {
-      css: input.css,
+      css: &input.css,
       ignore: ignore_errors,
-      current_token: Token("", String::new(), None, None),
       length,
       pos: 0,
+      // buffer: Vec::with_capacity(length / 13),
       buffer: vec![],
       returned: vec![],
     }
   }
 
   #[inline]
-  fn push(&mut self, t: Token) {
+  fn push(&mut self, t: &'a str) {
     self.buffer.push(t);
   }
 
@@ -94,64 +90,61 @@ impl Tokenizer {
     self.returned.push(token);
   }
 
-  pub fn next_token(&mut self, ignore_unclosed: bool) -> Option<Token> {
+  pub fn next_token(&mut self, ignore_unclosed: bool) -> Token {
     if !self.returned.is_empty() {
-      return self.returned.pop();
+      return self.returned.pop().unwrap();
     }
 
-    if self.pos >= self.length {
-      return None;
-    }
+    let mut code = char_code_at(self.css, self.pos);
 
-    let mut code = char_code_at(&self.css, self.pos);
+    let current_token: Token;
 
     match code {
       NEWLINE | SPACE | TAB | CR | FEED => {
         let mut next = self.pos;
         loop {
           next += 1;
-          code = char_code_at(&self.css, next);
+          code = char_code_at(self.css, next);
           if !(code == SPACE || code == NEWLINE || code == TAB || code == FEED) {
             break;
           }
         }
 
-        self.current_token = Token(
-          "space",
-          self.css.as_str()[self.pos..next].to_string(),
-          None,
-          None,
-        );
+        current_token = Token("space", self.css[self.pos..next].into(), None, None);
 
-        self.pos = next - 1;
+        self.pos = next;
       }
       OPEN_SQUARE => {
-        self.current_token = Token("[", "[".to_string(), Some(self.pos), None);
+        current_token = Token("[", "[".into(), Some(self.pos), None);
+        self.pos += 1;
       }
       CLOSE_SQUARE => {
-        self.current_token = Token("]", "]".to_string(), Some(self.pos), None);
+        current_token = Token("]", "]".into(), Some(self.pos), None);
+        self.pos += 1;
       }
       OPEN_CURLY => {
-        self.current_token = Token("{", "{".to_string(), Some(self.pos), None);
+        current_token = Token("{", "{".into(), Some(self.pos), None);
+        self.pos += 1;
       }
       CLOSE_CURLY => {
-        self.current_token = Token("}", "}".to_string(), Some(self.pos), None);
+        current_token = Token("}", "}".into(), Some(self.pos), None);
+        self.pos += 1;
       }
       COLON => {
-        self.current_token = Token(":", ":".to_string(), Some(self.pos), None);
+        current_token = Token(":", ":".into(), Some(self.pos), None);
+        self.pos += 1;
       }
       SEMICOLON => {
-        self.current_token = Token(";", ";".to_string(), Some(self.pos), None);
+        current_token = Token(";", ";".into(), Some(self.pos), None);
+        self.pos += 1;
       }
       CLOSE_PARENTHESES => {
-        self.current_token = Token(")", ")".to_string(), Some(self.pos), None);
+        current_token = Token(")", ")".into(), Some(self.pos), None);
+        self.pos += 1;
       }
       OPEN_PARENTHESES => {
-        let prev = match self.buffer.pop() {
-          Some(b) => b.1,
-          None => String::new(),
-        };
-        let n = char_code_at(&self.css, self.pos + 1);
+        let prev = self.buffer.pop().unwrap_or("");
+        let n = char_code_at(self.css, self.pos + 1);
         if prev == "url"
           && n != SINGLE_QUOTE
           && n != DOUBLE_QUOTE
@@ -164,7 +157,7 @@ impl Tokenizer {
           let mut next = self.pos;
           loop {
             let mut escaped = false;
-            match index_of(&self.css, ")", next + 1) {
+            match index_of_char(self.css, ')', next + 1) {
               Some(i) => {
                 next = i;
               }
@@ -179,7 +172,7 @@ impl Tokenizer {
             }
 
             let mut escape_pos = next;
-            while char_code_at(&self.css, escape_pos - 1) == BACKSLASH {
+            while char_code_at(self.css, escape_pos - 1) == BACKSLASH {
               escape_pos -= 1;
               escaped = !escaped;
             }
@@ -189,31 +182,31 @@ impl Tokenizer {
             }
           }
 
-          self.current_token = Token(
+          current_token = Token(
             "brackets",
-            sub_string(&self.css, self.pos, next + 1).to_string(),
+            sub_string(self.css, self.pos, next + 1).into(),
             Some(self.pos),
             Some(next),
           );
 
-          self.pos = next;
+          self.pos = next + 1;
         } else {
-          match index_of_char(&self.css, ')', self.pos + 1) {
+          match index_of_char(self.css, ')', self.pos + 1) {
             Some(i) => {
               let content = &self.css[self.pos..i + 1];
 
-              if RE_BAD_BRACKET.is_match(content).unwrap_or(false) {
-                self.current_token = Token("(", "(".to_string(), Some(self.pos), None);
+              if is_bad_bracket(content) {
+                current_token = Token("(", "(".into(), Some(self.pos), None);
               } else {
-                self.current_token =
-                  Token("brackets", content.to_string(), Some(self.pos), Some(i));
+                current_token = Token("brackets", content.into(), Some(self.pos), Some(i));
                 self.pos = i;
               }
             }
             None => {
-              self.current_token = Token("(", "(".to_string(), Some(self.pos), None);
+              current_token = Token("(", "(".into(), Some(self.pos), None);
             }
           };
+          self.pos += 1;
         }
       }
       SINGLE_QUOTE | DOUBLE_QUOTE => {
@@ -221,7 +214,7 @@ impl Tokenizer {
         let mut next = self.pos;
         loop {
           let mut escaped = false;
-          match index_of_char(&self.css, quote, next + 1) {
+          match index_of_char(self.css, quote, next + 1) {
             Some(i) => {
               next = i;
             }
@@ -236,7 +229,7 @@ impl Tokenizer {
           }
 
           let mut escape_pos = next;
-          while char_code_at(&self.css, escape_pos - 1) == BACKSLASH {
+          while char_code_at(self.css, escape_pos - 1) == BACKSLASH {
             escape_pos -= 1;
             escaped = !escaped;
           }
@@ -246,35 +239,32 @@ impl Tokenizer {
           }
         }
 
-        self.current_token = Token(
+        current_token = Token(
           "string",
-          sub_string(&self.css, self.pos, next + 1).to_string(),
+          sub_string(self.css, self.pos, next + 1).into(),
           Some(self.pos),
           Some(next),
         );
-        self.pos = next;
+        self.pos = next + 1;
       }
       AT => {
-        let next = match RE_AT_END.find(&self.css.as_str()[self.pos + 1..]).unwrap() {
-          Some(mat) => self.pos + 1 + mat.end() - 2,
-          None => self.length - 1,
-        };
-        self.current_token = Token(
+        let next = index_of_at_end(self.css, self.pos + 1) - 1;
+        current_token = Token(
           "at-word",
-          sub_string(&self.css, self.pos, next + 1).to_string(),
+          sub_string(self.css, self.pos, next + 1).into(),
           Some(self.pos),
           Some(next),
         );
-        self.pos = next;
+        self.pos = next + 1;
       }
       BACKSLASH => {
         let mut next = self.pos;
         let mut escape = true;
-        while char_code_at(&self.css, next + 1) == BACKSLASH {
+        while char_code_at(self.css, next + 1) == BACKSLASH {
           next += 1;
           escape = !escape;
         }
-        code = char_code_at(&self.css, next + 1);
+        code = char_code_at(self.css, next + 1);
         if escape
           && code != SLASH
           && code != SPACE
@@ -284,33 +274,27 @@ impl Tokenizer {
           && code != FEED
         {
           next += 1;
-          if RE_HEX_ESCAPE
-            .is_match(sub_string(&self.css, next, next + 1))
-            .unwrap_or(false)
-          {
-            while RE_HEX_ESCAPE
-              .is_match(sub_string(&self.css, next + 1, next + 2))
-              .unwrap_or(false)
-            {
+          if is_hex_char(self.css, next) {
+            while is_hex_char(self.css, next + 1) {
               next += 1;
             }
-            if char_code_at(&self.css, next + 1) == SPACE {
+            if char_code_at(self.css, next + 1) == SPACE {
               next += 1;
             }
           }
         }
 
-        self.current_token = Token(
+        current_token = Token(
           "word",
-          sub_string(&self.css, self.pos, next + 1).to_string(),
+          sub_string(self.css, self.pos, next + 1).into(),
           Some(self.pos),
           Some(next),
         );
-        self.pos = next;
+        self.pos = next + 1;
       }
       _ => {
-        self.pos = if code == SLASH && char_code_at(&self.css, self.pos + 1) == ASTERISK {
-          let next = match index_of(&self.css, "*/", self.pos + 2) {
+        self.pos = if code == SLASH && char_code_at(self.css, self.pos + 1) == ASTERISK {
+          let next = match index_of_end_comment(self.css, self.pos + 2) {
             Some(i) => i + 1,
             None => {
               if !self.ignore && !ignore_unclosed {
@@ -320,48 +304,40 @@ impl Tokenizer {
             }
           };
 
-          self.current_token = Token(
+          current_token = Token(
             "comment",
-            sub_string(&self.css, self.pos, next + 1).to_string(),
+            sub_string(self.css, self.pos, next + 1).into(),
             Some(self.pos),
             Some(next),
           );
           next
         } else {
-          let next = match RE_WORD_END
-            .find(&self.css.as_str()[self.pos + 1..])
-            .unwrap()
-          {
-            Some(mat) => self.pos + mat.end() - 1,
-            None => self.length - 1,
-          };
-          self.current_token = Token(
-            "word",
-            sub_string(&self.css, self.pos, next + 1).to_string(),
-            Some(self.pos),
-            Some(next),
-          );
-          self.push(self.current_token.clone());
+          let next = index_of_word_end(self.css, self.pos + 1) - 1;
+          let content = sub_string(self.css, self.pos, next + 1);
+          current_token = Token("word", content.into(), Some(self.pos), Some(next));
+          self.push(content);
           next
-        }
+        };
+        self.pos += 1;
       }
     }
 
-    self.pos += 1;
-    Some(self.current_token.clone())
+    current_token
   }
 }
 
 #[inline]
-fn index_of(value: &str, search_value: &str, from_index: usize) -> Option<usize> {
+fn index_of_end_comment(value: &str, from_index: usize) -> Option<usize> {
   let (_, last) = value.split_at(from_index);
-  last.find(search_value).map(|v| v + from_index)
+  FINDER_END_OF_COMMENT
+    .find(last.as_bytes())
+    .map(|v| v + from_index)
 }
 
 #[inline]
 fn index_of_char(value: &str, search_value: char, from_index: usize) -> Option<usize> {
   let (_, last) = value.split_at(from_index);
-  last.find(search_value).map(|v| v + from_index)
+  memchr(search_value as u8, last.as_bytes()).map(|v| v + from_index)
 }
 
 #[inline]
@@ -380,7 +356,73 @@ fn char_code_at(s: &str, n: usize) -> char {
   } else {
     s.as_bytes()[n] as char
   }
-  // s.chars().nth(n).unwrap_or('\0')
+}
+
+#[inline]
+fn is_hex_char(s: &str, n: usize) -> bool {
+  if n >= s.len() {
+    return false;
+  }
+
+  matches!(s.as_bytes()[n], b'A'..=b'F' | b'a'..=b'f' | b'0'..=b'9')
+}
+
+#[inline]
+fn is_bad_bracket(s: &str) -> bool {
+  let bytes = s.as_bytes();
+  for i in 1..bytes.len() {
+    match bytes[i] as char {
+      '\n' | '"' | '\'' | '(' | '/' | '\\' => {
+        return true;
+      }
+      _ => continue,
+    };
+  }
+  false
+}
+
+#[inline]
+fn index_of_at_end(s: &str, start: usize) -> usize {
+  let bytes = s.as_bytes();
+  let mut i = start;
+  let len = bytes.len();
+
+  while i < len {
+    match bytes[i] as char {
+      '\t' | '\n' | '\u{12}' | '\r' | ' ' | '"' | '#' | '\'' | '(' | ')' | '/' | ';' | '['
+      | '\\' | ']' | '{' | '}' => {
+        return i;
+      }
+      _ => i += 1,
+    };
+  }
+
+  i
+}
+
+#[inline]
+fn index_of_word_end(s: &str, start: usize) -> usize {
+  let bytes = s.as_bytes();
+  let mut i = start;
+  let len = bytes.len();
+
+  while i < len {
+    match bytes[i] as char {
+      '\t' | '\n' | '\u{12}' | '\r' | ' ' | '!' | '"' | '#' | '\'' | '(' | ')' | ':' | ';'
+      | '@' | '[' | '\\' | ']' | '{' | '}' => {
+        return i;
+      }
+      '/' => {
+        if bytes[i + 1] as char == '*' {
+          return i;
+        } else {
+          i += 1;
+        }
+      }
+      _ => i += 1,
+    };
+  }
+  i
 }
 
 #[cfg(test)]
