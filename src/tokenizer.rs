@@ -5,7 +5,7 @@ use memchr::memmem::Finder;
 use std::cell::RefCell;
 use std::clone::Clone;
 use std::cmp::PartialEq;
-use std::cmp::{max, Eq};
+use std::cmp::{min, Eq};
 
 const SINGLE_QUOTE: char = '\'';
 const DOUBLE_QUOTE: char = '"';
@@ -83,8 +83,8 @@ impl<'a> Tokenizer<'a> {
       length,
       pos: RefCell::new(0),
       // buffer: Vec::with_capacity(length / 13),
-      buffer: RefCell::new(Vec::with_capacity(max(102400, length / 8))),
-      returned: RefCell::new(Vec::with_capacity(max(102400, length / 8))),
+      buffer: RefCell::new(Vec::with_capacity(min(102400, length / 8))),
+      returned: RefCell::new(Vec::with_capacity(min(102400, length / 8))),
     }
   }
 
