@@ -1,29 +1,9 @@
-use crate::ast::root::Root;
 use crate::ast::{Node, Source};
-
-#[derive(Debug, PartialEq, Clone)]
-pub struct RawValue {
-  pub value: String,
-  pub raw: String,
-}
+use std::cell::RefCell;
+use std::rc::{Rc, Weak};
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct DocumentRaws {}
-
-pub struct DocumentProps {
-  /// Name of the document.
-  pub name: String,
-
-  /// Parameters following the name of the at-rule.
-  pub params: String, // | number
-
-  /// Information used to generate byte-to-byte equal node string as it was in the origin input.
-  pub raws: Option<DocumentRaws>,
-
-  nodes: Option<Vec<Box<Root>>>,
-
-  source: Option<Source>,
-}
 
 /// Represents a file and contains all its parsed nodes.
 ///
@@ -34,10 +14,10 @@ pub struct Document {
   /// `rule`, `decl`, or `comment`.
   pub r#type: &'static str,
 
-  pub nodes: Option<Vec<Box<dyn Node>>>,
+  pub nodes: Option<RefCell<Vec<Rc<Node>>>>,
 
   /// The node’s parent node.
-  // pub parent: Option<Container>,
+  pub parent: Option<RefCell<Weak<Node>>>,
 
   /// Information to generate byte-to-byte equal node string as it was
   /// in the origin input.
