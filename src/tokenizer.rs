@@ -134,7 +134,12 @@ impl<'a> Tokenizer<'a> {
           }
         }
 
-        current_token = Token(TokenType::Space, self.css[self.position()..next].into(), None, None);
+        current_token = Token(
+          TokenType::Space,
+          self.css[self.position()..next].into(),
+          None,
+          None,
+        );
 
         self.pos.replace(next);
       }
@@ -163,7 +168,12 @@ impl<'a> Tokenizer<'a> {
         self.pos_plus_one();
       }
       CLOSE_PARENTHESES => {
-        current_token = Token(TokenType::CloseParentheses, ")", Some(self.position()), None);
+        current_token = Token(
+          TokenType::CloseParentheses,
+          ")",
+          Some(self.position()),
+          None,
+        );
         self.pos_plus_one();
       }
       OPEN_PARENTHESES => {

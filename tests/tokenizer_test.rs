@@ -33,7 +33,10 @@ fn tokenizes_space() {
 
 #[test]
 fn tokenizes_word() {
-  run("ab", vec![Token::new(TokenType::Word, "ab", Some(0), Some(1))]);
+  run(
+    "ab",
+    vec![Token::new(TokenType::Word, "ab", Some(0), Some(1))],
+  );
 }
 
 #[test]
@@ -228,14 +231,22 @@ fn tokenizes_quoted_urls() {
 
 #[test]
 fn tokenizes_at_symbol() {
-  run("@", vec![Token::new(TokenType::AtWord, "@", Some(0), Some(0))]);
+  run(
+    "@",
+    vec![Token::new(TokenType::AtWord, "@", Some(0), Some(0))],
+  );
 }
 
 #[test]
 fn tokenizes_comment() {
   run(
     "/* a\nb */",
-    vec![Token::new(TokenType::Comment, "/* a\nb */", Some(0), Some(8))],
+    vec![Token::new(
+      TokenType::Comment,
+      "/* a\nb */",
+      Some(0),
+      Some(8),
+    )],
   );
 }
 
