@@ -31,7 +31,6 @@ lazy_static! {
   static ref FINDER_END_OF_COMMENT: Finder<'static> = Finder::new("*/");
 }
 
-// { "comment", "brackets", }
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub enum TokenType {
   OpenParentheses,
@@ -50,6 +49,7 @@ pub enum TokenType {
   Brackets,
   Unknown,
 }
+
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub struct Token<'a>(
   pub TokenType,
@@ -93,6 +93,7 @@ impl<'a> Tokenizer<'a> {
     self.buffer.borrow_mut().push(t);
   }
 
+  #[inline]
   pub fn position(&self) -> usize {
     *self.pos.borrow()
   }
@@ -143,34 +144,11 @@ impl<'a> Tokenizer<'a> {
 
         self.pos.replace(next);
       }
-      OPEN_SQUARE => {
-        current_token = Token(TokenType::OpenSquare, "[", Some(self.position()), None);
-        self.pos_plus_one();
-      }
-      CLOSE_SQUARE => {
-        current_token = Token(TokenType::CloseSquare, "]", Some(self.position()), None);
-        self.pos_plus_one();
-      }
-      OPEN_CURLY => {
-        current_token = Token(TokenType::OpenCurly, "{", Some(self.position()), None);
-        self.pos_plus_one();
-      }
-      CLOSE_CURLY => {
-        current_token = Token(TokenType::CloseCurly, "}", Some(self.position()), None);
-        self.pos_plus_one();
-      }
-      COLON => {
-        current_token = Token(TokenType::Colon, ":", Some(self.position()), None);
-        self.pos_plus_one();
-      }
-      SEMICOLON => {
-        current_token = Token(TokenType::Semicolon, ";", Some(self.position()), None);
-        self.pos_plus_one();
-      }
-      CLOSE_PARENTHESES => {
+      OPEN_SQUARE | CLOSE_SQUARE | OPEN_CURLY | CLOSE_CURLY | COLON | SEMICOLON
+      | CLOSE_PARENTHESES => {
         current_token = Token(
-          TokenType::CloseParentheses,
-          ")",
+          get_token_type(code),
+          get_str(code),
           Some(self.position()),
           None,
         );
@@ -406,6 +384,7 @@ fn is_hex_char(s: &str, n: usize) -> bool {
 #[inline]
 fn is_bad_bracket(s: &str) -> bool {
   let bytes = s.as_bytes();
+  #[allow(clippy::needless_range_loop)]
   for i in 1..bytes.len() {
     match bytes[i] as char {
       '\n' | '"' | '\'' | '(' | '/' | '\\' => {
@@ -459,6 +438,34 @@ fn index_of_word_end(s: &str, start: usize) -> usize {
     };
   }
   i
+}
+
+/// SAFETY: YOU SHOULD NEVER CALL THIS FUNCTION WITH THE PARAM OTHER THAN THESE BELOW.
+const fn get_str(ch: char) -> &'static str {
+  match ch {
+    OPEN_SQUARE => "[",
+    CLOSE_SQUARE => "]",
+    OPEN_CURLY => "{",
+    CLOSE_CURLY => "}",
+    COLON => ":",
+    SEMICOLON => ";",
+    CLOSE_PARENTHESES => ")",
+    _ => "",
+  }
+}
+
+/// SAFETY: YOU SHOULD NEVER CALL THIS FUNCTION WITH THE PARAM OTHER THAN THESE BELOW.
+const fn get_token_type(ch: char) -> TokenType {
+  match ch {
+    OPEN_SQUARE => TokenType::OpenSquare,
+    CLOSE_SQUARE => TokenType::CloseSquare,
+    OPEN_CURLY => TokenType::OpenCurly,
+    CLOSE_CURLY => TokenType::CloseCurly,
+    COLON => TokenType::Colon,
+    SEMICOLON => TokenType::Semicolon,
+    CLOSE_PARENTHESES => TokenType::CloseParentheses,
+    _ => TokenType::Unknown,
+  }
 }
 
 #[cfg(test)]
