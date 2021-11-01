@@ -157,7 +157,7 @@ impl<'a> Tokenizer<'a> {
           let mut next = self.pos;
           loop {
             let mut escaped = false;
-            match index_of_char(self.css, ')', next + 1) {
+            match index_of_byte(self.css, b')', next + 1) {
               Some(i) => {
                 next = i;
               }
@@ -191,7 +191,7 @@ impl<'a> Tokenizer<'a> {
 
           self.pos = next + 1;
         } else {
-          match index_of_char(self.css, ')', self.pos + 1) {
+          match index_of_byte(self.css, b')', self.pos + 1) {
             Some(i) => {
               let content = &self.css[self.pos..i + 1];
 
@@ -210,11 +210,11 @@ impl<'a> Tokenizer<'a> {
         }
       }
       SINGLE_QUOTE | DOUBLE_QUOTE => {
-        let quote = if code == SINGLE_QUOTE { '\'' } else { '"' };
+        let quote = if code == SINGLE_QUOTE { b'\'' } else { b'"' };
         let mut next = self.pos;
         loop {
           let mut escaped = false;
-          match index_of_char(self.css, quote, next + 1) {
+          match index_of_byte(self.css, quote, next + 1) {
             Some(i) => {
               next = i;
             }
@@ -335,9 +335,9 @@ fn index_of_end_comment(value: &str, from_index: usize) -> Option<usize> {
 }
 
 #[inline]
-fn index_of_char(value: &str, search_value: char, from_index: usize) -> Option<usize> {
+fn index_of_byte(value: &str, search_value: u8, from_index: usize) -> Option<usize> {
   let (_, last) = value.split_at(from_index);
-  memchr(search_value as u8, last.as_bytes()).map(|v| v + from_index)
+  memchr(search_value, last.as_bytes()).map(|v| v + from_index)
 }
 
 #[inline]
