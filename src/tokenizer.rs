@@ -6,7 +6,6 @@ use std::cell::RefCell;
 use std::clone::Clone;
 use std::cmp::Eq;
 use std::cmp::PartialEq;
-use std::hint::unreachable_unchecked;
 
 const SINGLE_QUOTE: char = '\'';
 const DOUBLE_QUOTE: char = '"';
@@ -385,6 +384,7 @@ fn is_hex_char(s: &str, n: usize) -> bool {
 #[inline]
 fn is_bad_bracket(s: &str) -> bool {
   let bytes = s.as_bytes();
+  #[allow(clippy::needless_range_loop)]
   for i in 1..bytes.len() {
     match bytes[i] as char {
       '\n' | '"' | '\'' | '(' | '/' | '\\' => {
@@ -441,7 +441,6 @@ fn index_of_word_end(s: &str, start: usize) -> usize {
 }
 
 /// SAFETY: YOU SHOULD NEVER CALL THIS FUNCTION WITH THE PARAM OTHER THAN THESE BELOW.
-#[inline]
 const fn get_str(ch: char) -> &'static str {
   match ch {
     OPEN_SQUARE => "[",
@@ -456,7 +455,6 @@ const fn get_str(ch: char) -> &'static str {
 }
 
 /// SAFETY: YOU SHOULD NEVER CALL THIS FUNCTION WITH THE PARAM OTHER THAN THESE BELOW.
-#[inline]
 const fn get_token_type(ch: char) -> TokenType {
   match ch {
     OPEN_SQUARE => TokenType::OpenSquare,
