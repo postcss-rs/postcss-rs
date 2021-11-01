@@ -14,7 +14,6 @@ fn main() {
   }
   let end = start.elapsed();
   println!("rust: tokenizer/small(7K)\t: {:?}", end);
-
   let css = fs::read_to_string("assets/bootstrap.css").unwrap();
   let start = Instant::now();
   let input = Input::new(&css, None);

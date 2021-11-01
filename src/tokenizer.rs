@@ -31,21 +31,35 @@ lazy_static! {
   static ref FINDER_END_OF_COMMENT: Finder<'static> = Finder::new("*/");
 }
 
+// { "comment", "brackets", }
+#[derive(Debug, Clone, Eq, PartialEq)]
+pub enum TokenType {
+  OpenParentheses,
+  CloseParentheses,
+  Space,
+  Word,
+  String,
+  OpenSquare,
+  CloseSquare,
+  OpenCurly,
+  CloseCurly,
+  Semicolon,
+  Colon,
+  Comment,
+  AtWord,
+  Brackets,
+  Unknown,
+}
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub struct Token<'a>(
-  pub &'static str,
+  pub TokenType,
   pub &'a str,
   pub Option<usize>,
   pub Option<usize>,
 );
 
 impl<'a> Token<'a> {
-  pub fn new(
-    kind: &'static str,
-    content: &'a str,
-    pos: Option<usize>,
-    next: Option<usize>,
-  ) -> Token<'a> {
+  pub fn new(kind: TokenType, content: &'a str, pos: Option<usize>, next: Option<usize>) -> Token {
     Token(kind, content, pos, next)
   }
 }
@@ -120,36 +134,46 @@ impl<'a> Tokenizer<'a> {
           }
         }
 
-        current_token = Token("space", self.css[self.position()..next].into(), None, None);
+        current_token = Token(
+          TokenType::Space,
+          self.css[self.position()..next].into(),
+          None,
+          None,
+        );
 
         self.pos.replace(next);
       }
       OPEN_SQUARE => {
-        current_token = Token("[", "[", Some(self.position()), None);
+        current_token = Token(TokenType::OpenSquare, "[", Some(self.position()), None);
         self.pos_plus_one();
       }
       CLOSE_SQUARE => {
-        current_token = Token("]", "]", Some(self.position()), None);
+        current_token = Token(TokenType::CloseSquare, "]", Some(self.position()), None);
         self.pos_plus_one();
       }
       OPEN_CURLY => {
-        current_token = Token("{", "{", Some(self.position()), None);
+        current_token = Token(TokenType::OpenCurly, "{", Some(self.position()), None);
         self.pos_plus_one();
       }
       CLOSE_CURLY => {
-        current_token = Token("}", "}", Some(self.position()), None);
+        current_token = Token(TokenType::CloseCurly, "}", Some(self.position()), None);
         self.pos_plus_one();
       }
       COLON => {
-        current_token = Token(":", ":", Some(self.position()), None);
+        current_token = Token(TokenType::Colon, ":", Some(self.position()), None);
         self.pos_plus_one();
       }
       SEMICOLON => {
-        current_token = Token(";", ";", Some(self.position()), None);
+        current_token = Token(TokenType::Semicolon, ";", Some(self.position()), None);
         self.pos_plus_one();
       }
       CLOSE_PARENTHESES => {
-        current_token = Token(")", ")", Some(self.position()), None);
+        current_token = Token(
+          TokenType::CloseParentheses,
+          ")",
+          Some(self.position()),
+          None,
+        );
         self.pos_plus_one();
       }
       OPEN_PARENTHESES => {
@@ -193,7 +217,7 @@ impl<'a> Tokenizer<'a> {
           }
 
           current_token = Token(
-            "brackets",
+            TokenType::Brackets,
             sub_string(self.css, self.position(), next + 1),
             Some(self.position()),
             Some(next),
@@ -206,14 +230,14 @@ impl<'a> Tokenizer<'a> {
               let content = &self.css[self.position()..i + 1];
 
               if is_bad_bracket(content) {
-                current_token = Token("(", "(", Some(self.position()), None);
+                current_token = Token(TokenType::OpenParentheses, "(", Some(self.position()), None);
               } else {
-                current_token = Token("brackets", content, Some(self.position()), Some(i));
+                current_token = Token(TokenType::Brackets, content, Some(self.position()), Some(i));
                 self.pos.replace(i);
               }
             }
             None => {
-              current_token = Token("(", "(", Some(self.position()), None);
+              current_token = Token(TokenType::OpenParentheses, "(", Some(self.position()), None);
             }
           };
           self.pos_plus_one();
@@ -250,7 +274,7 @@ impl<'a> Tokenizer<'a> {
         }
 
         current_token = Token(
-          "string",
+          TokenType::String,
           sub_string(self.css, self.position(), next + 1),
           Some(self.position()),
           Some(next),
@@ -260,7 +284,7 @@ impl<'a> Tokenizer<'a> {
       AT => {
         let next = index_of_at_end(self.css, self.position() + 1) - 1;
         current_token = Token(
-          "at-word",
+          TokenType::AtWord,
           sub_string(self.css, self.position(), next + 1),
           Some(self.position()),
           Some(next),
@@ -295,7 +319,7 @@ impl<'a> Tokenizer<'a> {
         }
 
         current_token = Token(
-          "word",
+          TokenType::Word,
           sub_string(self.css, self.position(), next + 1),
           Some(self.position()),
           Some(next),
@@ -316,7 +340,7 @@ impl<'a> Tokenizer<'a> {
             };
 
             current_token = Token(
-              "comment",
+              TokenType::Comment,
               sub_string(self.css, self.position(), next + 1),
               Some(self.position()),
               Some(next),
@@ -325,7 +349,7 @@ impl<'a> Tokenizer<'a> {
           } else {
             let next = index_of_word_end(self.css, self.position() + 1) - 1;
             let content = sub_string(self.css, self.position(), next + 1);
-            current_token = Token("word", content, Some(self.position()), Some(next));
+            current_token = Token::new(TokenType::Word, content, Some(self.position()), Some(next));
             self.push(content);
             next
           },
