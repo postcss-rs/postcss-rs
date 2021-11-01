@@ -1,12 +1,14 @@
-use crate::ast::root::Root;
-use crate::ast::rule::Rule;
-use crate::ast::Node;
+use std::cell::RefCell;
+use std::rc::{Rc, Weak};
+
 use crate::input::Input;
-use crate::tokenizer::{Token, Tokenizer, TokenType};
+use crate::node::{Node, Raws, RootRaws};
+use crate::tokenizer::{Token, TokenType, Tokenizer};
 
 pub struct Parser<'a> {
-  input: &'a Input,
-  current: Box<dyn Node>,
+  input: &'a Input<'a>,
+  pub root: RefCell<Node>,
+  current: Weak<RefCell<Node>>,
   tokenizer: Tokenizer<'a>,
   spaces: String,
   semicolon: bool,
@@ -15,14 +17,32 @@ pub struct Parser<'a> {
 
 impl<'a> Parser<'a> {
   pub fn new(input: &'a Input) -> Self {
-    let root: Root = Root::new(None, None, None, None);
+    let root = RefCell::new(Node {
+      r#type: "root",
+      nodes: todo!(),
+      parent: None,
+      source: None,
+      name: None,
+      params: None,
+      text: None,
+      decl: None,
+      rule: None,
+      raws: Raws::RootRaws(RootRaws {
+        after: None,
+        code_before: None,
+        code_after: None,
+        semicolon: None,
+      }),
+    });
+    let current: Weak<RefCell<Node>> = Weak::new();
     Self {
       input,
-      current: Box::new(root),
+      root,
+      current,
       spaces: "".to_string(),
       semicolon: false,
       custom_property: false,
-      tokenizer: Tokenizer::new(&input, true),
+      tokenizer: Tokenizer::new(input, true),
     }
   }
 
@@ -48,16 +68,28 @@ impl<'a> Parser<'a> {
     self.spaces += &token.1;
     if let Some(node) = self
       .current
-      .nodes_mut()
-      .and_then(|nodes| nodes.last_mut())
-      .and_then(|prev| prev.as_any_mut().downcast_mut::<&mut Rule>())
+      .upgrade()
+      .and_then(|node| node.borrow().nodes)
+      .and_then(|node| node.get_mut().last_mut())
     {
-      if node.raws.own_semicolon.unwrap_or(false) {
-        node.raws.own_semicolon = Some(!self.spaces.is_empty());
-        self.spaces = "".to_owned();
+      match node.raws {
+        Raws::RuleRaws(ref mut raws) => {
+          if raws.own_semicolon.unwrap_or(false) {
+            raws.own_semicolon = Some(!self.spaces.is_empty());
+            self.spaces = "".to_owned();
+          }
+        }
+        _ => {}
       }
     }
   }
+
+  //   if let Some(node) = self
+  //   .current
+  //   .nodes_mut()
+  //   .and_then(|nodes| nodes.last_mut())
+  //   .and_then(|prev| prev.as_any_mut().downcast_mut::<&mut Rule>())
+  // {
 
   #[inline]
   fn end(&self, token: &Token) {
