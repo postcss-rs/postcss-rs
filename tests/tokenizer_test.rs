@@ -389,7 +389,7 @@ fn ignore_unclosed_per_token_request() {
     tokens
   }
 
-  let tokens = tokn("How's it going (");
+  let tokens = token("How's it going (");
   let expected = vec![
     Token::new("word", "How", Some(0), Some(2)),
     Token::new("string", "'s", Some(3), Some(4)),
