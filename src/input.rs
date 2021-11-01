@@ -26,8 +26,8 @@ impl fmt::Display for FilePosition {
 }
 
 #[derive(Debug, PartialEq, Clone)]
-pub struct Input {
-  pub css: String,
+pub struct Input<'a> {
+  pub css: &'a str,
   // map: PreviousMap,
   file: Option<String>,
   id: Option<String>,
@@ -36,7 +36,7 @@ pub struct Input {
   column: u32,
 }
 
-impl fmt::Display for Input {
+impl<'a> fmt::Display for Input<'a> {
   fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
     write!(
       f,
@@ -49,8 +49,8 @@ impl fmt::Display for Input {
 #[derive(Debug)]
 pub struct ProcessOptions {}
 
-impl Input {
-  pub fn new(css: String, _opts: Option<ProcessOptions>) -> Input {
+impl<'a> Input<'a> {
+  pub fn new(css: &'a str, _opts: Option<ProcessOptions>) -> Input<'a> {
     Input {
       css,
       file: Some(String::new()),

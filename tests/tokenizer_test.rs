@@ -2,8 +2,8 @@ use postcss::input::Input;
 use postcss::tokenizer::*;
 
 fn tokenize(css: &str, ignore_errors: bool) -> Vec<Token> {
-  let input = Input::new(css.to_string(), None);
-  let mut processor = Tokenizer::new(&input, ignore_errors);
+  let input = Input::new(css, None);
+  let processor = Tokenizer::new(input, ignore_errors);
   let mut tokens = vec![];
   while !processor.end_of_file() {
     tokens.push(processor.next_token(false))
@@ -406,8 +406,8 @@ fn ignore_unclosed_per_token_request() {
 #[test]
 fn provides_correct_position() {
   let css = "Three tokens";
-  let input = Input::new(css.to_string(), None);
-  let mut processor = Tokenizer::new(&input, false);
+  let input = Input::new(css, None);
+  let processor = Tokenizer::new(input, false);
   assert_eq!(processor.position(), 0);
   processor.next_token(false);
   assert_eq!(processor.position(), 5);
