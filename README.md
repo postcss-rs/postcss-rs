@@ -6,19 +6,19 @@
 
 ## Performance Improvement 
 
-Tokenize [bootstrap.css](./assets/bootstrap.css) (Compare with postcss.js):
+Tokenize [bootstrap.css](./assets/bootstrap.css) (Compare with Node.js v14.18.1):
 
 ```bash
-rust: 0.00s user 0.00s system  71% cpu 0.007 total
-js:   0.13s user 0.02s system 126% cpu 0.109 total
+rust: 0.00s user 0.00s system  71% cpu 0.006 total
+js:   0.11s user 0.02s system 126% cpu 0.107 total
 
-# tokenize bootstrap-reboot.css ~18x
-js:   tokenizer/small(7K)       : 2.274ms
-rust: tokenizer/small(7K)       : 0.120ms
+# tokenize bootstrap-reboot.css ~34x
+js:   tokenizer/small(7K)       : 2.248ms
+rust: tokenizer/small(7K)       : 0.061ms
 
-# tokenize bootstrap.css ~14x
-js:   tokenizer/small(201K)     : 31.367ms
-rust: tokenizer/small(201K)     :  2.158ms
+# tokenize bootstrap.css ~26x
+js:   tokenizer/small(201K)     : 29.577ms
+rust: tokenizer/small(201K)     :  1.127ms
 ```
 
 🎉 Welcome contribute, here is a guide:
