@@ -8,8 +8,8 @@ use postcss::tokenizer::{Token, Tokenizer};
 fn main() {
   let css = fs::read_to_string("assets/bootstrap-reboot.css").unwrap();
   let start = Instant::now();
-  let input = Input::new(css, None);
-  let mut processor = Tokenizer::new(&input, false);
+  let input = Input::new(&css, None);
+  let processor = Tokenizer::new(input, false);
   while !processor.end_of_file() {
     processor.next_token(false);
   }
@@ -18,8 +18,8 @@ fn main() {
   // let mut set = HashSet::new();
   let css = fs::read_to_string("assets/bootstrap.css").unwrap();
   let start = Instant::now();
-  let input = Input::new(css, None);
-  let mut processor = Tokenizer::new(&input, false);
+  let input = Input::new(&css, None);
+  let processor = Tokenizer::new(input, false);
   while !processor.end_of_file() {
     let token = processor.next_token(false);
     println!("{}", std::mem::size_of_val(&token));

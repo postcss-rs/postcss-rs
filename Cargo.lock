@@ -3,15 +3,6 @@
 version = 3
 
 [[package]]
-name = "aho-corasick"
-version = "0.7.18"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1e37cfd5e7657ada45f742d6e99ca5788580b5c529dc78faf11ece6dc702656f"
-dependencies = [
- "memchr",
-]
-
-[[package]]
 name = "atty"
 version = "0.2.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -321,8 +312,6 @@ dependencies = [
  "criterion",
  "lazy_static",
  "memchr",
- "regex",
- "smol_str",
 ]
 
 [[package]]
@@ -374,8 +363,6 @@ version = "1.5.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d07a8629359eb56f1e2fb1652bb04212c072a87ba68546a04065d525673ac461"
 dependencies = [
- "aho-corasick",
- "memchr",
  "regex-syntax",
 ]
 
@@ -464,12 +451,6 @@ dependencies = [
  "ryu",
  "serde",
 ]
-
-[[package]]
-name = "smol_str"
-version = "0.1.18"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b203e79e90905594272c1c97c7af701533d42adaab0beb3859018e477d54a3b0"
 
 [[package]]
 name = "syn"

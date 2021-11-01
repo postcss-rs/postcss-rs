@@ -2,7 +2,7 @@ use crate::input::Input;
 use lazy_static::lazy_static;
 use memchr::memchr;
 use memchr::memmem::Finder;
-use smol_str::SmolStr;
+use std::cell::RefCell;
 use std::clone::Clone;
 use std::cmp::Eq;
 use std::cmp::PartialEq;
@@ -51,21 +51,16 @@ pub enum TokenType {
   Unknown,
 }
 #[derive(Debug, Clone, Eq, PartialEq)]
-pub struct Token {
-  pub kind: TokenType,
-  pub content: SmolStr,
-  pub start: Option<usize>,
-  pub end: Option<usize>,
-}
+pub struct Token<'a>(
+  pub TokenType,
+  pub &'a str,
+  pub Option<usize>,
+  pub Option<usize>,
+);
 
-impl Token {
-  pub fn new(kind: TokenType, content: &str, pos: Option<usize>, next: Option<usize>) -> Token {
-    Token {
-      kind,
-      content: content.into(),
-      start: pos,
-      end: next,
-    }
+impl<'a> Token<'a> {
+  pub fn new(kind: TokenType, content: &'a str, pos: Option<usize>, next: Option<usize>) -> Token {
+    Token(kind, content, pos, next)
   }
 }
 
@@ -73,58 +68,64 @@ impl Token {
 pub struct Tokenizer<'a> {
   css: &'a str,
   ignore: bool,
-  current_token: Token,
   length: usize,
-  pos: usize,
-  buffer: Vec<Token>,
-  returned: Vec<Token>,
+  pos: RefCell<usize>,
+  buffer: RefCell<Vec<&'a str>>,
+  returned: RefCell<Vec<Token<'a>>>,
 }
 
 impl<'a> Tokenizer<'a> {
-  pub fn new(input: &'a Input, ignore_errors: bool) -> Tokenizer {
-    let length = input.css.chars().count();
+  pub fn new(input: Input<'a>, ignore_errors: bool) -> Tokenizer<'a> {
+    let length = input.css.len();
     Tokenizer {
-      css: &input.css,
+      css: input.css,
       ignore: ignore_errors,
-      current_token: Token::new(TokenType::Unknown, &String::new(), None, None),
       length,
-      pos: 0,
-      buffer: vec![],
-      returned: vec![],
+      pos: RefCell::new(0),
+      // buffer: Vec::with_capacity(length / 13),
+      buffer: RefCell::new(vec![]),
+      returned: RefCell::new(vec![]),
     }
   }
 
   #[inline]
-  fn push(&mut self, t: Token) {
-    self.buffer.push(t);
+  fn push(&self, t: &'a str) {
+    self.buffer.borrow_mut().push(t);
   }
 
   pub fn position(&self) -> usize {
-    self.pos
+    *self.pos.borrow()
   }
 
   pub fn unclosed(&self, what: &str) {
-    panic!("Unclosed {} {}", what, self.pos);
+    panic!("Unclosed {} {}", what, self.position());
   }
 
   pub fn end_of_file(&self) -> bool {
-    self.returned.is_empty() && self.pos >= self.length
+    self.returned.borrow().is_empty() && self.position() >= self.length
   }
 
-  pub fn back(&mut self, token: Token) {
-    self.returned.push(token);
+  pub fn back(&self, token: Token<'a>) {
+    self.returned.borrow_mut().push(token);
   }
 
-  pub fn next_token(&mut self, ignore_unclosed: bool) -> Token {
-    if !self.returned.is_empty() {
-      return self.returned.pop().unwrap();
+  #[inline]
+  fn pos_plus_one(&self) {
+    self.pos.replace_with(|it| *it + 1);
+  }
+
+  pub fn next_token(&self, ignore_unclosed: bool) -> Token<'a> {
+    if !self.returned.borrow().is_empty() {
+      return self.returned.borrow_mut().pop().unwrap();
     }
 
-    let mut code = char_code_at(self.css, self.pos);
+    let mut code = char_code_at(self.css, self.position());
+
+    let current_token: Token;
 
     match code {
       NEWLINE | SPACE | TAB | CR | FEED => {
-        let mut next = self.pos;
+        let mut next = self.position();
         loop {
           next += 1;
           code = char_code_at(self.css, next);
@@ -133,47 +134,41 @@ impl<'a> Tokenizer<'a> {
           }
         }
 
-        self.current_token = Token::new(
-          TokenType::Space,
-          self.css[self.pos..next].into(),
-          None,
-          None,
-        );
+        current_token = Token(TokenType::Space, self.css[self.position()..next].into(), None, None);
 
-        self.pos = next - 1;
+        self.pos.replace(next);
       }
       OPEN_SQUARE => {
-        self.current_token = Token::new(TokenType::OpenSquare, "[".into(), Some(self.pos), None);
+        current_token = Token(TokenType::OpenSquare, "[", Some(self.position()), None);
+        self.pos_plus_one();
       }
       CLOSE_SQUARE => {
-        self.current_token = Token::new(TokenType::CloseSquare, "]".into(), Some(self.pos), None);
+        current_token = Token(TokenType::CloseSquare, "]", Some(self.position()), None);
+        self.pos_plus_one();
       }
       OPEN_CURLY => {
-        self.current_token = Token::new(TokenType::OpenCurly, "{".into(), Some(self.pos), None);
+        current_token = Token(TokenType::OpenCurly, "{", Some(self.position()), None);
+        self.pos_plus_one();
       }
       CLOSE_CURLY => {
-        self.current_token = Token::new(TokenType::CloseCurly, "}".into(), Some(self.pos), None);
+        current_token = Token(TokenType::CloseCurly, "}", Some(self.position()), None);
+        self.pos_plus_one();
       }
       COLON => {
-        self.current_token = Token::new(TokenType::Colon, ":".into(), Some(self.pos), None);
+        current_token = Token(TokenType::Colon, ":", Some(self.position()), None);
+        self.pos_plus_one();
       }
       SEMICOLON => {
-        self.current_token = Token::new(TokenType::Semicolon, ";".into(), Some(self.pos), None);
+        current_token = Token(TokenType::Semicolon, ";", Some(self.position()), None);
+        self.pos_plus_one();
       }
       CLOSE_PARENTHESES => {
-        self.current_token = Token::new(
-          TokenType::CloseParentheses,
-          ")".into(),
-          Some(self.pos),
-          None,
-        );
+        current_token = Token(TokenType::CloseParentheses, ")", Some(self.position()), None);
+        self.pos_plus_one();
       }
       OPEN_PARENTHESES => {
-        let prev = match self.buffer.pop() {
-          Some(b) => b.content,
-          None => String::new().into(),
-        };
-        let n = char_code_at(self.css, self.pos + 1);
+        let prev = self.buffer.borrow_mut().pop().unwrap_or("");
+        let n = char_code_at(self.css, self.position() + 1);
         if prev == "url"
           && n != SINGLE_QUOTE
           && n != DOUBLE_QUOTE
@@ -183,16 +178,16 @@ impl<'a> Tokenizer<'a> {
           && n != FEED
           && n != CR
         {
-          let mut next = self.pos;
+          let mut next = self.position();
           loop {
             let mut escaped = false;
-            match index_of_char(self.css, ')', next + 1) {
+            match index_of_byte(self.css, b')', next + 1) {
               Some(i) => {
                 next = i;
               }
               None => {
                 if self.ignore || ignore_unclosed {
-                  next = self.pos;
+                  next = self.position();
                   break;
                 } else {
                   self.unclosed("bracket")
@@ -211,47 +206,45 @@ impl<'a> Tokenizer<'a> {
             }
           }
 
-          self.current_token = Token::new(
+          current_token = Token(
             TokenType::Brackets,
-            sub_string(self.css, self.pos, next + 1).into(),
-            Some(self.pos),
+            sub_string(self.css, self.position(), next + 1),
+            Some(self.position()),
             Some(next),
           );
 
-          self.pos = next;
+          self.pos.replace(next + 1);
         } else {
-          match index_of_char(self.css, ')', self.pos + 1) {
+          match index_of_byte(self.css, b')', self.position() + 1) {
             Some(i) => {
-              let content = &self.css[self.pos..i + 1];
+              let content = &self.css[self.position()..i + 1];
 
               if is_bad_bracket(content) {
-                self.current_token =
-                  Token::new(TokenType::OpenParentheses, "(".into(), Some(self.pos), None);
+                current_token = Token(TokenType::OpenParentheses, "(", Some(self.position()), None);
               } else {
-                self.current_token =
-                  Token::new(TokenType::Brackets, content.into(), Some(self.pos), Some(i));
-                self.pos = i;
+                current_token = Token(TokenType::Brackets, content, Some(self.position()), Some(i));
+                self.pos.replace(i);
               }
             }
             None => {
-              self.current_token =
-                Token::new(TokenType::OpenParentheses, "(".into(), Some(self.pos), None);
+              current_token = Token(TokenType::OpenParentheses, "(", Some(self.position()), None);
             }
           };
+          self.pos_plus_one();
         }
       }
       SINGLE_QUOTE | DOUBLE_QUOTE => {
-        let quote = if code == SINGLE_QUOTE { '\'' } else { '"' };
-        let mut next = self.pos;
+        let quote = if code == SINGLE_QUOTE { b'\'' } else { b'"' };
+        let mut next = self.position();
         loop {
           let mut escaped = false;
-          match index_of_char(self.css, quote, next + 1) {
+          match index_of_byte(self.css, quote, next + 1) {
             Some(i) => {
               next = i;
             }
             None => {
               if self.ignore || ignore_unclosed {
-                next = self.pos + 1;
+                next = self.position() + 1;
                 break;
               } else {
                 self.unclosed("string")
@@ -270,26 +263,26 @@ impl<'a> Tokenizer<'a> {
           }
         }
 
-        self.current_token = Token::new(
+        current_token = Token(
           TokenType::String,
-          sub_string(self.css, self.pos, next + 1).into(),
-          Some(self.pos),
+          sub_string(self.css, self.position(), next + 1),
+          Some(self.position()),
           Some(next),
         );
-        self.pos = next;
+        self.pos.replace(next + 1);
       }
       AT => {
-        let next = index_of_at_end(&self.css, self.pos + 1) - 1;
-        self.current_token = Token::new(
+        let next = index_of_at_end(self.css, self.position() + 1) - 1;
+        current_token = Token(
           TokenType::AtWord,
-          sub_string(self.css, self.pos, next + 1).into(),
-          Some(self.pos),
+          sub_string(self.css, self.position(), next + 1),
+          Some(self.position()),
           Some(next),
         );
-        self.pos = next;
+        self.pos.replace(next + 1);
       }
       BACKSLASH => {
-        let mut next = self.pos;
+        let mut next = self.position();
         let mut escape = true;
         while char_code_at(self.css, next + 1) == BACKSLASH {
           next += 1;
@@ -315,49 +308,47 @@ impl<'a> Tokenizer<'a> {
           }
         }
 
-        self.current_token = Token::new(
+        current_token = Token(
           TokenType::Word,
-          sub_string(self.css, self.pos, next + 1).into(),
-          Some(self.pos),
+          sub_string(self.css, self.position(), next + 1),
+          Some(self.position()),
           Some(next),
         );
-        self.pos = next;
+        self.pos.replace(next + 1);
       }
       _ => {
-        self.pos = if code == SLASH && char_code_at(self.css, self.pos + 1) == ASTERISK {
-          let next = match index_of_end_comment(self.css, self.pos + 2) {
-            Some(i) => i + 1,
-            None => {
-              if !self.ignore && !ignore_unclosed {
-                self.unclosed("comment");
+        self.pos.replace(
+          if code == SLASH && char_code_at(self.css, self.position() + 1) == ASTERISK {
+            let next = match index_of_end_comment(self.css, self.position() + 2) {
+              Some(i) => i + 1,
+              None => {
+                if !self.ignore && !ignore_unclosed {
+                  self.unclosed("comment");
+                }
+                self.length
               }
-              self.length
-            }
-          };
+            };
 
-          self.current_token = Token::new(
-            TokenType::Comment,
-            sub_string(self.css, self.pos, next + 1).into(),
-            Some(self.pos),
-            Some(next),
-          );
-          next
-        } else {
-          let next = index_of_word_end(&self.css, self.pos + 1) - 1;
-          self.current_token = Token::new(
-            TokenType::Word,
-            sub_string(self.css, self.pos, next + 1).into(),
-            Some(self.pos),
-            Some(next),
-          );
-          self.push(self.current_token.clone());
-          next
-        }
+            current_token = Token(
+              TokenType::Comment,
+              sub_string(self.css, self.position(), next + 1),
+              Some(self.position()),
+              Some(next),
+            );
+            next
+          } else {
+            let next = index_of_word_end(self.css, self.position() + 1) - 1;
+            let content = sub_string(self.css, self.position(), next + 1);
+            current_token = Token::new(TokenType::Word, content, Some(self.position()), Some(next));
+            self.push(content);
+            next
+          },
+        );
+        self.pos_plus_one();
       }
     }
 
-    self.pos += 1;
-    self.current_token.clone()
+    current_token
   }
 }
 
@@ -370,9 +361,9 @@ fn index_of_end_comment(value: &str, from_index: usize) -> Option<usize> {
 }
 
 #[inline]
-fn index_of_char(value: &str, search_value: char, from_index: usize) -> Option<usize> {
+fn index_of_byte(value: &str, search_value: u8, from_index: usize) -> Option<usize> {
   let (_, last) = value.split_at(from_index);
-  memchr(search_value as u8, last.as_bytes()).map(|v| v + from_index)
+  memchr(search_value, last.as_bytes()).map(|v| v + from_index)
 }
 
 #[inline]
@@ -391,7 +382,6 @@ fn char_code_at(s: &str, n: usize) -> char {
   } else {
     s.as_bytes()[n] as char
   }
-  // s.chars().nth(n).unwrap_or('\0')
 }
 
 #[inline]
@@ -400,12 +390,7 @@ fn is_hex_char(s: &str, n: usize) -> bool {
     return false;
   }
 
-  match s.as_bytes()[n] {
-    b'A'..=b'F' => true,
-    b'a'..=b'f' => true,
-    b'0'..=b'9' => true,
-    _ => false,
-  }
+  matches!(s.as_bytes()[n], b'A'..=b'F' | b'a'..=b'f' | b'0'..=b'9')
 }
 
 #[inline]
@@ -438,7 +423,7 @@ fn index_of_at_end(s: &str, start: usize) -> usize {
     };
   }
 
-  return i;
+  i
 }
 
 #[inline]
@@ -463,7 +448,7 @@ fn index_of_word_end(s: &str, start: usize) -> usize {
       _ => i += 1,
     };
   }
-  return i;
+  i
 }
 
 #[cfg(test)]
