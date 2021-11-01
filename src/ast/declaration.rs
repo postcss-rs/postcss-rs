@@ -1,10 +1,6 @@
-use crate::ast::{Node, Source};
-
-#[derive(Debug, PartialEq, Clone)]
-pub struct RawValue {
-  pub value: String,
-  pub raw: String,
-}
+use crate::ast::{Node, Source, RawValue};
+use std::cell::RefCell;
+use std::rc::{Rc, Weak};
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct DeclarationRaws {
@@ -23,28 +19,13 @@ pub struct DeclarationRaws {
   pub value: Option<RawValue>,
 }
 
-#[derive(Debug, PartialEq)]
-pub struct DeclarationProps {
-  /// Name of the declaration.
-  pub prop: String,
-
-  /// Value of the declaration.
-  pub value: String,
-
-  /// Whether the declaration has an `!important` annotation.
-  pub important: Option<bool>,
-
-  /// Information used to generate byte-to-byte equal node string as it was in the origin input.
-  pub raws: Option<DeclarationRaws>,
-}
-
 /// Represents a CSS declaration.
 pub struct Declaration {
   /// tring representing the node’s type. Possible values are `root`, `atrule`,
   /// `rule`, `decl`, or `comment`.
   pub r#type: &'static str,
-  // pub parent: Option<Container>,
-  pub nodes: Option<Vec<Box<dyn Node>>>,
+  pub parent: Option<RefCell<Weak<Node>>>,
+  pub nodes: Option<RefCell<Vec<Rc<Node>>>>,
 
   /// The declaration's property name.
   pub prop: String,
