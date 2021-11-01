@@ -380,8 +380,8 @@ fn tokenizes_hexadecimal_escape() {
 #[test]
 fn ignore_unclosed_per_token_request() {
   fn token(css: &str) -> Vec<Token> {
-    let input = Input::new(css.to_string(), None);
-    let mut processor = Tokenizer::new(&input, false);
+    let input = Input::new(css, None);
+    let mut processor = Tokenizer::new(input, false);
     let mut tokens = vec![];
     while !processor.end_of_file() {
       tokens.push(processor.next_token(true))
