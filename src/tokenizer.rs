@@ -2,7 +2,6 @@ use crate::input::Input;
 use lazy_static::lazy_static;
 use memchr::memchr;
 use memchr::memmem::Finder;
-use ringbuffer::{AllocRingBuffer, RingBufferRead, RingBufferWrite};
 use std::cell::RefCell;
 use std::clone::Clone;
 use std::cmp::PartialEq;
