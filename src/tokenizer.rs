@@ -162,6 +162,11 @@ impl<'a> Tokenizer<'a> {
       }
       OPEN_PARENTHESES => {
         let prev = self.fetch_and_reset();
+        // CGQAQ: ONLY WORD SHOULD BE HERE, OTHERWISE IS TREATING AS SYMBOL
+        if prev.is_empty() && self.position() != 0 {
+          let index = index_of_word_begin(self.css, self.position() - 1);
+          self.cache(sub_string(self.css, index, self.position()));
+        }
         let n = char_code_at(self.css, self.position() + 1);
         if prev == "url"
           && n != SINGLE_QUOTE
@@ -441,6 +446,30 @@ fn index_of_word_end(s: &str, start: usize) -> usize {
         }
       }
       _ => i += 1,
+    };
+  }
+  i
+}
+
+#[inline]
+fn index_of_word_begin(s: &str, end: usize) -> usize {
+  let bytes = s.as_bytes();
+  let mut i = end;
+
+  while i > 0 {
+    match bytes[i] as char {
+      '\t' | '\n' | '\u{12}' | '\r' | ' ' | '!' | '"' | '#' | '\'' | '(' | ')' | ':' | ';'
+      | '@' | '[' | '\\' | ']' | '{' | '}' => {
+        return i;
+      }
+      '/' => {
+        if bytes[i - 1] as char == '*' {
+          return i;
+        } else {
+          i -= 1;
+        }
+      }
+      _ => i -= 1,
     };
   }
   i
