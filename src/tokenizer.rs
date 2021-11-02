@@ -6,6 +6,7 @@ use std::cell::RefCell;
 use std::clone::Clone;
 use std::cmp::PartialEq;
 use std::cmp::{min, Eq};
+use std::collections::VecDeque;
 
 const SINGLE_QUOTE: char = '\'';
 const DOUBLE_QUOTE: char = '"';
@@ -70,7 +71,7 @@ pub struct Tokenizer<'a> {
   ignore: bool,
   length: usize,
   pos: RefCell<usize>,
-  buffer: RefCell<Vec<&'a str>>,
+  buffer: RefCell<VecDeque<&'a str>>,
   returned: RefCell<Vec<Token<'a>>>,
 }
 
@@ -83,14 +84,17 @@ impl<'a> Tokenizer<'a> {
       length,
       pos: RefCell::new(0),
       // buffer: Vec::with_capacity(length / 13),
-      buffer: RefCell::new(Vec::with_capacity(min(102400, length / 8))),
+      buffer: RefCell::new(VecDeque::with_capacity(10)),
       returned: RefCell::new(Vec::with_capacity(min(102400, length / 8))),
     }
   }
 
   #[inline]
   fn push(&self, t: &'a str) {
-    self.buffer.borrow_mut().push(t);
+    if self.buffer.borrow().len() >= 10 {
+      self.buffer.borrow_mut().pop_front();
+    }
+    self.buffer.borrow_mut().push_back(t);
   }
 
   #[inline]
@@ -155,7 +159,7 @@ impl<'a> Tokenizer<'a> {
         self.pos_plus_one();
       }
       OPEN_PARENTHESES => {
-        let prev = self.buffer.borrow_mut().pop().unwrap_or("");
+        let prev = self.buffer.borrow_mut().pop_back().unwrap_or("");
         let n = char_code_at(self.css, self.position() + 1);
         if prev == "url"
           && n != SINGLE_QUOTE
