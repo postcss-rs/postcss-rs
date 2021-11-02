@@ -2,6 +2,7 @@
 #![allow(dead_code)]
 
 use crate::input::Input;
+use crate::node::AstNodeType::Root;
 use crate::node::{Node, Raws, RootRaws};
 use crate::tokenizer::{Token, TokenType, Tokenizer};
 use std::cell::RefCell;
@@ -19,7 +20,7 @@ pub struct Parser<'a> {
 impl<'a> Parser<'a> {
   pub fn new(input: Input<'a>) -> Self {
     let root = Rc::new(RefCell::new(Node {
-      r#type: "root",
+      r#type: Root,
       nodes: None,
       parent: None,
       source: None,
@@ -35,6 +36,7 @@ impl<'a> Parser<'a> {
         semicolon: None,
       }),
     }));
+    root.borrow_mut().parent = None;
     Self {
       root,
       current: None,
