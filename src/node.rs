@@ -23,10 +23,19 @@ pub struct RawValue {
 }
 
 #[derive(Debug, Clone)]
+pub enum AstNodeType {
+  Root,
+  AtRule,
+  Rule,
+  Decl,
+  Comment,
+}
+
+#[derive(Debug, Clone)]
 pub struct Node<'a> {
   /// tring representing the node’s type. Possible values are `root`, `atrule`,
   /// `rule`, `decl`, or `comment`.
-  pub r#type: &'static str,
+  pub r#type: AstNodeType,
 
   /// An array containing the node’s children.
   pub nodes: Option<Vec<Node<'a>>>,
