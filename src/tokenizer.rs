@@ -86,7 +86,7 @@ impl<'a> Tokenizer<'a> {
       length,
       pos: RefCell::new(0),
       // buffer: Vec::with_capacity(length / 13),
-      buffer: RefCell::new(AllocRingBuffer::with_capacity_power_of_2(8)),
+      buffer: RefCell::new(AllocRingBuffer::with_capacity_power_of_2(4)),
       returned: RefCell::new(Vec::with_capacity(min(MAX_BUFFER, length / 8))),
     }
   }
