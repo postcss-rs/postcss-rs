@@ -1,5 +1,5 @@
 use std::cell::RefCell;
-use std::rc::{Rc, Weak};
+use std::rc::Weak;
 
 use crate::input::Input;
 use crate::node::{Node, Raws, RootRaws};
@@ -7,8 +7,8 @@ use crate::tokenizer::{Token, TokenType, Tokenizer};
 
 pub struct Parser<'a> {
   input: &'a Input<'a>,
-  pub root: RefCell<Node>,
-  current: Weak<RefCell<Node>>,
+  pub root: RefCell<Node<'a>>,
+  current: Weak<RefCell<Node<'a>>>,
   tokenizer: Tokenizer<'a>,
   spaces: String,
   semicolon: bool,
@@ -42,7 +42,7 @@ impl<'a> Parser<'a> {
       spaces: "".to_string(),
       semicolon: false,
       custom_property: false,
-      tokenizer: Tokenizer::new(input, true),
+      tokenizer: Tokenizer::new(*input, true),
     }
   }
 
@@ -50,7 +50,7 @@ impl<'a> Parser<'a> {
     use TokenType::*;
     while !self.tokenizer.end_of_file() {
       let token = self.tokenizer.next_token(true);
-      match token.kind {
+      match token.0 {
         Space => self.spaces += &token.1,
         Semicolon => self.free_semicolon(&token),
         CloseCurly => self.end(&token),
