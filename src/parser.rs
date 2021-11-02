@@ -16,7 +16,7 @@ pub struct Parser<'a> {
 }
 
 impl<'a> Parser<'a> {
-  pub fn new(input: &'a Input) -> Self {
+  pub fn new(input: Input<'a>) -> Self {
     let root = RefCell::new(Node {
       r#type: "root",
       nodes: todo!(),
@@ -42,7 +42,7 @@ impl<'a> Parser<'a> {
       spaces: "".to_string(),
       semicolon: false,
       custom_property: false,
-      tokenizer: Tokenizer::new(*input, true),
+      tokenizer: Tokenizer::new(input, true),
     }
   }
 
