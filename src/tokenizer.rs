@@ -73,7 +73,7 @@ pub struct Tokenizer<'a> {
   ignore: bool,
   length: usize,
   pos: RefCell<usize>,
-  buffer: RefCell<AllocRingBuffer<&'a str>>,
+  buffer: RefCell<&'a str>,
   returned: RefCell<Vec<Token<'a>>>,
 }
 
@@ -85,15 +85,14 @@ impl<'a> Tokenizer<'a> {
       ignore: ignore_errors,
       length,
       pos: RefCell::new(0),
-      // buffer: Vec::with_capacity(length / 13),
-      buffer: RefCell::new(AllocRingBuffer::with_capacity_power_of_2(64)),
+      buffer: RefCell::new(""),
       returned: RefCell::new(Vec::with_capacity(min(MAX_BUFFER, length / 8))),
     }
   }
 
   #[inline]
-  fn push(&self, t: &'a str) {
-    self.buffer.borrow_mut().push(t);
+  fn cache(&self, t: &'a str) {
+    self.buffer.replace(t);
   }
 
   #[inline]
@@ -158,7 +157,7 @@ impl<'a> Tokenizer<'a> {
         self.pos_plus_one();
       }
       OPEN_PARENTHESES => {
-        let prev = self.buffer.borrow_mut().dequeue().unwrap_or("");
+        let prev = *self.buffer.borrow();
         let n = char_code_at(self.css, self.position() + 1);
         if prev == "url"
           && n != SINGLE_QUOTE
@@ -331,7 +330,7 @@ impl<'a> Tokenizer<'a> {
             let next = index_of_word_end(self.css, self.position() + 1) - 1;
             let content = sub_string(self.css, self.position(), next + 1);
             current_token = Token::new(TokenType::Word, content, Some(self.position()), Some(next));
-            self.push(content);
+            self.cache(content);
             next
           },
         );
