@@ -95,6 +95,11 @@ impl<'a> Tokenizer<'a> {
   }
 
   #[inline]
+  fn fetch_and_reset(&self) -> &str {
+    self.buffer.replace("")
+  }
+
+  #[inline]
   pub fn position(&self) -> usize {
     *self.pos.borrow()
   }
@@ -156,8 +161,7 @@ impl<'a> Tokenizer<'a> {
         self.pos_plus_one();
       }
       OPEN_PARENTHESES => {
-        let prev = *self.buffer.borrow();
-        self.cache("");
+        let prev = self.fetch_and_reset();
         let n = char_code_at(self.css, self.position() + 1);
         if prev == "url"
           && n != SINGLE_QUOTE
