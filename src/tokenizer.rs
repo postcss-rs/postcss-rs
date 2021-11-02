@@ -86,7 +86,7 @@ impl<'a> Tokenizer<'a> {
       length,
       pos: RefCell::new(0),
       // buffer: Vec::with_capacity(length / 13),
-      buffer: RefCell::new(VecDeque::with_capacity(min(MAX_BUFFER, length / 1024 + 10))),
+      buffer: RefCell::new(VecDeque::with_capacity(500)),
       returned: RefCell::new(Vec::with_capacity(min(MAX_BUFFER, length / 8))),
     }
   }
