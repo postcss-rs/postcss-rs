@@ -36,7 +36,6 @@ impl<'a> Parser<'a> {
         semicolon: None,
       }),
     }));
-    root.borrow_mut().parent = None;
     Self {
       root,
       current: None,
