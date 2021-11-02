@@ -23,12 +23,12 @@ pub struct RawValue {
 }
 
 #[derive(Debug, Clone)]
-pub enum AstNodeType{
+pub enum AstNodeType {
   Root,
   AtRule,
   Rule,
   Decl,
-  Comment
+  Comment,
 }
 
 #[derive(Debug, Clone)]
