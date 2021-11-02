@@ -157,6 +157,7 @@ impl<'a> Tokenizer<'a> {
       }
       OPEN_PARENTHESES => {
         let prev = *self.buffer.borrow();
+        self.cache("");
         let n = char_code_at(self.css, self.position() + 1);
         if prev == "url"
           && n != SINGLE_QUOTE
