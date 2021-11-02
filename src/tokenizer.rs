@@ -2,6 +2,7 @@ use crate::input::Input;
 use lazy_static::lazy_static;
 use memchr::memchr;
 use memchr::memmem::Finder;
+#[cfg(feature = "feat_ringbuffer")]
 use ringbuffer::{AllocRingBuffer, RingBufferRead, RingBufferWrite};
 use std::cell::RefCell;
 use std::clone::Clone;
@@ -73,7 +74,10 @@ pub struct Tokenizer<'a> {
   ignore: bool,
   length: usize,
   pos: RefCell<usize>,
+  #[cfg(feature = "feat_ringbuffer")]
   buffer: RefCell<AllocRingBuffer<&'a str>>,
+  #[cfg(not(feature = "feat_ringbuffer"))]
+  buffer: RefCell<Vec<&'a str>>,
   returned: RefCell<Vec<Token<'a>>>,
 }
 
@@ -86,7 +90,10 @@ impl<'a> Tokenizer<'a> {
       length,
       pos: RefCell::new(0),
       // buffer: Vec::with_capacity(length / 13),
+      #[cfg(feature = "feat_ringbuffer")]
       buffer: RefCell::new(AllocRingBuffer::with_capacity_power_of_2(64)),
+      #[cfg(not(feature = "feat_ringbuffer"))]
+      buffer: RefCell::new(Vec::with_capacity(min(MAX_BUFFER, length / 8))),
       returned: RefCell::new(Vec::with_capacity(min(MAX_BUFFER, length / 8))),
     }
   }
@@ -158,7 +165,10 @@ impl<'a> Tokenizer<'a> {
         self.pos_plus_one();
       }
       OPEN_PARENTHESES => {
+        #[cfg(feature = "feat_ringbuffer")]
         let prev = self.buffer.borrow_mut().dequeue().unwrap_or("");
+        #[cfg(not(feature = "feat_ringbuffer"))]
+        let prev = self.buffer.borrow_mut().pop().unwrap_or("");
         let n = char_code_at(self.css, self.position() + 1);
         if prev == "url"
           && n != SINGLE_QUOTE
