@@ -2,8 +2,7 @@
 #![allow(dead_code)]
 
 use crate::input::Input;
-use crate::node::AstNodeType::Root;
-use crate::node::{Node, Raws, RootRaws};
+use crate::node::{Node, Root, RootRaws};
 use crate::tokenizer::{Token, TokenType, Tokenizer};
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -19,23 +18,12 @@ pub struct Parser<'a> {
 
 impl<'a> Parser<'a> {
   pub fn new(input: Input<'a>) -> Self {
-    let root = Rc::new(RefCell::new(Node {
-      r#type: Root,
+    let root = Rc::new(RefCell::new(Node::Root(Root {
       nodes: None,
       parent: None,
       source: None,
-      name: None,
-      params: None,
-      text: None,
-      decl: None,
-      rule: None,
-      raws: Raws::RootRaws(RootRaws {
-        after: None,
-        code_before: None,
-        code_after: None,
-        semicolon: None,
-      }),
-    }));
+      raws: RootRaws::default(),
+    })));
     Self {
       root,
       current: None,
@@ -67,9 +55,9 @@ impl<'a> Parser<'a> {
   fn free_semicolon(&mut self, token: &Token) {
     self.spaces += &token.1;
     if let Some(ref mut node) = self.current {
-      if let Raws::RuleRaws(ref mut raws) = node.raws {
-        if raws.own_semicolon.unwrap_or(false) {
-          raws.own_semicolon = Some(!self.spaces.is_empty());
+      if let Node::Rule(ref mut rule) = node {
+        if rule.raws.own_semicolon.unwrap_or(false) {
+          rule.raws.own_semicolon = Some(!self.spaces.is_empty());
           self.spaces = "".to_owned();
         }
       }
