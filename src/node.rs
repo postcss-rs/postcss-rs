@@ -22,7 +22,6 @@ pub struct RawValue {
   pub raw: String,
 }
 
-
 #[derive(Debug, Clone)]
 pub enum Node<'a> {
   Root(Root<'a>),
@@ -63,7 +62,7 @@ pub struct Declaration<'a> {
   /// The property is used in source map generation.
   pub source: Option<Source<'a>>,
 
-  pub raws: DeclarationRaws
+  pub raws: DeclarationRaws,
 }
 
 #[derive(Debug, Clone)]
@@ -83,7 +82,7 @@ pub struct Rule<'a> {
   /// The property is used in source map generation.
   pub source: Option<Source<'a>>,
 
-  pub raws: RuleRaws
+  pub raws: RuleRaws,
 }
 
 #[derive(Debug, Clone)]
@@ -108,7 +107,7 @@ pub struct AtRule<'a> {
   /// but precede any {} block.
   pub params: Option<String>,
 
-  pub raws: AtRuleRaws
+  pub raws: AtRuleRaws,
 }
 
 #[derive(Debug, Clone)]
@@ -127,7 +126,7 @@ pub struct Comment<'a> {
   /// The comment's text.
   pub text: Option<String>,
 
-  pub raws: CommentRaws
+  pub raws: CommentRaws,
 }
 #[derive(Debug, Clone)]
 pub struct Document<'a> {
@@ -145,7 +144,6 @@ pub struct Document<'a> {
   /// The at-rule's name immediately follows the `@`.
   /// Or the document's name.
   pub name: Option<String>,
-
   // document node have no raws
   // pub raws: Document
 }
@@ -161,7 +159,7 @@ pub struct Root<'a> {
   /// The property is used in source map generation.
   pub source: Option<Source<'a>>,
 
-  pub raws: RootRaws
+  pub raws: RootRaws,
 }
 
 #[derive(Debug, PartialEq, Clone, Default)]
