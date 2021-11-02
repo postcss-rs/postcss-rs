@@ -2,11 +2,11 @@ use crate::input::Input;
 use lazy_static::lazy_static;
 use memchr::memchr;
 use memchr::memmem::Finder;
+use ringbuffer::{AllocRingBuffer, RingBufferRead, RingBufferWrite};
 use std::cell::RefCell;
 use std::clone::Clone;
 use std::cmp::PartialEq;
 use std::cmp::{min, Eq};
-use std::collections::VecDeque;
 
 const SINGLE_QUOTE: char = '\'';
 const DOUBLE_QUOTE: char = '"';
@@ -73,7 +73,7 @@ pub struct Tokenizer<'a> {
   ignore: bool,
   length: usize,
   pos: RefCell<usize>,
-  buffer: RefCell<VecDeque<&'a str>>,
+  buffer: RefCell<AllocRingBuffer<&'a str>>,
   returned: RefCell<Vec<Token<'a>>>,
 }
 
@@ -86,17 +86,14 @@ impl<'a> Tokenizer<'a> {
       length,
       pos: RefCell::new(0),
       // buffer: Vec::with_capacity(length / 13),
-      buffer: RefCell::new(VecDeque::with_capacity(500)),
+      buffer: RefCell::new(AllocRingBuffer::with_capacity(100)),
       returned: RefCell::new(Vec::with_capacity(min(MAX_BUFFER, length / 8))),
     }
   }
 
   #[inline]
   fn push(&self, t: &'a str) {
-    if self.buffer.borrow().len() >= self.buffer.borrow().capacity() {
-      self.buffer.borrow_mut().pop_front();
-    }
-    self.buffer.borrow_mut().push_back(t);
+    self.buffer.borrow_mut().push(t);
   }
 
   #[inline]
@@ -161,7 +158,7 @@ impl<'a> Tokenizer<'a> {
         self.pos_plus_one();
       }
       OPEN_PARENTHESES => {
-        let prev = self.buffer.borrow_mut().pop_back().unwrap_or("");
+        let prev = self.buffer.borrow_mut().dequeue().unwrap_or("");
         let n = char_code_at(self.css, self.position() + 1);
         if prev == "url"
           && n != SINGLE_QUOTE
