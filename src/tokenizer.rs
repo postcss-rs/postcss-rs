@@ -28,6 +28,8 @@ const ASTERISK: char = '*';
 const COLON: char = ':';
 const AT: char = '@';
 
+const MAX_BUFFER: usize = 102400;
+
 lazy_static! {
   static ref FINDER_END_OF_COMMENT: Finder<'static> = Finder::new("*/");
 }
@@ -84,14 +86,14 @@ impl<'a> Tokenizer<'a> {
       length,
       pos: RefCell::new(0),
       // buffer: Vec::with_capacity(length / 13),
-      buffer: RefCell::new(VecDeque::with_capacity(10)),
-      returned: RefCell::new(Vec::with_capacity(min(102400, length / 8))),
+      buffer: RefCell::new(VecDeque::with_capacity(min(MAX_BUFFER, length / 10))),
+      returned: RefCell::new(Vec::with_capacity(min(MAX_BUFFER, length / 8))),
     }
   }
 
   #[inline]
   fn push(&self, t: &'a str) {
-    if self.buffer.borrow().len() >= 10 {
+    if self.buffer.borrow().len() >= self.buffer.borrow().capacity() {
       self.buffer.borrow_mut().pop_front();
     }
     self.buffer.borrow_mut().push_back(t);
