@@ -11,8 +11,8 @@ pub struct Position {
 }
 
 #[derive(Debug, PartialEq, Clone)]
-pub struct Source {
-  pub input: Input,
+pub struct Source<'a> {
+  pub input: &'a Input<'a>,
   pub start: Option<Position>,
   pub end: Option<Position>,
 }
@@ -24,20 +24,20 @@ pub struct RawValue {
 }
 
 #[derive(Debug, Clone)]
-pub struct Node {
+pub struct Node<'a> {
   /// tring representing the node’s type. Possible values are `root`, `atrule`,
   /// `rule`, `decl`, or `comment`.
   pub r#type: &'static str,
 
   /// An array containing the node’s children.
-  pub nodes: Option<RefCell<Vec<Node>>>,
+  pub nodes: Option<RefCell<Vec<Node<'a>>>>,
 
   /// The node’s parent node.
-  pub parent: Option<RefCell<Weak<Node>>>,
+  pub parent: Option<RefCell<Weak<Node<'a>>>>,
 
   /// The input source of the node.
   /// The property is used in source map generation.
-  pub source: Option<Source>,
+  pub source: Option<Source<'a>>,
 
   /// used in `atrule` or `document`.
   /// The at-rule's name immediately follows the `@`.
