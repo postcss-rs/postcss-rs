@@ -1,4 +1,3 @@
-use std::cell::RefCell;
 use std::rc::Weak;
 
 use crate::input::Input;
@@ -30,10 +29,10 @@ pub struct Node<'a> {
   pub r#type: &'static str,
 
   /// An array containing the node’s children.
-  pub nodes: Option<RefCell<Vec<Node<'a>>>>,
+  pub nodes: Option<Vec<Node<'a>>>,
 
   /// The node’s parent node.
-  pub parent: Option<RefCell<Weak<Node<'a>>>>,
+  pub parent: Option<Weak<Node<'a>>>,
 
   /// The input source of the node.
   /// The property is used in source map generation.
