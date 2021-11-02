@@ -69,7 +69,7 @@ impl<'a> Parser<'a> {
     if let Some(node) = self
       .current
       .upgrade()
-      .and_then(|node| node.borrow().nodes)
+      .and_then(|node| node.borrow_mut().nodes)
       .and_then(|node| node.get_mut().last_mut())
     {
       match node.raws {
