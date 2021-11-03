@@ -12,6 +12,9 @@ keywords = ["css", "syntax", "postcss", "parser", "ast"]
 [dependencies]
 lazy_static = "1"
 memchr = "2.4"
+once_cell = "1.8.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0.68"
 
 [profile.release]
 codegen-units = 1
@@ -20,7 +23,8 @@ panic = "abort"
 debug = true
 
 [dev-dependencies]
-criterion = { version="0.3", features = ["html_reports"] }
+criterion = { version = "0.3", features = ["html_reports"] }
+pretty_assertions = "0.7.2"
 
 [lib]
 # `cargo bench` Gives "Unrecognized Option" Errors for Valid Command-line Options
