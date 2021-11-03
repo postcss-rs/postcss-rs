@@ -43,6 +43,6 @@ cargo bench -- --baseline main
 ## License
 
 [postcss-rs](https://github.com/justjavac/postcss-rs) is released under the
-MIT License. See the bundled [LICENSE](./LICENSE) file for details.
+MIT License. See the [LICENSE](./LICENSE) file in the project root directory for details.
 
-**Most implementation of postcss-rs are modified from [postcss](https://github.com/postcss/postcss), under MIT License(See the origin [POSTCSS.LICENSE](./POSTCSS.LICENSE) file), thanks to Andrey Sitnik([@ai](https://github.com/ai)).**
+**The project is based on the wonderful work of Andrey Sitnik([@ai](https://github.com/ai)) 's [postcss](https://github.com/postcss/postcss), which is under MIT License(See [HERE](./POSTCSS.LICENSE)), Great thanks to Mr. Sitnik**
