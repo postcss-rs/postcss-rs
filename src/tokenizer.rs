@@ -73,10 +73,7 @@ pub struct Tokenizer<'a> {
   ignore: bool,
   length: usize,
   pos: RefCell<usize>,
-  #[cfg(feature = "feat_ringbuffer")]
   buffer: RefCell<RefRing<'a>>,
-  #[cfg(not(feature = "feat_ringbuffer"))]
-  buffer: RefCell<Vec<&'a str>>,
   returned: RefCell<Vec<Token<'a>>>,
 }
 
@@ -88,11 +85,7 @@ impl<'a> Tokenizer<'a> {
       ignore: ignore_errors,
       length,
       pos: RefCell::new(0),
-      // buffer: Vec::with_capacity(length / 13),
-      #[cfg(feature = "feat_ringbuffer")]
       buffer: RefCell::new(RefRing::new()),
-      #[cfg(not(feature = "feat_ringbuffer"))]
-      buffer: RefCell::new(Vec::with_capacity(min(MAX_BUFFER, length / 8))),
       returned: RefCell::new(Vec::with_capacity(min(MAX_BUFFER, length / 8))),
     }
   }

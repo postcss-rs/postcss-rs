@@ -8,6 +8,6 @@ pub mod list;
 // mod ast;
 // pub mod parse;
 // mod parser;
-mod ref_ring;
+pub mod ref_ring;
 pub mod tokenizer;
 pub mod warning;
