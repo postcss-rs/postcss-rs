@@ -1,0 +1,206 @@
+{
+  "type": "root",
+  "nodes": [
+    {
+      "type": "comment",
+      "source": {
+        "start": {
+          "offset": 1,
+          "column": 1,
+          "line": 2
+        },
+        "end": {
+          "offset": 105,
+          "column": 3,
+          "line": 6
+        }
+      },
+      "text": "*\n * Paste or drop some CSS here and explore\n * the syntax tree created by chosen parser.\n * Enjoy!",
+      "raws": {
+        "before": "\n",
+        "left": "",
+        "right": "\n "
+      }
+    },
+    {
+      "type": "atrule",
+      "nodes": [
+        {
+          "type": "rule",
+          "selector": "body, resulkt, .result",
+          "nodes": [
+            {
+              "type": "decl",
+              "prop": "background-color",
+              "value": "lightgreen",
+              "important": false,
+              "variable": false,
+              "source": {
+                "start": {
+                  "offset": 184,
+                  "column": 9,
+                  "line": 10
+                },
+                "end": {
+                  "offset": 212,
+                  "column": 37,
+                  "line": 10
+                }
+              },
+              "raws": {
+                "before": "\n        ",
+                "between": ": ",
+                "value": null
+              }
+            }
+          ],
+          "source": {
+            "start": {
+              "offset": 151,
+              "column": 5,
+              "line": 9
+            },
+            "end": {
+              "offset": 218,
+              "column": 5,
+              "line": 11
+            }
+          },
+          "raws": {
+            "before": "\n    ",
+            "after": "\n    ",
+            "between": " ",
+            "semicolon": true
+          }
+        }
+      ],
+      "source": {
+        "start": {
+          "offset": 108,
+          "column": 1,
+          "line": 8
+        },
+        "end": {
+          "offset": 220,
+          "column": 1,
+          "line": 12
+        }
+      },
+      "name": "media",
+      "params": "screen and (min-width: 480px)",
+      "raws": {
+        "before": "\n\n",
+        "after": "\n",
+        "between": " ",
+        "semicolon": false
+      }
+    },
+    {
+      "type": "rule",
+      "selector": "#main",
+      "nodes": [
+        {
+          "type": "decl",
+          "prop": "border",
+          "value": "1px solid black",
+          "important": false,
+          "variable": false,
+          "source": {
+            "start": {
+              "offset": 235,
+              "column": 5,
+              "line": 15
+            },
+            "end": {
+              "offset": 258,
+              "column": 28,
+              "line": 15
+            }
+          },
+          "raws": {
+            "before": "\n    ",
+            "between": ": ",
+            "value": null
+          }
+        }
+      ],
+      "source": {
+        "start": {
+          "offset": 223,
+          "column": 1,
+          "line": 14
+        },
+        "end": {
+          "offset": 260,
+          "column": 1,
+          "line": 16
+        }
+      },
+      "raws": {
+        "before": "\n\n",
+        "after": "\n",
+        "between": " ",
+        "semicolon": true
+      }
+    },
+    {
+      "type": "rule",
+      "selector": "ul li",
+      "nodes": [
+        {
+          "type": "decl",
+          "prop": "padding",
+          "value": "5px",
+          "important": false,
+          "variable": false,
+          "source": {
+            "start": {
+              "offset": 272,
+              "column": 2,
+              "line": 19
+            },
+            "end": {
+              "offset": 284,
+              "column": 14,
+              "line": 19
+            }
+          },
+          "raws": {
+            "before": "\n\t",
+            "between": ": ",
+            "value": null
+          }
+        }
+      ],
+      "source": {
+        "start": {
+          "offset": 263,
+          "column": 1,
+          "line": 18
+        },
+        "end": {
+          "offset": 286,
+          "column": 1,
+          "line": 20
+        }
+      },
+      "raws": {
+        "before": "\n\n",
+        "after": "\n",
+        "between": " ",
+        "semicolon": true
+      }
+    }
+  ],
+  "source": {
+    "start": {
+      "offset": 0,
+      "column": 1,
+      "line": 1
+    }
+  },
+  "raws": {
+    "after": "\n\n",
+    "semicolon": false
+  }
+}
