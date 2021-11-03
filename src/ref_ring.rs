@@ -1,38 +1,33 @@
-const BUFFER_SIZE: usize = 50;
+use std::mem;
+
+const BUFFER_SIZE: usize = u8::MAX as usize + 1;
 
 #[derive(Debug)]
 pub struct RefRing<'a> {
   buffer: [Option<&'a str>; BUFFER_SIZE],
-  index: usize,
+  index: u8,
 }
 
 impl<'a> Default for RefRing<'a> {
   fn default() -> Self {
     RefRing {
-      buffer: [None; BUFFER_SIZE],
+      buffer: unsafe { mem::zeroed() },
       index: 0,
     }
   }
 }
 
 impl<'a> RefRing<'a> {
-  #[inline(always)]
+  #[inline]
   pub fn push(&mut self, e: &'a str) {
-    self.buffer[self.index] = Some(e);
-    if self.index + 1 >= BUFFER_SIZE {
-      self.index = 0;
-    } else {
-      self.index += 1;
+    unsafe {
+      (&mut *(self.buffer.as_mut_ptr().add(self.index as usize))).replace(e);
     }
+    self.index += 1;
   }
 
   pub fn pop(&mut self) -> Option<&'a str> {
-    if self.index == 0 {
-      self.index = BUFFER_SIZE - 1;
-    } else {
-      self.index -= 1;
-    }
-
-    self.buffer[self.index].take()
+    self.index -= 1;
+    unsafe { (&mut *(self.buffer.as_mut_ptr().add(self.index as usize))).take() }
   }
 }
