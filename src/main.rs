@@ -25,5 +25,4 @@ fn main() {
   }
   let end = start.elapsed();
   println!("rust: tokenizer/small(201K)\t: {:?}", end);
-
 }
