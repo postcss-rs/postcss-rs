@@ -480,17 +480,6 @@ impl<'a> Parser<'a> {
 
 //   // Helpers
 
-//   init(node, offset) {
-//     this.current.push(node)
-//     node.source = {
-//       start: this.getPosition(offset),
-//       input: this.input
-//     }
-//     node.raws.before = this.spaces
-//     this.spaces = ''
-//     if (node.type !== 'comment') this.semicolon = false
-//   }
-
 //   raw(node, prop, tokens) {
 //     let token, type
 //     let length = tokens.length
