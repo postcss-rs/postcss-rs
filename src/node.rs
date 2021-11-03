@@ -1,8 +1,8 @@
 use std::rc::Weak;
 
 use crate::input::Input;
-use serde::{Deserialize, Serialize};
-#[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
+use serde::Serialize;
+#[derive(Debug, PartialEq, Clone, Serialize)]
 pub struct Position {
   pub offset: usize,
   pub column: usize,
