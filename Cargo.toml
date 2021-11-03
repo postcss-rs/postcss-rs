@@ -12,10 +12,6 @@ keywords = ["css", "syntax", "postcss", "parser", "ast"]
 [dependencies]
 lazy_static = "1"
 memchr = "2.4"
-ringbuffer = {version = "0.8.3", optional = true}
-
-[features]
-feat_ringbuffer = ["ringbuffer"]
 
 [profile.release]
 codegen-units = 1
