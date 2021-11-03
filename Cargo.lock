@@ -3,12 +3,6 @@
 version = 3
 
 [[package]]
-name = "array-init"
-version = "2.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6945cc5422176fc5e602e590c2878d2c2acd9a4fe20a4baa7c28022521698ec6"
-
-[[package]]
 name = "atty"
 version = "0.2.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -318,7 +312,6 @@ dependencies = [
  "criterion",
  "lazy_static",
  "memchr",
- "ringbuffer",
 ]
 
 [[package]]
@@ -384,15 +377,6 @@ name = "regex-syntax"
 version = "0.6.25"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f497285884f3fcff424ffc933e56d7cbca511def0c9831a7f9b5f6153e3cc89b"
-
-[[package]]
-name = "ringbuffer"
-version = "0.8.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "20e49d3a791d79aa7683f8798b274073140865ffb9d65767ace44229d34299e3"
-dependencies = [
- "array-init",
-]
 
 [[package]]
 name = "rustc_version"
