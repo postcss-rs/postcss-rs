@@ -1,8 +1,7 @@
 use postcss::node::Node;
-use serde_json::json;
 #[cfg(test)]
-use pretty_assertions::{assert_eq as pretty_assert_eq, };
-
+use pretty_assertions::assert_eq as pretty_assert_eq;
+use serde_json::json;
 
 #[cfg(test)]
 mod test_basic_serialize {

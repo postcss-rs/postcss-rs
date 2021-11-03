@@ -42,7 +42,7 @@ pub struct Input<'a> {
 
 impl<'a> Default for &'a Input<'a> {
   fn default() -> &'a Input<'a> {
-      &DEFAULT_INPUT
+    &DEFAULT_INPUT
   }
 }
 
