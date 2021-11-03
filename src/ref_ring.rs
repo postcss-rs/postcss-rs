@@ -1,3 +1,4 @@
+use std::hint::unreachable_unchecked;
 use std::mem;
 const BUFFER_SIZE: usize = u8::MAX as usize + 1;
 
@@ -22,10 +23,13 @@ impl<'a> RefRing<'a> {
   #[inline]
   pub fn push(&mut self, e: &'a str) {
     // SAFETY: WE ARE TAKING ADVANTAGE OF UNSIGNED NUMBER OVERFLOW TO ELIMINATED BRANCHES
-    // AND IT'S GUARANTEED THAT INDEX IS ALWAYS IN BOUNDARY OF BUFFER, SO WE USE UNSAFE HERE TO
+    // AND IT'S GUARANTEED THAT INDEX IS ALWAYS IN BOUNDARY OF BUFFER, SO WE USE UNSAFE EVIL TRICK BELOW TO
     // BYPASSING RUST BOUNDARY CHECK.
-    unsafe {
-      (&mut *(self.buffer.as_mut_ptr().add(self.index as usize))).replace(e);
+    let index = self.index as usize;
+    if index < BUFFER_SIZE {
+      self.buffer[index].replace(e);
+    } else {
+      unsafe { unreachable_unchecked() }
     }
     self.index = self.index.wrapping_add(1);
   }
@@ -33,8 +37,13 @@ impl<'a> RefRing<'a> {
   pub fn pop(&mut self) -> Option<&'a str> {
     self.index = self.index.wrapping_sub(1);
     // SAFETY: WE ARE TAKING ADVANTAGE OF UNSIGNED NUMBER OVERFLOW TO ELIMINATED BRANCHES
-    // AND IT'S GUARANTEED THAT INDEX IS ALWAYS IN BOUNDARY OF BUFFER, SO WE USE UNSAFE HERE TO
+    // AND IT'S GUARANTEED THAT INDEX IS ALWAYS IN BOUNDARY OF BUFFER, SO WE USE UNSAFE EVIL TRICK BELOW TO
     // BYPASSING RUST BOUNDARY CHECK.
-    unsafe { (&mut *(self.buffer.as_mut_ptr().add(self.index as usize))).take() }
+    let index = self.index as usize;
+    if index < BUFFER_SIZE {
+      self.buffer[index].take()
+    } else {
+      unsafe { unreachable_unchecked() }
+    }
   }
 }
