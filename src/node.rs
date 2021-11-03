@@ -1,4 +1,8 @@
-use std::rc::Weak;
+use std::{
+  cell::RefCell,
+  fs::OpenOptions,
+  rc::{Rc, Weak},
+};
 
 use crate::input::Input;
 use serde::{Deserialize, Serialize};
@@ -22,7 +26,7 @@ impl Position {
 #[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
 pub struct Source<'a> {
   #[serde(skip_serializing, skip_deserializing)]
-  pub input: &'a Input<'a>,
+  pub input: Rc<RefCell<Input<'a>>>,
   #[serde(skip_serializing_if = "Option::is_none")]
   pub start: Option<Position>,
   #[serde(skip_serializing_if = "Option::is_none")]
@@ -48,16 +52,56 @@ pub enum Node<'a> {
 }
 
 impl<'a> Node<'a> {
-  pub fn set_source(&mut self) {
+  pub fn set_source(
+    &mut self,
+    input: Rc<RefCell<Input<'a>>>,
+    start: Option<Position>,
+    end: Option<Position>,
+  ) {
     match self {
       Node::Root(root) => {
-        // root.source = Some(Source );
+        root.source = Some(Source {
+          input,
+          start,
+          end,
+        });
       }
-      Node::AtRule(at) => {}
-      Node::Rule(rule) => {}
-      Node::Decl(decl) => {}
-      Node::Comment(comment) => {}
-      Node::Document(doc) => {}
+      Node::AtRule(at) => {
+        at.source = Some(Source {
+          input,
+          start,
+          end,
+        });
+      }
+      Node::Rule(rule) => {
+
+        rule.source = Some(Source {
+          input,
+          start,
+          end,
+        });
+      }
+      Node::Decl(decl) => {
+        decl.source = Some(Source {
+          input,
+          start,
+          end,
+        });
+      }
+      Node::Comment(comment) => {
+        comment.source = Some(Source {
+          input,
+          start,
+          end,
+        });
+      }
+      Node::Document(doc) => {
+        doc.source = Some(Source {
+          input,
+          start,
+          end,
+        });
+      }
     }
   }
 }

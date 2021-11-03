@@ -481,27 +481,9 @@ impl<'a> Parser<'a> {
 //     this.current.raws.after = (this.current.raws.after || '') + this.spaces
 //   }
 
-//   freeSemicolon(token) {
-//     this.spaces += token[1]
-//     if (this.current.nodes) {
-//       let prev = this.current.nodes[this.current.nodes.length - 1]
-//       if (prev && prev.type === 'rule' && !prev.raws.ownSemicolon) {
-//         prev.raws.ownSemicolon = this.spaces
-//         this.spaces = ''
-//       }
-//     }
-//   }
+
 
 //   // Helpers
-
-//   getPosition(offset) {
-//     let pos = this.input.fromOffset(offset)
-//     return {
-//       offset,
-//       line: pos.line,
-//       column: pos.col
-//     }
-//   }
 
 //   init(node, offset) {
 //     this.current.push(node)
