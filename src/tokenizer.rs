@@ -85,7 +85,7 @@ impl<'a> Tokenizer<'a> {
       ignore: ignore_errors,
       length,
       pos: RefCell::new(0),
-      buffer: RefCell::new(RefRing::new()),
+      buffer: RefCell::new(Default::default()),
       returned: RefCell::new(Vec::with_capacity(min(MAX_BUFFER, length / 8))),
     }
   }
