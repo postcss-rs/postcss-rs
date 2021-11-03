@@ -39,3 +39,10 @@ Compare against the `main` baseline.
 ```bash
 cargo bench -- --baseline main
 ```
+
+## License
+
+[postcss-rs](https://github.com/justjavac/postcss-rs) is released under the
+MIT License. See the bundled [LICENSE](./LICENSE) file for details.
+
+**Most implementation of postcss-rs are modified from [postcss](https://github.com/postcss/postcss), under MIT License(See the origin [POSTCSS.LICENSE](./POSTCSS.LICENSE) file), thanks to Andrey Sitnik([@ai](https://github.com/ai)).**
