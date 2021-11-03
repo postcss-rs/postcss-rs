@@ -17,8 +17,8 @@ js:   tokenizer/small(7K)       : 2.248ms
 rust: tokenizer/small(7K)       : 0.061ms
 
 # tokenize bootstrap.css ~26x
-js:   tokenizer/small(201K)     : 29.577ms
-rust: tokenizer/small(201K)     :  1.127ms
+js:   tokenizer/fairly_large(201K)     : 29.577ms
+rust: tokenizer/fairly_large(201K)     :  1.127ms
 ```
 
 🎉 Welcome contribute, here is a guide:
@@ -39,3 +39,12 @@ Compare against the `main` baseline.
 ```bash
 cargo bench -- --baseline main
 ```
+
+## License
+
+[postcss-rs](https://github.com/justjavac/postcss-rs) is released under the
+MIT License. See the [LICENSE](./LICENSE) file in the project root directory for details.
+
+## ACKNOWLEDGEMENT
+
+**The project is based on the wonderful work of Andrey Sitnik([@ai](https://github.com/ai)) 's [postcss](https://github.com/postcss/postcss), which is under MIT License(See [HERE](./POSTCSS.LICENSE)), Great thanks to Mr. Sitnik and other contributors' work.**
