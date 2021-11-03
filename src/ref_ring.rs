@@ -27,10 +27,14 @@ impl<'a> RefRing<'a> {
     self.len == 0
   }
 
-  #[inline]
+  #[inline(always)]
   pub fn push(&mut self, e: &'a str) {
     self.buffer[self.index] = e;
-    self.index = self.len % BUFFER_SIZE;
+    if self.len + 1 >= BUFFER_SIZE {
+      self.index = 0;
+    } else {
+      self.index += 1;
+    }
 
     if self.len >= BUFFER_SIZE {
       self.len = BUFFER_SIZE;
@@ -39,7 +43,6 @@ impl<'a> RefRing<'a> {
     }
   }
 
-  #[inline]
   pub fn pop(&mut self) -> &'a str {
     if self.len == 0 {
       return "";
