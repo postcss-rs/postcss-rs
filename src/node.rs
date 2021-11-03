@@ -1,17 +1,17 @@
 use std::rc::Weak;
 
 use crate::input::Input;
-use serde::Serialize;
-#[derive(Debug, PartialEq, Clone, Serialize)]
+use serde::{Deserialize, Serialize};
+#[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
 pub struct Position {
   pub offset: usize,
   pub column: usize,
   pub line: usize,
 }
 
-#[derive(Debug, PartialEq, Clone, Serialize)]
+#[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
 pub struct Source<'a> {
-  #[serde(skip_serializing)]
+  #[serde(skip_serializing, skip_deserializing)]
   pub input: &'a Input<'a>,
   #[serde(skip_serializing_if = "Option::is_none")]
   pub start: Option<Position>,
@@ -19,13 +19,13 @@ pub struct Source<'a> {
   pub end: Option<Position>,
 }
 
-#[derive(Debug, PartialEq, Clone, Serialize)]
+#[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
 pub struct RawValue {
   pub value: String,
   pub raw: String,
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(tag = "type")]
 #[serde(rename_all = "lowercase")]
 pub enum Node<'a> {
@@ -37,7 +37,13 @@ pub enum Node<'a> {
   Document(Document<'a>),
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[allow(clippy::trivially_copy_pass_by_ref)]
+fn is_false(boolean: &bool) -> bool {
+  !boolean
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Declaration<'a> {
   /// The declaration's property name.
   pub prop: String,
@@ -51,10 +57,14 @@ pub struct Declaration<'a> {
   pub value: String,
 
   /// `true` if the declaration has an `!important` annotation.
+  #[serde(default)]
+  #[serde(skip_serializing_if = "is_false")]
   pub important: bool,
 
   /// `true` if declaration is declaration of CSS Custom Property
   /// or Sass variable.
+  #[serde(default)]
+  #[serde(skip_serializing_if = "is_false")]
   pub variable: bool,
 
   /// An array containing the node’s children.
@@ -62,7 +72,7 @@ pub struct Declaration<'a> {
   pub nodes: Option<Vec<Node<'a>>>,
 
   /// The node’s parent node.
-  #[serde(skip_serializing)]
+  #[serde(skip_serializing, skip_deserializing)]
   pub parent: Option<Weak<Node<'a>>>,
 
   /// The input source of the node.
@@ -73,7 +83,8 @@ pub struct Declaration<'a> {
   pub raws: DeclarationRaws,
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Rule<'a> {
   /// Selector or selectors of the rule.
   pub selector: String,
@@ -86,7 +97,7 @@ pub struct Rule<'a> {
   pub nodes: Option<Vec<Node<'a>>>,
 
   /// The node’s parent node.
-  #[serde(skip_serializing)]
+  #[serde(skip_serializing, skip_deserializing)]
   pub parent: Option<Weak<Node<'a>>>,
 
   /// The input source of the node.
@@ -97,14 +108,15 @@ pub struct Rule<'a> {
   pub raws: RuleRaws,
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct AtRule<'a> {
   /// An array containing the node’s children.
   #[serde(skip_serializing_if = "Option::is_none")]
   pub nodes: Option<Vec<Node<'a>>>,
 
   /// The node’s parent node.
-  #[serde(skip_serializing)]
+  #[serde(skip_serializing, skip_deserializing)]
   pub parent: Option<Weak<Node<'a>>>,
 
   /// The input source of the node.
@@ -127,14 +139,15 @@ pub struct AtRule<'a> {
   pub raws: AtRuleRaws,
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Comment<'a> {
   /// An array containing the node’s children.
   #[serde(skip_serializing_if = "Option::is_none")]
   pub nodes: Option<Vec<Node<'a>>>,
 
   /// The node’s parent node.
-  #[serde(skip_serializing)]
+  #[serde(skip_serializing, skip_deserializing)]
   pub parent: Option<Weak<Node<'a>>>,
 
   /// The input source of the node.
@@ -149,14 +162,15 @@ pub struct Comment<'a> {
 
   pub raws: CommentRaws,
 }
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Document<'a> {
   /// An array containing the node’s children.
   #[serde(skip_serializing_if = "Option::is_none")]
   pub nodes: Option<Vec<Node<'a>>>,
 
   /// The node’s parent node.
-  #[serde(skip_serializing)]
+  #[serde(skip_serializing, skip_deserializing)]
   pub parent: Option<Weak<Node<'a>>>,
 
   /// The input source of the node.
@@ -172,14 +186,15 @@ pub struct Document<'a> {
   // document node have no raws
   // pub raws: Document
 }
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Root<'a> {
   /// An array containing the node’s children.
   #[serde(skip_serializing_if = "Option::is_none")]
   pub nodes: Option<Vec<Node<'a>>>,
 
   /// The node’s parent node.
-  #[serde(skip_serializing)]
+  #[serde(skip_serializing, skip_deserializing)]
   pub parent: Option<Weak<Node<'a>>>,
 
   /// The input source of the node.
@@ -190,7 +205,8 @@ pub struct Root<'a> {
   pub raws: RootRaws,
 }
 
-#[derive(Debug, PartialEq, Clone, Default, Serialize)]
+#[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct RootRaws {
   #[serde(skip_serializing_if = "Option::is_none")]
   pub after: Option<String>,
@@ -202,7 +218,8 @@ pub struct RootRaws {
   pub semicolon: Option<bool>,
 }
 
-#[derive(Debug, PartialEq, Clone, Default, Serialize)]
+#[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct AtRuleRaws {
   #[serde(skip_serializing_if = "Option::is_none")]
   pub before: Option<String>,
@@ -218,7 +235,8 @@ pub struct AtRuleRaws {
   pub params: Option<RawValue>,
 }
 
-#[derive(Debug, PartialEq, Clone, Default, Serialize)]
+#[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct CommentRaws {
   #[serde(skip_serializing_if = "Option::is_none")]
   pub before: Option<String>,
@@ -228,7 +246,8 @@ pub struct CommentRaws {
   pub right: Option<String>,
 }
 
-#[derive(Debug, PartialEq, Clone, Default, Serialize)]
+#[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct DeclarationRaws {
   #[serde(skip_serializing_if = "Option::is_none")]
   pub before: Option<String>,
@@ -236,10 +255,12 @@ pub struct DeclarationRaws {
   pub between: Option<String>,
   #[serde(skip_serializing_if = "Option::is_none")]
   pub important: Option<String>,
+  #[serde(skip_serializing_if = "Option::is_none")]
   pub value: Option<RawValue>,
 }
 
-#[derive(Debug, PartialEq, Clone, Default, Serialize)]
+#[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct RuleRaws {
   #[serde(skip_serializing_if = "Option::is_none")]
   pub before: Option<String>,

@@ -1,8 +1,13 @@
 use postcss::node::Node;
 use serde_json::json;
 #[cfg(test)]
+use pretty_assertions::{assert_eq as pretty_assert_eq, };
+
+
+#[cfg(test)]
 mod test_basic_serialize {
   use postcss::node::{Root, RootRaws};
+  use serde_json::Value;
 
   use super::*;
 
@@ -19,7 +24,17 @@ mod test_basic_serialize {
         semicolon: None,
       },
     });
-    let result = serde_json::to_value(node).unwrap();
-    assert_eq!(result, json!({"type": "root", "raws": {}}));
+    let value = serde_json::to_value(node).unwrap();
+    assert_eq!(value, json!({"type": "root", "raws": {}}));
+  }
+
+  #[test]
+  fn test_simple_css() {
+    let json = include_str!("./fixtures/serialize/simple.json");
+    let node = serde_json::from_str::<Node>(json).unwrap();
+    // convert ast_node to json value
+    let value = serde_json::to_value(node).unwrap();
+    let value_from_string = serde_json::from_str::<Value>(json).unwrap();
+    pretty_assert_eq!(value, value_from_string);
   }
 }

@@ -26,7 +26,10 @@ impl fmt::Display for FilePosition {
   }
 }
 
-#[derive(Debug, PartialEq, Clone)]
+use once_cell::sync::Lazy;
+
+static DEFAULT_INPUT: Lazy<Input> = Lazy::new(|| Input::default());
+#[derive(Debug, PartialEq, Clone, Default)]
 pub struct Input<'a> {
   pub css: &'a str,
   // map: PreviousMap,
@@ -35,6 +38,12 @@ pub struct Input<'a> {
   has_bom: bool,
   line: u32,
   column: u32,
+}
+
+impl<'a> Default for &'a Input<'a> {
+  fn default() -> &'a Input<'a> {
+      &DEFAULT_INPUT
+  }
 }
 
 impl<'a> fmt::Display for Input<'a> {
