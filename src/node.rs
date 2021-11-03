@@ -9,6 +9,16 @@ pub struct Position {
   pub line: usize,
 }
 
+impl Position {
+  pub fn new(offset: usize, column: usize, line: usize) -> Self {
+    Self {
+      offset,
+      column,
+      line,
+    }
+  }
+}
+
 #[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
 pub struct Source<'a> {
   #[serde(skip_serializing, skip_deserializing)]
@@ -35,6 +45,21 @@ pub enum Node<'a> {
   Decl(Declaration<'a>),
   Comment(Comment<'a>),
   Document(Document<'a>),
+}
+
+impl<'a> Node<'a> {
+  pub fn set_source(&mut self) {
+    match self {
+      Node::Root(root) => {
+        // root.source = Some(Source );
+      }
+      Node::AtRule(at) => {}
+      Node::Rule(rule) => {}
+      Node::Decl(decl) => {}
+      Node::Comment(comment) => {}
+      Node::Document(doc) => {}
+    }
+  }
 }
 
 #[allow(clippy::trivially_copy_pass_by_ref)]

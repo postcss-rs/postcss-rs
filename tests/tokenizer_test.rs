@@ -2,7 +2,7 @@ use postcss::input::Input;
 use postcss::tokenizer::*;
 fn tokenize(css: &str, ignore_errors: bool) -> Vec<Token> {
   let input = Input::new(css, None);
-  let processor = Tokenizer::new(input, ignore_errors);
+  let processor = Tokenizer::new(input.css, ignore_errors);
   let mut tokens = vec![];
   while !processor.end_of_file() {
     tokens.push(processor.next_token(false))
@@ -403,7 +403,7 @@ fn tokenizes_hexadecimal_escape() {
 fn ignore_unclosed_per_token_request() {
   fn token(css: &str) -> Vec<Token> {
     let input = Input::new(css, None);
-    let processor = Tokenizer::new(input, false);
+    let processor = Tokenizer::new(input.css, false);
     let mut tokens = vec![];
     while !processor.end_of_file() {
       tokens.push(processor.next_token(true))
@@ -429,7 +429,7 @@ fn ignore_unclosed_per_token_request() {
 fn provides_correct_position() {
   let css = "Three tokens";
   let input = Input::new(css, None);
-  let processor = Tokenizer::new(input, false);
+  let processor = Tokenizer::new(input.css, false);
   assert_eq!(processor.position(), 0);
   processor.next_token(false);
   assert_eq!(processor.position(), 5);
