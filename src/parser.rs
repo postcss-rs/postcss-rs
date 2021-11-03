@@ -103,24 +103,21 @@ impl<'a> Parser<'a> {
     todo!()
   }
 
-  // init(node, offset) {
-  //   this.current.push(node)
-  //   node.source = {
-  //     start: this.getPosition(offset),
-  //     input: this.input
-  //   }
-  //   node.raws.before = this.spaces
-  //   this.spaces = ''
-  //   if (node.type !== 'comment') this.semicolon = false
-  // }
   fn get_position(&mut self, offset: usize) -> Position {
     let (line, column) = self.tokenizer.from_offset(offset);
     Position::new(offset, column, line)
   }
 
   fn init(&mut self, node: Node, offset: usize) {
+    use crate::node::Node::*;
+    let pos = self.get_position(offset);
     if let Some(ref mut cur_node) = self.current {
-      // cur_node.
+      cur_node.set_source(self.input.clone(), Some(pos), None);
+      let old_spaces = std::mem::replace(&mut self.spaces, "".to_string());
+      cur_node.set_raw_before(old_spaces);
+      if !matches!(cur_node, Comment(_)) {
+        self.semicolon = false;
+      }
     }
   }
 }
@@ -480,8 +477,6 @@ impl<'a> Parser<'a> {
 //     }
 //     this.current.raws.after = (this.current.raws.after || '') + this.spaces
 //   }
-
-
 
 //   // Helpers
 

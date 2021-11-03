@@ -1,6 +1,5 @@
 use std::{
   cell::RefCell,
-  fs::OpenOptions,
   rc::{Rc, Weak},
 };
 
@@ -60,47 +59,43 @@ impl<'a> Node<'a> {
   ) {
     match self {
       Node::Root(root) => {
-        root.source = Some(Source {
-          input,
-          start,
-          end,
-        });
+        root.source = Some(Source { input, start, end });
       }
       Node::AtRule(at) => {
-        at.source = Some(Source {
-          input,
-          start,
-          end,
-        });
+        at.source = Some(Source { input, start, end });
       }
       Node::Rule(rule) => {
-
-        rule.source = Some(Source {
-          input,
-          start,
-          end,
-        });
+        rule.source = Some(Source { input, start, end });
       }
       Node::Decl(decl) => {
-        decl.source = Some(Source {
-          input,
-          start,
-          end,
-        });
+        decl.source = Some(Source { input, start, end });
       }
       Node::Comment(comment) => {
-        comment.source = Some(Source {
-          input,
-          start,
-          end,
-        });
+        comment.source = Some(Source { input, start, end });
       }
       Node::Document(doc) => {
-        doc.source = Some(Source {
-          input,
-          start,
-          end,
-        });
+        doc.source = Some(Source { input, start, end });
+      }
+    }
+  }
+
+  pub fn set_raw_before(&mut self, before: String) {
+    match self {
+      Node::AtRule(at) => {
+        at.raws.before = Some(before);
+      }
+      Node::Rule(rule) => {
+        rule.raws.before = Some(before);
+      }
+      Node::Decl(decl) => {
+        decl.raws.before = Some(before);
+      }
+      Node::Comment(comment) => {
+        comment.raws.before = Some(before);
+      }
+      _ => {
+        // root, document raw don't have before
+        unimplemented!() // TODO
       }
     }
   }
