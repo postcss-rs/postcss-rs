@@ -3,7 +3,7 @@ name = "postcss"
 version = "0.0.1"
 description = "🚀 Fast and 100% API compatible postcss replacer"
 authors = ["迷渡 <justjavac@gmail.com>", "CGQAQ <m.jason.liu@outlook.com>"]
-edition = "2021"
+edition = "2018"
 readme = "README.md"
 repository = "https://github.com/justjavac/postcss-rs"
 license = "MIT"
@@ -12,7 +12,10 @@ keywords = ["css", "syntax", "postcss", "parser", "ast"]
 [dependencies]
 lazy_static = "1"
 memchr = "2.4"
-ringbuffer = "0.8.3"
+ringbuffer = {version = "0.8.3", optional = true}
+
+[features]
+feat_ringbuffer = ["ringbuffer"]
 
 [profile.release]
 codegen-units = 1
