@@ -230,6 +230,18 @@ fn tokenizes_quoted_urls() {
 }
 
 #[test]
+fn tokenizes_urls_with_2_open_parentheses_unclosed() {
+  run(
+    "url(foo)(",
+    vec![
+      Token::new(TokenType::Word, "url", Some(0), Some(2)),
+      Token::new(TokenType::Brackets, "(foo)", Some(3), Some(7)),
+      Token::new(TokenType::OpenParentheses, "(", Some(8), None),
+    ],
+  );
+}
+
+#[test]
 fn tokenizes_at_symbol() {
   run(
     "@",
