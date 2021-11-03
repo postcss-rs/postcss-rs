@@ -17,8 +17,8 @@ js:   tokenizer/small(7K)       : 2.248ms
 rust: tokenizer/small(7K)       : 0.061ms
 
 # tokenize bootstrap.css ~26x
-js:   tokenizer/small(201K)     : 29.577ms
-rust: tokenizer/small(201K)     :  1.127ms
+js:   tokenizer/fairly_large(201K)     : 29.577ms
+rust: tokenizer/fairly_large(201K)     :  1.127ms
 ```
 
 🎉 Welcome contribute, here is a guide:
