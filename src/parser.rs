@@ -2,7 +2,7 @@
 #![allow(dead_code)]
 
 use crate::input::Input;
-use crate::node::{Node, Position, Root, RootRaws};
+use crate::node::{Comment, Node, Position, Root, RootRaws};
 use crate::tokenizer::{Token, TokenType, Tokenizer};
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -20,7 +20,7 @@ pub struct Parser<'a> {
 impl<'a> Parser<'a> {
   pub fn new(input: Input<'a>) -> Self {
     let root = Rc::new(RefCell::new(Node::Root(Root {
-      nodes: None,
+      nodes: Some(vec![]),
       parent: None,
       source: None,
       raws: RootRaws::default(),
@@ -77,10 +77,29 @@ impl<'a> Parser<'a> {
   fn end(&self, token: &Token) {
     todo!()
   }
+  //   comment(token) {
+  //   let node = new Comment()
+  //   this.init(node, token[2])
+  //   node.source.end = this.getPosition(token[3] || token[2])
+
+  //   let text = token[1].slice(2, -2)
+  //   if (/^\s*$/.test(text)) {
+  //     node.text = ''
+  //     node.raws.left = text
+  //     node.raws.right = ''
+  //   } else {
+  //     let match = text.match(/^(\s*)([^]*\S)(\s*)$/)
+  //     node.text = match[2]
+  //     node.raws.left = match[1]
+  //     node.raws.right = match[3]
+  //   }
+  // }
 
   #[inline]
-  fn comment(&self, token: &Token) {
-    todo!()
+  fn comment(&mut self, token: &Token) {
+    let mut node = Node::Comment(Comment::default());
+    self.init(node, token.2.expect("comment should have start offset"));
+    // node.set_source_end(node, start, end);
   }
 
   #[inline]
@@ -108,11 +127,12 @@ impl<'a> Parser<'a> {
     Position::new(offset, column, line)
   }
 
-  fn init(&mut self, node: Node, offset: usize) {
+  fn init(&mut self, node: Node<'a>, offset: usize) {
     use crate::node::Node::*;
     let pos = self.get_position(offset);
     if let Some(ref mut cur_node) = self.current {
       cur_node.set_source(self.input.clone(), Some(pos), None);
+      cur_node.push_child(node);
       let old_spaces = std::mem::replace(&mut self.spaces, "".to_string());
       cur_node.set_raw_before(old_spaces);
       if !matches!(cur_node, Comment(_)) {

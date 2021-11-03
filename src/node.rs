@@ -79,6 +79,25 @@ impl<'a> Node<'a> {
     }
   }
 
+  pub fn set_source_end(
+    &mut self,
+    end: Option<Position>,
+  ) {
+    match self {
+      Node::Root(root) => {
+      }
+      Node::AtRule(at) => {
+      }
+      Node::Rule(rule) => {
+      }
+      Node::Decl(decl) => {
+      }
+      Node::Comment(comment) => {
+      }
+      Node::Document(doc) => {
+      }
+    }
+  }
   pub fn set_raw_before(&mut self, before: String) {
     match self {
       Node::AtRule(at) => {
@@ -97,6 +116,35 @@ impl<'a> Node<'a> {
         // root, document raw don't have before
         unimplemented!() // TODO
       }
+    }
+  }
+
+  pub fn push_child(&mut self, node: Node<'a>) {
+    match self {
+      Node::Root(root) => match root.nodes.as_mut() {
+        Some(children) => children.push(node),
+        None => {}
+      },
+      Node::AtRule(at) => match at.nodes.as_mut() {
+        Some(children) => children.push(node),
+        None => {}
+      },
+      Node::Rule(rule) => match rule.nodes.as_mut() {
+        Some(children) => children.push(node),
+        None => {}
+      },
+      Node::Decl(decl) => match decl.nodes.as_mut() {
+        Some(children) => children.push(node),
+        None => {}
+      },
+      Node::Comment(comment) => match comment.nodes.as_mut() {
+        Some(children) => children.push(node),
+        None => {}
+      },
+      Node::Document(doc) => match doc.nodes.as_mut() {
+        Some(children) => children.push(node),
+        None => {}
+      },
     }
   }
 }
@@ -203,7 +251,7 @@ pub struct AtRule<'a> {
   pub raws: AtRuleRaws,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct Comment<'a> {
   /// An array containing the node’s children.
