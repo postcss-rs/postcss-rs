@@ -47,4 +47,4 @@ MIT License. See the [LICENSE](./LICENSE) file in the project root directory for
 
 ## ACKNOWLEDGEMENT
 
-**The project is based on the wonderful work of Andrey Sitnik([@ai](https://github.com/ai)) 's [postcss](https://github.com/postcss/postcss), which is under MIT License(See [HERE](./POSTCSS.LICENSE)), Great thanks to Mr. Sitnik and other contributors' work.**
+**The project is based on the wonderful work of Andrey Sitnik([@ai](https://github.com/ai)) 's [postcss](https://github.com/postcss/postcss), which is under MIT License(See [HERE](./POSTCSS.LICENSE)), Great thanks to Mr. Sitnik and other contributors' work**
