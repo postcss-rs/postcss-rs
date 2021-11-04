@@ -1,4 +1,3 @@
-use crate::input::Input;
 use crate::ref_ring::RefRing;
 use lazy_static::lazy_static;
 use memchr::memchr;
