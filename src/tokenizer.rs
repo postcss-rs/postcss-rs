@@ -79,13 +79,14 @@ pub struct Tokenizer<'a> {
   #[cfg(not(feature = "feat_ringbuffer"))]
   buffer: RefCell<Vec<&'a str>>,
   returned: RefCell<Vec<Token<'a>>>,
+  rope: Option<ropey::Rope>,
 }
 
 impl<'a> Tokenizer<'a> {
-  pub fn new(input: Input<'a>, ignore_errors: bool) -> Tokenizer<'a> {
-    let length = input.css.len();
+  pub fn new(source_code: &'a str, ignore_errors: bool) -> Tokenizer<'a> {
+    let length = source_code.len();
     Tokenizer {
-      css: input.css,
+      css: source_code,
       ignore: ignore_errors,
       length,
       pos: RefCell::new(0),
@@ -95,6 +96,7 @@ impl<'a> Tokenizer<'a> {
       #[cfg(not(feature = "feat_ringbuffer"))]
       buffer: RefCell::new(Vec::with_capacity(min(MAX_BUFFER, length / 8))),
       returned: RefCell::new(Vec::with_capacity(min(MAX_BUFFER, length / 8))),
+      rope: None,
     }
   }
 
@@ -350,6 +352,19 @@ impl<'a> Tokenizer<'a> {
     }
 
     current_token
+  }
+
+  /// return (line, column), use rope for simplicity
+  pub fn from_offset(&mut self, offset: usize) -> (usize, usize) {
+    let rope = if let Some(ref rope) = self.rope {
+      rope
+    } else {
+      self.rope = Some(ropey::Rope::from_str(self.css));
+      &self.rope.as_ref().unwrap()
+    };
+    let column = rope.byte_to_char(offset);
+    let line = rope.byte_to_line(offset);
+    (line, column)
   }
 }
 

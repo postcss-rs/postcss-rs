@@ -10,7 +10,7 @@ fn main() {
   let css = fs::read_to_string("assets/bootstrap-reboot.css").unwrap();
   let start = Instant::now();
   let input = Input::new(&css, None);
-  let processor = Tokenizer::new(input, false);
+  let processor = Tokenizer::new(input.css, false);
   while !processor.end_of_file() {
     processor.next_token(false);
   }
@@ -19,7 +19,7 @@ fn main() {
   let css = fs::read_to_string("assets/bootstrap.css").unwrap();
   let start = Instant::now();
   let input = Input::new(&css, None);
-  let processor = Tokenizer::new(input, false);
+  let processor = Tokenizer::new(input.css, false);
   while !processor.end_of_file() {
     processor.next_token(false);
   }

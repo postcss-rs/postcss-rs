@@ -7,7 +7,7 @@ const LARGE_CSS_FILE: &str = include_str!("../assets/bootstrap.css");
 
 fn tokenize<'a>(css: &'a str, ignore_errors: bool) -> Vec<Token<'a>> {
   let input: Input<'a> = Input::new(css, None);
-  let processor: Tokenizer<'a> = Tokenizer::new(input, ignore_errors);
+  let processor: Tokenizer<'a> = Tokenizer::new(input.css, ignore_errors);
   let mut tokens = vec![];
   while !processor.end_of_file() {
     tokens.push(processor.next_token(false))
