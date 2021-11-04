@@ -56,12 +56,10 @@ impl<'a> Parser<'a> {
   #[inline]
   fn free_semicolon(&mut self, token: &Token) {
     self.spaces += token.1;
-    if let Some(ref mut node) = self.current {
-      if let Node::Rule(ref mut rule) = node {
-        if rule.raws.own_semicolon.unwrap_or(false) {
-          rule.raws.own_semicolon = Some(!self.spaces.is_empty());
-          self.spaces = "".to_owned();
-        }
+    if let Some(Node::Rule(ref mut rule)) = self.current {
+      if rule.raws.own_semicolon.unwrap_or(false) {
+        rule.raws.own_semicolon = Some(!self.spaces.is_empty());
+        self.spaces = "".to_owned();
       }
     }
   }
