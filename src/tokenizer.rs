@@ -1,7 +1,7 @@
 use crate::ref_ring::RefRing;
-use lazy_static::lazy_static;
 use memchr::memchr;
 use memchr::memmem::Finder;
+use once_cell::sync::Lazy;
 use std::cell::RefCell;
 use std::clone::Clone;
 use std::cmp::PartialEq;
@@ -29,9 +29,7 @@ const AT: char = '@';
 
 const MAX_BUFFER: usize = 102400;
 
-lazy_static! {
-  static ref FINDER_END_OF_COMMENT: Finder<'static> = Finder::new("*/");
-}
+static FINDER_END_OF_COMMENT: Lazy<Finder<'static>> = Lazy::new(|| Finder::new("*/"));
 
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub enum TokenType {
