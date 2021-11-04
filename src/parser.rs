@@ -30,7 +30,7 @@ impl<'a> Parser<'a> {
       spaces: "".to_string(),
       semicolon: false,
       custom_property: false,
-      tokenizer: Tokenizer::new(input, true),
+      tokenizer: Tokenizer::new(input.css, true),
     }
   }
 
