@@ -1,4 +1,3 @@
-use std::hint::unreachable_unchecked;
 use std::mem;
 const BUFFER_SIZE: usize = u8::MAX as usize + 1;
 
