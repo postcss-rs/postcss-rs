@@ -79,23 +79,14 @@ impl<'a> Node<'a> {
     }
   }
 
-  pub fn set_source_end(
-    &mut self,
-    end: Option<Position>,
-  ) {
+  pub fn set_source_end(&mut self, end: Option<Position>) {
     match self {
-      Node::Root(root) => {
-      }
-      Node::AtRule(at) => {
-      }
-      Node::Rule(rule) => {
-      }
-      Node::Decl(decl) => {
-      }
-      Node::Comment(comment) => {
-      }
-      Node::Document(doc) => {
-      }
+      Node::Root(root) => {}
+      Node::AtRule(at) => {}
+      Node::Rule(rule) => {}
+      Node::Decl(decl) => {}
+      Node::Comment(comment) => {}
+      Node::Document(doc) => {}
     }
   }
   pub fn set_raw_before(&mut self, before: String) {
