@@ -12,13 +12,13 @@ Tokenize [bootstrap.css](./assets/bootstrap.css) (Compare with Node.js v16.13.0)
 rust: 0.00s user 0.00s system  66% cpu 0.006 total
 js:   0.11s user 0.02s system 126% cpu 0.102 total
 
-# tokenize bootstrap-reboot.css ~45x
-js:   tokenizer/small(7K)       : 3.063ms
-rust: tokenizer/small(7K)       : 0.068ms
+# tokenize bootstrap-reboot.css               ~45x
+js:   tokenizer/small(7K)                  3.063ms
+rust: tokenizer/small(7K)                  0.068ms
 
-# tokenize bootstrap.css ~26x
-js:   tokenizer/fairly_large(201K)     : 25.672ms
-rust: tokenizer/fairly_large(201K)     :  0.979ms
+# tokenize bootstrap.css                      ~26x
+js:   tokenizer/fairly_large(201K)        25.672ms
+rust: tokenizer/fairly_large(201K)         0.979ms
 ```
 
 🎉 Welcome contribute, here is a guide:
