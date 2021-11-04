@@ -1,4 +1,7 @@
-use std::rc::Weak;
+use std::{
+  cell::RefCell,
+  rc::{Rc, Weak},
+};
 
 use crate::input::Input;
 use serde::{Deserialize, Serialize};
@@ -9,10 +12,20 @@ pub struct Position {
   pub line: usize,
 }
 
+impl Position {
+  pub fn new(offset: usize, column: usize, line: usize) -> Self {
+    Self {
+      offset,
+      column,
+      line,
+    }
+  }
+}
+
 #[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
 pub struct Source<'a> {
   #[serde(skip_serializing, skip_deserializing)]
-  pub input: &'a Input<'a>,
+  pub input: Rc<RefCell<Input<'a>>>,
   #[serde(skip_serializing_if = "Option::is_none")]
   pub start: Option<Position>,
   #[serde(skip_serializing_if = "Option::is_none")]
@@ -35,6 +48,95 @@ pub enum Node<'a> {
   Decl(Declaration<'a>),
   Comment(Comment<'a>),
   Document(Document<'a>),
+}
+impl<'a> Node<'a> {
+  pub fn set_source(
+    &mut self,
+    input: Rc<RefCell<Input<'a>>>,
+    start: Option<Position>,
+    end: Option<Position>,
+  ) {
+    match self {
+      Node::Root(root) => {
+        root.source = Some(Source { input, start, end });
+      }
+      Node::AtRule(at) => {
+        at.source = Some(Source { input, start, end });
+      }
+      Node::Rule(rule) => {
+        rule.source = Some(Source { input, start, end });
+      }
+      Node::Decl(decl) => {
+        decl.source = Some(Source { input, start, end });
+      }
+      Node::Comment(comment) => {
+        comment.source = Some(Source { input, start, end });
+      }
+      Node::Document(doc) => {
+        doc.source = Some(Source { input, start, end });
+      }
+    }
+  }
+
+  pub fn set_source_end(&mut self, end: Option<Position>) {
+    match self {
+      Node::Root(root) => {}
+      Node::AtRule(at) => {}
+      Node::Rule(rule) => {}
+      Node::Decl(decl) => {}
+      Node::Comment(comment) => {}
+      Node::Document(doc) => {}
+    }
+  }
+  pub fn set_raw_before(&mut self, before: String) {
+    match self {
+      Node::AtRule(at) => {
+        at.raws.before = Some(before);
+      }
+      Node::Rule(rule) => {
+        rule.raws.before = Some(before);
+      }
+      Node::Decl(decl) => {
+        decl.raws.before = Some(before);
+      }
+      Node::Comment(comment) => {
+        comment.raws.before = Some(before);
+      }
+      _ => {
+        // root, document raw don't have before
+        unimplemented!() // TODO
+      }
+    }
+  }
+
+  pub fn push_child(&mut self, node: Node<'a>) {
+    match self {
+      Node::Root(root) => match root.nodes.as_mut() {
+        Some(children) => children.push(node),
+        None => {}
+      },
+      Node::AtRule(at) => match at.nodes.as_mut() {
+        Some(children) => children.push(node),
+        None => {}
+      },
+      Node::Rule(rule) => match rule.nodes.as_mut() {
+        Some(children) => children.push(node),
+        None => {}
+      },
+      Node::Decl(decl) => match decl.nodes.as_mut() {
+        Some(children) => children.push(node),
+        None => {}
+      },
+      Node::Comment(comment) => match comment.nodes.as_mut() {
+        Some(children) => children.push(node),
+        None => {}
+      },
+      Node::Document(doc) => match doc.nodes.as_mut() {
+        Some(children) => children.push(node),
+        None => {}
+      },
+    }
+  }
 }
 
 #[allow(clippy::trivially_copy_pass_by_ref)]
@@ -139,7 +241,7 @@ pub struct AtRule<'a> {
   pub raws: AtRuleRaws,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct Comment<'a> {
   /// An array containing the node’s children.
