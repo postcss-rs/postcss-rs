@@ -1,12 +1,7 @@
-use crate::ast::{Node, Source};
+use std::cell::RefCell;
+use std::rc::{Rc, Weak};
 
-use super::Props;
-
-#[derive(Debug, PartialEq, Clone)]
-pub struct RawValue {
-  pub value: String,
-  pub raw: String,
-}
+use crate::ast::{Node, RawValue, Source};
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct AtRuleRaws {
@@ -31,21 +26,6 @@ pub struct AtRuleRaws {
   pub params: Option<RawValue>,
 }
 
-pub struct AtRuleProps {
-  /// Name of the at-rule.
-  pub name: String,
-
-  /// Parameters following the name of the at-rule.
-  pub params: String, // | number
-
-  /// Information used to generate byte-to-byte equal node string as it was in the origin input.
-  pub raws: Option<AtRuleRaws>,
-
-  nodes: Option<Vec<Box<dyn Props>>>,
-
-  source: Option<Source>,
-}
-
 /// Represents an at-rule.
 ///
 /// If it’s followed in the CSS by a {} block, this node will have
@@ -55,10 +35,10 @@ pub struct AtRule {
   /// `rule`, `decl`, or `comment`.
   pub r#type: &'static str,
 
-  pub nodes: Option<Vec<Box<dyn Node>>>,
+  pub nodes: Option<RefCell<Vec<Rc<Node>>>>,
 
   /// The node’s parent node.
-  // pub parent: Option<Container>,
+  pub parent: Option<RefCell<Weak<Node>>>,
 
   /// Information to generate byte-to-byte equal node string as it was
   /// in the origin input.

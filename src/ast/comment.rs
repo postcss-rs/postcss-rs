@@ -1,10 +1,7 @@
-use crate::ast::{Node, Props, Source};
+use std::cell::RefCell;
+use std::rc::{Rc, Weak};
 
-#[derive(Debug, PartialEq, Clone)]
-pub struct RawValue {
-  pub value: String,
-  pub raw: String,
-}
+use crate::ast::{Node, Source};
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct CommentRaws {
@@ -18,24 +15,6 @@ pub struct CommentRaws {
   pub right: Option<String>,
 }
 
-pub struct CommentProps {
-  /// Name of the at-rule.
-  pub name: String,
-
-  /// Content of the comment.
-  pub text: String,
-
-  /// Parameters following the name of the at-rule.
-  pub params: String, // | number
-
-  /// Information used to generate byte-to-byte equal node string as it was in the origin input.
-  pub raws: Option<CommentRaws>,
-
-  nodes: Option<Vec<Box<dyn Props>>>,
-
-  source: Option<Source>,
-}
-
 /// Represents a comment between declarations or statements (rule and at-rules).
 ///
 /// Comments inside selectors, at-rule parameters, or declaration values
@@ -45,10 +24,10 @@ pub struct Comment {
   /// `rule`, `decl`, or `comment`.
   pub r#type: &'static str,
 
-  pub nodes: Option<Vec<Box<dyn Node>>>,
+  pub nodes: Option<RefCell<Vec<Rc<Node>>>>,
 
-  /// The node’s parent node.
-  // pub parent: Container,
+  // / The node’s parent node.
+  pub parent: Option<RefCell<Weak<Node>>>,
 
   /// Information to generate byte-to-byte equal node string as it was
   /// in the origin input.

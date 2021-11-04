@@ -1,11 +1,14 @@
-use std::any::Any;
+use std::cell::RefCell;
+use std::rc::Rc;
 
 use crate::input::Input;
 
-use self::at_rule::AtRuleProps;
-use self::comment::CommentProps;
-use self::declaration::DeclarationProps;
-use self::rule::RuleProps;
+use self::at_rule::AtRule;
+use self::comment::Comment;
+use self::declaration::Declaration;
+use self::document::Document;
+use self::root::Root;
+use self::rule::Rule;
 
 pub mod at_rule;
 pub mod comment;
@@ -18,24 +21,30 @@ pub trait Props {
   fn name(&self) -> String;
 }
 
-pub trait Node {
-  fn nodes(&self) -> Option<&Vec<Box<dyn Node>>>;
-  fn nodes_mut(&mut self) -> Option<&mut Vec<Box<dyn Node>>>;
-  fn as_any(&self) -> &dyn Any;
-  fn as_any_mut(&mut self) -> &mut dyn Any;
-}
-
-pub enum ChildProps {
-  AtRuleProps(AtRuleProps),
-  RuleProps(RuleProps),
-  DeclarationProps(DeclarationProps),
-  CommentProps(CommentProps),
-}
-
-// pub enum ChildNodeOrProps<'a> {
-//   ChildNode(ChildNode<'a>),
-//   ChildProps(ChildProps<'a>),
+// pub trait Node {
+//   fn nodes(&self) -> Option<&Vec<Box<dyn Node>>>;
+//   fn nodes_mut(&mut self) -> Option<&mut Vec<Box<dyn Node>>>;
+//   fn as_any(&self) -> &dyn Any;
+//   fn as_any_mut(&mut self) -> &mut dyn Any;
 // }
+
+pub enum Node {
+  AtRule(AtRule),
+  Comment(Comment),
+  Declaration(Declaration),
+  Document(Document),
+  Root(Root),
+  Rule(Rule),
+}
+
+impl Node {
+  fn nodes(&self) -> Option<RefCell<Vec<Rc<Node>>>> {
+    match self {
+        Node::Root(root) => root.nodes,
+        _ => None,
+    }
+  }
+}
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct Position {
@@ -59,4 +68,10 @@ pub struct Source {
 
   /// The ending position of the node's source.
   pub end: Option<Position>,
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct RawValue {
+  pub value: String,
+  pub raw: String,
 }
