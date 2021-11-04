@@ -13,7 +13,7 @@ fn main() {
     processor.next_token(false);
   }
   let end = start.elapsed();
-  println!("rust: tokenizer/small(7K)\t: {:?}", end);
+  println!("rust: tokenizer/small(7K)\t\t: {:?}", end);
 
   let css = fs::read_to_string("assets/bootstrap.css").unwrap();
   let start = Instant::now();
