@@ -41,7 +41,7 @@ impl<'a> Parser<'a> {
     while !self.tokenizer.end_of_file() {
       let token = self.tokenizer.next_token(true);
       match token.0 {
-        Space => self.spaces += &token.1,
+        Space => self.spaces += token.1,
         Semicolon => self.free_semicolon(&token),
         CloseCurly => self.end(&token),
         Comment => self.comment(&token),
@@ -55,7 +55,7 @@ impl<'a> Parser<'a> {
 
   #[inline]
   fn free_semicolon(&mut self, token: &Token) {
-    self.spaces += &token.1;
+    self.spaces += token.1;
     if let Some(ref mut node) = self.current {
       if let Node::Rule(ref mut rule) = node {
         if rule.raws.own_semicolon.unwrap_or(false) {
