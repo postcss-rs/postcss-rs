@@ -110,37 +110,42 @@ impl<'a> Node<'a> {
 
   pub fn push_child(&mut self, node: Node<'a>) {
     match self {
-      Node::Root(root) => match root.nodes.as_mut() {
-        Some(children) => children.push(node),
-        None => {}
-      },
-      Node::AtRule(at) => match at.nodes.as_mut() {
-        Some(children) => children.push(node),
-        None => {}
-      },
-      Node::Rule(rule) => match rule.nodes.as_mut() {
-        Some(children) => children.push(node),
-        None => {}
-      },
-      Node::Decl(decl) => match decl.nodes.as_mut() {
-        Some(children) => children.push(node),
-        None => {}
-      },
-      Node::Comment(comment) => match comment.nodes.as_mut() {
-        Some(children) => children.push(node),
-        None => {}
-      },
-      Node::Document(doc) => match doc.nodes.as_mut() {
-        Some(children) => children.push(node),
-        None => {}
-      },
+      Node::Root(root) => {
+        if let Some(children) = root.nodes.as_mut() {
+          children.push(node)
+        }
+      }
+      Node::AtRule(at) => {
+        if let Some(children) = at.nodes.as_mut() {
+          children.push(node)
+        }
+      }
+      Node::Rule(rule) => {
+        if let Some(children) = rule.nodes.as_mut() {
+          children.push(node)
+        }
+      }
+      Node::Decl(decl) => {
+        if let Some(children) = decl.nodes.as_mut() {
+          children.push(node)
+        }
+      }
+      Node::Comment(comment) => {
+        if let Some(children) = comment.nodes.as_mut() {
+          children.push(node)
+        }
+      }
+      Node::Document(doc) => {
+        if let Some(children) = doc.nodes.as_mut() {
+          children.push(node)
+        }
+      }
     }
   }
 }
 
-#[allow(clippy::trivially_copy_pass_by_ref)]
 fn is_false(boolean: &bool) -> bool {
-  !boolean
+  !*boolean
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
