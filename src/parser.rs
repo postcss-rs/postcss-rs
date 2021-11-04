@@ -2,7 +2,7 @@
 #![allow(dead_code)]
 
 use crate::input::Input;
-use crate::node::{Node, Root, RootRaws};
+use crate::node::{Node, Position, Root, RootRaws};
 use crate::tokenizer::{Token, TokenType, Tokenizer};
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -14,12 +14,13 @@ pub struct Parser<'a> {
   spaces: String,
   semicolon: bool,
   custom_property: bool,
+  input: Rc<RefCell<Input<'a>>>,
 }
 
 impl<'a> Parser<'a> {
   pub fn new(input: Input<'a>) -> Self {
     let root = Rc::new(RefCell::new(Node::Root(Root {
-      nodes: None,
+      nodes: Some(vec![]),
       parent: None,
       source: None,
       raws: RootRaws::default(),
@@ -30,7 +31,8 @@ impl<'a> Parser<'a> {
       spaces: "".to_string(),
       semicolon: false,
       custom_property: false,
-      tokenizer: Tokenizer::new(input, true),
+      tokenizer: Tokenizer::new(input.css, true),
+      input: Rc::new(RefCell::new(input)),
     }
   }
 
@@ -99,5 +101,23 @@ impl<'a> Parser<'a> {
   #[inline]
   fn end_file(&self) {
     todo!()
+  }
+  fn get_position(&mut self, offset: usize) -> Position {
+    let (line, column) = self.tokenizer.from_offset(offset);
+    Position::new(offset, column, line)
+  }
+
+  fn init(&mut self, node: Node<'a>, offset: usize) {
+    use crate::node::Node::*;
+    let pos = self.get_position(offset);
+    if let Some(ref mut cur_node) = self.current {
+      cur_node.set_source(self.input.clone(), Some(pos), None);
+      cur_node.push_child(node);
+      let old_spaces = std::mem::replace(&mut self.spaces, "".to_string());
+      cur_node.set_raw_before(old_spaces);
+      if !matches!(cur_node, Comment(_)) {
+        self.semicolon = false;
+      }
+    }
   }
 }
