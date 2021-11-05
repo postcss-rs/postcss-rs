@@ -22,6 +22,7 @@ impl<'a> RefRing<'a> {
   #[inline]
   pub fn push(&mut self, e: &'a str) {
     let index = self.index as usize;
+    // The assert let the compiler optimize out the bounds checks.
     assert!(index < BUFFER_SIZE);
     self.buffer[index].replace(e);
     self.index = self.index.wrapping_add(1);
@@ -30,6 +31,7 @@ impl<'a> RefRing<'a> {
   pub fn pop(&mut self) -> Option<&'a str> {
     self.index = self.index.wrapping_sub(1);
     let index = self.index as usize;
+    // The assert let the compiler optimize out the bounds checks.
     assert!(index < BUFFER_SIZE);
 
     self.buffer[index].take()
