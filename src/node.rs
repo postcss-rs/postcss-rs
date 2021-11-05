@@ -1,16 +1,15 @@
-use std::{
-  cell::RefCell,
-  rc::{Rc, Weak},
-};
-
 use crate::input::Input;
 use serde::{Deserialize, Serialize};
+use std::cell::RefCell;
+use std::rc::{Rc, Weak};
+
 #[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
 pub struct Position {
   pub offset: usize,
   pub column: usize,
   pub line: usize,
 }
+
 impl Position {
   pub fn new(offset: usize, column: usize, line: usize) -> Self {
     Self {
@@ -48,6 +47,7 @@ pub enum Node<'a> {
   Comment(Comment<'a>),
   Document(Document<'a>),
 }
+
 impl<'a> Node<'a> {
   pub fn set_source(
     &mut self,
@@ -87,6 +87,7 @@ impl<'a> Node<'a> {
       Node::Document(_doc) => {}
     }
   }
+
   pub fn set_raw_before(&mut self, before: String) {
     match self {
       Node::AtRule(at) => {
@@ -268,6 +269,7 @@ pub struct Comment<'a> {
 
   pub raws: CommentRaws,
 }
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Document<'a> {
@@ -292,6 +294,7 @@ pub struct Document<'a> {
   // document node have no raws
   // pub raws: Document
 }
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Root<'a> {
