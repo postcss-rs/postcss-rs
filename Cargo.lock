@@ -350,7 +350,6 @@ name = "postcss"
 version = "0.0.1"
 dependencies = [
  "criterion",
- "lazy_static",
  "memchr",
  "once_cell",
  "pretty_assertions",
