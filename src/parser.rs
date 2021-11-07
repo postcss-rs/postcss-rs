@@ -2,7 +2,8 @@
 #![allow(dead_code)]
 
 use crate::input::Input;
-use crate::node::{Node, Position, Root, RootRaws, Rule, RuleRaws};
+use crate::node::{Comment, Node, Position, Root, RootRaws, Rule, RuleRaws};
+use crate::regex;
 use crate::tokenizer::{Token, TokenType, Tokenizer};
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -47,7 +48,7 @@ impl<'a> Parser<'a> {
         Comment => self.comment(&token),
         AtWord => self.atrule(&token),
         OpenCurly => self.empty_rule(&token),
-        _ => self.other(&token),
+        _ => self.other(token),
       }
     }
     self.end_file();
@@ -77,8 +78,36 @@ impl<'a> Parser<'a> {
   }
 
   #[inline]
-  fn comment(&self, token: &Token) {
-    todo!()
+  fn comment(&mut self, token: &Token) {
+    let node = Node::Comment(Comment {
+      ..Default::default()
+    });
+    let node = Rc::new(RefCell::new(node));
+    self.init(node.clone(), token.2.expect("expected have start offset"));
+    let offset = token
+      .3
+      .unwrap_or_else(|| token.2.expect("expected have start offset"));
+    let (line, column) = self.tokenizer.from_offset(offset);
+    node
+      .borrow_mut()
+      .set_source_end(Some(Position::new(offset, line, column)));
+
+    let text = &token.1[2..token.1.len() - 2];
+    let all_white_space = regex!(r#"^\s*$"#);
+    if let Some(comment) = node.borrow_mut().as_comment_mut() {
+      if all_white_space.is_match(text) {
+        comment.text = Some("".into());
+        comment.raws.left = Some(text.to_string());
+        comment.raws.right = Some("".to_string());
+      } else {
+        // text.match(/^(\s*)([^]*\S)(\s*)$/) these two reg is equivalent, but is not valid in rust regexp crate
+        let comment_reg = regex!(r#"^(\s*)([\s\S]*\S)(\s*)$"#);
+        let capture = comment_reg.captures(text).unwrap();
+        comment.text = Some(capture.get(1).unwrap().as_str().to_string());
+        comment.raws.left = Some(capture.get(0).unwrap().as_str().to_string());
+        comment.raws.right = Some(capture.get(2).unwrap().as_str().to_string());
+      }
+    };
   }
 
   #[inline]
@@ -102,7 +131,7 @@ impl<'a> Parser<'a> {
   }
 
   #[inline]
-  fn other(&self, token: &Token) {
+  fn other(&self, token: Token) {
     todo!()
   }
 
@@ -112,7 +141,7 @@ impl<'a> Parser<'a> {
   }
   fn get_position(&mut self, offset: usize) -> Position {
     let (line, column) = self.tokenizer.from_offset(offset);
-    Position::new(offset, column, line)
+    Position::new(offset, line, column)
   }
 
   fn init(&mut self, node: Rc<RefCell<Node<'a>>>, offset: usize) {

@@ -11,7 +11,7 @@ pub struct Position {
 }
 
 impl Position {
-  pub fn new(offset: usize, column: usize, line: usize) -> Self {
+  pub fn new(offset: usize, line: usize, column: usize) -> Self {
     Self {
       offset,
       column,
@@ -77,14 +77,38 @@ impl<'a> Node<'a> {
     }
   }
 
-  pub fn set_source_end(&mut self, _end: Option<Position>) {
+  pub fn set_source_end(&mut self, end: Option<Position>) {
     match self {
-      Node::Root(_root) => {}
-      Node::AtRule(_at) => {}
-      Node::Rule(_rule) => {}
-      Node::Decl(_decl) => {}
-      Node::Comment(_comment) => {}
-      Node::Document(_doc) => {}
+      Node::Root(root) => {
+        if let Some(source) = root.source.as_mut() {
+          source.end = end;
+        };
+      }
+      Node::AtRule(at) => {
+        if let Some(source) = at.source.as_mut() {
+          source.end = end;
+        };
+      }
+      Node::Rule(rule) => {
+        if let Some(source) = rule.source.as_mut() {
+          source.end = end;
+        };
+      }
+      Node::Decl(decl) => {
+        if let Some(source) = decl.source.as_mut() {
+          source.end = end;
+        };
+      }
+      Node::Comment(comment) => {
+        if let Some(source) = comment.source.as_mut() {
+          source.end = end;
+        };
+      }
+      Node::Document(doc) => {
+        if let Some(source) = doc.source.as_mut() {
+          source.end = end;
+        };
+      }
     }
   }
 
