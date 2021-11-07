@@ -2,14 +2,14 @@
 #![allow(dead_code)]
 
 use crate::input::Input;
-use crate::node::{Node, Position, Root, RootRaws};
+use crate::node::{Node, Position, Root, RootRaws, Rule, RuleRaws};
 use crate::tokenizer::{Token, TokenType, Tokenizer};
 use std::cell::RefCell;
 use std::rc::Rc;
 
 pub struct Parser<'a> {
   pub root: Rc<RefCell<Node<'a>>>,
-  current: Option<Node<'a>>,
+  current: Rc<RefCell<Node<'a>>>,
   tokenizer: Tokenizer<'a>,
   spaces: String,
   semicolon: bool,
@@ -26,8 +26,8 @@ impl<'a> Parser<'a> {
       raws: RootRaws::default(),
     })));
     Self {
-      root,
-      current: None,
+      root: root.clone(),
+      current: root,
       spaces: "".to_string(),
       semicolon: false,
       custom_property: false,
@@ -56,7 +56,7 @@ impl<'a> Parser<'a> {
   #[inline]
   fn free_semicolon(&mut self, token: &Token) {
     self.spaces += token.1;
-    if let Some(Node::Rule(ref mut rule)) = self.current {
+    if let Some(rule) = self.current.borrow_mut().as_rule_mut() {
       if rule.raws.own_semicolon.unwrap_or(false) {
         rule.raws.own_semicolon = Some(!self.spaces.is_empty());
         self.spaces = "".to_owned();
@@ -87,8 +87,18 @@ impl<'a> Parser<'a> {
   }
 
   #[inline]
-  fn empty_rule(&self, token: &Token) {
-    todo!()
+  fn empty_rule(&mut self, token: &Token) {
+    let node = Node::Rule(Rule {
+      selector: "".to_string(),
+      raws: RuleRaws {
+        between: Some("".to_string()),
+        ..Default::default()
+      },
+      ..Default::default()
+    });
+    let node = Rc::new(RefCell::new(node));
+    self.init(node.clone(), token.2.expect("expected have start offset"));
+    self.current = node;
   }
 
   #[inline]
@@ -105,17 +115,15 @@ impl<'a> Parser<'a> {
     Position::new(offset, column, line)
   }
 
-  fn init(&mut self, node: Node<'a>, offset: usize) {
-    use crate::node::Node::*;
+  fn init(&mut self, node: Rc<RefCell<Node<'a>>>, offset: usize) {
     let pos = self.get_position(offset);
-    if let Some(ref mut cur_node) = self.current {
-      cur_node.set_source(self.input.clone(), Some(pos), None);
-      cur_node.push_child(node);
-      let old_spaces = std::mem::replace(&mut self.spaces, "".to_string());
-      cur_node.set_raw_before(old_spaces);
-      if !matches!(cur_node, Comment(_)) {
-        self.semicolon = false;
-      }
+    let mut cur_node = self.current.borrow_mut();
+    cur_node.set_source(self.input.clone(), Some(pos), None);
+    cur_node.push_child(node);
+    let old_spaces = std::mem::replace(&mut self.spaces, "".to_string());
+    cur_node.set_raw_before(old_spaces);
+    if !cur_node.is_comment() {
+      self.semicolon = false;
     }
   }
 }

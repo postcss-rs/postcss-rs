@@ -109,7 +109,7 @@ impl<'a> Node<'a> {
     }
   }
 
-  pub fn push_child(&mut self, node: Node<'a>) {
+  pub fn push_child(&mut self, node: Rc<RefCell<Node<'a>>>) {
     match self {
       Node::Root(root) => {
         if let Some(children) = root.nodes.as_mut() {
@@ -142,6 +142,143 @@ impl<'a> Node<'a> {
         }
       }
     }
+  }
+
+  pub fn as_root(&self) -> Option<&Root<'a>> {
+    if let Self::Root(v) = self {
+      Some(v)
+    } else {
+      None
+    }
+  }
+
+  pub fn as_at_rule(&self) -> Option<&AtRule<'a>> {
+    if let Self::AtRule(v) = self {
+      Some(v)
+    } else {
+      None
+    }
+  }
+
+  pub fn as_rule(&self) -> Option<&Rule<'a>> {
+    if let Self::Rule(v) = self {
+      Some(v)
+    } else {
+      None
+    }
+  }
+
+  pub fn as_decl(&self) -> Option<&Declaration<'a>> {
+    if let Self::Decl(v) = self {
+      Some(v)
+    } else {
+      None
+    }
+  }
+
+  pub fn as_comment(&self) -> Option<&Comment<'a>> {
+    if let Self::Comment(v) = self {
+      Some(v)
+    } else {
+      None
+    }
+  }
+
+  pub fn as_document(&self) -> Option<&Document<'a>> {
+    if let Self::Document(v) = self {
+      Some(v)
+    } else {
+      None
+    }
+  }
+  pub fn as_root_mut(&self) -> Option<&Root<'a>> {
+    if let Self::Root(v) = self {
+      Some(v)
+    } else {
+      None
+    }
+  }
+
+  pub fn as_at_rule_mut(&mut self) -> Option<&mut AtRule<'a>> {
+    if let Self::AtRule(v) = self {
+      Some(v)
+    } else {
+      None
+    }
+  }
+
+  pub fn as_rule_mut(&mut self) -> Option<&mut Rule<'a>> {
+    if let Self::Rule(v) = self {
+      Some(v)
+    } else {
+      None
+    }
+  }
+
+  pub fn as_decl_mut(&mut self) -> Option<&mut Declaration<'a>> {
+    if let Self::Decl(v) = self {
+      Some(v)
+    } else {
+      None
+    }
+  }
+
+  pub fn as_comment_mut(&mut self) -> Option<&mut Comment<'a>> {
+    if let Self::Comment(v) = self {
+      Some(v)
+    } else {
+      None
+    }
+  }
+
+  pub fn as_document_mut(&mut self) -> Option<&mut Document<'a>> {
+    if let Self::Document(v) = self {
+      Some(v)
+    } else {
+      None
+    }
+  }
+
+  /// Returns `true` if the node is [`Root`].
+  ///
+  /// [`Root`]: Node::Root
+  pub fn is_root(&self) -> bool {
+    matches!(self, Self::Root(..))
+  }
+
+  /// Returns `true` if the node is [`AtRule`].
+  ///
+  /// [`AtRule`]: Node::AtRule
+  pub fn is_at_rule(&self) -> bool {
+    matches!(self, Self::AtRule(..))
+  }
+
+  /// Returns `true` if the node is [`Rule`].
+  ///
+  /// [`Rule`]: Node::Rule
+  pub fn is_rule(&self) -> bool {
+    matches!(self, Self::Rule(..))
+  }
+
+  /// Returns `true` if the node is [`Decl`].
+  ///
+  /// [`Decl`]: Node::Decl
+  pub fn is_decl(&self) -> bool {
+    matches!(self, Self::Decl(..))
+  }
+
+  /// Returns `true` if the node is [`Comment`].
+  ///
+  /// [`Comment`]: Node::Comment
+  pub fn is_comment(&self) -> bool {
+    matches!(self, Self::Comment(..))
+  }
+
+  /// Returns `true` if the node is [`Document`].
+  ///
+  /// [`Document`]: Node::Document
+  pub fn is_document(&self) -> bool {
+    matches!(self, Self::Document(..))
   }
 }
 
@@ -176,7 +313,7 @@ pub struct Declaration<'a> {
 
   /// An array containing the node’s children.
   #[serde(skip_serializing_if = "Option::is_none")]
-  pub nodes: Option<Vec<Node<'a>>>,
+  pub nodes: Option<Vec<Rc<RefCell<Node<'a>>>>>,
 
   /// The node’s parent node.
   #[serde(skip_serializing, skip_deserializing)]
@@ -190,7 +327,7 @@ pub struct Declaration<'a> {
   pub raws: DeclarationRaws,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct Rule<'a> {
   /// Selector or selectors of the rule.
@@ -201,7 +338,7 @@ pub struct Rule<'a> {
   pub selectors: Option<Vec<String>>,
   /// An array containing the node’s children.
   #[serde(skip_serializing_if = "Option::is_none")]
-  pub nodes: Option<Vec<Node<'a>>>,
+  pub nodes: Option<Vec<Rc<RefCell<Node<'a>>>>>,
 
   /// The node’s parent node.
   #[serde(skip_serializing, skip_deserializing)]
@@ -220,7 +357,7 @@ pub struct Rule<'a> {
 pub struct AtRule<'a> {
   /// An array containing the node’s children.
   #[serde(skip_serializing_if = "Option::is_none")]
-  pub nodes: Option<Vec<Node<'a>>>,
+  pub nodes: Option<Vec<Rc<RefCell<Node<'a>>>>>,
 
   /// The node’s parent node.
   #[serde(skip_serializing, skip_deserializing)]
@@ -251,7 +388,7 @@ pub struct AtRule<'a> {
 pub struct Comment<'a> {
   /// An array containing the node’s children.
   #[serde(skip_serializing_if = "Option::is_none")]
-  pub nodes: Option<Vec<Node<'a>>>,
+  pub nodes: Option<Vec<Rc<RefCell<Node<'a>>>>>,
 
   /// The node’s parent node.
   #[serde(skip_serializing, skip_deserializing)]
@@ -275,7 +412,7 @@ pub struct Comment<'a> {
 pub struct Document<'a> {
   /// An array containing the node’s children.
   #[serde(skip_serializing_if = "Option::is_none")]
-  pub nodes: Option<Vec<Node<'a>>>,
+  pub nodes: Option<Vec<Rc<RefCell<Node<'a>>>>>,
 
   /// The node’s parent node.
   #[serde(skip_serializing, skip_deserializing)]
@@ -300,7 +437,7 @@ pub struct Document<'a> {
 pub struct Root<'a> {
   /// An array containing the node’s children.
   #[serde(skip_serializing_if = "Option::is_none")]
-  pub nodes: Option<Vec<Node<'a>>>,
+  pub nodes: Option<Vec<Rc<RefCell<Node<'a>>>>>,
 
   /// The node’s parent node.
   #[serde(skip_serializing, skip_deserializing)]
