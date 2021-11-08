@@ -2,14 +2,15 @@
 #![allow(dead_code)]
 
 use crate::input::Input;
-use crate::node::{Node, Position, Root, RootRaws};
+use crate::node::{Comment, Node, Position, Root, RootRaws, Rule, RuleRaws};
+use crate::regex;
 use crate::tokenizer::{Token, TokenType, Tokenizer};
 use std::cell::RefCell;
 use std::rc::Rc;
 
 pub struct Parser<'a> {
   pub root: Rc<RefCell<Node<'a>>>,
-  current: Option<Node<'a>>,
+  current: Rc<RefCell<Node<'a>>>,
   tokenizer: Tokenizer<'a>,
   spaces: String,
   semicolon: bool,
@@ -26,8 +27,8 @@ impl<'a> Parser<'a> {
       raws: RootRaws::default(),
     })));
     Self {
-      root,
-      current: None,
+      root: root.clone(),
+      current: root,
       spaces: "".to_string(),
       semicolon: false,
       custom_property: false,
@@ -47,7 +48,7 @@ impl<'a> Parser<'a> {
         Comment => self.comment(&token),
         AtWord => self.atrule(&token),
         OpenCurly => self.empty_rule(&token),
-        _ => self.other(&token),
+        _ => self.other(token),
       }
     }
     self.end_file();
@@ -56,7 +57,7 @@ impl<'a> Parser<'a> {
   #[inline]
   fn free_semicolon(&mut self, token: &Token) {
     self.spaces += token.1;
-    if let Some(Node::Rule(ref mut rule)) = self.current {
+    if let Some(rule) = self.current.borrow_mut().as_rule_mut() {
       if rule.raws.own_semicolon.unwrap_or(false) {
         rule.raws.own_semicolon = Some(!self.spaces.is_empty());
         self.spaces = "".to_owned();
@@ -77,8 +78,36 @@ impl<'a> Parser<'a> {
   }
 
   #[inline]
-  fn comment(&self, token: &Token) {
-    todo!()
+  fn comment(&mut self, token: &Token) {
+    let node = Node::Comment(Comment {
+      ..Default::default()
+    });
+    let node = Rc::new(RefCell::new(node));
+    self.init(node.clone(), token.2.expect("expected have start offset"));
+    let offset = token
+      .3
+      .unwrap_or_else(|| token.2.expect("expected have start offset"));
+    let (line, column) = self.tokenizer.from_offset(offset);
+    node
+      .borrow_mut()
+      .set_source_end(Some(Position::new(offset, line, column)));
+
+    let text = &token.1[2..token.1.len() - 2];
+    let all_white_space = regex!(r#"^\s*$"#);
+    if let Some(comment) = node.borrow_mut().as_comment_mut() {
+      if all_white_space.is_match(text) {
+        comment.text = Some("".into());
+        comment.raws.left = Some(text.to_string());
+        comment.raws.right = Some("".to_string());
+      } else {
+        // text.match(/^(\s*)([^]*\S)(\s*)$/) these two reg is equivalent, but is not valid in rust regexp crate
+        let comment_reg = regex!(r#"^(\s*)([\s\S]*\S)(\s*)$"#);
+        let capture = comment_reg.captures(text).unwrap();
+        comment.text = Some(capture.get(1).unwrap().as_str().to_string());
+        comment.raws.left = Some(capture.get(0).unwrap().as_str().to_string());
+        comment.raws.right = Some(capture.get(2).unwrap().as_str().to_string());
+      }
+    };
   }
 
   #[inline]
@@ -87,12 +116,22 @@ impl<'a> Parser<'a> {
   }
 
   #[inline]
-  fn empty_rule(&self, token: &Token) {
-    todo!()
+  fn empty_rule(&mut self, token: &Token) {
+    let node = Node::Rule(Rule {
+      selector: "".to_string(),
+      raws: RuleRaws {
+        between: Some("".to_string()),
+        ..Default::default()
+      },
+      ..Default::default()
+    });
+    let node = Rc::new(RefCell::new(node));
+    self.init(node.clone(), token.2.expect("expected have start offset"));
+    self.current = node;
   }
 
   #[inline]
-  fn other(&self, token: &Token) {
+  fn other(&self, token: Token) {
     todo!()
   }
 
@@ -102,20 +141,18 @@ impl<'a> Parser<'a> {
   }
   fn get_position(&mut self, offset: usize) -> Position {
     let (line, column) = self.tokenizer.from_offset(offset);
-    Position::new(offset, column, line)
+    Position::new(offset, line, column)
   }
 
-  fn init(&mut self, node: Node<'a>, offset: usize) {
-    use crate::node::Node::*;
+  fn init(&mut self, node: Rc<RefCell<Node<'a>>>, offset: usize) {
     let pos = self.get_position(offset);
-    if let Some(ref mut cur_node) = self.current {
-      cur_node.set_source(self.input.clone(), Some(pos), None);
-      cur_node.push_child(node);
-      let old_spaces = std::mem::replace(&mut self.spaces, "".to_string());
-      cur_node.set_raw_before(old_spaces);
-      if !matches!(cur_node, Comment(_)) {
-        self.semicolon = false;
-      }
+    let mut cur_node = self.current.borrow_mut();
+    cur_node.set_source(self.input.clone(), Some(pos), None);
+    cur_node.push_child(node);
+    let old_spaces = std::mem::replace(&mut self.spaces, "".to_string());
+    cur_node.set_raw_before(old_spaces);
+    if !cur_node.is_comment() {
+      self.semicolon = false;
     }
   }
 }

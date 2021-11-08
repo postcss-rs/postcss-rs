@@ -9,4 +9,5 @@ pub mod parse;
 mod parser;
 pub mod ref_ring;
 pub mod tokenizer;
+pub(crate) mod util;
 pub mod warning;
