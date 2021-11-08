@@ -158,25 +158,19 @@ impl<'a> Parser<'a> {
 
 #[inline]
 fn is_all_white_space(s: &str) -> bool {
-  for n in s.chars() {
-    match n as u32 {
-      // See PropList for the definition of Whitespace.
-      // https://www.unicode.org/Public/UCD/latest/ucd/PropList.txt
-      0x0009..=0x000D
-      | 0x0020
-      | 0x0085
-      | 0x00A0
-      | 0x1680
-      | 0x2000..=0x200A
-      | 0x2028
-      | 0x2029
-      | 0x202F
-      | 0x205F
-      | 0x3000 => continue,
-      _ => {
-        return false;
-      }
-    };
-  }
-  true
+  s.chars().all(is_whitespace)
+}
+
+const fn is_whitespace(ch: char) -> bool {
+  matches!(ch as u32, 0x0009..=0x000D
+    | 0x0020
+    | 0x0085
+    | 0x00A0
+    | 0x1680
+    | 0x2000..=0x200A
+    | 0x2028
+    | 0x2029
+    | 0x202F
+    | 0x205F
+    | 0x3000)
 }
