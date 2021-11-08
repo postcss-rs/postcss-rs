@@ -93,9 +93,8 @@ impl<'a> Parser<'a> {
       .set_source_end(Some(Position::new(offset, line, column)));
 
     let text = &token.1[2..token.1.len() - 2];
-    let all_white_space = regex!(r#"^\s*$"#);
     if let Some(comment) = node.borrow_mut().as_comment_mut() {
-      if all_white_space.is_match(text) {
+      if is_all_white_space(text) {
         comment.text = Some("".into());
         comment.raws.left = Some(text.to_string());
         comment.raws.right = Some("".to_string());
@@ -155,4 +154,29 @@ impl<'a> Parser<'a> {
       self.semicolon = false;
     }
   }
+}
+
+#[inline]
+fn is_all_white_space(s: &str) -> bool {
+  for n in s.chars() {
+    match n as u32 {
+      // See PropList for the definition of Whitespace.
+      // https://www.unicode.org/Public/UCD/latest/ucd/PropList.txt
+      0x0009..=0x000D
+      | 0x0020
+      | 0x0085
+      | 0x00A0
+      | 0x1680
+      | 0x2000..=0x200A
+      | 0x2028
+      | 0x2029
+      | 0x202F
+      | 0x205F
+      | 0x3000 => continue,
+      _ => {
+        return false;
+      }
+    };
+  }
+  true
 }
