@@ -356,7 +356,7 @@ dependencies = [
 
 [[package]]
 name = "postcss"
-version = "0.0.1"
+version = "0.0.2"
 dependencies = [
  "criterion",
  "memchr",
