@@ -129,7 +129,6 @@ jobs:
       - name: Publish
         if: |
           startsWith(matrix.os, 'ubuntu') &&
-          matrix.rust == 'stable' &&
           startsWith(github.repository, 'justjavac') &&
           startsWith(github.ref, 'refs/tags/')
         env:
