@@ -5,3 +5,13 @@ macro_rules! regex {
     RE.get_or_init(|| regex::Regex::new($re).unwrap())
   }};
 }
+
+#[macro_export]
+macro_rules! enum_mapping {
+  ($value:expr, $pattern:pat => $extracted_value:expr) => {
+    match $value {
+      $pattern => Some($extracted_value),
+      _ => None,
+    }
+  };
+}

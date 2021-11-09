@@ -1,3 +1,4 @@
+use crate::enum_mapping;
 use crate::input::Input;
 use serde::{Deserialize, Serialize};
 use std::cell::RefCell;
@@ -101,98 +102,50 @@ impl<'a> Node<'a> {
   }
 
   pub fn as_root(&self) -> Option<&Root<'a>> {
-    if let Self::Root(v) = self {
-      Some(v)
-    } else {
-      None
-    }
+    enum_mapping!(self, Self::Root(v) => v)
   }
 
   pub fn as_at_rule(&self) -> Option<&AtRule<'a>> {
-    if let Self::AtRule(v) = self {
-      Some(v)
-    } else {
-      None
-    }
+    enum_mapping!(self, Self::AtRule(v) => v)
   }
 
   pub fn as_rule(&self) -> Option<&Rule<'a>> {
-    if let Self::Rule(v) = self {
-      Some(v)
-    } else {
-      None
-    }
+    enum_mapping!(self, Self::Rule(v) => v)
   }
 
   pub fn as_decl(&self) -> Option<&Declaration<'a>> {
-    if let Self::Decl(v) = self {
-      Some(v)
-    } else {
-      None
-    }
+    enum_mapping!(self, Self::Decl(v) => v)
   }
 
   pub fn as_comment(&self) -> Option<&Comment<'a>> {
-    if let Self::Comment(v) = self {
-      Some(v)
-    } else {
-      None
-    }
+    enum_mapping!(self, Self::Comment(v) => v)
   }
 
   pub fn as_document(&self) -> Option<&Document<'a>> {
-    if let Self::Document(v) = self {
-      Some(v)
-    } else {
-      None
-    }
+    enum_mapping!(self, Self::Document(v) => v)
   }
   pub fn as_root_mut(&self) -> Option<&Root<'a>> {
-    if let Self::Root(v) = self {
-      Some(v)
-    } else {
-      None
-    }
+    enum_mapping!(self, Self::Root(v) => v)
   }
 
   pub fn as_at_rule_mut(&mut self) -> Option<&mut AtRule<'a>> {
-    if let Self::AtRule(v) = self {
-      Some(v)
-    } else {
-      None
-    }
+    enum_mapping!(self, Self::AtRule(v) => v)
   }
 
   pub fn as_rule_mut(&mut self) -> Option<&mut Rule<'a>> {
-    if let Self::Rule(v) = self {
-      Some(v)
-    } else {
-      None
-    }
+    enum_mapping!(self, Self::Rule(v) => v)
   }
 
   pub fn as_decl_mut(&mut self) -> Option<&mut Declaration<'a>> {
-    if let Self::Decl(v) = self {
-      Some(v)
-    } else {
-      None
-    }
+    enum_mapping!(self, Self::Decl(v) => v)
   }
 
   pub fn as_comment_mut(&mut self) -> Option<&mut Comment<'a>> {
-    if let Self::Comment(v) = self {
-      Some(v)
-    } else {
-      None
-    }
+    enum_mapping!(self, Self::Comment(v) => v)
   }
 
   pub fn as_document_mut(&mut self) -> Option<&mut Document<'a>> {
-    if let Self::Document(v) = self {
-      Some(v)
-    } else {
-      None
-    }
+    enum_mapping!(self, Self::Document(v) => v)
   }
 
   /// Returns `true` if the node is [`Root`].
