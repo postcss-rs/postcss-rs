@@ -49,6 +49,7 @@ pub enum Node<'a> {
 }
 
 impl<'a> Node<'a> {
+  /// get mutable shared behaviour reference of the Node
   pub fn as_shared_mut(&mut self) -> &mut dyn NodeTrait<'a> {
     match self {
       Node::Root(root) => root,
@@ -60,6 +61,7 @@ impl<'a> Node<'a> {
     }
   }
 
+  /// get readonly shared behaviour reference of the Node
   pub fn as_shared(&self) -> &dyn NodeTrait<'a> {
     match self {
       Node::Root(root) => root,
