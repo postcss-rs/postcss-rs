@@ -88,26 +88,8 @@ impl<'a> Node<'a> {
     }
   }
 
-  // TODO(CGQAQ): add a get_raws to the `NodeTrait`
   pub fn set_raw_before(&mut self, before: String) {
-    match self {
-      Node::AtRule(at) => {
-        at.raws.before = Some(before);
-      }
-      Node::Rule(rule) => {
-        rule.raws.before = Some(before);
-      }
-      Node::Decl(decl) => {
-        decl.raws.before = Some(before);
-      }
-      Node::Comment(comment) => {
-        comment.raws.before = Some(before);
-      }
-      _ => {
-        // root, document raw don't have before
-        unimplemented!() // TODO
-      }
-    }
+    self.as_shared_mut().as_raws_mut().set_raw_before(before);
   }
 
   pub fn push_child(&mut self, node: Rc<RefCell<Node<'a>>>) {
@@ -263,6 +245,8 @@ pub trait NodeTrait<'a> {
   fn get_nodes(&self) -> Option<Vec<Rc<RefCell<Node<'a>>>>>;
   fn get_source(&self) -> Option<Source<'a>>;
   fn set_source(&mut self, source: Source<'a>);
+  fn as_raws(&self) -> &dyn RawBefore;
+  fn as_raws_mut(&mut self) -> &mut dyn RawBefore;
   fn as_trait(&'a self) -> &dyn NodeTrait<'a>;
 }
 
@@ -279,6 +263,14 @@ macro_rules! impl_node_traits {
 
       fn set_source(&mut self, source: Source<'a>) {
         self.source = Some(source);
+      }
+
+      fn as_raws(&self) -> &dyn RawBefore {
+        &self.raws as &dyn RawBefore
+      }
+
+      fn as_raws_mut(&mut self) -> &mut dyn RawBefore {
+        &mut self.raws as &mut dyn RawBefore
       }
 
       fn as_trait(&'a self) -> &dyn NodeTrait<'a> {
@@ -435,8 +427,10 @@ pub struct Document<'a> {
   /// Or the document's name.
   #[serde(skip_serializing_if = "Option::is_none")]
   pub name: Option<String>,
+
   // document node have no raws
-  // pub raws: Document
+  #[serde(skip_serializing)]
+  pub raws: DocumentRaws,
 }
 impl_node_traits!(Document);
 
@@ -460,7 +454,33 @@ pub struct Root<'a> {
 }
 impl_node_traits!(Root);
 
-// TODO(CGQAQ): Add a `RawTrait`
+pub trait RawBefore {
+  fn get_raw_before(&self) -> Option<String>;
+  fn set_raw_before(&mut self, value: String);
+}
+
+macro_rules! impl_raw_before_traits {
+  ($ident: ident) => {
+    impl RawBefore for $ident {
+      fn get_raw_before(&self) -> Option<String> {
+        self.before.clone()
+      }
+      fn set_raw_before(&mut self, value: String) {
+        self.before = Some(value)
+      }
+    }
+  };
+  ($ident: ident, unimplemented) => {
+    impl RawBefore for $ident {
+      fn get_raw_before(&self) -> Option<String> {
+        unreachable!()
+      }
+      fn set_raw_before(&mut self, _value: String) {
+        unreachable!()
+      }
+    }
+  };
+}
 
 #[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -474,6 +494,7 @@ pub struct RootRaws {
   #[serde(skip_serializing_if = "Option::is_none")]
   pub semicolon: Option<bool>,
 }
+impl_raw_before_traits!(RootRaws, unimplemented);
 
 #[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -491,6 +512,7 @@ pub struct AtRuleRaws {
   #[serde(skip_serializing_if = "Option::is_none")]
   pub params: Option<RawValue>,
 }
+impl_raw_before_traits!(AtRuleRaws);
 
 #[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -502,6 +524,7 @@ pub struct CommentRaws {
   #[serde(skip_serializing_if = "Option::is_none")]
   pub right: Option<String>,
 }
+impl_raw_before_traits!(CommentRaws);
 
 #[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -515,6 +538,7 @@ pub struct DeclarationRaws {
   #[serde(skip_serializing_if = "Option::is_none")]
   pub value: Option<RawValue>,
 }
+impl_raw_before_traits!(DeclarationRaws);
 
 #[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -532,3 +556,8 @@ pub struct RuleRaws {
   #[serde(skip_serializing_if = "Option::is_none")]
   pub selector: Option<RawValue>,
 }
+impl_raw_before_traits!(RuleRaws);
+
+#[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
+pub struct DocumentRaws {}
+impl_raw_before_traits!(DocumentRaws, unimplemented);
