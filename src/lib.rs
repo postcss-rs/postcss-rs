@@ -1,6 +1,7 @@
 pub mod error;
 pub mod input;
 pub mod list;
+pub(crate) mod util;
 // pub mod stringify;
 // mod stringifier;
 // mod ast;
@@ -9,5 +10,4 @@ pub mod parse;
 mod parser;
 pub mod ref_ring;
 pub mod tokenizer;
-pub(crate) mod util;
 pub mod warning;
