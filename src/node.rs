@@ -49,69 +49,46 @@ pub enum Node<'a> {
 }
 
 impl<'a> Node<'a> {
+  pub fn as_shared_mut(&mut self) -> &mut dyn NodeTrait<'a> {
+    match self {
+      Node::Root(root) => root,
+      Node::AtRule(at) => at,
+      Node::Rule(rule) => rule,
+      Node::Decl(decl) => decl,
+      Node::Comment(comment) => comment,
+      Node::Document(document) => document,
+    }
+  }
+
+  pub fn as_shared(&self) -> &dyn NodeTrait<'a> {
+    match self {
+      Node::Root(root) => root,
+      Node::AtRule(at) => at,
+      Node::Rule(rule) => rule,
+      Node::Decl(decl) => decl,
+      Node::Comment(comment) => comment,
+      Node::Document(document) => document,
+    }
+  }
+
   pub fn set_source(
     &mut self,
     input: Rc<RefCell<Input<'a>>>,
     start: Option<Position>,
     end: Option<Position>,
   ) {
-    match self {
-      Node::Root(root) => {
-        root.source = Some(Source { input, start, end });
-      }
-      Node::AtRule(at) => {
-        at.source = Some(Source { input, start, end });
-      }
-      Node::Rule(rule) => {
-        rule.source = Some(Source { input, start, end });
-      }
-      Node::Decl(decl) => {
-        decl.source = Some(Source { input, start, end });
-      }
-      Node::Comment(comment) => {
-        comment.source = Some(Source { input, start, end });
-      }
-      Node::Document(doc) => {
-        doc.source = Some(Source { input, start, end });
-      }
-    }
+    self
+      .as_shared_mut()
+      .set_source(Source { input, start, end });
   }
 
   pub fn set_source_end(&mut self, end: Option<Position>) {
-    match self {
-      Node::Root(root) => {
-        if let Some(source) = root.source.as_mut() {
-          source.end = end;
-        };
-      }
-      Node::AtRule(at) => {
-        if let Some(source) = at.source.as_mut() {
-          source.end = end;
-        };
-      }
-      Node::Rule(rule) => {
-        if let Some(source) = rule.source.as_mut() {
-          source.end = end;
-        };
-      }
-      Node::Decl(decl) => {
-        if let Some(source) = decl.source.as_mut() {
-          source.end = end;
-        };
-      }
-      Node::Comment(comment) => {
-        if let Some(source) = comment.source.as_mut() {
-          source.end = end;
-        };
-      }
-      Node::Document(doc) => {
-        if let Some(source) = doc.source.as_mut() {
-          source.end = end;
-        };
-      }
+    if let Some(source) = self.as_shared_mut().get_source().as_mut() {
+      source.end = end
     }
   }
 
+  // TODO(CGQAQ): add a get_raws to the `NodeTrait`
   pub fn set_raw_before(&mut self, before: String) {
     match self {
       Node::AtRule(at) => {
@@ -134,37 +111,8 @@ impl<'a> Node<'a> {
   }
 
   pub fn push_child(&mut self, node: Rc<RefCell<Node<'a>>>) {
-    match self {
-      Node::Root(root) => {
-        if let Some(children) = root.nodes.as_mut() {
-          children.push(node)
-        }
-      }
-      Node::AtRule(at) => {
-        if let Some(children) = at.nodes.as_mut() {
-          children.push(node)
-        }
-      }
-      Node::Rule(rule) => {
-        if let Some(children) = rule.nodes.as_mut() {
-          children.push(node)
-        }
-      }
-      Node::Decl(decl) => {
-        if let Some(children) = decl.nodes.as_mut() {
-          children.push(node)
-        }
-      }
-      Node::Comment(comment) => {
-        if let Some(children) = comment.nodes.as_mut() {
-          children.push(node)
-        }
-      }
-      Node::Document(doc) => {
-        if let Some(children) = doc.nodes.as_mut() {
-          children.push(node)
-        }
-      }
+    if let Some(children) = self.as_shared().get_nodes().as_mut() {
+      children.push(node)
     }
   }
 
@@ -310,6 +258,36 @@ fn is_false(boolean: &bool) -> bool {
   !*boolean
 }
 
+/// CommonBehaviors
+pub trait NodeTrait<'a> {
+  fn get_nodes(&self) -> Option<Vec<Rc<RefCell<Node<'a>>>>>;
+  fn get_source(&self) -> Option<Source<'a>>;
+  fn set_source(&mut self, source: Source<'a>);
+  fn as_trait(&'a self) -> &dyn NodeTrait<'a>;
+}
+
+macro_rules! impl_node_traits {
+  ($ident: ident) => {
+    impl<'a> NodeTrait<'a> for $ident<'a> {
+      fn get_nodes(&self) -> Option<Vec<Rc<RefCell<Node<'a>>>>> {
+        self.nodes.clone()
+      }
+
+      fn get_source(&self) -> Option<Source<'a>> {
+        self.source.clone()
+      }
+
+      fn set_source(&mut self, source: Source<'a>) {
+        self.source = Some(source);
+      }
+
+      fn as_trait(&'a self) -> &dyn NodeTrait<'a> {
+        self as &dyn NodeTrait<'a>
+      }
+    }
+  };
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Declaration<'a> {
@@ -351,6 +329,8 @@ pub struct Declaration<'a> {
   pub raws: DeclarationRaws,
 }
 
+impl_node_traits!(Declaration);
+
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct Rule<'a> {
@@ -375,6 +355,7 @@ pub struct Rule<'a> {
 
   pub raws: RuleRaws,
 }
+impl_node_traits!(Rule);
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -406,6 +387,7 @@ pub struct AtRule<'a> {
 
   pub raws: AtRuleRaws,
 }
+impl_node_traits!(AtRule);
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
@@ -430,6 +412,7 @@ pub struct Comment<'a> {
 
   pub raws: CommentRaws,
 }
+impl_node_traits!(Comment);
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -455,6 +438,7 @@ pub struct Document<'a> {
   // document node have no raws
   // pub raws: Document
 }
+impl_node_traits!(Document);
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -474,6 +458,9 @@ pub struct Root<'a> {
 
   pub raws: RootRaws,
 }
+impl_node_traits!(Root);
+
+// TODO(CGQAQ): Add a `RawTrait`
 
 #[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
