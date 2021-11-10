@@ -8,6 +8,7 @@ readme = "README.md"
 repository = "https://github.com/justjavac/postcss-rs"
 license = "MIT"
 keywords = ["css", "syntax", "postcss", "parser", "ast"]
+exclude = ["assets/*", "adapter/*", ".*"]
 
 [dependencies]
 memchr = "2.4"
