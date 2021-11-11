@@ -51,7 +51,7 @@ impl Stringifier {
 
         string.push_str(&decl.prop);
         string.push_str(between);
-        string.push_str(&value);
+        string.push_str(value);
 
         if decl.important {
           match &decl.raws.important {
@@ -71,7 +71,7 @@ impl Stringifier {
         self.block(node, self.raw_value(node, "selector"));
         if rule.raws.own_semicolon.unwrap_or(false) {
           // (self.builder)(rule.raws.own_semicolon, Some(*node), Some("end".into()));
-          (self.builder)("", Some(node), Some("end".into()));
+          (self.builder)("", Some(node), Some("end"));
         }
       }
 
@@ -124,7 +124,7 @@ impl Stringifier {
     }
   }
 
-  fn body(&self, node: &Node) -> () {
+  fn body(&self, node: &Node) {
     todo!()
   }
 
