@@ -95,14 +95,14 @@ impl<'a> Parser<'a> {
     let text = &token.1[2..token.1.len() - 2];
     if let Some(comment) = node.borrow_mut().as_comment_mut() {
       if is_all_white_space(text) {
-        comment.text = Some("".into());
+        comment.text = "".into();
         comment.raws.left = Some(text.to_string());
         comment.raws.right = Some("".to_string());
       } else {
         // text.match(/^(\s*)([^]*\S)(\s*)$/) these two reg is equivalent, but is not valid in rust regexp crate
         let comment_reg = regex!(r#"^(\s*)([\s\S]*\S)(\s*)$"#);
         let capture = comment_reg.captures(text).unwrap();
-        comment.text = Some(capture.get(1).unwrap().as_str().to_string());
+        comment.text = capture.get(1).unwrap().as_str().to_string();
         comment.raws.left = Some(capture.get(0).unwrap().as_str().to_string());
         comment.raws.right = Some(capture.get(2).unwrap().as_str().to_string());
       }

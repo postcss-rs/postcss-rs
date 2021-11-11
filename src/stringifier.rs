@@ -1,7 +1,16 @@
-use crate::at_rule::AtRule;
-use crate::node::AnyNode;
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
+#![allow(unreachable_patterns)]
 
-pub type Builder = fn(String, Option<AnyNode>, Option<String>);
+use crate::input::Input;
+use crate::node::{self, Comment, Node, Position, Root, RootRaws, Rule, RuleRaws};
+use crate::regex;
+use crate::tokenizer::{Token, TokenType, Tokenizer};
+use std::cell::RefCell;
+use std::rc::Rc;
+
+pub type Builder = fn(&str, Option<&Node>, Option<&str>);
 
 pub(crate) struct Stringifier {
   pub builder: Builder,
@@ -12,24 +21,76 @@ impl Stringifier {
     Stringifier { builder }
   }
 
-  pub fn stringify(&self, node: &AnyNode, semicolon: bool) {
+  pub fn stringify(&self, node: &Node, semicolon: bool) {
     match node {
-      AnyNode::AtRule(node) => {
-        let mut name = String::with_capacity(node.name.len() + 1);
+      Node::Document(document) => {
+        self.body(node);
+      }
+
+      Node::Root(root) => {
+        self.body(node);
+        if let Some(after) = &root.raws.after {
+          (self.builder)(after, None, None);
+        }
+      }
+
+      Node::Comment(comment) => {
+        let left = self.raw(node, "left", "commentLeft");
+        let right = self.raw(node, "right", "commentRight");
+        (self.builder)(
+          &("/*".to_string() + left + &comment.text + right + "*/"),
+          Some(node),
+          None,
+        );
+      }
+
+      Node::Decl(decl) => {
+        let between = self.raw(node, "between", "colon");
+        let value = self.raw_value(node, "value");
+        let mut string = String::with_capacity(32);
+
+        string.push_str(&decl.prop);
+        string.push_str(between);
+        string.push_str(&value);
+
+        if decl.important {
+          match &decl.raws.important {
+            Some(important) => string.push_str(important),
+            None => string.push_str(" !important"),
+          }
+        }
+
+        if semicolon {
+          string.push(';');
+        }
+
+        (self.builder)(&string, Some(node), None);
+      }
+
+      Node::Rule(rule) => {
+        self.block(node, self.raw_value(node, "selector"));
+        if rule.raws.own_semicolon.unwrap_or(false) {
+          // (self.builder)(rule.raws.own_semicolon, Some(*node), Some("end".into()));
+          (self.builder)("", Some(node), Some("end".into()));
+        }
+      }
+
+      Node::AtRule(at_rule) => {
+        let mut name = String::with_capacity(32);
         name.push('@');
-        name.push_str(&node.name);
-        let params = match &node.raws.params {
+        name.push_str(&at_rule.name);
+        let params = match &at_rule.raws.params {
           Some(raw) => {
-            let params = &node.params;
-            if raw.value == *params {
+            let params = &*at_rule.params;
+            if *raw.value == *params {
               &raw.raw
             } else {
               params
             }
           }
-          None => &node.params,
+          None => &at_rule.params,
         };
-        match &node.raws.after_name {
+        match &at_rule.raws.after_name {
           Some(after_name) => {
             name.push_str(after_name);
           }
@@ -42,10 +103,10 @@ impl Stringifier {
 
         name.push_str(params);
 
-        match node.nodes {
-          Some(_) => self.block(node, &name),
+        match at_rule.nodes {
+          Some(_) => self.block(node, &(name + params)),
           None => {
-            if let Some(ref between) = node.raws.between {
+            if let Some(ref between) = at_rule.raws.between {
               name.push_str(between);
             }
 
@@ -53,7 +114,7 @@ impl Stringifier {
               name.push(';');
             }
 
-            (self.builder)(name, Some(AnyNode::AtRule(node.clone())), None);
+            (self.builder)(&name, Some(node), None);
           }
         }
       }
@@ -63,8 +124,20 @@ impl Stringifier {
     }
   }
 
-  pub fn block(&self, _node: &AtRule, _name: &str) {
-    // un-impl
+  fn body(&self, node: &Node) -> () {
+    todo!()
+  }
+
+  pub fn block(&self, node: &Node, name: &str) {
+    todo!()
+  }
+
+  fn raw(&self, node: &Node, arg_1: &str, arg_2: &str) -> &str {
+    todo!()
+  }
+
+  fn raw_value(&self, node: &Node, arg: &str) -> &str {
+    todo!()
   }
 }
 

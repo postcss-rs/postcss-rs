@@ -290,17 +290,12 @@ pub struct AtRule<'a> {
   #[serde(skip_serializing_if = "Option::is_none")]
   pub source: Option<Source<'a>>,
 
-  /// used in `atrule` or `document`.
   /// The at-rule's name immediately follows the `@`.
-  /// Or the document's name.
-  #[serde(skip_serializing_if = "Option::is_none")]
-  pub name: Option<String>,
+  pub name: String,
 
-  /// used in `atrule`.
   /// The at-rule’s parameters, the values that follow the at-rule’s name
   /// but precede any {} block.
-  #[serde(skip_serializing_if = "Option::is_none")]
-  pub params: Option<String>,
+  pub params: String,
 
   pub raws: AtRuleRaws,
 }
@@ -322,10 +317,8 @@ pub struct Comment<'a> {
   #[serde(skip_serializing_if = "Option::is_none")]
   pub source: Option<Source<'a>>,
 
-  /// used in `comment`.
   /// The comment's text.
-  #[serde(skip_serializing_if = "Option::is_none")]
-  pub text: Option<String>,
+  pub text: String,
 
   pub raws: CommentRaws,
 }
