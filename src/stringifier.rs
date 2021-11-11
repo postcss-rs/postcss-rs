@@ -1,7 +1,6 @@
 #![allow(dead_code)]
 #![allow(unused_variables)]
 #![allow(unused_imports)]
-#![allow(unreachable_patterns)]
 
 use crate::input::Input;
 use crate::node::{self, Comment, Node, Position, Root, RootRaws, Rule, RuleRaws};
@@ -118,9 +117,9 @@ impl Stringifier {
           }
         }
       }
-      _ => {
-        println!("Unknown AST node type. Maybe you need to change PostCSS stringifier.")
-      }
+      // _ => {
+      //   println!("Unknown AST node type. Maybe you need to change PostCSS stringifier.")
+      // }
     }
   }
 
