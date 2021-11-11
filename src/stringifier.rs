@@ -4,7 +4,7 @@
 
 use crate::input::Input;
 use crate::node::{self, Comment, Node, Position, Root, RootRaws, Rule, RuleRaws};
-use crate::regex;
+use crate::{regex, get_raw_value};
 use crate::tokenizer::{Token, TokenType, Tokenizer};
 use std::any::Any;
 use std::borrow::Borrow;
@@ -47,7 +47,7 @@ impl Stringifier {
 
       Node::Decl(decl) => {
         let between = self.raw(node, "between", Some("colon"));
-        let value = self.raw_value(node, "value");
+        let value = get_raw_value!(decl, value);
         let mut string = String::with_capacity(32);
 
         string.push_str(&decl.prop);
@@ -69,7 +69,7 @@ impl Stringifier {
       }
 
       Node::Rule(rule) => {
-        self.block(node, self.raw_value(node, "selector"));
+        self.block(node, get_raw_value!(rule, selector));
         if rule.raws.own_semicolon.unwrap_or(false) {
           // (self.builder)(rule.raws.own_semicolon, Some(*node), Some("end".into()));
           (self.builder)("", Some(node), Some("end"));
@@ -80,17 +80,7 @@ impl Stringifier {
         let mut name = String::with_capacity(32);
         name.push('@');
         name.push_str(&at_rule.name);
-        let params = match &at_rule.raws.params {
-          Some(raw) => {
-            let params = &*at_rule.params;
-            if *raw.value == *params {
-              &raw.raw
-            } else {
-              params
-            }
-          }
-          None => &at_rule.params,
-        };
+        let params = get_raw_value!(at_rule, params);
         match &at_rule.raws.after_name {
           Some(after_name) => {
             name.push_str(after_name);
@@ -141,15 +131,24 @@ impl Stringifier {
     }
   }
 
-  pub(crate) fn block(&self, node: &Node, name: &str) {
-    todo!()
+  pub(crate) fn block(&self, node: &Node, start: &str) {
+    let between = self.raw(node, "between", Some("beforeOpen"));
+    (self.builder)(&(start.to_string() + between + "{"), Some(node), Some("start"));
+
+    let after = match node.as_shared().get_nodes() {
+        Some(_) => {
+          self.body(node);
+          self.raw(node, "after", None)
+        },
+        None => self.raw(node, "after", Some("emptyBody")),
+    };
+
+    if !after.is_empty() { (self.builder)(after, None, None); }
+    (self.builder)("}", Some(node), Some("end"));
   }
 
   pub(crate) fn raw(&self, node: &Node, own: &str, detect: Option<&str>) -> &str {
-    todo!()
-  }
-
-  pub(crate) fn raw_value(&self, node: &Node, arg: &str) -> &str {
+    let detect = detect.unwrap_or(own);
     todo!()
   }
 }
