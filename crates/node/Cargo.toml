@@ -1,0 +1,11 @@
+[package]
+name = "node"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tokenizer = { path = "../tokenizer" }
+serde = { version = "1.0", features = ["derive", "std", "rc"] }
+serde_json = "1.0.68"

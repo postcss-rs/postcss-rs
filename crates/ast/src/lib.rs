@@ -1,7 +1,7 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use crate::input::Input;
+use tokenizer::input::Input;
 
 use self::at_rule::AtRule;
 use self::comment::Comment;

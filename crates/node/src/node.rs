@@ -1,4 +1,4 @@
-use crate::input::Input;
+use tokenizer::input::Input;
 use crate::{enum_mapping, impl_node_traits};
 use serde::{Deserialize, Serialize};
 use std::cell::RefCell;

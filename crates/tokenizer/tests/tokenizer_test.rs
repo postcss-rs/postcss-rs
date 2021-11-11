@@ -1,5 +1,5 @@
-use postcss::input::Input;
-use postcss::tokenizer::*;
+use tokenizer::input::Input;
+use tokenizer::*;
 fn tokenize(css: &str, ignore_errors: bool) -> Vec<Token> {
   let input = Input::new(css, None);
   let processor = Tokenizer::new(input.css, ignore_errors);

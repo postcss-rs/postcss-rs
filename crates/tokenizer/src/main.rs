@@ -1,8 +1,8 @@
 use std::fs;
 use std::time::Instant;
 
-use postcss::input::Input;
-use postcss::tokenizer::Tokenizer;
+use tokenizer::input::Input;
+use tokenizer::Tokenizer;
 
 fn main() {
   let css = fs::read_to_string("assets/bootstrap-reboot.css").unwrap();
