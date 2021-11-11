@@ -4,8 +4,8 @@
 
 use crate::input::Input;
 use crate::node::{self, Comment, Node, Position, Root, RootRaws, Rule, RuleRaws};
-use crate::{regex, get_raw_value};
 use crate::tokenizer::{Token, TokenType, Tokenizer};
+use crate::{get_raw_value, regex};
 use std::any::Any;
 use std::borrow::Borrow;
 use std::cell::RefCell;
@@ -133,36 +133,29 @@ impl Stringifier {
 
   pub(crate) fn block(&self, node: &Node, start: &str) {
     let between = self.raw(node, "between", Some("beforeOpen"));
-    (self.builder)(&(start.to_string() + between + "{"), Some(node), Some("start"));
+    (self.builder)(
+      &(start.to_string() + between + "{"),
+      Some(node),
+      Some("start"),
+    );
 
     let after = match node.as_shared().get_nodes() {
-        Some(_) => {
-          self.body(node);
-          self.raw(node, "after", None)
-        },
-        None => self.raw(node, "after", Some("emptyBody")),
+      Some(_) => {
+        self.body(node);
+        self.raw(node, "after", None)
+      }
+      None => self.raw(node, "after", Some("emptyBody")),
     };
 
-    if !after.is_empty() { (self.builder)(after, None, None); }
+    if !after.is_empty() {
+      (self.builder)(after, None, None);
+    }
     (self.builder)("}", Some(node), Some("end"));
   }
 
   pub(crate) fn raw(&self, node: &Node, own: &str, detect: Option<&str>) -> &str {
     let detect = detect.unwrap_or(own);
     todo!()
-  }
-}
-
-#[inline]
-fn capitalize(s: &str) -> String {
-  match s.len() {
-    0 => s.to_string(),
-    _ => {
-      let mut res = String::with_capacity(s.len());
-      res.push_str(&s[0..1].to_uppercase());
-      res.push_str(&s[1..]);
-      res
-    }
   }
 }
 
@@ -182,17 +175,5 @@ fn get_default_raw(s: &str) -> &str {
     "commentRight" => " ",
     "semicolon" => ";", // false
     _ => "\0",
-  }
-}
-
-#[cfg(test)]
-mod test {
-  use super::*;
-
-  #[test]
-  fn test_capitalize() {
-    assert_eq!(capitalize("hello"), "Hello");
-    assert_eq!(capitalize("Hello"), "Hello");
-    assert_eq!(capitalize("hellO"), "HellO");
   }
 }
