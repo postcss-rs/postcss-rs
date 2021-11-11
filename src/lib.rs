@@ -1,7 +1,7 @@
 pub mod error;
 pub mod input;
 pub mod list;
-pub(crate) mod r#macro;
+pub(crate) mod macros;
 // pub mod stringify;
 // mod stringifier;
 // mod ast;
