@@ -129,13 +129,13 @@ impl Stringifier {
     let last = nodes.iter().rfind(|&node| !(**node).borrow().is_comment());
     let semicolon = self.raw(node, "semicolon", None);
     for child in &nodes {
-      let child_content = (**child).borrow().clone();
-      let before = self.raw(&child_content, "before", None);
+      let child_content = &*(**child).borrow();
+      let before = self.raw(child_content, "before", None);
       if !before.is_empty() {
         (self.builder)(before, None, None);
       }
       self.stringify(
-        &child_content,
+        child_content,
         last.is_none() || !Rc::ptr_eq(last.unwrap(), child) || !semicolon.is_empty(),
       );
     }
