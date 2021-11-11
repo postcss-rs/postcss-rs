@@ -290,6 +290,7 @@ dependencies = [
 name = "node"
 version = "0.1.0"
 dependencies = [
+ "pretty_assertions",
  "serde",
  "serde_json",
  "tokenizer",
@@ -589,7 +590,6 @@ dependencies = [
  "criterion",
  "memchr",
  "once_cell",
- "pretty_assertions",
  "ropey",
 ]
 

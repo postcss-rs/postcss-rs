@@ -23,7 +23,6 @@ debug = true
 
 [dev-dependencies]
 criterion = { version = "0.3", features = ["html_reports"] }
-pretty_assertions = "0.7.2"
 
 [lib]
 # `cargo bench` Gives "Unrecognized Option" Errors for Valid Command-line Options
