@@ -6,6 +6,8 @@ use crate::input::Input;
 use crate::node::{self, Comment, Node, Position, Root, RootRaws, Rule, RuleRaws};
 use crate::regex;
 use crate::tokenizer::{Token, TokenType, Tokenizer};
+use std::any::Any;
+use std::borrow::Borrow;
 use std::cell::RefCell;
 use std::rc::Rc;
 
@@ -34,8 +36,8 @@ impl Stringifier {
       }
 
       Node::Comment(comment) => {
-        let left = self.raw(node, "left", "commentLeft");
-        let right = self.raw(node, "right", "commentRight");
+        let left = self.raw(node, "left", Some("commentLeft"));
+        let right = self.raw(node, "right", Some("commentRight"));
         (self.builder)(
           &("/*".to_string() + left + &comment.text + right + "*/"),
           Some(node),
@@ -44,7 +46,7 @@ impl Stringifier {
       }
 
       Node::Decl(decl) => {
-        let between = self.raw(node, "between", "colon");
+        let between = self.raw(node, "between", Some("colon"));
         let value = self.raw_value(node, "value");
         let mut string = String::with_capacity(32);
 
@@ -116,26 +118,37 @@ impl Stringifier {
             (self.builder)(&name, Some(node), None);
           }
         }
-      }
-      // _ => {
-      //   println!("Unknown AST node type. Maybe you need to change PostCSS stringifier.")
-      // }
+      } // _ => {
+        //   println!("Unknown AST node type. Maybe you need to change PostCSS stringifier.")
+        // }
     }
   }
 
-  fn body(&self, node: &Node) {
+  pub(crate) fn body(&self, node: &Node) {
+    let nodes = node.as_shared().get_nodes().unwrap();
+    let last = nodes.iter().rfind(|&&node| !node.borrow().is_comment());
+    let semicolon = self.raw(node, "semicolon", None);
+    for child in nodes.borrow() {
+      let before = self.raw(&child.borrow(), "before", None);
+      if !before.is_empty() {
+        (self.builder)(before, None, None);
+      }
+      self.stringify(
+        &child.borrow(),
+        last.is_none() || !Rc::ptr_eq(last.unwrap(), &child) || !semicolon.is_empty(),
+      );
+    }
+  }
+
+  pub(crate) fn block(&self, node: &Node, name: &str) {
     todo!()
   }
 
-  pub fn block(&self, node: &Node, name: &str) {
+  pub(crate) fn raw(&self, node: &Node, own: &str, detect: Option<&str>) -> &str {
     todo!()
   }
 
-  fn raw(&self, node: &Node, arg_1: &str, arg_2: &str) -> &str {
-    todo!()
-  }
-
-  fn raw_value(&self, node: &Node, arg: &str) -> &str {
+  pub(crate) fn raw_value(&self, node: &Node, arg: &str) -> &str {
     todo!()
   }
 }
