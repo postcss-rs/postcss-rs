@@ -126,16 +126,17 @@ impl Stringifier {
 
   pub(crate) fn body(&self, node: &Node) {
     let nodes = node.as_shared().get_nodes().unwrap();
-    let last = nodes.iter().rfind(|&&node| !node.borrow().is_comment());
+    let last = nodes.iter().rfind(|&node| !(**node).borrow().is_comment());
     let semicolon = self.raw(node, "semicolon", None);
-    for child in nodes.borrow() {
-      let before = self.raw(&child.borrow(), "before", None);
+    for child in &nodes {
+      let child_content = &*(**child).borrow();
+      let before = self.raw(child_content, "before", None);
       if !before.is_empty() {
         (self.builder)(before, None, None);
       }
       self.stringify(
-        &child.borrow(),
-        last.is_none() || !Rc::ptr_eq(last.unwrap(), &child) || !semicolon.is_empty(),
+        child_content,
+        last.is_none() || !Rc::ptr_eq(last.unwrap(), child) || !semicolon.is_empty(),
       );
     }
   }
