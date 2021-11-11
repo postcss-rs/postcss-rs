@@ -3,7 +3,7 @@ pub mod input;
 pub mod list;
 pub(crate) mod macros;
 // pub mod stringify;
-// mod stringifier;
+mod stringifier;
 // mod ast;
 pub mod node;
 pub mod parse;
