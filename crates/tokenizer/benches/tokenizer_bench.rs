@@ -1,9 +1,9 @@
 use criterion::{criterion_group, criterion_main, Criterion};
-use postcss::input::Input;
-use postcss::tokenizer::{Token, Tokenizer};
+use tokenizer::input::Input;
+use tokenizer::{Token, Tokenizer};
 
-const SMALL_CSS_FILE: &str = include_str!("../assets/bootstrap-reboot.css");
-const LARGE_CSS_FILE: &str = include_str!("../assets/bootstrap.css");
+const SMALL_CSS_FILE: &str = include_str!("../../../assets/bootstrap-reboot.css");
+const LARGE_CSS_FILE: &str = include_str!("../../../assets/bootstrap.css");
 
 fn tokenize<'a>(css: &'a str, ignore_errors: bool) -> Vec<Token<'a>> {
   let input: Input<'a> = Input::new(css, None);

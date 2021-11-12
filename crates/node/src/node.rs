@@ -1,8 +1,8 @@
-use crate::input::Input;
 use crate::{enum_mapping, impl_node_traits};
 use serde::{Deserialize, Serialize};
 use std::cell::RefCell;
 use std::rc::{Rc, Weak};
+use tokenizer::input::Input;
 
 #[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
 pub struct Position {

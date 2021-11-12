@@ -1,12 +1,12 @@
 #![allow(unused_variables)]
 #![allow(dead_code)]
 
-use crate::input::Input;
-use crate::node::{Comment, Node, Position, Root, RootRaws, Rule, RuleRaws};
 use crate::regex;
-use crate::tokenizer::{Token, TokenType, Tokenizer};
+use node::{Comment, Node, Position, Root, RootRaws, Rule, RuleRaws};
 use std::cell::RefCell;
 use std::rc::Rc;
+use tokenizer::input::Input;
+use tokenizer::{Token, TokenType, Tokenizer};
 
 pub struct Parser<'a> {
   pub root: Rc<RefCell<Node<'a>>>,

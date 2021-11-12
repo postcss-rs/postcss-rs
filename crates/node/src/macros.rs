@@ -1,12 +1,4 @@
 #[macro_export]
-macro_rules! regex {
-  ($re:literal $(,)?) => {{
-    static RE: once_cell::sync::OnceCell<regex::Regex> = once_cell::sync::OnceCell::new();
-    RE.get_or_init(|| regex::Regex::new($re).unwrap())
-  }};
-}
-
-#[macro_export]
 macro_rules! enum_mapping {
   ($value:expr, $pattern:pat => $extracted_value:expr) => {
     match $value {
@@ -43,23 +35,6 @@ macro_rules! impl_node_traits {
       fn as_trait(&'a self) -> &dyn NodeTrait<'a> {
         self as &dyn NodeTrait<'a>
       }
-    }
-  };
-}
-
-#[macro_export]
-macro_rules! get_raw_value {
-  ($node: ident, $prop: ident) => {
-    match &$node.raws.$prop {
-      Some(raw) => {
-        let v = &*$node.$prop;
-        if *raw.value == *v {
-          &raw.raw
-        } else {
-          v
-        }
-      }
-      None => &$node.$prop,
     }
   };
 }

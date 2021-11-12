@@ -1,4 +1,4 @@
-use postcss::list::*;
+use tokenizer::list::*;
 
 #[test]
 fn space_fn_splits_list_by_spaces() {

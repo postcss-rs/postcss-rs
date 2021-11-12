@@ -2,14 +2,15 @@
 #![allow(unused_variables)]
 #![allow(unused_imports)]
 
-use crate::input::Input;
-use crate::node::{self, Comment, Node, Position, Root, RootRaws, Rule, RuleRaws};
-use crate::tokenizer::{Token, TokenType, Tokenizer};
-use crate::{get_raw_value, regex};
+use crate::get_raw_value;
+use node::{self, Comment, Node, Position, Root, RootRaws, Rule, RuleRaws};
+use parser::regex;
 use std::any::Any;
 use std::borrow::Borrow;
 use std::cell::RefCell;
 use std::rc::Rc;
+use tokenizer::input::Input;
+use tokenizer::{Token, TokenType, Tokenizer};
 
 pub type Builder = fn(&str, Option<&Node>, Option<&str>);
 
