@@ -1,16 +1,9 @@
 #![allow(dead_code)]
-#![allow(unused_variables)]
-#![allow(unused_imports)]
 
 use crate::get_raw_value;
-use node::{self, Comment, Node, Position, Root, RootRaws, Rule, RuleRaws};
-use parser::regex;
-use std::any::Any;
-use std::borrow::Borrow;
-use std::cell::RefCell;
+use node::Node;
+use std::hint::unreachable_unchecked;
 use std::rc::Rc;
-use tokenizer::input::Input;
-use tokenizer::{Token, TokenType, Tokenizer};
 
 pub type Builder = fn(&str, Option<&Node>, Option<&str>);
 
@@ -25,7 +18,7 @@ impl Stringifier {
 
   pub fn stringify(&self, node: &Node, semicolon: bool) {
     match node {
-      Node::Document(document) => {
+      Node::Document(_) => {
         self.body(node);
       }
 
@@ -37,8 +30,16 @@ impl Stringifier {
       }
 
       Node::Comment(comment) => {
-        let left = self.raw(node, "left", Some("commentLeft"));
-        let right = self.raw(node, "right", Some("commentRight"));
+        let left: &str = &comment
+          .raws
+          .left
+          .clone()
+          .unwrap_or_else(|| self.detect_str(node, "left", "commentLeft").into());
+        let right: &str = &comment
+          .raws
+          .right
+          .clone()
+          .unwrap_or_else(|| self.detect_str(node, "right", "commentRight").into());
         (self.builder)(
           &("/*".to_string() + left + &comment.text + right + "*/"),
           Some(node),
@@ -47,7 +48,11 @@ impl Stringifier {
       }
 
       Node::Decl(decl) => {
-        let between = self.raw(node, "between", Some("colon"));
+        let between: &str = &decl
+          .raws
+          .between
+          .clone()
+          .unwrap_or_else(|| self.detect_str(node, "between", "colon").into());
         let value = get_raw_value!(decl, value);
         let mut string = String::with_capacity(32);
 
@@ -118,44 +123,82 @@ impl Stringifier {
   pub(crate) fn body(&self, node: &Node) {
     let nodes = node.as_shared().get_nodes().unwrap();
     let last = nodes.iter().rfind(|&node| !(**node).borrow().is_comment());
-    let semicolon = self.raw(node, "semicolon", None);
+    let semicolon = match node {
+      Node::Document(_) => Some(false), // FIXME(justjavac):
+      Node::Root(node) => node.raws.semicolon,
+      Node::Rule(node) => node.raws.semicolon,
+      Node::AtRule(node) => node.raws.semicolon,
+      _ => unsafe { unreachable_unchecked() },
+    };
+
+    let semicolon = semicolon.unwrap_or_else(|| self.detect_bool(node, "semicolon", "semicolon"));
+
     for child in &nodes {
       let child_content = &*(**child).borrow();
-      let before = self.raw(child_content, "before", None);
+      let before = match child_content {
+        Node::Rule(node) => node.raws.before.clone(),
+        Node::AtRule(node) => node.raws.before.clone(),
+        Node::Comment(node) => node.raws.before.clone(),
+        Node::Decl(node) => node.raws.before.clone(),
+        _ => unsafe { unreachable_unchecked() },
+      };
+
+      let before =
+        before.unwrap_or_else(|| self.detect_str(child_content, "before", "before").into());
+
       if !before.is_empty() {
-        (self.builder)(before, None, None);
+        (self.builder)(&before, None, None);
       }
       self.stringify(
         child_content,
-        last.is_none() || !Rc::ptr_eq(last.unwrap(), child) || !semicolon.is_empty(),
+        last.is_none() || !Rc::ptr_eq(last.unwrap(), child) || semicolon,
       );
     }
   }
 
   pub(crate) fn block(&self, node: &Node, start: &str) {
-    let between = self.raw(node, "between", Some("beforeOpen"));
+    let between = match node {
+      Node::Rule(node) => node.raws.between.clone(),
+      Node::AtRule(node) => node.raws.between.clone(),
+      _ => unsafe { unreachable_unchecked() },
+    };
+    let between = between.unwrap_or_else(|| self.detect_str(node, "between", "beforeOpen").into());
+
     (self.builder)(
-      &(start.to_string() + between + "{"),
+      &(start.to_string() + &between + "{"),
       Some(node),
       Some("start"),
     );
 
+    let after = match node {
+      Node::Rule(node) => node.raws.between.clone(),
+      Node::AtRule(node) => node.raws.between.clone(),
+      _ => unsafe { unreachable_unchecked() },
+    };
+
     let after = match node.as_shared().get_nodes() {
       Some(_) => {
         self.body(node);
-        self.raw(node, "after", None)
+        after.unwrap_or_else(|| self.detect_str(node, "after", "after").into())
       }
-      None => self.raw(node, "after", Some("emptyBody")),
+      None => after.unwrap_or_else(|| self.detect_str(node, "after", "emptyBody").into()),
     };
 
     if !after.is_empty() {
-      (self.builder)(after, None, None);
+      (self.builder)(&after, None, None);
     }
     (self.builder)("}", Some(node), Some("end"));
   }
 
-  pub(crate) fn raw(&self, node: &Node, own: &str, detect: Option<&str>) -> &str {
-    let detect = detect.unwrap_or(own);
+  pub(crate) fn detect_str(&self, _node: &Node, _own: &str, _detect: &str) -> &str {
+    todo!()
+  }
+
+  pub(crate) fn detect_bool(&self, _node: &Node, _own: &str, _detect: &str) -> bool {
+    todo!()
+  }
+
+  pub(crate) fn before_after(&self, _node: &Node, _detect: &str) -> &str {
     todo!()
   }
 }
