@@ -1,3 +1,17 @@
 [workspace]
 members = ["crates/*"]
 exclude = ["crates/ast"]
+
+# NB: the `bench` and `release` profiles must remain EXACTLY the same.
+[profile.release]
+codegen-units = 1
+lto = true
+panic = "abort"
+debug = true
+
+# NB: the `bench` and `release` profiles must remain EXACTLY the same.
+[profile.bench]
+codegen-units = 1
+lto = true
+panic = "abort"
+debug = true
