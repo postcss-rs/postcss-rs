@@ -374,9 +374,11 @@ fn index_of_byte(value: &str, search_value: u8, from_index: usize) -> Option<usi
 #[inline]
 fn sub_string(s: &str, start: usize, end: usize) -> &str {
   if end + 1 > s.len() {
-    &s[start..]
+    // Safety: NEVER out-of-bounds
+    unsafe { &s.get_unchecked(start..) }
   } else {
-    &s[start..end]
+    // Safety: NEVER out-of-bounds
+    unsafe { &s.get_unchecked(start..end) }
   }
 }
 
