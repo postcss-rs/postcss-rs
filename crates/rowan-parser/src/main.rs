@@ -60,8 +60,7 @@ fn parse_and_serialize(input: &str) -> () {
         Token::Function(a) => (),
         Token::ParenthesisBlock => (),
         Token::SquareBracketBlock => (),
-        Token::CurlyBracketBlock => {
-        },
+        Token::CurlyBracketBlock => {}
         Token::BadUrl(_) => (),
         Token::BadString(_) => (),
         Token::CloseParenthesis => (),
