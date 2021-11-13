@@ -188,7 +188,7 @@ impl<'a> Tokenizer<'a> {
           let start_offset = self.position();
           current_token = Token(
             TokenType::Brackets,
-            sub_string(self.css, start_offset, next + 1),
+            sub_str(self.css, start_offset, next + 1),
             start_offset,
             next + 1,
           );
@@ -257,7 +257,7 @@ impl<'a> Tokenizer<'a> {
 
         current_token = Token(
           TokenType::String,
-          sub_string(self.css, self.position(), next + 1),
+          sub_str(self.css, self.position(), next + 1),
           self.position(),
           next + 1,
         );
@@ -267,7 +267,7 @@ impl<'a> Tokenizer<'a> {
         let next = index_of_at_end(self.css, self.position() + 1) - 1;
         current_token = Token(
           TokenType::AtWord,
-          sub_string(self.css, self.position(), next + 1),
+          sub_str(self.css, self.position(), next + 1),
           self.position(),
           next + 1,
         );
@@ -302,7 +302,7 @@ impl<'a> Tokenizer<'a> {
 
         current_token = Token(
           TokenType::Word,
-          sub_string(self.css, self.position(), next + 1),
+          sub_str(self.css, self.position(), next + 1),
           self.position(),
           next + 1,
         );
@@ -323,14 +323,14 @@ impl<'a> Tokenizer<'a> {
 
             current_token = Token(
               TokenType::Comment,
-              sub_string(self.css, self.position(), next + 1),
+              sub_str(self.css, self.position(), next + 1),
               self.position(),
               next + 1,
             );
             next
           } else {
             let next = index_of_word_end(self.css, self.position() + 1) - 1;
-            let content = sub_string(self.css, self.position(), next + 1);
+            let content = sub_str(self.css, self.position(), next + 1);
             current_token = Token::new(TokenType::Word, content, self.position(), next + 1);
             self.push(content);
             next
@@ -372,11 +372,13 @@ fn index_of_byte(value: &str, search_value: u8, from_index: usize) -> Option<usi
 }
 
 #[inline]
-fn sub_string(s: &str, start: usize, end: usize) -> &str {
+fn sub_str(s: &str, start: usize, end: usize) -> &str {
   if end + 1 > s.len() {
-    &s[start..]
+    // Safety: NEVER out-of-bounds
+    unsafe { &s.get_unchecked(start..) }
   } else {
-    &s[start..end]
+    // Safety: NEVER out-of-bounds
+    unsafe { &s.get_unchecked(start..end) }
   }
 }
 
@@ -495,5 +497,14 @@ mod test {
     assert_eq!(char_code_at(s, 0), '0');
     assert_eq!(char_code_at(s, 1), '1');
     assert_eq!(char_code_at(s, 100), '\0');
+  }
+
+  #[test]
+  fn test_sub_str() {
+    let s = "0123456789abc";
+    assert_eq!(sub_str(s, 0, 0), "");
+    assert_eq!(sub_str(s, 1, 3), "12");
+    assert_eq!(sub_str(s, 10, 13), "abc");
+    assert_eq!(sub_str(s, 10, 100), "abc");
   }
 }
