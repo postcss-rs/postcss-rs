@@ -28,3 +28,7 @@ path = "src/main.rs"
 # `cargo bench` Gives "Unrecognized Option" Errors for Valid Command-line Options
 # https://bheisler.github.io/criterion.rs/book/faq.html#cargo-bench-gives-unrecognized-option-errors-for-valid-command-line-options
 bench = false
+
+[[bench]]
+name = "tokenizer_bench"
+harness = false
