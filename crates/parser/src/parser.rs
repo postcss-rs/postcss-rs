@@ -83,10 +83,8 @@ impl<'a> Parser<'a> {
       ..Default::default()
     });
     let node = Rc::new(RefCell::new(node));
-    self.init(node.clone(), token.2.expect("expected have start offset"));
-    let offset = token
-      .3
-      .unwrap_or_else(|| token.2.expect("expected have start offset"));
+    self.init(node.clone(), token.2);
+    let offset = token.3;
     let (line, column) = self.tokenizer.from_offset(offset);
     node
       .borrow_mut()
@@ -125,7 +123,7 @@ impl<'a> Parser<'a> {
       ..Default::default()
     });
     let node = Rc::new(RefCell::new(node));
-    self.init(node.clone(), token.2.expect("expected have start offset"));
+    self.init(node.clone(), token.2);
     self.current = node;
   }
 

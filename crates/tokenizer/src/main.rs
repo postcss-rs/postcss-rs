@@ -24,4 +24,6 @@ fn main() {
   }
   let end = start.elapsed();
   println!("rust: tokenizer/fairly_large(201K)\t: {:?}", end);
+  println!("{:?}", '\u{c}' as u32);
+  println!("{:?}", '\r' as u32);
 }
