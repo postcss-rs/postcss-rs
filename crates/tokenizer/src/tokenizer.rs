@@ -214,7 +214,12 @@ impl<'a> Tokenizer<'a> {
             }
             None => {
               let start_offset = self.position();
-              current_token = Token(TokenType::OpenParentheses, "(", start_offset, start_offset + 1);
+              current_token = Token(
+                TokenType::OpenParentheses,
+                "(",
+                start_offset,
+                start_offset + 1,
+              );
             }
           };
           self.pos_plus_one();
@@ -435,8 +440,8 @@ fn index_of_word_end(s: &str, start: usize) -> usize {
 
   while i < len {
     match bytes[i] as char {
-      '\t' | '\n' | '\u{c}' | '\r' | ' ' | '!' | '"' | '#' | '\'' | '(' | ')' | ':' | ';'
-      | '@' | '[' | '\\' | ']' | '{' | '}' => {
+      '\t' | '\n' | '\u{c}' | '\r' | ' ' | '!' | '"' | '#' | '\'' | '(' | ')' | ':' | ';' | '@'
+      | '[' | '\\' | ']' | '{' | '}' => {
         return i;
       }
       '/' => {
