@@ -66,7 +66,7 @@ impl<'a> Token<'a> {
 
 #[derive(Debug)]
 pub struct Tokenizer<'a> {
-  css: &'a str,
+  pub css: &'a str,
   ignore: bool,
   length: usize,
   pos: RefCell<usize>,
