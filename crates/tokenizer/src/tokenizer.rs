@@ -13,7 +13,7 @@ const BACKSLASH: char = '\\';
 const SLASH: char = '/';
 const NEWLINE: char = '\n';
 const SPACE: char = ' ';
-const FEED: char = '\u{12}'; // \f
+const FEED: char = '\u{c}'; // \f
 const TAB: char = '\t';
 const CR: char = '\r';
 const OPEN_SQUARE: char = '[';
@@ -51,15 +51,10 @@ pub enum TokenType {
 }
 
 #[derive(Debug, Clone, Eq, PartialEq)]
-pub struct Token<'a>(
-  pub TokenType,
-  pub &'a str,
-  pub Option<usize>,
-  pub Option<usize>,
-);
+pub struct Token<'a>(pub TokenType, pub &'a str, pub usize, pub usize);
 
 impl<'a> Token<'a> {
-  pub fn new(kind: TokenType, content: &'a str, pos: Option<usize>, next: Option<usize>) -> Token {
+  pub fn new(kind: TokenType, content: &'a str, pos: usize, next: usize) -> Token {
     Token(kind, content, pos, next)
   }
 }
@@ -139,20 +134,16 @@ impl<'a> Tokenizer<'a> {
         current_token = Token(
           TokenType::Space,
           self.css[self.position()..next].into(),
-          None,
-          None,
+          self.position(),
+          next,
         );
 
         self.pos.replace(next);
       }
       OPEN_SQUARE | CLOSE_SQUARE | OPEN_CURLY | CLOSE_CURLY | COLON | SEMICOLON
       | CLOSE_PARENTHESES => {
-        current_token = Token(
-          get_token_type(code),
-          get_str(code),
-          Some(self.position()),
-          None,
-        );
+        let start = self.position();
+        current_token = Token(get_token_type(code), get_str(code), start, start + 1);
         self.pos_plus_one();
       }
       OPEN_PARENTHESES => {
@@ -194,12 +185,12 @@ impl<'a> Tokenizer<'a> {
               break;
             }
           }
-
+          let start_offset = self.position();
           current_token = Token(
             TokenType::Brackets,
-            sub_string(self.css, self.position(), next + 1),
-            Some(self.position()),
-            Some(next),
+            sub_string(self.css, start_offset, next + 1),
+            start_offset,
+            next + 1,
           );
 
           self.pos.replace(next + 1);
@@ -208,15 +199,27 @@ impl<'a> Tokenizer<'a> {
             Some(i) => {
               let content = &self.css[self.position()..i + 1];
 
+              let start_offset = self.position();
               if is_bad_bracket(content) {
-                current_token = Token(TokenType::OpenParentheses, "(", Some(self.position()), None);
+                current_token = Token(
+                  TokenType::OpenParentheses,
+                  "(",
+                  start_offset,
+                  start_offset + 1,
+                );
               } else {
-                current_token = Token(TokenType::Brackets, content, Some(self.position()), Some(i));
+                current_token = Token(TokenType::Brackets, content, start_offset, i + 1);
                 self.pos.replace(i);
               }
             }
             None => {
-              current_token = Token(TokenType::OpenParentheses, "(", Some(self.position()), None);
+              let start_offset = self.position();
+              current_token = Token(
+                TokenType::OpenParentheses,
+                "(",
+                start_offset,
+                start_offset + 1,
+              );
             }
           };
           self.pos_plus_one();
@@ -255,8 +258,8 @@ impl<'a> Tokenizer<'a> {
         current_token = Token(
           TokenType::String,
           sub_string(self.css, self.position(), next + 1),
-          Some(self.position()),
-          Some(next),
+          self.position(),
+          next + 1,
         );
         self.pos.replace(next + 1);
       }
@@ -265,8 +268,8 @@ impl<'a> Tokenizer<'a> {
         current_token = Token(
           TokenType::AtWord,
           sub_string(self.css, self.position(), next + 1),
-          Some(self.position()),
-          Some(next),
+          self.position(),
+          next + 1,
         );
         self.pos.replace(next + 1);
       }
@@ -300,8 +303,8 @@ impl<'a> Tokenizer<'a> {
         current_token = Token(
           TokenType::Word,
           sub_string(self.css, self.position(), next + 1),
-          Some(self.position()),
-          Some(next),
+          self.position(),
+          next + 1,
         );
         self.pos.replace(next + 1);
       }
@@ -321,14 +324,14 @@ impl<'a> Tokenizer<'a> {
             current_token = Token(
               TokenType::Comment,
               sub_string(self.css, self.position(), next + 1),
-              Some(self.position()),
-              Some(next),
+              self.position(),
+              next + 1,
             );
             next
           } else {
             let next = index_of_word_end(self.css, self.position() + 1) - 1;
             let content = sub_string(self.css, self.position(), next + 1);
-            current_token = Token::new(TokenType::Word, content, Some(self.position()), Some(next));
+            current_token = Token::new(TokenType::Word, content, self.position(), next + 1);
             self.push(content);
             next
           },
@@ -418,7 +421,7 @@ fn index_of_at_end(s: &str, start: usize) -> usize {
 
   while i < len {
     match bytes[i] as char {
-      '\t' | '\n' | '\u{12}' | '\r' | ' ' | '"' | '#' | '\'' | '(' | ')' | '/' | ';' | '['
+      '\t' | '\n' | '\u{c}' | '\r' | ' ' | '"' | '#' | '\'' | '(' | ')' | '/' | ';' | '['
       | '\\' | ']' | '{' | '}' => {
         return i;
       }
@@ -437,8 +440,8 @@ fn index_of_word_end(s: &str, start: usize) -> usize {
 
   while i < len {
     match bytes[i] as char {
-      '\t' | '\n' | '\u{12}' | '\r' | ' ' | '!' | '"' | '#' | '\'' | '(' | ')' | ':' | ';'
-      | '@' | '[' | '\\' | ']' | '{' | '}' => {
+      '\t' | '\n' | '\u{c}' | '\r' | ' ' | '!' | '"' | '#' | '\'' | '(' | ')' | ':' | ';' | '@'
+      | '[' | '\\' | ']' | '{' | '}' => {
         return i;
       }
       '/' => {
