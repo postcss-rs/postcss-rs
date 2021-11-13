@@ -317,7 +317,7 @@ impl<'a> Tokenizer<'a> {
                 if !self.ignore && !ignore_unclosed {
                   self.unclosed("comment");
                 }
-                self.length
+                self.length - 1
               }
             };
 
