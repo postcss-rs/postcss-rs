@@ -658,6 +658,7 @@ version = "0.1.0"
 dependencies = [
  "cssparser",
  "rowan",
+ "tokenizer",
 ]
 
 [[package]]

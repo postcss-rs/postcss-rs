@@ -8,4 +8,4 @@ edition = "2021"
 [dependencies]
 cssparser = "0.29.0"
 rowan = "0.14.1"
-# tokenizer = { path = "../tokenizer" }
+tokenizer = { path = "../tokenizer" }
