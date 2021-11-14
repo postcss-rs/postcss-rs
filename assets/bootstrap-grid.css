@@ -5036,7 +5036,7 @@
   }
 
   .d-print-flex {
-    display: flex !important
+    display: flex !important;
   }
 
   .d-print-inline-flex {
