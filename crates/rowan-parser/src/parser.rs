@@ -173,10 +173,10 @@ impl<'a> Parser<'a> {
     self.skip_whitespace();
     while let Some(kind) = self.peek() {
       match kind {
-        CloseCurly => {},
+        CloseCurly => {}
         Semicolon => {
           break;
-        },
+        }
         _ => {
           println!("parse the component");
           self.parse_component();

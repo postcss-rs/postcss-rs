@@ -4,7 +4,6 @@ use std::time::Instant;
 
 use rowan_parser::{parser::Parser, syntax::SyntaxNode};
 
-
 // fn parse_and_serialize(input: &str) -> () {
 //   let mut input = ParserInput::new(input);
 //   let mut parser = CssParser::new(&mut input);
@@ -66,7 +65,8 @@ use rowan_parser::{parser::Parser, syntax::SyntaxNode};
 //   }
 // }
 fn main() {
-  let mut parser = Parser::new(r#"
+  let mut parser = Parser::new(
+    r#"
   /**
  * Paste or drop some CSS here and explore
  * the syntax tree created by chosen parser.
@@ -82,10 +82,10 @@ ul li {
 	padding: 5px;
 }
 
-"#);
+"#,
+  );
   // println!("{:?}", parser.peek());
   let node = parser.parse().green_node;
   let lang = SyntaxNode::new_root(node);
   println!("{:#?}", lang);
-
 }

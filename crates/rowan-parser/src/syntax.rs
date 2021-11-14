@@ -72,21 +72,21 @@ impl<'a> Iterator for Lexer<'a> {
 impl From<TokenType> for SyntaxKind {
   fn from(token: TokenType) -> Self {
     match token {
-        TokenType::OpenParentheses => SyntaxKind::OpenParentheses,
-        TokenType::CloseParentheses => SyntaxKind::CloseParentheses,
-        TokenType::Space => SyntaxKind::Space,
-        TokenType::Word => SyntaxKind::Word,
-        TokenType::String => SyntaxKind::String,
-        TokenType::OpenSquare => SyntaxKind::OpenSquare,
-        TokenType::CloseSquare => SyntaxKind::CloseSquare,
-        TokenType::OpenCurly => SyntaxKind::OpenCurly,
-        TokenType::CloseCurly => SyntaxKind::CloseCurly,
-        TokenType::Semicolon => SyntaxKind::Semicolon,
-        TokenType::Colon => SyntaxKind::Colon,
-        TokenType::Comment => SyntaxKind::Comment,
-        TokenType::AtWord => SyntaxKind::AtWord,
-        TokenType::Brackets => SyntaxKind::Brackets,
-        TokenType::Unknown => SyntaxKind::Unknown,
+      TokenType::OpenParentheses => SyntaxKind::OpenParentheses,
+      TokenType::CloseParentheses => SyntaxKind::CloseParentheses,
+      TokenType::Space => SyntaxKind::Space,
+      TokenType::Word => SyntaxKind::Word,
+      TokenType::String => SyntaxKind::String,
+      TokenType::OpenSquare => SyntaxKind::OpenSquare,
+      TokenType::CloseSquare => SyntaxKind::CloseSquare,
+      TokenType::OpenCurly => SyntaxKind::OpenCurly,
+      TokenType::CloseCurly => SyntaxKind::CloseCurly,
+      TokenType::Semicolon => SyntaxKind::Semicolon,
+      TokenType::Colon => SyntaxKind::Colon,
+      TokenType::Comment => SyntaxKind::Comment,
+      TokenType::AtWord => SyntaxKind::AtWord,
+      TokenType::Brackets => SyntaxKind::Brackets,
+      TokenType::Unknown => SyntaxKind::Unknown,
     }
   }
 }
