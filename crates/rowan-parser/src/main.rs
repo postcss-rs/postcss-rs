@@ -65,27 +65,14 @@ use rowan_parser::{parser::Parser, syntax::SyntaxNode};
 //   }
 // }
 fn main() {
-  let mut parser = Parser::new(
-    r#"
-  /**
- * Paste or drop some CSS here and explore
- * the syntax tree created by chosen parser.
- * Enjoy!
- */
-
-#main {
-    border: 1px solid black;
-  
-}
-
-ul li {
-	padding: 5px;
-}
-
-"#,
-  );
+  let css = include_str!("../../../assets/bootstrap.css");
+  let code = r#"@media{{}}
+"#;
+  let instant = Instant::now();
+  let mut parser = Parser::new(css);
   // println!("{:?}", parser.peek());
   let node = parser.parse().green_node;
   let lang = SyntaxNode::new_root(node);
-  println!("{:#?}", lang);
+  println!("{:?}", instant.elapsed());
+  // println!("{:#?}", lang);
 }

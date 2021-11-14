@@ -1,4 +1,3 @@
-use cssparser::Token;
 use tokenizer::{TokenType, Tokenizer};
 
 #[repr(u16)]

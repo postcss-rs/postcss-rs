@@ -23,7 +23,10 @@ impl<'a> Parser<'a> {
     while let Some(syntax) = self.peek() {
       match syntax {
         SyntaxKind::Space => self.bump(),
-        SyntaxKind::AtWord => self.parse_at_rule(),
+        SyntaxKind::AtWord => {
+          println!("parse at rule top level");
+          self.parse_at_rule()
+        }
         SyntaxKind::Comment => self.parse_comment(),
         _ => {
           self.parse_rule();
@@ -44,10 +47,10 @@ impl<'a> Parser<'a> {
 
   pub fn parse_rule(&mut self) {
     self.start_node(SyntaxKind::Rule);
-    while let Some(kind) = self.peek() {
+    if let Some(kind) = self.peek() {
       match kind {
         SyntaxKind::OpenCurly => {
-          self.parse_curly_block();
+          self.parse_curly_block(false);
         }
         _ => {
           self.parse_component();
@@ -62,15 +65,17 @@ impl<'a> Parser<'a> {
     if let Some(kind) = self.peek() {
       match kind {
         SyntaxKind::OpenParentheses => {
+          // println!("parse open parentheses");
           self.parse_parentheses_block();
         }
         SyntaxKind::OpenSquare => {
           self.parse_square_block();
         }
         SyntaxKind::OpenCurly => {
-          self.parse_curly_block();
+          self.parse_curly_block(false);
         }
         _ => {
+          // println!("need to bump {:?} from parse component", self.peek());
           self.bump();
         }
       }
@@ -80,54 +85,49 @@ impl<'a> Parser<'a> {
 
   fn parse_parentheses_block(&mut self) {
     self.bump(); // bump (
-    match self.peek() {
-      Some(kind) => match kind {
-        SyntaxKind::CloseParentheses => {
-          self.bump();
+    loop {
+      match self.peek() {
+        Some(kind) => match kind {
+          SyntaxKind::CloseParentheses => {
+            self.bump();
+            break;
+          }
+          _ => {
+            self.parse_component();
+          }
+        },
+        None => {
+          // TODO: error handle
+          panic!("expected ) found none");
         }
-        _ => {
-          self.parse_component();
-          assert!(
-            matches!(self.peek(), Some(SyntaxKind::CloseParentheses)),
-            "expected ) found {:?}",
-            self.peek()
-          );
-          self.bump();
-        }
-      },
-      None => {
-        // TODO: error handle
-        panic!("expected ), found none");
       }
     }
   }
 
   fn parse_square_block(&mut self) {
     self.bump(); // bump [
-    match self.peek() {
-      Some(kind) => match kind {
-        SyntaxKind::CloseSquare => {
-          self.bump();
+    loop {
+      match self.peek() {
+        Some(kind) => match kind {
+          SyntaxKind::CloseSquare => {
+            self.bump();
+            break;
+          }
+          _ => {
+            self.parse_component();
+          }
+        },
+        None => {
+          // TODO: error handle
+          panic!("expected ] found none");
         }
-        _ => {
-          self.parse_component();
-          assert!(
-            matches!(self.peek(), Some(SyntaxKind::CloseSquare)),
-            "expected ] found {:?}",
-            self.peek()
-          );
-          self.bump();
-        }
-      },
-      None => {
-        // TODO: error handle
-        panic!("expected ], found none");
       }
     }
   }
 
-  fn parse_curly_block(&mut self) {
+  fn parse_curly_block(&mut self, rule: bool) {
     use SyntaxKind::*;
+    // println!("parse curlyblock");
     self.bump(); // bump {
     self.skip_whitespace();
     loop {
@@ -140,10 +140,17 @@ impl<'a> Parser<'a> {
           }
           CloseCurly => {
             self.bump();
+            // println!("finish close curly");
             break;
           }
           _ => {
-            self.parse_declaration();
+            if rule {
+              // println!("parse rule -->");
+              self.parse_rule();
+            } else {
+              // println!("parse declaration");
+              self.parse_declaration();
+            }
           }
         },
         None => {
@@ -178,7 +185,7 @@ impl<'a> Parser<'a> {
           break;
         }
         _ => {
-          println!("parse the component");
+          // println!("parse the component");
           self.parse_component();
         }
       }
@@ -187,32 +194,25 @@ impl<'a> Parser<'a> {
   }
 
   pub fn parse_at_rule(&mut self) {
+    use SyntaxKind::*;
     self.start_node(SyntaxKind::AtRule);
-    self.bump();
+    self.bump(); // bump atWord
+    while let Some(kind) = self.peek() {
+      match kind {
+        OpenCurly => {
+          self.parse_curly_block(true);
+        }
+        Semicolon => {
+          self.bump();
+          break;
+        }
+        _ => {
+          self.parse_component();
+        }
+      }
+    }
     self.finish_node();
   }
-  // pub fn parse_element(&mut self) {
-  //     self.skip_whitespace();
-
-  //     self.skip_whitespace();
-  // }
-  // pub fn parse_member(&mut self) {
-  //     self.skip_whitespace();
-  //     match self.peek() {
-  //         Some(SyntaxKind::String) => {
-  //             self.bump();
-  //         }
-  //         None => todo!(),
-  //         _ => {
-  //             let res = self.lexer.next().unwrap();
-  //             panic!("{:?}", res);
-  //         }
-  //     }
-  //     self.skip_whitespace();
-  //     assert!(matches!(self.peek(), Some(SyntaxKind::Colon)));
-  //     self.bump();
-  //     self.parse_element();
-  // }
 
   pub fn skip_whitespace(&mut self) {
     while let Some(SyntaxKind::Space) = self.peek() {
@@ -225,7 +225,7 @@ impl<'a> Parser<'a> {
 
   pub fn bump(&mut self) {
     let (kind, text) = self.lexer.next().unwrap();
-    println!("{:?}, {:?}", kind, text);
+    // println!("{:?}, {:?}", kind, text);
     self.builder.token(Lang::kind_to_raw(kind), text.into());
   }
 
