@@ -24,7 +24,7 @@ impl<'a> Parser<'a> {
       match syntax {
         SyntaxKind::Space => self.bump(),
         SyntaxKind::AtWord => {
-          println!("parse at rule top level");
+          // println!("parse at rule top level");
           self.parse_at_rule()
         }
         SyntaxKind::Comment => self.parse_comment(),
@@ -54,9 +54,23 @@ impl<'a> Parser<'a> {
         }
         _ => {
           self.parse_component();
-          self.skip_whitespace();
-          debug_assert!(matches!(self.peek(), Some(SyntaxKind::OpenCurly)),);
-          self.parse_curly_block(false);
+          loop {
+            match self.peek() {
+              Some(kind) => match kind {
+                SyntaxKind::OpenCurly => {
+                  self.parse_curly_block(false);
+                  break;
+                }
+                SyntaxKind::Space => self.bump(),
+                _ => {
+                  self.parse_component();
+                }
+              },
+              None => {
+                panic!(r#"expected {} found none"#, "{");
+              }
+            }
+          }
         }
       }
     }
@@ -205,6 +219,7 @@ impl<'a> Parser<'a> {
       match kind {
         OpenCurly => {
           self.parse_curly_block(true);
+          break;
         }
         Semicolon => {
           self.bump();

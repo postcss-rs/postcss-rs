@@ -66,15 +66,13 @@ use rowan_parser::{parser::Parser, syntax::SyntaxNode};
 // }
 fn main() {
   let css = include_str!("../../../assets/bootstrap.css");
-  let code = r#"test{
-    width: 100px url(suport) fuck that
-  }
+  let code = r#".test that shit{{}}
 "#;
   let instant = Instant::now();
-  let mut parser = Parser::new(code);
+  let parser = Parser::new(code);
   // println!("{:?}", parser.peek());
   let node = parser.parse().green_node;
   let lang = SyntaxNode::new_root(node);
   println!("{:?}", instant.elapsed());
-  println!("{:#?}", lang);
+  // println!("{:#?}", lang);
 }
