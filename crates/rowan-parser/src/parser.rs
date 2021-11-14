@@ -54,6 +54,9 @@ impl<'a> Parser<'a> {
         }
         _ => {
           self.parse_component();
+          self.skip_whitespace();
+          debug_assert!(matches!(self.peek(), Some(SyntaxKind::OpenCurly)),);
+          self.parse_curly_block(false);
         }
       }
     }
@@ -180,10 +183,11 @@ impl<'a> Parser<'a> {
     self.skip_whitespace();
     while let Some(kind) = self.peek() {
       match kind {
-        CloseCurly => {}
+        CloseCurly => break,
         Semicolon => {
           break;
         }
+        Space => self.bump(),
         _ => {
           // println!("parse the component");
           self.parse_component();
