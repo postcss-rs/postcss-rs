@@ -35,6 +35,7 @@ pub enum SyntaxKind {
   Rule,
   Comment,
   Selector,
+  Value,
   Prop,
 }
 

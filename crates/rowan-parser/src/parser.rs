@@ -39,12 +39,14 @@ impl<'a> Parser<'a> {
     }
   }
 
+  #[inline]
   pub fn parse_comment(&mut self) {
     self.start_node(SyntaxKind::Comment);
     self.bump();
     self.finish_node();
   }
 
+  #[inline]
   pub fn parse_rule(&mut self) {
     self.start_node(SyntaxKind::Rule);
     if let Some(kind) = self.peek() {
@@ -79,6 +81,7 @@ impl<'a> Parser<'a> {
     self.finish_node();
   }
   // https://drafts.csswg.org/css-syntax/#component-value-diagram
+  #[inline]
   fn parse_component(&mut self) {
     // self.start_node(SyntaxKind::Component);
     if let Some(kind) = self.peek() {
@@ -199,10 +202,13 @@ impl<'a> Parser<'a> {
     );
     self.bump();
     self.skip_whitespace();
+    self.start_node(SyntaxKind::Value);
+    let mut has_finish = false;
     while let Some(kind) = self.peek() {
       match kind {
-        CloseCurly => break,
-        Semicolon => {
+        CloseCurly | Semicolon => {
+          has_finish = true;
+          self.finish_node();
           break;
         }
         Space => self.bump(),
@@ -211,6 +217,9 @@ impl<'a> Parser<'a> {
           self.parse_component();
         }
       }
+    }
+    if !has_finish {
+      self.finish_node();
     }
     self.finish_node();
   }
@@ -237,8 +246,9 @@ impl<'a> Parser<'a> {
     self.finish_node();
   }
 
+  #[inline]
   pub fn skip_whitespace(&mut self) {
-    while let Some(SyntaxKind::Space) = self.peek() {
+    if let Some(SyntaxKind::Space) = self.peek() {
       self.bump();
     }
   }

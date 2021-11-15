@@ -9,3 +9,8 @@ edition = "2021"
 # cssparser = "0.29.0"
 rowan = "0.14.1"
 tokenizer = { path = "../tokenizer" }
+
+[profile.release]
+lto = true
+codegen-units = 1
+panic = "abort"
