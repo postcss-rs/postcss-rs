@@ -1,4 +1,7 @@
 const postcss = require("postcss");
+const fs = require('fs');
+
+const file = fs.readFileSync('../assets/bootstrap.css').toString()
 const code = `
 /**
  * Paste or drop some CSS here and explore
@@ -38,10 +41,13 @@ function normalize(node) {
   return node
 }
 
-const root = postcss.parse(code).root()
+console.time('label')
+const root = postcss.parse(file).root()
+root.toString()
+console.timeEnd('label')
 
-const normalizeRoot = normalize(root.toJSON())
-console.log(JSON.stringify(normalizeRoot))
+// const normalizeRoot = normalize(root.toJSON())
+// console.log(JSON.stringify(normalizeRoot))
 
 // console.log(normalizeRoot.toJSON())
 

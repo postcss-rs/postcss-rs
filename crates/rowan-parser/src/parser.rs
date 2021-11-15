@@ -78,7 +78,7 @@ impl<'a> Parser<'a> {
   }
   // https://drafts.csswg.org/css-syntax/#component-value-diagram
   fn parse_component(&mut self) {
-    self.start_node(SyntaxKind::Component);
+    // self.start_node(SyntaxKind::Component);
     if let Some(kind) = self.peek() {
       match kind {
         SyntaxKind::OpenParentheses => {
@@ -97,7 +97,7 @@ impl<'a> Parser<'a> {
         }
       }
     }
-    self.finish_node();
+    // self.finish_node();
   }
 
   fn parse_parentheses_block(&mut self) {
@@ -186,7 +186,9 @@ impl<'a> Parser<'a> {
       "expected word found {:?}",
       self.peek(),
     );
+    self.start_node(SyntaxKind::Prop);
     self.bump();
+    self.finish_node();
     self.skip_whitespace();
     assert!(
       matches!(self.peek(), Some(SyntaxKind::Colon)),
