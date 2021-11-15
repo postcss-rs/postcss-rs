@@ -78,7 +78,9 @@ fn main() {
   let parser = Parser::new(css);
   // println!("{:?}", parser.peek());
   let node = parser.parse().green_node;
+  let ins = Instant::now();
   let lang = SyntaxNode::new_root(node);
+  println!("{:?}", ins.elapsed());
   // let _res = format!("{}", lang);
   // lang.to_string();
 
@@ -92,42 +94,33 @@ fn main() {
   // println!("{:#?}", lang);
   let start = Instant::now();
   let mut string = String::with_capacity(0);
-  stringify(lang, &mut string, css);
+  let mut id = 0;
+  stringify(&lang, &mut id);
   // assert_eq!(_res, css);
-  println!("{:?}", start.elapsed());
-  println!("{}", string);
+  println!("{:?}", id);
+  println!("1 {:?}", start.elapsed());
+  // println!("{}", string);
+  let start = Instant::now();
+  let mut string = String::with_capacity(0);
+  let mut id = 0;
+  stringify2(lang, &mut id);
+  // assert_eq!(_res, css);
+  println!("{:?}", id);
+  println!("2 {:?}", start.elapsed());
 }
 
-fn stringify(root: SyntaxNode, string: &mut String, source: &str) {
-  let iter = root.preorder_with_tokens();
-  for n in iter {
-    match n {
-      WalkEvent::Enter(n) => match n {
-        rowan::NodeOrToken::Node(_) => {}
-        rowan::NodeOrToken::Token(t) => match t.kind() {
-          rowan_parser::syntax::SyntaxKind::Space => {}
-          rowan_parser::syntax::SyntaxKind::OpenParentheses
-          | rowan_parser::syntax::SyntaxKind::CloseParentheses
-          | rowan_parser::syntax::SyntaxKind::Word
-          | rowan_parser::syntax::SyntaxKind::String
-          | rowan_parser::syntax::SyntaxKind::OpenSquare
-          | rowan_parser::syntax::SyntaxKind::CloseSquare
-          | rowan_parser::syntax::SyntaxKind::OpenCurly
-          | rowan_parser::syntax::SyntaxKind::CloseCurly
-          | rowan_parser::syntax::SyntaxKind::Semicolon
-          | rowan_parser::syntax::SyntaxKind::Colon
-          | rowan_parser::syntax::SyntaxKind::AtWord
-          | rowan_parser::syntax::SyntaxKind::Comment
-          | rowan_parser::syntax::SyntaxKind::Brackets => {
-            string.push_str(&source[t.text_range()]);
-          }
-          _ => {
-            println!("{:?}", t);
-            unreachable!()
-          }
-        },
-      },
-      WalkEvent::Leave(_) => {}
+fn stringify(root: &SyntaxNode, count: &mut u32) {
+  root.children().for_each(|n| {
+    *count += 1;
+    stringify(&n, count);
+  });
+}
+
+fn stringify2(root: SyntaxNode, count: &mut u32) {
+  root.preorder().for_each(|e| match e {
+    WalkEvent::Enter(n) => {
+      *count += 1;
     }
-  }
+    WalkEvent::Leave(_) => {}
+  });
 }

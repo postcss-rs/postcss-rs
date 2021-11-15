@@ -1,7 +1,7 @@
 use tokenizer::{TokenType, Tokenizer};
 
 #[repr(u16)]
-#[derive(Debug, PartialEq, Clone, Copy)]
+#[derive(Debug, PartialEq, Clone, Copy, Ord, PartialOrd, Eq, Hash)]
 pub enum SyntaxKind {
   // SyntaxToken
   /// (
