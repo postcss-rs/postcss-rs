@@ -70,43 +70,59 @@ use rowan_parser::{
 // }
 fn main() {
   let css = include_str!("../../../assets/bootstrap.css");
-  let code = r#".test that [] {
-    width : 10px
-  }
+  let code = r#"/**
+ * Paste or drop some CSS here and explore
+ * the syntax tree created by chosen parser.
+ * Enjoy!
+ */
+
+@media screen and (min-width: 480px) {
+    body, resulkt, .result {
+        background-color: lightgreen;
+    }
+}
+
+#main {
+    border: 1px solid black;
+}
+
+ul li {
+	padding: 5px;
+}
+
 "#;
   let instant = Instant::now();
-  let parser = Parser::new(css);
-  // println!("{:?}", parser.peek());
+  let parser = Parser::new(code);
   let node = parser.parse().green_node;
-  let ins = Instant::now();
-  let lang = SyntaxNode::new_root(node);
-  println!("{:?}", ins.elapsed());
-  // let _res = format!("{}", lang);
-  // lang.to_string();
+  // let ins = Instant::now();
+  let _lang = SyntaxNode::new_root(node);
+  // println!("{:?}", ins.elapsed());
+  // // let _res = format!("{}", lang);
+  // // lang.to_string();
 
   println!("{:?}", instant.elapsed());
-
-  let start = Instant::now();
-  let _res = format!("{}", lang);
-  assert_eq!(_res, css);
-  println!("{:?}", start.elapsed());
-
-  // println!("{:#?}", lang);
-  let start = Instant::now();
-  let mut string = String::with_capacity(0);
-  let mut id = 0;
-  stringify(&lang, &mut id);
+  println!("{:#?}", _lang);
+  // let start = Instant::now();
+  // let _res = format!("{}", lang);
   // assert_eq!(_res, css);
-  println!("{:?}", id);
-  println!("1 {:?}", start.elapsed());
-  // println!("{}", string);
-  let start = Instant::now();
-  let mut string = String::with_capacity(0);
-  let mut id = 0;
-  stringify2(lang, &mut id);
-  // assert_eq!(_res, css);
-  println!("{:?}", id);
-  println!("2 {:?}", start.elapsed());
+  // println!("{:?}", start.elapsed());
+
+  // // println!("{:#?}", lang);
+  // let start = Instant::now();
+  // let mut string = String::with_capacity(0);
+  // let mut id = 0;
+  // stringify(&lang, &mut id);
+  // // assert_eq!(_res, css);
+  // println!("{:?}", id);
+  // println!("1 {:?}", start.elapsed());
+  // // println!("{}", string);
+  // let start = Instant::now();
+  // let mut string = String::with_capacity(0);
+  // let mut id = 0;
+  // stringify2(lang, &mut id);
+  // // assert_eq!(_res, css);
+  // println!("{:?}", id);
+  // println!("2 {:?}", start.elapsed());
 }
 
 fn stringify(root: &SyntaxNode, count: &mut u32) {

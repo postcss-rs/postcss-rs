@@ -228,13 +228,17 @@ impl<'a> Parser<'a> {
     use SyntaxKind::*;
     self.start_node(SyntaxKind::AtRule);
     self.bump(); // bump atWord
+    self.skip_whitespace();
+    self.start_node(SyntaxKind::Params);
     while let Some(kind) = self.peek() {
       match kind {
         OpenCurly => {
+          self.finish_node();
           self.parse_curly_block(true);
           break;
         }
         Semicolon => {
+          self.finish_node();
           self.bump();
           break;
         }
