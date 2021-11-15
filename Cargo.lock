@@ -490,6 +490,7 @@ dependencies = [
 name = "rowan-parser"
 version = "0.1.0"
 dependencies = [
+ "criterion",
  "rowan",
  "tokenizer",
 ]
