@@ -92,7 +92,7 @@ ul li {
 
 "#;
   let instant = Instant::now();
-  let parser = Parser::new(code);
+  let parser = Parser::new(css);
   let node = parser.parse().green_node;
   // let ins = Instant::now();
   let _lang = SyntaxNode::new_root(node);
@@ -101,7 +101,7 @@ ul li {
   // // lang.to_string();
 
   println!("{:?}", instant.elapsed());
-  println!("{:#?}", _lang);
+  // println!("{:#?}", _lang);
   // let start = Instant::now();
   // let _res = format!("{}", lang);
   // assert_eq!(_res, css);
@@ -116,27 +116,33 @@ ul li {
   // println!("{:?}", id);
   // println!("1 {:?}", start.elapsed());
   // // println!("{}", string);
-  // let start = Instant::now();
-  // let mut string = String::with_capacity(0);
+  let start = Instant::now();
+  let mut string = String::with_capacity(0);
   // let mut id = 0;
-  // stringify2(lang, &mut id);
+  reverse_plugin(_lang, &mut string, css);
   // // assert_eq!(_res, css);
   // println!("{:?}", id);
-  // println!("2 {:?}", start.elapsed());
+  println!("reverse plugin{:?}", start.elapsed());
 }
 
-fn stringify(root: &SyntaxNode, count: &mut u32) {
-  root.children().for_each(|n| {
-    *count += 1;
-    stringify(&n, count);
-  });
-}
-
-fn stringify2(root: SyntaxNode, count: &mut u32) {
+fn reverse_plugin(root: SyntaxNode, string: &mut String, source: &str) {
   root.preorder().for_each(|e| match e {
-    WalkEvent::Enter(n) => {
-      *count += 1;
-    }
+    WalkEvent::Enter(n) => match n.kind() {
+      rowan_parser::syntax::SyntaxKind::Document
+      | rowan_parser::syntax::SyntaxKind::Declaration
+      | rowan_parser::syntax::SyntaxKind::AtRule
+      | rowan_parser::syntax::SyntaxKind::Rule
+      | rowan_parser::syntax::SyntaxKind::Selector
+      | rowan_parser::syntax::SyntaxKind::Params
+      | rowan_parser::syntax::SyntaxKind::Value
+      | rowan_parser::syntax::SyntaxKind::Comment => {
+        string.push_str(&source[n.text_range()]);
+      }
+      rowan_parser::syntax::SyntaxKind::Prop => {
+        string.push_str(&source[n.text_range()].chars().rev().collect::<String>());
+      }
+      _ => {}
+    },
     WalkEvent::Leave(_) => {}
   });
 }
