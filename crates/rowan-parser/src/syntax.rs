@@ -34,6 +34,7 @@ pub enum SyntaxKind {
   AtRule,
   Rule,
   Comment,
+  Selector,
   Prop,
 }
 

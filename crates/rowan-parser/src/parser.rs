@@ -53,11 +53,13 @@ impl<'a> Parser<'a> {
           self.parse_curly_block(false);
         }
         _ => {
+          self.start_node(SyntaxKind::Selector);
           self.parse_component();
           loop {
             match self.peek() {
               Some(kind) => match kind {
                 SyntaxKind::OpenCurly => {
+                  self.finish_node();
                   self.parse_curly_block(false);
                   break;
                 }

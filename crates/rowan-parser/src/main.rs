@@ -66,7 +66,7 @@ use rowan_parser::{parser::Parser, syntax::SyntaxNode};
 // }
 fn main() {
   let css = include_str!("../../../assets/bootstrap.css");
-  let code = r#".test that shit{
+  let code = r#".test that [] {
     width: 10px;
   }
 "#;
