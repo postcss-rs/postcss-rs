@@ -5,7 +5,7 @@ use std::time::Instant;
 use rowan::WalkEvent;
 use rowan_parser::{
   parser::Parser,
-  syntax::{Lang, SyntaxNode},
+  syntax::{Lang, SyntaxKind, SyntaxNode},
 };
 
 // fn parse_and_serialize(input: &str) -> () {
@@ -119,30 +119,24 @@ ul li {
   let start = Instant::now();
   let mut string = String::with_capacity(0);
   // let mut id = 0;
-  reverse_plugin(_lang, &mut string, css);
+  reverse_plugin(_lang.clone(), &mut string, css);
   // // assert_eq!(_res, css);
   // println!("{:?}", id);
   println!("reverse plugin{:?}", start.elapsed());
+  // println!("{}", string);
 }
 
 fn reverse_plugin(root: SyntaxNode, string: &mut String, source: &str) {
-  root.preorder().for_each(|e| match e {
-    WalkEvent::Enter(n) => match n.kind() {
-      rowan_parser::syntax::SyntaxKind::Document
-      | rowan_parser::syntax::SyntaxKind::Declaration
-      | rowan_parser::syntax::SyntaxKind::AtRule
-      | rowan_parser::syntax::SyntaxKind::Rule
-      | rowan_parser::syntax::SyntaxKind::Selector
-      | rowan_parser::syntax::SyntaxKind::Params
-      | rowan_parser::syntax::SyntaxKind::Value
-      | rowan_parser::syntax::SyntaxKind::Comment => {
-        string.push_str(&source[n.text_range()]);
-      }
-      rowan_parser::syntax::SyntaxKind::Prop => {
+  root.children_with_tokens().for_each(|n| match n {
+    rowan::NodeOrToken::Node(n) => {
+      if n.kind() == SyntaxKind::Prop {
+        // println!("prop: {}", &source[n.text_range()]);
+        // string.push_str(&source[n.text_range()]);
         string.push_str(&source[n.text_range()].chars().rev().collect::<String>());
+      } else {
+        reverse_plugin(n, string, source);
       }
-      _ => {}
-    },
-    WalkEvent::Leave(_) => {}
+    }
+    rowan::NodeOrToken::Token(t) => string.push_str(&source[t.text_range()]),
   });
 }
