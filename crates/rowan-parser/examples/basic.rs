@@ -11,6 +11,24 @@ fn main() {
   let parser = Parser::new(css).parse();
   let root = SyntaxNode::new_root(parser.green_node);
 
+  println!("{:#?}", root);
+  // Root@0..23
+  //   Rule@0..23
+  //     Selector@0..4
+  //       Word@0..3 "#id"
+  //       Space@3..4 " "
+  //     OpenCurly@4..5 "{"
+  //     Declaration@5..20
+  //       Prop@5..14
+  //         Word@5..14 "font-size"
+  //       Colon@14..15 ":"
+  //       Space@15..16 " "
+  //       Value@16..20
+  //         Word@16..20 "12px"
+  //     Semicolon@20..21 ";"
+  //     Space@21..22 " "
+  //     CloseCurly@22..23 "}"
+
   assert_eq!(root.kind(), SyntaxKind::Root);
   assert_eq!(root.text(), "#id {font-size: 12px; }");
   assert_eq!(root.text_range(), TextRange::new(0.into(), 23.into()));
