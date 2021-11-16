@@ -2,6 +2,10 @@ use rowan_parser::parser::Parser;
 use rowan_parser::syntax::{SyntaxKind, SyntaxNode};
 use std::time::Instant;
 
+use mimalloc_rust::*;
+
+#[global_allocator]
+static GLOBAL_MIMALLOC: GlobalMiMalloc = GlobalMiMalloc;
 fn main() {
   let css = include_str!("../../../assets/bootstrap.css");
   //   let css = r#"/**
