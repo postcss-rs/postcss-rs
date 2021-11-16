@@ -9,6 +9,7 @@ edition = "2021"
 # cssparser = "0.29.0"
 rowan = "0.15.0"
 tokenizer = { path = "../tokenizer" }
+mimalloc-rust = "0.1"
 
 [profile.release]
 lto = true
