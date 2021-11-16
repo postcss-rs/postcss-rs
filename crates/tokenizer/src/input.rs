@@ -11,6 +11,7 @@ pub struct FilePosition {
 }
 
 #[derive(Debug)]
+#[allow(dead_code)]
 pub struct Position {
   line: u32,
   col: u32,
