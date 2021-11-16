@@ -1,14 +1,12 @@
 use std::fs;
 use std::time::Instant;
 
-use tokenizer::input::Input;
 use tokenizer::Tokenizer;
 
 fn main() {
-  let css = fs::read_to_string("../../assets/bootstrap-reboot.css").unwrap();
+  let css = include_str!("../../../assets/bootstrap.css");
   let start = Instant::now();
-  let input = Input::new(&css, None);
-  let processor = Tokenizer::new(input.css, false);
+  let processor = Tokenizer::new(css, false);
   while !processor.end_of_file() {
     processor.next_token(false);
   }
@@ -17,8 +15,7 @@ fn main() {
 
   let css = fs::read_to_string("../../assets/bootstrap.css").unwrap();
   let start = Instant::now();
-  let input = Input::new(&css, None);
-  let processor = Tokenizer::new(input.css, false);
+  let processor = Tokenizer::new(css, false);
   while !processor.end_of_file() {
     processor.next_token(false);
   }
