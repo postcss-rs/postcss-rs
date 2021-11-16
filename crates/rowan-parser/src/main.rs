@@ -38,7 +38,7 @@ fn main() {
 
   let start = Instant::now();
   let mut output = String::with_capacity(0);
-  reverse_plugin(lang.clone(), &mut output, css);
+  reverse_plugin(lang, &mut output, css);
   println!("reverse plugin\t{:?}", start.elapsed());
 }
 

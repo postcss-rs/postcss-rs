@@ -375,10 +375,10 @@ fn index_of_byte(value: &str, search_value: u8, from_index: usize) -> Option<usi
 fn sub_str(s: &str, start: usize, end: usize) -> &str {
   if end + 1 > s.len() {
     // Safety: NEVER out-of-bounds
-    unsafe { &s.get_unchecked(start..) }
+    unsafe { s.get_unchecked(start..) }
   } else {
     // Safety: NEVER out-of-bounds
-    unsafe { &s.get_unchecked(start..end) }
+    unsafe { s.get_unchecked(start..end) }
   }
 }
 

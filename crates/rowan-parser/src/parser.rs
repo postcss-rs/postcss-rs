@@ -263,7 +263,7 @@ impl<'a> Parser<'a> {
   pub fn bump(&mut self) {
     let (kind, text) = self.lexer.next().unwrap();
     // println!("{:?}, {:?}", kind, text);
-    self.builder.token(Lang::kind_to_raw(kind), text.into());
+    self.builder.token(Lang::kind_to_raw(kind), text);
   }
 
   fn start_node(&mut self, kind: SyntaxKind) {
