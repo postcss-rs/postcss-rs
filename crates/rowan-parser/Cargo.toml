@@ -1,0 +1,23 @@
+[package]
+name = "rowan-parser"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+# cssparser = "0.29.0"
+rowan = "0.15.0"
+tokenizer = { path = "../tokenizer" }
+
+[profile.release]
+lto = true
+codegen-units = 1
+panic = "abort"
+
+[dev-dependencies]
+criterion = "0.3.5"
+
+[[bench]]
+name = "parse"
+harness = false
