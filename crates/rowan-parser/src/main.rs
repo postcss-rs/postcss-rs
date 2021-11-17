@@ -1,3 +1,4 @@
+use rowan_parser::ast_printer;
 use rowan_parser::parser::Parser;
 use rowan_parser::syntax::{SyntaxKind, SyntaxNode};
 use std::time::Instant;
@@ -7,28 +8,28 @@ use mimalloc_rust::*;
 #[global_allocator]
 static GLOBAL_MIMALLOC: GlobalMiMalloc = GlobalMiMalloc;
 fn main() {
-  let css = include_str!("../../../assets/bootstrap.css");
-  //   let css = r#"/**
-  // * Paste or drop some CSS here and explore
-  // * the syntax tree created by chosen parser.
-  // * Enjoy!
-  // */
-  // @media screen and (min-width: 480px) {
-  //     body, resulkt, .result {
-  //         background-color: lightgreen;
-  //     }
-  // }
+  let long_css = include_str!("../../../assets/bootstrap.css");
+  let short_css = r#"/**
+  * Paste or drop some CSS here and explore
+  * the syntax tree created by chosen parser.
+  * Enjoy!
+  */
+  @media screen and (min-width: 480px) {
+      body, resulkt, .result {
+          background-color: lightgreen;
+      }
+  }
 
-  // #main {
-  //     border: 1px solid black;
-  // }
+  #main {
+      border: 1px solid black;
+  }
 
-  // ul li {
-  //   padding: 5px;
-  // }
+  ul li {
+    padding: 5px;
+  }
 
-  // "#;
-
+  "#;
+  let css = short_css;
   let instant = Instant::now();
   let parser = Parser::new(css);
   let node = parser.parse().green_node;
@@ -42,8 +43,10 @@ fn main() {
 
   let start = Instant::now();
   let mut output = String::with_capacity(0);
-  reverse_plugin(lang, &mut output, css);
+  reverse_plugin(lang.clone(), &mut output, css);
   println!("reverse plugin\t{:?}", start.elapsed());
+
+  ast_printer(lang, 0, true);
 }
 
 fn reverse_plugin(root: SyntaxNode, output: &mut String, source: &str) {
