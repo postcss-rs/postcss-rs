@@ -1,6 +1,6 @@
 use rowan::{NodeOrToken, TextRange};
 use rowan_parser::parser::Parser;
-use rowan_parser::syntax::{Lang, SyntaxKind, SyntaxNode};
+use rowan_parser::syntax::{SyntaxKind, SyntaxNode};
 
 use mimalloc_rust::*;
 
@@ -11,7 +11,9 @@ fn main() {
   let parser = Parser::new(css).parse();
   let root = SyntaxNode::new_root(parser.green_node);
   let root_mut = root.clone_for_update().clone();
-  remove_space(&root_mut);
+  remove_space_mut(&root_mut);
+  let mut output = String::with_capacity(0);
+  remove_space(&root, &mut output, css);
 
   println!("{:#?}", root);
   println!("{:#?}", root_mut);
@@ -36,15 +38,29 @@ fn main() {
 
   assert_eq!(root.text(), "#id { font-size: 12px; }");
   assert_eq!(root_mut.text(), "#id{font-size:12px;}");
+  assert_eq!(output, "#id{font-size:12px;}");
   assert_eq!(root.text_range(), TextRange::new(0.into(), 24.into()));
   assert_eq!(root_mut.text_range(), TextRange::new(0.into(), 20.into()));
 }
 
-fn remove_space(node: &SyntaxNode) {
+fn remove_space_mut(node: &SyntaxNode) {
   for child in node.children_with_tokens() {
     if child.kind() == SyntaxKind::Space {
       child.detach();
     }
-    child.as_node().map(|n| remove_space(n));
+    child.as_node().map(|n| remove_space_mut(n));
   }
+}
+
+fn remove_space(node: &SyntaxNode, output: &mut String, source: &str) {
+  node.children_with_tokens().for_each(|n| match n {
+    NodeOrToken::Node(n) => {
+      remove_space(&n, output, source);
+    }
+    NodeOrToken::Token(t) => {
+      if t.kind() != SyntaxKind::Space {
+        output.push_str(&source[t.text_range()]);
+      }
+    }
+  });
 }

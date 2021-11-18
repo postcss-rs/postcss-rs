@@ -1,3 +1,4 @@
+use rowan::NodeOrToken;
 use rowan_parser::parser::Parser;
 use rowan_parser::syntax::{SyntaxKind, SyntaxNode};
 use std::time::Instant;
@@ -33,22 +34,27 @@ fn main() {
   let parser = Parser::new(css);
   let node = parser.parse().green_node;
   let lang = SyntaxNode::new_root(node);
-  println!("parse\t\t{:?}", instant.elapsed());
+  println!("parse\t\t\t{:?}", instant.elapsed());
 
   let start = Instant::now();
   let result = format!("{}", lang);
   assert_eq!(result, css);
-  println!("stringify\t{:?}", start.elapsed());
+  println!("stringify\t\t{:?}", start.elapsed());
 
   let start = Instant::now();
   let mut output = String::with_capacity(0);
   reverse_plugin(lang.clone(), &mut output, css);
-  println!("reverse plugin\t{:?}", start.elapsed());
+  println!("reverse plugin\t\t{:?}", start.elapsed());
 
   let start = Instant::now();
   let root_mut = lang.clone_for_update();
-  remove_space(&root_mut);
-  println!("remove_space\t{:?}", start.elapsed());
+  remove_space_mut(&root_mut);
+  println!("remove_space_mut\t{:?}", start.elapsed());
+
+  let start = Instant::now();
+  let mut output = String::with_capacity(0);
+  remove_space(&lang, &mut output, css);
+  println!("remove_space\t\t{:?}", start.elapsed());
 }
 
 fn reverse_plugin(root: SyntaxNode, output: &mut String, source: &str) {
@@ -64,11 +70,24 @@ fn reverse_plugin(root: SyntaxNode, output: &mut String, source: &str) {
   });
 }
 
-fn remove_space(node: &SyntaxNode) {
+fn remove_space_mut(node: &SyntaxNode) {
   for child in node.children_with_tokens() {
     if child.kind() == SyntaxKind::Space {
       child.detach();
     }
-    child.as_node().map(remove_space);
+    child.as_node().map(remove_space_mut);
   }
+}
+
+fn remove_space(node: &SyntaxNode, output: &mut String, source: &str) {
+  node.children_with_tokens().for_each(|n| match n {
+    NodeOrToken::Node(n) => {
+      remove_space(&n, output, source);
+    }
+    NodeOrToken::Token(t) => {
+      if t.kind() != SyntaxKind::Space {
+        output.push_str(&source[t.text_range()]);
+      }
+    }
+  });
 }
