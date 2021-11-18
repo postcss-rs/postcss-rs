@@ -59,12 +59,17 @@ impl<'a> Lexer<'a> {
 }
 
 impl<'a> Iterator for Lexer<'a> {
-  type Item = (SyntaxKind, &'a str);
+  type Item = (SyntaxKind, &'a str, usize, (usize, usize));
 
   fn next(&mut self) -> Option<Self::Item> {
     if !self.inner.end_of_file() {
       let token = self.inner.next_token(false);
-      Some((token.0.into(), &self.inner.css[token.2..token.3]))
+      Some((
+        token.0.into(),
+        &self.inner.css[token.2..token.3],
+        token.2,
+        self.inner.from_offset(token.2),
+      ))
     } else {
       None
     }
