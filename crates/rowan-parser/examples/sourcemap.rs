@@ -16,30 +16,46 @@ fn main() {
 
   let start = Instant::now();
   let mut smb = SourceMapBuilder::new(Some("stdin"));
-  sourcemap(&root, css, &mut smb);
+  let src_id = smb.add_source("stdin");
+  smb.set_source_contents(src_id, Some(css));
+  sourcemap(root, &mut smb, Some(src_id));
   let sm = smb.into_sourcemap();
-  let mut output : Vec<u8> = vec![];
+  let mut output: Vec<u8> = vec![];
   sm.to_writer(&mut output).unwrap();
   println!("sourcemap\t{:?}", start.elapsed());
-  println!("{}", std::str::from_utf8(&output).unwrap());
+  // println!("{}", std::str::from_utf8(&output).unwrap());
+
+  let start = Instant::now();
+  let mut smb = SourceMapBuilder::new(None);
+  let src_id = smb.add_source("stdin");
+  smb.set_source_contents(src_id, Some(css));
+  smb.add_raw(1, 0, 1, 0, Some(src_id), None);
+  smb.add_raw(1, 2, 1, 2, Some(src_id), None);
+  let sm = smb.into_sourcemap();
+  let mut output: Vec<u8> = vec![];
+  sm.to_writer(&mut output).unwrap();
+  println!("sourcemap\t{:?}", start.elapsed());
+  // println!("{}", std::str::from_utf8(&output).unwrap());
 }
 
-// {
-//   version: 3,
-//   sources: [ 'stdin' ],
-//   names: [],
-//   mappings: 'AAAA,MAAM,eAAe,EAAE',
-//   file: 'stdin',
-//   sourcesContent: [ '#id { font-size: 12px; }' ]
-// }
+// postcss-js:                                        postcss-rs:
+// {                                                  {
+//   version: 3,                                        version: 3,
+//   sources: [ 'stdin' ],                              sources: [ "stdin" ],
+//   names: [],                                         names: [],
+//   mappings: 'AAAA,MAAM,eAAe,EAAE',                   mappings: ";AACA,GAAG,CAAC,CAAC,CAAC,SAAS,CAAC,CAAC,IAAI,CAAC,CAAC",
+//   file: 'stdin',                                     file: "stdin",
+//   sourcesContent: [ '#id { font-size: 12px; }' ]     sourcesContent: [ "#id { font-size: 12px; }" ]
 
-fn sourcemap(root: &SyntaxNode, source: &str, sb: &mut SourceMapBuilder) {
-  root.children_with_tokens().for_each(|n| match n {
-    rowan::NodeOrToken::Node(n) => {
-      sourcemap(&n, source, sb);
-    }
-    rowan::NodeOrToken::Token(t) => {
-      sb.add(0, 1, 0, 1, Some(t.text()), None);
-    }
+fn sourcemap(root: SyntaxNode, sb: &mut SourceMapBuilder, src_id: Option<u32>) {
+  root.preorder_with_tokens().for_each(|e| match e {
+    rowan::WalkEvent::Enter(n) => match n {
+      rowan::NodeOrToken::Node(_) => {}
+      rowan::NodeOrToken::Token(tok) => {
+        let col: u32 = tok.text_range().start().into();
+        sb.add_raw(1, col, 1, col, src_id, None);
+      }
+    },
+    rowan::WalkEvent::Leave(_) => {}
   });
 }
