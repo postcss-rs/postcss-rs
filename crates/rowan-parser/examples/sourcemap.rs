@@ -15,11 +15,13 @@ fn main() {
   let root = SyntaxNode::new_root(parse.green_node);
 
   let start = Instant::now();
-  let mut output = String::with_capacity(0);
   let mut smb = SourceMapBuilder::new(Some("stdin"));
-  sourcemap(&root, &mut output, css, &mut smb);
+  sourcemap(&root, css, &mut smb);
+  let sm = smb.into_sourcemap();
+  let mut output : Vec<u8> = vec![];
+  sm.to_writer(&mut output).unwrap();
   println!("sourcemap\t{:?}", start.elapsed());
-  println!("{:?}", smb.into_sourcemap());
+  println!("{}", std::str::from_utf8(&output).unwrap());
 }
 
 // {
@@ -31,10 +33,10 @@ fn main() {
 //   sourcesContent: [ '#id { font-size: 12px; }' ]
 // }
 
-fn sourcemap(root: &SyntaxNode, output: &mut String, source: &str, sb: &mut SourceMapBuilder) {
+fn sourcemap(root: &SyntaxNode, source: &str, sb: &mut SourceMapBuilder) {
   root.children_with_tokens().for_each(|n| match n {
     rowan::NodeOrToken::Node(n) => {
-      sourcemap(&n, output, source, sb);
+      sourcemap(&n, source, sb);
     }
     rowan::NodeOrToken::Token(t) => {
       sb.add(0, 1, 0, 1, Some(t.text()), None);
