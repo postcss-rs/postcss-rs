@@ -1,4 +1,3 @@
-use rowan_parser::ast_printer;
 use rowan_parser::parser::Parser;
 use rowan_parser::syntax::{SyntaxKind, SyntaxNode};
 use std::time::Instant;
@@ -9,7 +8,7 @@ use mimalloc_rust::*;
 static GLOBAL_MIMALLOC: GlobalMiMalloc = GlobalMiMalloc;
 fn main() {
   let long_css = include_str!("../../../assets/bootstrap.css");
-  let short_css = r#"/**
+  let _short_css = r#"/**
   * Paste or drop some CSS here and explore
   * the syntax tree created by chosen parser.
   * Enjoy!
@@ -29,7 +28,7 @@ fn main() {
   }
 
   "#;
-  let css = short_css;
+  let css = long_css;
   let instant = Instant::now();
   let parser = Parser::new(css);
   let node = parser.parse().green_node;
@@ -46,7 +45,10 @@ fn main() {
   reverse_plugin(lang.clone(), &mut output, css);
   println!("reverse plugin\t{:?}", start.elapsed());
 
-  ast_printer(lang, 0, true);
+  let start = Instant::now();
+  let root_mut = lang.clone_for_update();
+  remove_space(&root_mut);
+  println!("remove_space\t{:?}", start.elapsed());
 }
 
 fn reverse_plugin(root: SyntaxNode, output: &mut String, source: &str) {
@@ -60,4 +62,13 @@ fn reverse_plugin(root: SyntaxNode, output: &mut String, source: &str) {
     }
     rowan::NodeOrToken::Token(t) => output.push_str(&source[t.text_range()]),
   });
+}
+
+fn remove_space(node: &SyntaxNode) {
+  for child in node.children_with_tokens() {
+    if child.kind() == SyntaxKind::Space {
+      child.detach();
+    }
+    child.as_node().map(remove_space);
+  }
 }
