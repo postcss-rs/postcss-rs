@@ -8,8 +8,7 @@ use mimalloc_rust::*;
 #[global_allocator]
 static GLOBAL_MIMALLOC: GlobalMiMalloc = GlobalMiMalloc;
 fn main() {
-  let css = "#id { font-size: 12px; }";
-  // let css = include_str!("../../../assets/bootstrap.css");
+  let css = include_str!("../../../assets/bootstrap.css");
   let parser = Parser::new(css);
   let parse = parser.parse();
   let root = SyntaxNode::new_root(parse.green_node);
@@ -25,12 +24,15 @@ fn main() {
   println!("sourcemap\t{:?}", start.elapsed());
   // println!("{}", std::str::from_utf8(&output).unwrap());
 
+  let css = "#id { font-size: 12px; }";
+  let parser = Parser::new(css);
+  let parse = parser.parse();
+  let root = SyntaxNode::new_root(parse.green_node);
   let start = Instant::now();
   let mut smb = SourceMapBuilder::new(None);
   let src_id = smb.add_source("stdin");
   smb.set_source_contents(src_id, Some(css));
-  smb.add_raw(1, 0, 1, 0, Some(src_id), None);
-  smb.add_raw(1, 2, 1, 2, Some(src_id), None);
+  sourcemap(root, &mut smb, Some(src_id));
   let sm = smb.into_sourcemap();
   let mut output: Vec<u8> = vec![];
   sm.to_writer(&mut output).unwrap();
