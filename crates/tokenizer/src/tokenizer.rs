@@ -6,6 +6,7 @@ use std::cell::RefCell;
 use std::clone::Clone;
 use std::cmp::PartialEq;
 use std::cmp::{min, Eq};
+use std::collections::HashMap;
 
 const SINGLE_QUOTE: char = '\'';
 const DOUBLE_QUOTE: char = '"';
@@ -68,6 +69,7 @@ pub struct Tokenizer<'a> {
   buffer: RefCell<RefRing<'a>>,
   returned: RefCell<Vec<Token<'a>>>,
   rope: Option<ropey::Rope>,
+  from_offset_cache: Option<HashMap<usize, usize>>,
 }
 
 impl<'a> Tokenizer<'a> {
@@ -81,6 +83,7 @@ impl<'a> Tokenizer<'a> {
       buffer: RefCell::new(Default::default()),
       returned: RefCell::new(Vec::with_capacity(min(MAX_BUFFER, length / 8))),
       rope: None,
+      from_offset_cache: None,
     }
   }
 
@@ -354,6 +357,45 @@ impl<'a> Tokenizer<'a> {
     let column = rope.byte_to_char(offset);
     let line = rope.byte_to_line(offset);
     (line, column)
+  }
+
+  pub fn from_offset2(&mut self, offset: usize) -> (usize, usize) {
+    let mut last_line: usize = 0;
+    let mut line_to_index: HashMap<usize, usize>;
+    if let Some(cache) = &mut self.from_offset_cache {
+      line_to_index = cache.clone();
+    } else {
+      let lines = self.css.split('\n').collect::<Vec<&str>>();
+      line_to_index = HashMap::with_capacity(lines.len());
+      let mut prev_index = 0;
+      for i in 0..lines.len() {
+        line_to_index.insert(i, prev_index);
+        prev_index += lines[i].len() + 1;
+      }
+      self.from_offset_cache = Some(line_to_index.clone());
+    }
+    last_line = line_to_index[&(line_to_index.len() - 1)];
+
+    let mut min = 0;
+    if offset >= last_line {
+      min = line_to_index.len() - 1;
+    } else {
+      let mut max = line_to_index.len() - 2;
+      let mut mid = 0usize;
+      while min < max {
+        mid = min + ((max - min) >> 1);
+        if offset < line_to_index[&mid] {
+          max = mid - 1;
+        } else if offset >= line_to_index[&(mid + 1)] {
+          min = mid + 1;
+        } else {
+          min = mid;
+          break;
+        }
+      }
+    }
+
+    (min + 1, offset - line_to_index[&min] + 1)
   }
 }
 

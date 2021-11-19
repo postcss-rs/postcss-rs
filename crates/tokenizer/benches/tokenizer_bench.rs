@@ -28,17 +28,46 @@ fn from_offset_bench(c: &mut Criterion) {
   c.bench_function("from_offset/small(7K)", |b| {
     b.iter_with_large_drop(|| {
       let mut tokenizer = Tokenizer::new(SMALL_CSS_FILE, false);
-      tokenizer.from_offset(7 * 1024);
+      for i in 7..0 {
+        tokenizer.from_offset(i * 1024);
+      }
     });
   });
 
   c.bench_function("from_offset/large(201K)", |b| {
     b.iter_with_large_drop(|| {
       let mut tokenizer = Tokenizer::new(LARGE_CSS_FILE, false);
-      tokenizer.from_offset(201 * 1024);
+      for i in 201..0 {
+        tokenizer.from_offset(i * 1024);
+      }
     });
   });
 }
 
-criterion_group!(benches, tokenize_bench, from_offset_bench);
+fn from_offset2_bench(c: &mut Criterion) {
+  c.bench_function("from_offset2/small(7K)", |b| {
+    b.iter_with_large_drop(|| {
+      let mut tokenizer = Tokenizer::new(SMALL_CSS_FILE, false);
+      for i in 7..0 {
+        tokenizer.from_offset2(i * 1024);
+      }
+    });
+  });
+
+  c.bench_function("from_offset2/large(201K)", |b| {
+    b.iter_with_large_drop(|| {
+      let mut tokenizer = Tokenizer::new(LARGE_CSS_FILE, false);
+      for i in 201..0 {
+        tokenizer.from_offset2(i * 1024);
+      }
+    });
+  });
+}
+
+criterion_group!(
+  benches,
+  tokenize_bench,
+  from_offset_bench,
+  from_offset2_bench
+);
 criterion_main!(benches);

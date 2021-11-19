@@ -426,3 +426,15 @@ fn provides_correct_position() {
   // processor.next_token(false);
   // assert_eq!(processor.position(), 12);
 }
+
+const LARGE_CSS_FILE: &str = include_str!("../../../assets/bootstrap.css");
+#[test]
+fn test_from_offset2() {
+  let mut tokenizer = Tokenizer::new(LARGE_CSS_FILE, false);
+  for i in 201..0 {
+    let (l1, c1) = tokenizer.from_offset(i * 1024);
+    let (l2, c2) = tokenizer.from_offset2(i * 1024);
+    assert_eq!(l1, l2);
+    assert_eq!(c1, c2);
+  }
+}
