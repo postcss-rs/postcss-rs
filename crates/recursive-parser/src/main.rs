@@ -1,7 +1,10 @@
 use std::time::Instant;
 
 use mimalloc_rust::*;
-use recursive_parser::{AstPrinter, parser::{self, Rule, RuleOrAtRuleOrDecl}};
+use recursive_parser::{
+  parser::{self, Rule, RuleOrAtRuleOrDecl},
+  AstPrinter,
+};
 
 #[global_allocator]
 static GLOBAL_MIMALLOC: GlobalMiMalloc = GlobalMiMalloc;
@@ -12,7 +15,7 @@ fn main() {
       width: 100px;
   }
   "#;
-  println!("{}", css.len());;
+  println!("{}", css.len());
   let start = Instant::now();
   let mut parser = parser::Parser::new(css);
   let mut _root = parser.parse();
