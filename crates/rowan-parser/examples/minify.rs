@@ -12,9 +12,9 @@ fn main() {
   // let css = include_str!("../../../assets/bootstrap.css");
   let start = Instant::now();
   let result = transform(css);
-  println!("sourcemap\t{:?}", start.elapsed());
-  println!("{}", result.output);
-  println!("{}", result.sourcemap);
+  println!("transform(total)\t{:?}", start.elapsed());
+  println!("output: {}", result.output);
+  println!("sourcemap: {}", result.sourcemap);
 }
 
 struct ParseResult {
@@ -23,13 +23,16 @@ struct ParseResult {
 }
 
 fn transform(css: &str) -> ParseResult {
+  let start = Instant::now();
   let parser = Parser::new(css);
-  let parse = parser.parse();
-  let root = SyntaxNode::new_root(parse.green_node.clone());
+  // let parse = parser.parse();
+  let (node, map) = parser.parse();
+  let root = SyntaxNode::new_root(node);
+  println!("parse with location\t{:?}", start.elapsed());
 
+  let start = Instant::now();
   let mut output = String::with_capacity(0);
   let mut sourcemap: Vec<u8> = vec![];
-
   let mut smb = SourceMapBuilder::new(None);
   let src_id = smb.add_source("stdin");
   smb.set_source_contents(src_id, Some(css));
@@ -40,7 +43,8 @@ fn transform(css: &str) -> ParseResult {
         if token.kind() != SyntaxKind::Space {
           output.push_str(&css[token.text_range()]);
         }
-        let (src_line, src_col) = parse.location(token);
+        let offset: usize = token.text_range().start().into();
+        let (src_line, src_col) = *map.get(&offset).unwrap();
         smb.add_raw(1, 1, src_line, src_col, Some(src_id), None);
       }
     },
@@ -48,6 +52,8 @@ fn transform(css: &str) -> ParseResult {
   });
   let sm = smb.into_sourcemap();
   sm.to_writer(&mut sourcemap).unwrap();
+  println!("outpout with sourcemap\t{:?}", start.elapsed());
+
   ParseResult {
     output,
     sourcemap: String::from_utf8(sourcemap).unwrap(),

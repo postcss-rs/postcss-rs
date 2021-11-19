@@ -18,7 +18,7 @@ impl<'a> Parser<'a> {
     }
   }
 
-  pub fn parse(mut self) -> Parse {
+  pub fn parse(mut self) -> (GreenNode, HashMap<usize, (u32, u32)>) {
     self.builder.start_node(SyntaxKind::Root.into());
     // self.parse_element();
     while let Some(syntax) = self.peek() {
@@ -35,10 +35,11 @@ impl<'a> Parser<'a> {
       }
     }
     self.builder.finish_node();
-    Parse {
-      green_node: self.builder.finish(),
-      location_map: self.location_map,
-    }
+    (self.builder.finish(), self.location_map)
+    // Parse {
+    //   green_node: self.builder.finish(),
+    //   location_map: self.location_map,
+    // }
   }
 
   #[inline]
