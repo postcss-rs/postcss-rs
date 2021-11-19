@@ -21,7 +21,7 @@ js:   tokenizer/fairly_large(201K)        25.672ms
 rust: tokenizer/fairly_large(201K)         0.979ms
 ```
 
-🎉 Welcome contribute, here is a guide:
+🎉 Welcome to contribute, here is a guide:
 
 ```bash
 git checkout main
