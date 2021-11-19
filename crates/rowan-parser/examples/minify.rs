@@ -35,9 +35,9 @@ fn transform(css: &str) -> ParseResult {
   let mut smb = SourceMapBuilder::new(None);
   let src_id = smb.add_source("stdin");
   smb.set_source_contents(src_id, Some(css));
-  let mut src_line = 1;
+  let mut src_line = 0;
   let mut src_col = 0;
-  let mut dst_line = 1;
+  let mut dst_line = 0;
   let mut dst_col = 0;
   root.preorder_with_tokens().for_each(|e| match e {
     rowan::WalkEvent::Enter(n) => match n {
@@ -46,7 +46,6 @@ fn transform(css: &str) -> ParseResult {
         if token.kind() != SyntaxKind::Space {
           let dst = &css[token.text_range()];
           output.push_str(dst);
-          println!("{},{},{},{}, {}", dst_line, dst_col, src_line, src_col, dst);
           smb.add_raw(dst_line, dst_col, src_line, src_col, Some(src_id), None);
 
           // cacl next location
