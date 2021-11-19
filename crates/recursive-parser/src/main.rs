@@ -6,8 +6,8 @@ use recursive_parser::{
   AstPrinter,
 };
 
-#[global_allocator]
-static GLOBAL_MIMALLOC: GlobalMiMalloc = GlobalMiMalloc;
+// #[global_allocator]
+// static GLOBAL_MIMALLOC: GlobalMiMalloc = GlobalMiMalloc;
 fn main() {
   let str = include_str!("../../../assets/bootstrap.css");
   let css = r#"
@@ -17,7 +17,8 @@ fn main() {
   "#;
   println!("{}", css.len());
   let start = Instant::now();
-  let mut parser = parser::Parser::new(css);
+  let mut parser = parser::Parser::new(str);
   let mut _root = parser.parse();
-  AstPrinter::default().print(&_root);
+  println!("{:?}", start.elapsed());
+  // AstPrinter::default().print(&_root);
 }

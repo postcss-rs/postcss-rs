@@ -1,4 +1,4 @@
-use std::iter::Peekable;
+use std::{borrow::Cow, iter::Peekable, ops::Add};
 use tokenizer::{Token, TokenType, Tokenizer};
 
 use crate::syntax::Lexer;
@@ -26,19 +26,19 @@ pub struct Rule<'a> {
 
 pub struct Declaration<'a> {
   pub prop: Prop<'a>,
-  value: Value,
+  value: Value<'a>,
   pub(crate) start: usize,
   pub(crate) end: usize,
 }
 
 pub struct Prop<'a> {
-  pub(crate) content: &'a str,
+  pub(crate) content: Cow<'a, str>,
   start: usize,
   end: usize,
 }
 
-pub struct Value {
-  // content: &'a str,
+pub struct Value<'a> {
+  content: Cow<'a, str>,
   start: usize,
   end: usize,
 }
@@ -50,7 +50,7 @@ pub struct AtRule<'a> {
   pub(crate) children: Vec<RuleOrAtRuleOrDecl<'a>>,
 }
 struct Selector<'a> {
-  content: &'a str,
+  content: Cow<'a, str>,
   start: usize,
   end: usize,
 }
@@ -260,7 +260,7 @@ impl<'a> Parser<'a> {
     );
     let Token(_, content, start, end) = self.bump();
     let prop = Prop {
-      content,
+      content: Cow::Borrowed(content),
       start,
       end,
     };
@@ -270,10 +270,11 @@ impl<'a> Parser<'a> {
       "expected : found {:?}",
       self.peek()
     );
-    self.bump();
+    let Token(_, v, _, _) = self.bump();
     self.skip_whitespace();
     let mut has_finish = false;
     let mut value = Value {
+      content: Cow::Borrowed(v),
       start: self.pos,
       end: 0,
     };
@@ -330,7 +331,7 @@ impl<'a> Parser<'a> {
     AtRule {
       // FIXME: not a real selector
       selector: Selector {
-        content: "",
+        content: Cow::Borrowed(""),
         start: 0,
         end: 0,
       },

@@ -43,20 +43,20 @@ function normalize(node) {
 
 console.time('label')
 const root = postcss.parse(file).root()
-const plugin = postcss.plugin('postcss-reverse-props', (options = {}) => {
-    // Work with options here
-    return root => {
-        // Transform CSS AST here
-        root.walkRules(rule => {
-            // Transform each rule here
-            rule.walkDecls(decl => {
-                // Transform each property declaration here
-                decl.prop = decl.prop.split('').reverse().join('');
-            });
-        });
-    };
-});
-console.log(plugin()(root))
+// const plugin = postcss.plugin('postcss-reverse-props', (options = {}) => {
+//     // Work with options here
+//     return root => {
+//         // Transform CSS AST here
+//         root.walkRules(rule => {
+//             // Transform each rule here
+//             rule.walkDecls(decl => {
+//                 // Transform each property declaration here
+//                 decl.prop = decl.prop.split('').reverse().join('');
+//             });
+//         });
+//     };
+// });
+// console.log(plugin()(root))
 // console.log(root.toString())
 // root.toString()
 console.timeEnd('label')
