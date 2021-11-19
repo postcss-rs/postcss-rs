@@ -8,13 +8,13 @@ use std::time::Instant;
 #[global_allocator]
 static GLOBAL_MIMALLOC: GlobalMiMalloc = GlobalMiMalloc;
 fn main() {
-  let css = "body\n        {\n font-size: \n 12px;      \n} \n";
-  // let css = include_str!("../../../assets/bootstrap.css");
+  // let css = "body\n        {\n font-size: \n 12px;      \n} \n";
+  let css = include_str!("../../../assets/bootstrap.css");
   let start = Instant::now();
   let result = transform(css);
   println!("transform(total)\t{:?}", start.elapsed());
-  println!("output:\t{}", result.output);
-  println!("sourcemap:\t{}", result.sourcemap);
+  // println!("output:\t{}", result.output);
+  // println!("sourcemap:\t{}", result.sourcemap);
 }
 
 struct ParseResult {
@@ -43,9 +43,25 @@ fn transform(css: &str) -> ParseResult {
     rowan::WalkEvent::Enter(n) => match n {
       rowan::NodeOrToken::Node(_) => {}
       rowan::NodeOrToken::Token(token) => {
-        if token.kind() != SyntaxKind::Space {
-          let dst = &css[token.text_range()];
-          output.push_str(dst);
+        let mut dst = css[token.text_range()].to_string();
+
+        // plugin: remove space
+        if token.kind() == SyntaxKind::Space {
+          dst.clear();
+        }
+
+        // plugin: upper prop
+        if token.kind() == SyntaxKind::Word && token.parent().unwrap().kind() == SyntaxKind::Prop {
+          dst = dst.to_uppercase();
+        }
+
+        // plugin: upper prop
+        if token.kind() == SyntaxKind::Word && token.parent().unwrap().kind() == SyntaxKind::Value {
+          dst = dst.chars().rev().collect();
+        }
+
+        if !dst.is_empty() {
+          output.push_str(&dst);
           smb.add_raw(dst_line, dst_col, src_line, src_col, Some(src_id), None);
 
           // cacl next location
