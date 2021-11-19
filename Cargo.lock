@@ -525,6 +525,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "recursive-parser"
+version = "0.1.0"
+dependencies = [
+ "criterion",
+ "mimalloc-rust",
+ "tokenizer",
+]
+
+[[package]]
 name = "regex"
 version = "1.5.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"

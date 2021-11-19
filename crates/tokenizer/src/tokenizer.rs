@@ -31,7 +31,7 @@ const MAX_BUFFER: usize = 102400;
 
 static FINDER_END_OF_COMMENT: Lazy<Finder<'static>> = Lazy::new(|| Finder::new("*/"));
 
-#[derive(Debug, Clone, Eq, PartialEq)]
+#[derive(Debug, Clone, Eq, PartialEq, Copy)]
 pub enum TokenType {
   OpenParentheses,
   CloseParentheses,
