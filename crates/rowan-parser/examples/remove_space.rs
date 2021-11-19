@@ -8,8 +8,7 @@ use mimalloc_rust::*;
 static GLOBAL_MIMALLOC: GlobalMiMalloc = GlobalMiMalloc;
 fn main() {
   let css = "#id { font-size: 12px; }";
-  let parser = Parser::new(css).parse();
-  let root = SyntaxNode::new_root(parser.green_node);
+  let root = Parser::new(css).parse();
   let root_mut = root.clone_for_update().clone();
   remove_space_mut(&root_mut);
   let mut output = String::with_capacity(0);

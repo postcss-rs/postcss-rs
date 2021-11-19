@@ -1,8 +1,6 @@
+use crate::syntax::{Lang, Lexer, SyntaxKind, SyntaxNode};
+use rowan::{GreenNodeBuilder, Language};
 use std::iter::Peekable;
-
-use crate::syntax::Lang;
-use crate::syntax::{Lexer, SyntaxKind};
-use rowan::{GreenNode, GreenNodeBuilder, Language};
 
 pub struct Parser<'a> {
   lexer: Peekable<Lexer<'a>>,
@@ -17,7 +15,7 @@ impl<'a> Parser<'a> {
     }
   }
 
-  pub fn parse(mut self) -> Parse {
+  pub fn parse(mut self) -> SyntaxNode {
     self.builder.start_node(SyntaxKind::Root.into());
     // self.parse_element();
     while let Some(syntax) = self.peek() {
@@ -34,9 +32,7 @@ impl<'a> Parser<'a> {
       }
     }
     self.builder.finish_node();
-    Parse {
-      green_node: self.builder.finish(),
-    }
+    SyntaxNode::new_root(self.builder.finish())
   }
 
   #[inline]
@@ -257,11 +253,11 @@ impl<'a> Parser<'a> {
     }
   }
   pub fn peek(&mut self) -> Option<SyntaxKind> {
-    self.lexer.peek().map(|(kind, _)| *kind)
+    self.lexer.peek().map(|(kind, ..)| *kind)
   }
 
   pub fn bump(&mut self) {
-    let (kind, text) = self.lexer.next().unwrap();
+    let (kind, text, _) = self.lexer.next().unwrap();
     // println!("{:?}, {:?}", kind, text);
     self.builder.token(Lang::kind_to_raw(kind), text);
   }
@@ -273,8 +269,4 @@ impl<'a> Parser<'a> {
   fn finish_node(&mut self) {
     self.builder.finish_node();
   }
-}
-
-pub struct Parse {
-  pub green_node: GreenNode,
 }

@@ -32,8 +32,7 @@ fn main() {
   let css = long_css;
   let instant = Instant::now();
   let parser = Parser::new(css);
-  let node = parser.parse().green_node;
-  let lang = SyntaxNode::new_root(node);
+  let lang = parser.parse();
   println!("parse\t\t\t{:?}", instant.elapsed());
 
   let start = Instant::now();

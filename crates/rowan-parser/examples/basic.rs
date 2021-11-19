@@ -1,6 +1,6 @@
 use rowan::TextRange;
 use rowan_parser::parser::Parser;
-use rowan_parser::syntax::{SyntaxKind, SyntaxNode};
+use rowan_parser::syntax::SyntaxKind;
 
 use mimalloc_rust::*;
 
@@ -8,8 +8,7 @@ use mimalloc_rust::*;
 static GLOBAL_MIMALLOC: GlobalMiMalloc = GlobalMiMalloc;
 fn main() {
   let css = "#id {font-size: 12px; }";
-  let parser = Parser::new(css).parse();
-  let root = SyntaxNode::new_root(parser.green_node);
+  let root = Parser::new(css).parse();
 
   println!("{:#?}", root);
   // Root@0..23
