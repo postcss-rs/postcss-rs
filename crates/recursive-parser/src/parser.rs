@@ -1,14 +1,14 @@
 use std::iter::Peekable;
 use tokenizer::{Token, TokenType, Tokenizer};
 
-use crate::Lexer;
+use crate::syntax::Lexer;
 pub struct Root<'a> {
-  children: Vec<RuleOrAtRuleOrDecl<'a>>,
-  start: usize,
-  end: usize,
+  pub children: Vec<RuleOrAtRuleOrDecl<'a>>,
+  pub(crate) start: usize,
+  pub(crate) end: usize,
 }
 
-enum RuleOrAtRuleOrDecl<'a> {
+pub enum RuleOrAtRuleOrDecl<'a> {
   Rule(Rule<'a>),
   AtRule(AtRule<'a>),
   Declaration(Declaration<'a>),
@@ -19,18 +19,20 @@ enum RuleOrAtRuleOrDecl<'a> {
 //   AtRule(AtRule<'a>),
 // }
 pub struct Rule<'a> {
-  children: Vec<RuleOrAtRuleOrDecl<'a>>,
-  start: usize,
-  end: usize,
+  pub children: Vec<RuleOrAtRuleOrDecl<'a>>,
+  pub start: usize,
+  pub end: usize,
 }
 
 pub struct Declaration<'a> {
-  prop: Prop<'a>,
+  pub prop: Prop<'a>,
   value: Value,
+  pub(crate) start: usize,
+  pub(crate) end: usize,
 }
 
 pub struct Prop<'a> {
-  content: &'a str,
+  pub(crate) content: &'a str,
   start: usize,
   end: usize,
 }
@@ -43,8 +45,9 @@ pub struct Value {
 
 pub struct AtRule<'a> {
   selector: Selector<'a>,
-  start: usize,
-  end: usize,
+  pub(crate) start: usize,
+  pub(crate) end: usize,
+  pub(crate) children: Vec<RuleOrAtRuleOrDecl<'a>>,
 }
 struct Selector<'a> {
   content: &'a str,
@@ -67,21 +70,20 @@ impl<'a> Parser<'a> {
 
   pub fn parse(mut self) -> Root<'a> {
     // self.parse_element();
-    let mut children = vec![];
+    let mut children: Vec<RuleOrAtRuleOrDecl> = vec![];
     while let Some(syntax) = self.peek() {
       match syntax {
         TokenType::Space => {
           self.bump();
         }
         TokenType::AtWord => {
-          // println!("parse at rule top level");
-          self.parse_at_rule();
+          children.push(RuleOrAtRuleOrDecl::AtRule(self.parse_at_rule()));
         }
         TokenType::Comment => {
           self.parse_comment();
         }
         _ => {
-          self.parse_rule();
+          children.push(RuleOrAtRuleOrDecl::Rule(self.parse_rule()));
         }
       };
     }
@@ -294,7 +296,12 @@ impl<'a> Parser<'a> {
     if !has_finish {
       value.end = self.pos;
     }
-    Declaration { prop, value }
+    Declaration {
+      start: prop.start,
+      end: value.end,
+      prop,
+      value,
+    }
   }
 
   pub fn parse_at_rule(&mut self) -> AtRule<'a> {
@@ -302,11 +309,12 @@ impl<'a> Parser<'a> {
     let start = self.pos;
     self.bump(); // bump atWord
     self.skip_whitespace();
+    let mut children = vec![];
     while let Some(kind) = self.peek() {
       match kind {
         OpenCurly => {
           //   self.finish_node(); finish params
-          self.parse_curly_block(true);
+          children = self.parse_curly_block(true);
           break;
         }
         Semicolon => {
@@ -328,6 +336,7 @@ impl<'a> Parser<'a> {
       },
       start,
       end: self.pos,
+      children,
     }
   }
 
