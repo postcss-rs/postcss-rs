@@ -361,18 +361,18 @@ impl<'a> Tokenizer<'a> {
 
   pub fn from_offset2(&mut self, offset: usize) -> (usize, usize) {
     let mut last_line: usize = 0;
-    let mut line_to_index: HashMap<usize, usize>;
+    let mut line_to_index: &mut HashMap<usize, usize>;
     if let Some(cache) = &mut self.from_offset_cache {
-      line_to_index = cache.clone();
+      line_to_index = cache;
     } else {
       let lines = self.css.split('\n').collect::<Vec<&str>>();
-      line_to_index = HashMap::with_capacity(lines.len());
+      self.from_offset_cache = Some(HashMap::with_capacity(lines.len()));
+      line_to_index = self.from_offset_cache.as_mut().unwrap();
       let mut prev_index = 0;
       for i in 0..lines.len() {
         line_to_index.insert(i, prev_index);
         prev_index += lines[i].len() + 1;
       }
-      self.from_offset_cache = Some(line_to_index.clone());
     }
     last_line = line_to_index[&(line_to_index.len() - 1)];
 

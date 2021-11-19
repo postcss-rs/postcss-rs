@@ -28,7 +28,7 @@ fn from_offset_bench(c: &mut Criterion) {
   c.bench_function("from_offset/small(7K)", |b| {
     b.iter_with_large_drop(|| {
       let mut tokenizer = Tokenizer::new(SMALL_CSS_FILE, false);
-      for i in 7..0 {
+      for i in (0..8).rev() {
         tokenizer.from_offset(i * 1024);
       }
     });
@@ -37,7 +37,7 @@ fn from_offset_bench(c: &mut Criterion) {
   c.bench_function("from_offset/large(201K)", |b| {
     b.iter_with_large_drop(|| {
       let mut tokenizer = Tokenizer::new(LARGE_CSS_FILE, false);
-      for i in 201..0 {
+      for i in (0..202).rev() {
         tokenizer.from_offset(i * 1024);
       }
     });
@@ -48,7 +48,7 @@ fn from_offset2_bench(c: &mut Criterion) {
   c.bench_function("from_offset2/small(7K)", |b| {
     b.iter_with_large_drop(|| {
       let mut tokenizer = Tokenizer::new(SMALL_CSS_FILE, false);
-      for i in 7..0 {
+      for i in (0..8).rev() {
         tokenizer.from_offset2(i * 1024);
       }
     });
@@ -57,7 +57,7 @@ fn from_offset2_bench(c: &mut Criterion) {
   c.bench_function("from_offset2/large(201K)", |b| {
     b.iter_with_large_drop(|| {
       let mut tokenizer = Tokenizer::new(LARGE_CSS_FILE, false);
-      for i in 201..0 {
+      for i in (0..202).rev() {
         tokenizer.from_offset2(i * 1024);
       }
     });
