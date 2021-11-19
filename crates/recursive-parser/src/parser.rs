@@ -26,7 +26,7 @@ pub struct Rule<'a> {
 
 pub struct Declaration<'a> {
   prop: Prop<'a>,
-  value: Value<'a>,
+  value: Value,
 }
 
 pub struct Prop<'a> {
@@ -35,8 +35,8 @@ pub struct Prop<'a> {
   end: usize,
 }
 
-pub struct Value<'a> {
-  content: &'a str,
+pub struct Value {
+  // content: &'a str,
   start: usize,
   end: usize,
 }
@@ -117,12 +117,12 @@ impl<'a> Parser<'a> {
             match self.peek() {
               Some(kind) => match kind {
                 TokenType::OpenCurly => {
-                  // let children = 
+                  // let children =
                   return Rule {
                     children: self.parse_curly_block(false),
                     start,
                     end: self.pos,
-                  }
+                  };
                 }
                 TokenType::Space => {
                   self.bump();
@@ -271,11 +271,15 @@ impl<'a> Parser<'a> {
     self.bump();
     self.skip_whitespace();
     let mut has_finish = false;
-    let mut value: Value;
+    let mut value = Value {
+      start: self.pos,
+      end: 0,
+    };
     while let Some(kind) = self.peek() {
       match kind {
         CloseCurly | Semicolon => {
           has_finish = true;
+          value.end = self.pos;
           break;
         }
         Space => {
@@ -287,15 +291,15 @@ impl<'a> Parser<'a> {
         }
       }
     }
-    if !has_finish {}
-    Declaration {
-      prop,
-      value: todo!(),
+    if !has_finish {
+      value.end = self.pos;
     }
+    Declaration { prop, value }
   }
 
   pub fn parse_at_rule(&mut self) -> AtRule<'a> {
     use TokenType::*;
+    let start = self.pos;
     self.bump(); // bump atWord
     self.skip_whitespace();
     while let Some(kind) = self.peek() {
@@ -316,9 +320,14 @@ impl<'a> Parser<'a> {
       }
     }
     AtRule {
-      selector: todo!(),
-      start: todo!(),
-      end: todo!(),
+      // FIXME: not a real selector
+      selector: Selector {
+        content: "",
+        start: 0,
+        end: 0,
+      },
+      start,
+      end: self.pos,
     }
   }
 
