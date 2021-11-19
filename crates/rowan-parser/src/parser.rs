@@ -1,14 +1,12 @@
+use crate::syntax::{Lang, Lexer, SyntaxKind, SyntaxToken};
+use rowan::{GreenNode, GreenNodeBuilder, Language};
 use std::collections::HashMap;
 use std::iter::Peekable;
-
-use crate::syntax::Lang;
-use crate::syntax::{Lexer, SyntaxKind};
-use rowan::{GreenNode, GreenNodeBuilder, Language};
 
 pub struct Parser<'a> {
   lexer: Peekable<Lexer<'a>>,
   builder: GreenNodeBuilder<'static>,
-  location_map: HashMap<usize, (usize, usize)>,
+  pub location_map: HashMap<usize, (u32, u32)>,
 }
 
 impl<'a> Parser<'a> {
@@ -18,6 +16,14 @@ impl<'a> Parser<'a> {
       builder: GreenNodeBuilder::new(),
       location_map: HashMap::new(),
     }
+  }
+
+  pub fn location(&self, token: SyntaxToken) -> (u32, u32) {
+    let offset: usize = token.text_range().start().into();
+    *self
+      .location_map
+      .get(&offset)
+      .unwrap_or_else(|| unreachable!())
   }
 
   pub fn parse(mut self) -> Parse {
@@ -264,9 +270,9 @@ impl<'a> Parser<'a> {
   }
 
   pub fn bump(&mut self) {
-    let (kind, text, offset, location) = self.lexer.next().unwrap();
+    let (kind, text, offset, (line, col)) = self.lexer.next().unwrap();
     // println!("{:?}, {:?}", kind, text);
-    self.location_map.insert(offset, location);
+    self.location_map.insert(offset, (line as u32, col as u32));
     self.builder.token(Lang::kind_to_raw(kind), text);
   }
 
