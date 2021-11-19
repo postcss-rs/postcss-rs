@@ -1,12 +1,10 @@
-use crate::syntax::{Lang, Lexer, SyntaxKind, SyntaxToken};
-use rowan::{GreenNode, GreenNodeBuilder, Language};
-use std::collections::HashMap;
+use crate::syntax::{Lang, Lexer, SyntaxKind, SyntaxNode};
+use rowan::{GreenNodeBuilder, Language};
 use std::iter::Peekable;
 
 pub struct Parser<'a> {
   lexer: Peekable<Lexer<'a>>,
   builder: GreenNodeBuilder<'static>,
-  location_map: HashMap<usize, (u32, u32)>,
 }
 
 impl<'a> Parser<'a> {
@@ -14,11 +12,10 @@ impl<'a> Parser<'a> {
     Self {
       lexer: Lexer::new(input).peekable(),
       builder: GreenNodeBuilder::new(),
-      location_map: HashMap::new(),
     }
   }
 
-  pub fn parse(mut self) -> (GreenNode, HashMap<usize, (u32, u32)>) {
+  pub fn parse(mut self) -> SyntaxNode {
     self.builder.start_node(SyntaxKind::Root.into());
     // self.parse_element();
     while let Some(syntax) = self.peek() {
@@ -35,11 +32,7 @@ impl<'a> Parser<'a> {
       }
     }
     self.builder.finish_node();
-    (self.builder.finish(), self.location_map)
-    // Parse {
-    //   green_node: self.builder.finish(),
-    //   location_map: self.location_map,
-    // }
+    SyntaxNode::new_root(self.builder.finish())
   }
 
   #[inline]
@@ -264,9 +257,8 @@ impl<'a> Parser<'a> {
   }
 
   pub fn bump(&mut self) {
-    let (kind, text, offset, (line, col)) = self.lexer.next().unwrap();
+    let (kind, text, _) = self.lexer.next().unwrap();
     // println!("{:?}, {:?}", kind, text);
-    self.location_map.insert(offset, (line as u32, col as u32));
     self.builder.token(Lang::kind_to_raw(kind), text);
   }
 
@@ -276,20 +268,5 @@ impl<'a> Parser<'a> {
 
   fn finish_node(&mut self) {
     self.builder.finish_node();
-  }
-}
-
-pub struct Parse {
-  pub green_node: GreenNode,
-  location_map: HashMap<usize, (u32, u32)>,
-}
-
-impl Parse {
-  pub fn location(&self, token: SyntaxToken) -> (u32, u32) {
-    let offset: usize = token.text_range().start().into();
-    *self
-      .location_map
-      .get(&offset)
-      .unwrap_or_else(|| unreachable!())
   }
 }

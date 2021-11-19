@@ -10,8 +10,7 @@ static GLOBAL_MIMALLOC: GlobalMiMalloc = GlobalMiMalloc;
 fn main() {
   let css = include_str!("../../../assets/bootstrap.css");
   let parser = Parser::new(css);
-  let parse = parser.parse();
-  let root = SyntaxNode::new_root(parse.green_node);
+  let root = parser.parse();
 
   let start = Instant::now();
   let mut smb = SourceMapBuilder::new(Some("stdin"));
@@ -26,8 +25,7 @@ fn main() {
 
   let css = "#id { font-size: 12px; }";
   let parser = Parser::new(css);
-  let parse = parser.parse();
-  let root = SyntaxNode::new_root(parse.green_node);
+  let root = parser.parse();
   let start = Instant::now();
   let mut smb = SourceMapBuilder::new(None);
   let src_id = smb.add_source("stdin");
@@ -37,7 +35,7 @@ fn main() {
   let mut output: Vec<u8> = vec![];
   sm.to_writer(&mut output).unwrap();
   println!("sourcemap\t{:?}", start.elapsed());
-  // println!("{}", std::str::from_utf8(&output).unwrap());
+  println!("{}", std::str::from_utf8(&output).unwrap());
 }
 
 // postcss-js:                                        postcss-rs:

@@ -11,6 +11,8 @@ rowan = "0.15.0"
 tokenizer = { path = "../tokenizer" }
 mimalloc-rust = "0.1"
 sourcemap = "6"
+bytecount = "0.6"
+memchr = "2"
 
 [profile.release]
 lto = true
