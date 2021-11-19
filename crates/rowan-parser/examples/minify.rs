@@ -25,7 +25,7 @@ struct ParseResult {
 fn transform(css: &str) -> ParseResult {
   let parser = Parser::new(css);
   let parse = parser.parse();
-  let root = SyntaxNode::new_root(parse.green_node);
+  let root = SyntaxNode::new_root(parse.green_node.clone());
 
   let mut output = String::with_capacity(0);
   let mut sourcemap: Vec<u8> = vec![];
@@ -40,7 +40,7 @@ fn transform(css: &str) -> ParseResult {
         if token.kind() != SyntaxKind::Space {
           output.push_str(&css[token.text_range()]);
         }
-        let (src_line, src_col) = parser.location(token);
+        let (src_line, src_col) = parse.location(token);
         smb.add_raw(1, 1, src_line, src_col, Some(src_id), None);
       }
     },

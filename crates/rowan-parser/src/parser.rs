@@ -6,7 +6,7 @@ use std::iter::Peekable;
 pub struct Parser<'a> {
   lexer: Peekable<Lexer<'a>>,
   builder: GreenNodeBuilder<'static>,
-  pub location_map: HashMap<usize, (u32, u32)>,
+  location_map: HashMap<usize, (u32, u32)>,
 }
 
 impl<'a> Parser<'a> {
@@ -16,14 +16,6 @@ impl<'a> Parser<'a> {
       builder: GreenNodeBuilder::new(),
       location_map: HashMap::new(),
     }
-  }
-
-  pub fn location(&self, token: SyntaxToken) -> (u32, u32) {
-    let offset: usize = token.text_range().start().into();
-    *self
-      .location_map
-      .get(&offset)
-      .unwrap_or_else(|| unreachable!())
   }
 
   pub fn parse(mut self) -> Parse {
@@ -45,6 +37,7 @@ impl<'a> Parser<'a> {
     self.builder.finish_node();
     Parse {
       green_node: self.builder.finish(),
+      location_map: self.location_map,
     }
   }
 
@@ -287,4 +280,15 @@ impl<'a> Parser<'a> {
 
 pub struct Parse {
   pub green_node: GreenNode,
+  location_map: HashMap<usize, (u32, u32)>,
+}
+
+impl Parse {
+  pub fn location(&self, token: SyntaxToken) -> (u32, u32) {
+    let offset: usize = token.text_range().start().into();
+    *self
+      .location_map
+      .get(&offset)
+      .unwrap_or_else(|| unreachable!())
+  }
 }
