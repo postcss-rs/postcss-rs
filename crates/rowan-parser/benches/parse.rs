@@ -1,12 +1,12 @@
 use criterion::{criterion_group, criterion_main, Criterion};
 use rowan_parser::{parser, syntax::SyntaxNode};
+
 const SMALL_CSS_FILE: &str = include_str!("../../../assets/bootstrap-reboot.css");
 const LARGE_CSS_FILE: &str = include_str!("../../../assets/bootstrap.css");
 
-fn parse<'a>(css: &'a str) {
+fn parse<'a>(css: &'a str) -> SyntaxNode {
   let parser = parser::Parser::new(css);
-  let node = parser.parse().green_node;
-  let _root = SyntaxNode::new_root(node);
+  parser.parse()
 }
 
 fn tokenize_bench(c: &mut Criterion) {

@@ -8,13 +8,13 @@ use std::time::Instant;
 #[global_allocator]
 static GLOBAL_MIMALLOC: GlobalMiMalloc = GlobalMiMalloc;
 fn main() {
-  // let css = "body\n        {\n font-size: \n 12px;      \n} \n";
-  let css = include_str!("../../../assets/bootstrap.css");
+  let css = "body\n        {\n font-size: \n 12px;      \n} \n";
+  // let css = include_str!("../../../assets/bootstrap.css");
   let start = Instant::now();
   let result = transform(css);
   println!("transform(total)\t{:?}", start.elapsed());
-  // println!("output:\t{}", result.output);
-  // println!("sourcemap:\t{}", result.sourcemap);
+  println!("output:\t{}", result.output);
+  println!("sourcemap:\t{}", result.sourcemap);
 }
 
 struct ParseResult {
@@ -25,9 +25,8 @@ struct ParseResult {
 fn transform(css: &str) -> ParseResult {
   let start = Instant::now();
   let parser = Parser::new(css);
-  // let parse = parser.parse();
   let root = parser.parse();
-  println!("parse with location\t{:?}", start.elapsed());
+  println!("parse\t\t\t{:?}", start.elapsed());
 
   let start = Instant::now();
   let mut output = String::with_capacity(0);
@@ -43,23 +42,25 @@ fn transform(css: &str) -> ParseResult {
     rowan::WalkEvent::Enter(n) => match n {
       rowan::NodeOrToken::Node(_) => {}
       rowan::NodeOrToken::Token(token) => {
-        let mut dst = css[token.text_range()].to_string();
+        let src: &str = &css[token.text_range()]; // 💡 从 offset 获取 input css 片段
+        let mut dst: String = src.to_string(); // 💡 复制一份 input 作为 output
 
-        // plugin: remove space
+        // plugin: remove space                       // 💡 插件1: 如果是 Space，则移除
         if token.kind() == SyntaxKind::Space {
           dst.clear();
         }
 
-        // plugin: upper prop
+        // plugin: upper prop                         // 💡 插件2: 如果是 Word，并且 parent 是 Prop，则转成大写
         if token.kind() == SyntaxKind::Word && token.parent().unwrap().kind() == SyntaxKind::Prop {
           dst = dst.to_uppercase();
         }
 
-        // plugin: upper prop
+        // plugin: upper prop                         // 💡 插件3: 如果是 Word，并且 parent 是 Value，则反转
         if token.kind() == SyntaxKind::Word && token.parent().unwrap().kind() == SyntaxKind::Value {
           dst = dst.chars().rev().collect();
         }
 
+        // build source-map                           // 💡 生成 sourcemap 和 output
         if !dst.is_empty() {
           output.push_str(&dst);
           smb.add_raw(dst_line, dst_col, src_line, src_col, Some(src_id), None);
@@ -75,7 +76,6 @@ fn transform(css: &str) -> ParseResult {
           }
         }
 
-        let src = &css[token.text_range()];
         let count = bytecount::count(src.as_bytes(), b'\n') as u32;
         if count == 0 {
           src_col += src.len() as u32;
