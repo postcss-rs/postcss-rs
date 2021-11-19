@@ -24,5 +24,21 @@ fn tokenize_bench(c: &mut Criterion) {
   });
 }
 
-criterion_group!(benches, tokenize_bench);
+fn from_offset_bench(c: &mut Criterion) {
+  c.bench_function("from_offset/small(7K)", |b| {
+    b.iter_with_large_drop(|| {
+      let mut tokenizer = Tokenizer::new(SMALL_CSS_FILE, false);
+      tokenizer.from_offset(7 * 1024);
+    });
+  });
+
+  c.bench_function("from_offset/large(201K)", |b| {
+    b.iter_with_large_drop(|| {
+      let mut tokenizer = Tokenizer::new(LARGE_CSS_FILE, false);
+      tokenizer.from_offset(201 * 1024);
+    });
+  });
+}
+
+criterion_group!(benches, tokenize_bench, from_offset_bench);
 criterion_main!(benches);
