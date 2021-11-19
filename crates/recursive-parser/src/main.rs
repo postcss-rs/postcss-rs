@@ -14,11 +14,18 @@ fn main() {
   .test {
       width: 100px;
   }
+  @media {
+    .test result result{
+      height: 100px test test;
+    }
+    {
+      height: 100px;
+    }
+  }
   "#;
-  println!("{}", css.len());
   let start = Instant::now();
-  let mut parser = parser::Parser::new(str);
+  let mut parser = parser::Parser::new(css);
   let mut _root = parser.parse();
   println!("{:?}", start.elapsed());
-  // AstPrinter::default().print(&_root);
+  AstPrinter::default().print(&_root);
 }

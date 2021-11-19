@@ -18,7 +18,7 @@ impl AstPrinter {
 impl Visit for AstPrinter {
   fn visit_root(&mut self, root: &parser::Root) {
     println!(
-      "{}Root{:?}",
+      "{}Root@{:?}",
       " ".repeat(self.level * 2),
       root.start..root.end
     );
@@ -41,11 +41,16 @@ impl Visit for AstPrinter {
 
   fn visit_rule(&mut self, rule: &parser::Rule) {
     println!(
-      "{}Rule{:?}",
+      "{}Rule@{:?}",
       " ".repeat(self.level * 2),
       rule.start..rule.end
     );
     self.level += 1;
+    println!(
+      "{}Selector`{}`",
+      " ".repeat(self.level * 2),
+      rule.selector.content
+    );
     for child in &rule.children {
       match child {
         parser::RuleOrAtRuleOrDecl::Rule(rule) => {
@@ -64,7 +69,7 @@ impl Visit for AstPrinter {
 
   fn visit_at_rule(&mut self, at_rule: &parser::AtRule) {
     println!(
-      "{}AtRule{:?}",
+      "{}AtRule@{:?}",
       " ".repeat(self.level * 2),
       at_rule.start..at_rule.end
     );
@@ -87,12 +92,21 @@ impl Visit for AstPrinter {
 
   fn visit_declaration(&mut self, decl: &parser::Declaration) {
     println!(
-      "{}Decl{:?}",
+      "{}Decl@{:?}",
       " ".repeat(self.level * 2),
       decl.start..decl.end
     );
     self.level += 1;
-    println!("{}prop: {}", " ".repeat(self.level * 2), decl.prop.content);
+    println!(
+      "{}prop: `{}`",
+      " ".repeat(self.level * 2),
+      decl.prop.content
+    );
+    println!(
+      "{}value: `{}`",
+      " ".repeat(self.level * 2),
+      decl.value.content
+    );
     self.level -= 1;
   }
 }

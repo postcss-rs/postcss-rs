@@ -22,11 +22,12 @@ pub struct Rule<'a> {
   pub children: Vec<RuleOrAtRuleOrDecl<'a>>,
   pub start: usize,
   pub end: usize,
+  pub selector: Selector<'a>,
 }
 
 pub struct Declaration<'a> {
-  pub prop: Prop<'a>,
-  value: Value<'a>,
+  pub(crate) prop: Prop<'a>,
+  pub(crate) value: Value<'a>,
   pub(crate) start: usize,
   pub(crate) end: usize,
 }
@@ -38,7 +39,7 @@ pub struct Prop<'a> {
 }
 
 pub struct Value<'a> {
-  content: Cow<'a, str>,
+  pub content: Cow<'a, str>,
   start: usize,
   end: usize,
 }
@@ -49,14 +50,25 @@ pub struct AtRule<'a> {
   pub(crate) end: usize,
   pub(crate) children: Vec<RuleOrAtRuleOrDecl<'a>>,
 }
-struct Selector<'a> {
-  content: Cow<'a, str>,
+pub struct Selector<'a> {
+  pub content: Cow<'a, str>,
   start: usize,
   end: usize,
 }
 
+impl<'a> Selector<'a> {
+  fn new(content: Cow<'a, str>, start: usize, end: usize) -> Self {
+    Self {
+      content,
+      start,
+      end,
+    }
+  }
+}
+
 pub struct Parser<'a> {
   lexer: Peekable<Lexer<'a>>,
+  source: &'a str,
   pos: usize,
 }
 
@@ -64,6 +76,7 @@ impl<'a> Parser<'a> {
   pub fn new(input: &'a str) -> Self {
     Self {
       lexer: Lexer::new(input).peekable(),
+      source: input,
       pos: 0,
     }
   }
@@ -101,35 +114,48 @@ impl<'a> Parser<'a> {
 
   #[inline]
   pub fn parse_rule(&mut self) -> Rule<'a> {
-    let rule: Rule;
     let start = self.pos;
     if let Some(kind) = self.peek() {
       match kind {
         TokenType::OpenCurly => {
           let children = self.parse_curly_block(false);
           Rule {
+            selector: Selector::new(Cow::Borrowed(""), start, start),
             children,
             start,
-            end: 0,
+            end: self.pos,
           }
         }
         _ => {
+          let mut last_end = self.pos;
           self.parse_component();
           loop {
             match self.peek() {
               Some(kind) => match kind {
                 TokenType::OpenCurly => {
-                  // let children =
-                  return Rule {
-                    children: self.parse_curly_block(false),
-                    start,
-                    end: self.pos,
-                  };
+                  let selector = &self.source[start..self.pos];
+                  if selector.chars().last().unwrap().is_ascii_whitespace() {
+                    return Rule {
+                      selector: Selector::new(Cow::Borrowed(&self.source[start..last_end]), start, last_end),
+                      children: self.parse_curly_block(false),
+                      start,
+                      end: self.pos,
+                    };
+                  } else {
+                    return Rule {
+                      selector: Selector::new(Cow::Borrowed(selector), start, self.pos),
+                      children: self.parse_curly_block(false),
+                      start,
+                      end: self.pos,
+                    };
+                  }
                 }
                 TokenType::Space => {
+                  last_end = self.pos;
                   self.bump();
                 }
                 _ => {
+                  last_end = self.pos;
                   self.parse_component();
                 }
               },
@@ -270,11 +296,11 @@ impl<'a> Parser<'a> {
       "expected : found {:?}",
       self.peek()
     );
-    let Token(_, v, _, _) = self.bump();
+    self.bump();
     self.skip_whitespace();
     let mut has_finish = false;
     let mut value = Value {
-      content: Cow::Borrowed(v),
+      content: Cow::Borrowed(""),
       start: self.pos,
       end: 0,
     };
@@ -283,6 +309,7 @@ impl<'a> Parser<'a> {
         CloseCurly | Semicolon => {
           has_finish = true;
           value.end = self.pos;
+          value.content = Cow::Borrowed(&self.source[value.start..value.end]);
           break;
         }
         Space => {
@@ -296,6 +323,7 @@ impl<'a> Parser<'a> {
     }
     if !has_finish {
       value.end = self.pos;
+      value.content = Cow::Borrowed(&self.source[value.start..value.end]);
     }
     Declaration {
       start: prop.start,
