@@ -75,6 +75,16 @@ impl Visit for AstPrinter {
       at_rule.start..at_rule.end
     );
     self.level += 1;
+    println!(
+      "{}name: `{}`",
+      " ".repeat(self.level * 2),
+      at_rule.name,
+    );
+    println!(
+      "{}params: `{}`",
+      " ".repeat(self.level * 2),
+      at_rule.params,
+    );
     for child in &at_rule.children {
       match child {
         parser::RuleOrAtRuleOrDecl::Rule(rule) => {

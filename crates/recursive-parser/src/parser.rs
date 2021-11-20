@@ -45,7 +45,8 @@ pub struct Value<'a> {
 }
 
 pub struct AtRule<'a> {
-  selector: Selector<'a>,
+  pub params: Cow<'a, str>,
+  pub name: Cow<'a, str>,
   pub(crate) start: usize,
   pub(crate) end: usize,
   pub(crate) children: Vec<RuleOrAtRuleOrDecl<'a>>,
@@ -188,7 +189,7 @@ impl<'a> Parser<'a> {
           self.parse_square_block();
         }
         TokenType::OpenCurly => {
-          self.parse_curly_block(false);
+          self.parse_curly_block_in_component();
         }
         _ => {
           // println!("need to bump {:?} from parse component", self.peek());
@@ -236,6 +237,27 @@ impl<'a> Parser<'a> {
         None => {
           // TODO: error handle
           panic!("expected ] found none");
+        }
+      }
+    }
+  }
+
+  fn parse_curly_block_in_component(&mut self) {
+    self.bump(); // bump {
+    loop {
+      match self.peek() {
+        Some(kind) => match kind {
+          TokenType::CloseCurly => {
+            self.bump();
+            break;
+          }
+          _ => {
+            self.parse_component();
+          }
+        },
+        None => {
+          // TODO: error handle
+          panic!("expected {} found none", "}");
         }
       }
     }
@@ -345,18 +367,22 @@ impl<'a> Parser<'a> {
   pub fn parse_at_rule(&mut self) -> AtRule<'a> {
     use TokenType::*;
     let start = self.pos;
-    self.bump(); // bump atWord
+    let Token(_, name, _, _) = self.bump(); // bump atWord
     self.skip_whitespace();
     let mut children = vec![];
+    let params_start = self.pos;
+    let mut params_end = self.pos;
     while let Some(kind) = self.peek() {
       match kind {
         OpenCurly => {
+          params_end = self.pos;
           //   self.finish_node(); finish params
           children = self.parse_curly_block(true);
           break;
         }
         Semicolon => {
           //   self.finish_node();
+          params_end = self.pos;
           self.bump();
           break;
         }
@@ -366,12 +392,8 @@ impl<'a> Parser<'a> {
       }
     }
     AtRule {
-      // FIXME: not a real selector
-      selector: Selector {
-        content: Cow::Borrowed(""),
-        start: 0,
-        end: 0,
-      },
+      params: Cow::Borrowed(&self.source[params_start..params_end].trim()),
+      name: Cow::Borrowed(name),
       start,
       end: self.pos,
       children,
