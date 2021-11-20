@@ -34,7 +34,7 @@ fn main() {
     ;
   }"#;
   let css_test2 = r#"
-  @supports {
+  @supports ([[[[[{"result": 200px;}]]]]]){
     [--self] {
       background: greenyellow        ;
     }

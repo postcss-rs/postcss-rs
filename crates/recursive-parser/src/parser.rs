@@ -308,12 +308,10 @@ impl<'a> Parser<'a> {
       start: self.pos,
       end: 0,
     };
-    let mut break_by_semicolon = false;
     while let Some(kind) = self.peek() {
       match kind {
         CloseCurly | Semicolon => {
           has_finish = true;
-          break_by_semicolon = kind == Semicolon;
           value.end = self.pos;
           value.content = Cow::Borrowed(&self.source[value.start..value.end]);
           break;
@@ -331,7 +329,7 @@ impl<'a> Parser<'a> {
       value.end = self.pos;
       value.content = Cow::Borrowed(&self.source[value.start..value.end]);
     }
-    let end = if break_by_semicolon {
+    let end = if matches!(self.peek(), Some(Semicolon)) {
       self.lexer.peek().unwrap().3
     } else {
       value.end
