@@ -1,18 +1,16 @@
 use criterion::{criterion_group, criterion_main, Criterion};
 use tokenizer::input::Input;
-use tokenizer::{Token, Tokenizer};
+use tokenizer::Tokenizer;
 
 const SMALL_CSS_FILE: &str = include_str!("../../../assets/bootstrap-reboot.css");
 const LARGE_CSS_FILE: &str = include_str!("../../../assets/bootstrap.css");
 
-fn tokenize<'a>(css: &'a str, ignore_errors: bool) -> Vec<Token<'a>> {
+fn tokenize<'a>(css: &'a str, ignore_errors: bool) {
   let input: Input<'a> = Input::new(css, None);
   let processor: Tokenizer<'a> = Tokenizer::new(input.css, ignore_errors);
-  let mut tokens = vec![];
   while !processor.end_of_file() {
-    tokens.push(processor.next_token(false))
+    processor.next_token(false);
   }
-  tokens
 }
 
 fn tokenize_bench(c: &mut Criterion) {
