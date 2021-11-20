@@ -10,9 +10,8 @@ use recursive_parser::{
 // static GLOBAL_MIMALLOC: GlobalMiMalloc = GlobalMiMalloc;
 fn main() {
   let str = include_str!("../../../assets/bootstrap.css");
-  let css = r#"
-  .test {
-      width: 100px;
+  let css = r#".test {
+      width: 100px
   }
   @media {
     .test result result{
@@ -23,8 +22,29 @@ fn main() {
     }
   }
   "#;
+  let css_test = r#":root {
+    --zero-size: {
+      width: 0;
+      height: 0;
+    };
+    --small-icon: {
+      width: 16px;
+      height: 16px;
+    }
+    ;
+  }"#;
+  let css_test2 = r#"
+  @supports {
+    [--self] {
+      background: greenyellow        ;
+    }
+  }
+  
+  
+
+  "#;
   let start = Instant::now();
-  let mut parser = parser::Parser::new(css);
+  let mut parser = parser::Parser::new(css_test2);
   let mut _root = parser.parse();
   println!("{:?}", start.elapsed());
   AstPrinter::default().print(&_root);

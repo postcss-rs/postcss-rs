@@ -34,14 +34,14 @@ pub struct Declaration<'a> {
 
 pub struct Prop<'a> {
   pub(crate) content: Cow<'a, str>,
-  start: usize,
-  end: usize,
+  pub start: usize,
+  pub end: usize,
 }
 
 pub struct Value<'a> {
   pub content: Cow<'a, str>,
-  start: usize,
-  end: usize,
+  pub start: usize,
+  pub end: usize,
 }
 
 pub struct AtRule<'a> {
@@ -52,8 +52,8 @@ pub struct AtRule<'a> {
 }
 pub struct Selector<'a> {
   pub content: Cow<'a, str>,
-  start: usize,
-  end: usize,
+  pub start: usize,
+  pub end: usize,
 }
 
 impl<'a> Selector<'a> {
@@ -136,7 +136,11 @@ impl<'a> Parser<'a> {
                   let selector = &self.source[start..self.pos];
                   if selector.chars().last().unwrap().is_ascii_whitespace() {
                     return Rule {
-                      selector: Selector::new(Cow::Borrowed(&self.source[start..last_end]), start, last_end),
+                      selector: Selector::new(
+                        Cow::Borrowed(&self.source[start..last_end]),
+                        start,
+                        last_end,
+                      ),
                       children: self.parse_curly_block(false),
                       start,
                       end: self.pos,
@@ -304,10 +308,12 @@ impl<'a> Parser<'a> {
       start: self.pos,
       end: 0,
     };
+    let mut break_by_semicolon = false;
     while let Some(kind) = self.peek() {
       match kind {
         CloseCurly | Semicolon => {
           has_finish = true;
+          break_by_semicolon = kind == Semicolon;
           value.end = self.pos;
           value.content = Cow::Borrowed(&self.source[value.start..value.end]);
           break;
@@ -325,9 +331,14 @@ impl<'a> Parser<'a> {
       value.end = self.pos;
       value.content = Cow::Borrowed(&self.source[value.start..value.end]);
     }
+    let end = if break_by_semicolon {
+      self.lexer.peek().unwrap().3
+    } else {
+      value.end
+    };
     Declaration {
       start: prop.start,
-      end: value.end,
+      end,
       prop,
       value,
     }
