@@ -1,14 +1,14 @@
-use std::iter::Peekable;
+use std::{borrow::Cow, iter::Peekable, ops::Add};
 use tokenizer::{Token, TokenType, Tokenizer};
 
-use crate::Lexer;
+use crate::syntax::Lexer;
 pub struct Root<'a> {
-  children: Vec<RuleOrAtRuleOrDecl<'a>>,
-  start: usize,
-  end: usize,
+  pub children: Vec<RuleOrAtRuleOrDecl<'a>>,
+  pub(crate) start: usize,
+  pub(crate) end: usize,
 }
 
-enum RuleOrAtRuleOrDecl<'a> {
+pub enum RuleOrAtRuleOrDecl<'a> {
   Rule(Rule<'a>),
   AtRule(AtRule<'a>),
   Declaration(Declaration<'a>),
@@ -19,41 +19,57 @@ enum RuleOrAtRuleOrDecl<'a> {
 //   AtRule(AtRule<'a>),
 // }
 pub struct Rule<'a> {
-  children: Vec<RuleOrAtRuleOrDecl<'a>>,
-  start: usize,
-  end: usize,
+  pub children: Vec<RuleOrAtRuleOrDecl<'a>>,
+  pub start: usize,
+  pub end: usize,
+  pub selector: Selector<'a>,
 }
 
 pub struct Declaration<'a> {
-  prop: Prop<'a>,
-  value: Value,
+  pub(crate) prop: Prop<'a>,
+  pub(crate) value: Value<'a>,
+  pub(crate) start: usize,
+  pub(crate) end: usize,
 }
 
 pub struct Prop<'a> {
-  content: &'a str,
-  start: usize,
-  end: usize,
+  pub(crate) content: Cow<'a, str>,
+  pub start: usize,
+  pub end: usize,
 }
 
-pub struct Value {
-  // content: &'a str,
-  start: usize,
-  end: usize,
+pub struct Value<'a> {
+  pub content: Cow<'a, str>,
+  pub start: usize,
+  pub end: usize,
 }
 
 pub struct AtRule<'a> {
-  selector: Selector<'a>,
-  start: usize,
-  end: usize,
+  pub params: Cow<'a, str>,
+  pub name: Cow<'a, str>,
+  pub(crate) start: usize,
+  pub(crate) end: usize,
+  pub(crate) children: Vec<RuleOrAtRuleOrDecl<'a>>,
 }
-struct Selector<'a> {
-  content: &'a str,
-  start: usize,
-  end: usize,
+pub struct Selector<'a> {
+  pub content: Cow<'a, str>,
+  pub start: usize,
+  pub end: usize,
+}
+
+impl<'a> Selector<'a> {
+  fn new(content: Cow<'a, str>, start: usize, end: usize) -> Self {
+    Self {
+      content,
+      start,
+      end,
+    }
+  }
 }
 
 pub struct Parser<'a> {
   lexer: Peekable<Lexer<'a>>,
+  source: &'a str,
   pos: usize,
 }
 
@@ -61,27 +77,27 @@ impl<'a> Parser<'a> {
   pub fn new(input: &'a str) -> Self {
     Self {
       lexer: Lexer::new(input).peekable(),
+      source: input,
       pos: 0,
     }
   }
 
   pub fn parse(mut self) -> Root<'a> {
     // self.parse_element();
-    let mut children = vec![];
+    let mut children: Vec<RuleOrAtRuleOrDecl> = vec![];
     while let Some(syntax) = self.peek() {
       match syntax {
         TokenType::Space => {
           self.bump();
         }
         TokenType::AtWord => {
-          // println!("parse at rule top level");
-          self.parse_at_rule();
+          children.push(RuleOrAtRuleOrDecl::AtRule(self.parse_at_rule()));
         }
         TokenType::Comment => {
           self.parse_comment();
         }
         _ => {
-          self.parse_rule();
+          children.push(RuleOrAtRuleOrDecl::Rule(self.parse_rule()));
         }
       };
     }
@@ -99,36 +115,42 @@ impl<'a> Parser<'a> {
 
   #[inline]
   pub fn parse_rule(&mut self) -> Rule<'a> {
-    let rule: Rule;
     let start = self.pos;
     if let Some(kind) = self.peek() {
       match kind {
         TokenType::OpenCurly => {
           let children = self.parse_curly_block(false);
           Rule {
+            selector: Selector::new(Cow::Borrowed(""), start, start),
             children,
             start,
-            end: 0,
+            end: self.pos,
           }
         }
         _ => {
           self.parse_component();
+          let mut selector_end = self.pos;
           loop {
             match self.peek() {
               Some(kind) => match kind {
                 TokenType::OpenCurly => {
-                  // let children =
                   return Rule {
+                    selector: Selector::new(
+                      Cow::Borrowed(&self.source[start..selector_end]),
+                      start,
+                      selector_end,
+                    ),
                     children: self.parse_curly_block(false),
                     start,
                     end: self.pos,
                   };
                 }
-                TokenType::Space => {
+                TokenType::Space | TokenType::Comment => {
                   self.bump();
                 }
                 _ => {
                   self.parse_component();
+                  selector_end = self.pos;
                 }
               },
               None => {
@@ -144,7 +166,8 @@ impl<'a> Parser<'a> {
   }
   // https://drafts.csswg.org/css-syntax/#component-value-diagram
   #[inline]
-  fn parse_component(&mut self) {
+  /// return bump token is trivial
+  fn parse_component(&mut self) -> bool {
     // self.start_node(TokenType::Component);
     if let Some(kind) = self.peek() {
       match kind {
@@ -156,14 +179,17 @@ impl<'a> Parser<'a> {
           self.parse_square_block();
         }
         TokenType::OpenCurly => {
-          self.parse_curly_block(false);
+          self.parse_curly_block_in_component();
         }
         _ => {
           // println!("need to bump {:?} from parse component", self.peek());
-          self.bump();
+          return matches!(self.bump().0, TokenType::Space | TokenType::Comment);
         }
       }
+    } else {
+      eprintln!("expected token found none");
     }
+    false
     // self.finish_node();
   }
 
@@ -209,12 +235,33 @@ impl<'a> Parser<'a> {
     }
   }
 
+  fn parse_curly_block_in_component(&mut self) {
+    self.bump(); // bump {
+    loop {
+      match self.peek() {
+        Some(kind) => match kind {
+          TokenType::CloseCurly => {
+            self.bump();
+            break;
+          }
+          _ => {
+            self.parse_component();
+          }
+        },
+        None => {
+          // TODO: error handle
+          panic!("expected {} found none", "}");
+        }
+      }
+    }
+  }
+
   fn parse_curly_block(&mut self, rule: bool) -> Vec<RuleOrAtRuleOrDecl<'a>> {
     use TokenType::*;
     // println!("parse curlyblock");
     let mut ret: Vec<RuleOrAtRuleOrDecl> = vec![];
     self.bump(); // bump {
-    self.skip_whitespace();
+    self.skip_whitespace_comment();
     loop {
       match self.peek() {
         Some(kind) => match kind {
@@ -222,7 +269,7 @@ impl<'a> Parser<'a> {
             self.bump();
           }
           AtWord => ret.push(RuleOrAtRuleOrDecl::AtRule(self.parse_at_rule())),
-          Space => {
+          Space | Comment => {
             self.bump();
           }
           CloseCurly => {
@@ -258,28 +305,31 @@ impl<'a> Parser<'a> {
     );
     let Token(_, content, start, end) = self.bump();
     let prop = Prop {
-      content,
+      content: Cow::Borrowed(content),
       start,
       end,
     };
-    self.skip_whitespace();
+    self.skip_whitespace_comment();
     assert!(
       matches!(self.peek(), Some(TokenType::Colon)),
       "expected : found {:?}",
       self.peek()
     );
     self.bump();
-    self.skip_whitespace();
+    self.skip_whitespace_comment();
     let mut has_finish = false;
     let mut value = Value {
+      content: Cow::Borrowed(""),
       start: self.pos,
-      end: 0,
+      end: self.pos,
     };
+    let mut value_end = self.pos;
     while let Some(kind) = self.peek() {
       match kind {
         CloseCurly | Semicolon => {
           has_finish = true;
-          value.end = self.pos;
+          value.end = value_end;
+          value.content = Cow::Borrowed(&self.source[value.start..value.end]);
           break;
         }
         Space => {
@@ -288,25 +338,40 @@ impl<'a> Parser<'a> {
         _ => {
           // println!("parse the component");
           self.parse_component();
+          value_end = self.pos;
         }
       }
     }
     if !has_finish {
-      value.end = self.pos;
+      value.end = value_end;
+      value.content = Cow::Borrowed(&self.source[value.start..value.end]);
     }
-    Declaration { prop, value }
+    let end = if matches!(self.peek(), Some(Semicolon)) {
+      self.lexer.peek().unwrap().3
+    } else {
+      value.end
+    };
+    Declaration {
+      start: prop.start,
+      end,
+      prop,
+      value,
+    }
   }
 
   pub fn parse_at_rule(&mut self) -> AtRule<'a> {
     use TokenType::*;
     let start = self.pos;
-    self.bump(); // bump atWord
-    self.skip_whitespace();
+    let Token(_, name, _, _) = self.bump(); // bump atWord
+    self.skip_whitespace_comment();
+    let mut children = vec![];
+    let params_start = self.pos;
+    let mut params_end = self.pos;
     while let Some(kind) = self.peek() {
       match kind {
         OpenCurly => {
           //   self.finish_node(); finish params
-          self.parse_curly_block(true);
+          children = self.parse_curly_block(true);
           break;
         }
         Semicolon => {
@@ -314,26 +379,28 @@ impl<'a> Parser<'a> {
           self.bump();
           break;
         }
+        CloseCurly => {
+          break;
+        }
         _ => {
-          self.parse_component();
+          if !self.parse_component() {
+            params_end = self.pos;
+          }
         }
       }
     }
     AtRule {
-      // FIXME: not a real selector
-      selector: Selector {
-        content: "",
-        start: 0,
-        end: 0,
-      },
+      params: Cow::Borrowed(&self.source[params_start..params_end]),
+      name: Cow::Borrowed(name),
       start,
       end: self.pos,
+      children,
     }
   }
 
   #[inline]
-  pub fn skip_whitespace(&mut self) {
-    if let Some(TokenType::Space) = self.peek() {
+  pub fn skip_whitespace_comment(&mut self) {
+    while matches!(self.peek(), Some(TokenType::Space | TokenType::Comment)) {
       self.bump();
     }
   }

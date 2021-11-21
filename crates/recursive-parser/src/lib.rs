@@ -1,27 +1,117 @@
-pub mod parser;
-use tokenizer::{Token, TokenType, Tokenizer};
+use visitor::Visit;
 
-pub(crate) struct Lexer<'a> {
-  inner: Tokenizer<'a>,
+pub mod parser;
+pub mod syntax;
+
+pub mod visitor;
+
+#[derive(Default)]
+pub struct AstPrinter {
+  level: usize,
 }
 
-impl<'a> Lexer<'a> {
-  pub(crate) fn new(input: &'a str) -> Self {
-    Self {
-      inner: Tokenizer::new(input, false),
-    }
+impl AstPrinter {
+  pub fn print(&mut self, root: &parser::Root) {
+    self.visit_root(root);
   }
 }
-
-impl<'a> Iterator for Lexer<'a> {
-  type Item = Token<'a>;
-
-  fn next(&mut self) -> Option<Self::Item> {
-    if !self.inner.end_of_file() {
-      let token = self.inner.next_token(false);
-      Some(token)
-    } else {
-      None
+impl Visit for AstPrinter {
+  fn visit_root(&mut self, root: &parser::Root) {
+    println!(
+      "{}Root@{:?}",
+      " ".repeat(self.level * 2),
+      root.start..root.end
+    );
+    self.level += 1;
+    for child in &root.children {
+      match child {
+        parser::RuleOrAtRuleOrDecl::Rule(rule) => {
+          self.visit_rule(rule);
+        }
+        parser::RuleOrAtRuleOrDecl::AtRule(at_rule) => {
+          self.visit_at_rule(at_rule);
+        }
+        parser::RuleOrAtRuleOrDecl::Declaration(decl) => {
+          self.visit_declaration(decl);
+        }
+      }
     }
+    self.level -= 1;
+  }
+
+  fn visit_rule(&mut self, rule: &parser::Rule) {
+    println!(
+      "{}Rule@{:?}",
+      " ".repeat(self.level * 2),
+      rule.start..rule.end
+    );
+    self.level += 1;
+    println!(
+      "{}Selector`{}`@{:?}",
+      " ".repeat(self.level * 2),
+      rule.selector.content,
+      rule.selector.start..rule.selector.end
+    );
+    for child in &rule.children {
+      match child {
+        parser::RuleOrAtRuleOrDecl::Rule(rule) => {
+          self.visit_rule(rule);
+        }
+        parser::RuleOrAtRuleOrDecl::AtRule(at_rule) => {
+          self.visit_at_rule(at_rule);
+        }
+        parser::RuleOrAtRuleOrDecl::Declaration(decl) => {
+          self.visit_declaration(decl);
+        }
+      }
+    }
+    self.level -= 1;
+  }
+
+  fn visit_at_rule(&mut self, at_rule: &parser::AtRule) {
+    println!(
+      "{}AtRule@{:?}",
+      " ".repeat(self.level * 2),
+      at_rule.start..at_rule.end
+    );
+    self.level += 1;
+    println!("{}name: `{}`", " ".repeat(self.level * 2), at_rule.name,);
+    println!("{}params: `{}`", " ".repeat(self.level * 2), at_rule.params,);
+    for child in &at_rule.children {
+      match child {
+        parser::RuleOrAtRuleOrDecl::Rule(rule) => {
+          self.visit_rule(rule);
+        }
+        parser::RuleOrAtRuleOrDecl::AtRule(at_rule) => {
+          self.visit_at_rule(at_rule);
+        }
+        parser::RuleOrAtRuleOrDecl::Declaration(decl) => {
+          self.visit_declaration(decl);
+        }
+      }
+    }
+    self.level -= 1;
+  }
+
+  fn visit_declaration(&mut self, decl: &parser::Declaration) {
+    println!(
+      "{}Decl@{:?}",
+      " ".repeat(self.level * 2),
+      decl.start..decl.end
+    );
+    self.level += 1;
+    println!(
+      "{}prop: `{}`@{:?}",
+      " ".repeat(self.level * 2),
+      decl.prop.content,
+      decl.prop.start..decl.prop.end
+    );
+    println!(
+      "{}value: `{}`@{:?}",
+      " ".repeat(self.level * 2),
+      decl.value.content,
+      decl.value.start..decl.value.end
+    );
+    self.level -= 1;
   }
 }
