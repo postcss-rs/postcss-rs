@@ -26,8 +26,8 @@ pub struct Rule<'a> {
 }
 
 pub struct Declaration<'a> {
-  pub(crate) prop: Prop<'a>,
-  pub(crate) value: Value<'a>,
+  pub prop: Prop<'a>,
+  pub value: Value<'a>,
   pub(crate) start: usize,
   pub(crate) end: usize,
 }
@@ -38,10 +38,22 @@ pub struct Prop<'a> {
   pub end: usize,
 }
 
+impl<'a> std::fmt::Display for Prop<'a> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+      write!(f, "{}", self.content)
+    }
+}
+
 pub struct Value<'a> {
   pub content: Cow<'a, str>,
   pub start: usize,
   pub end: usize,
+}
+
+impl<'a> std::fmt::Display for Value<'a> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+      write!(f, "{}", self.content)
+    }
 }
 
 pub struct AtRule<'a> {
@@ -49,7 +61,7 @@ pub struct AtRule<'a> {
   pub name: Cow<'a, str>,
   pub(crate) start: usize,
   pub(crate) end: usize,
-  pub(crate) children: Vec<RuleOrAtRuleOrDecl<'a>>,
+  pub children: Vec<RuleOrAtRuleOrDecl<'a>>,
 }
 pub struct Selector<'a> {
   pub content: Cow<'a, str>,
