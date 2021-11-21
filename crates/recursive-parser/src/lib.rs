@@ -15,7 +15,7 @@ impl AstPrinter {
     self.visit_root(root);
   }
 }
-impl Visit for AstPrinter {
+impl Visit<()> for AstPrinter {
   fn visit_root(&mut self, root: &parser::Root) {
     println!(
       "{}Root@{:?}",

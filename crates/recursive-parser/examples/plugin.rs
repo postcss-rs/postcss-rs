@@ -1,10 +1,10 @@
-use std::{borrow::Cow, ops::Add};
+use std::{borrow::Cow, io::Write, time::Instant};
 
 use mimalloc_rust::*;
-use recursive_parser::{parser::Parser, visitor::VisitMut};
+use recursive_parser::{parser::*, visitor::VisitMut};
 
-#[global_allocator]
-static GLOBAL_MIMALLOC: GlobalMiMalloc = GlobalMiMalloc;
+// #[global_allocator]
+// static GLOBAL_MIMALLOC: GlobalMiMalloc = GlobalMiMalloc;
 fn main() {
   let css = "#id {                     font-size: 12px; 
     width: 100px;
@@ -12,91 +12,112 @@ fn main() {
         .test { width: 100px; height: 200px;}
     }
 }";
-  let mut root = Parser::new(css).parse();
+  let bootstrap = include_str!("../../../assets/bootstrap.css");
+  let mut start = Instant::now();
+  let mut root = Parser::new(bootstrap).parse();
+  println!("parse {:?}", start.elapsed());
+  start = Instant::now();
   ReverseProp::default().visit_root(&mut root);
-  SimplePrettier::default().visit_root(&mut root);
+  println!("reverse {:?}", start.elapsed());
+  let start = Instant::now();
+  let mut printer = SimplePrettier::new(Vec::with_capacity(bootstrap.len()));
+  printer.visit_root(&mut root).unwrap();
+  println!("stringify {:?}", start.elapsed());
 }
 
 #[derive(Default)]
-struct SimplePrettier {
+struct SimplePrettier<W: Write> {
   level: usize,
+  writer: W,
 }
 
-impl VisitMut for SimplePrettier {
-  fn visit_root(&mut self, root: &mut recursive_parser::parser::Root) {
-    root.children.iter_mut().for_each(|child| match child {
-      recursive_parser::parser::RuleOrAtRuleOrDecl::Rule(rule) => {
-        self.visit_rule(rule);
-      }
-      recursive_parser::parser::RuleOrAtRuleOrDecl::AtRule(at_rule) => {
-        self.visit_at_rule(at_rule);
-      }
-      recursive_parser::parser::RuleOrAtRuleOrDecl::Declaration(_) => {
-        unreachable!()
-      }
-    });
+impl<W: Write> SimplePrettier<W> {
+  pub fn new(writer: W) -> Self {
+    Self { level: 0, writer }
   }
-
-  fn visit_rule(&mut self, rule: &mut recursive_parser::parser::Rule) {
-    print!(
-      "{}{} {}\n",
-      " ".repeat(self.level * 2),
-      rule.selector.content,
-      "{"
-    );
-    self.level += 1;
-    rule
-      .children
-      .iter_mut()
-      .for_each(|rule_child| match rule_child {
-        recursive_parser::parser::RuleOrAtRuleOrDecl::Rule(_) => {
+}
+impl<W: std::io::Write> VisitMut<std::io::Result<()>> for SimplePrettier<W> {
+  fn visit_root(&mut self, root: &mut Root) -> std::io::Result<()> {
+    for child in root.children.iter_mut() {
+      match child {
+        RuleOrAtRuleOrDecl::Rule(rule) => {
+          self.visit_rule(rule)?;
+        }
+        RuleOrAtRuleOrDecl::AtRule(at_rule) => {
+          self.visit_at_rule(at_rule)?;
+        }
+        RuleOrAtRuleOrDecl::Declaration(_) => {
           unreachable!()
         }
-        recursive_parser::parser::RuleOrAtRuleOrDecl::AtRule(at_rule) => {
-          self.visit_at_rule(at_rule);
-        }
-        recursive_parser::parser::RuleOrAtRuleOrDecl::Declaration(decl) => {
-          self.visit_declaration(decl);
-        }
-      });
-    self.level -= 1;
-    print!("{}{}\n", " ".repeat(self.level * 2), "}");
+      }
+    }
+    Ok(())
   }
 
-  fn visit_at_rule(&mut self, at_rule: &mut recursive_parser::parser::AtRule) {
-    print!(
+  fn visit_rule(&mut self, rule: &mut Rule) -> std::io::Result<()> {
+    self.writer.write(
+      format!(
+        "{}{} {}\n",
+        " ".repeat(self.level * 2),
+        rule.selector.content,
+        "{"
+      )
+      .as_bytes(),
+    )?;
+    self.level += 1;
+    for child in rule.children.iter_mut() {
+      match child {
+        RuleOrAtRuleOrDecl::Rule(_) => {
+          unreachable!()
+        }
+        RuleOrAtRuleOrDecl::AtRule(at_rule) => {
+          self.visit_at_rule(at_rule)?;
+        }
+        RuleOrAtRuleOrDecl::Declaration(decl) => {
+          self.visit_declaration(decl)?;
+        }
+      }
+    }
+    self.level -= 1;
+    write!(self.writer, "{}{}\n", " ".repeat(self.level * 2), "}")?;
+    Ok(())
+  }
+
+  fn visit_at_rule(&mut self, at_rule: &mut AtRule) -> std::io::Result<()> {
+    write!(
+      self.writer,
       "{}{} {} {}\n",
       " ".repeat(self.level * 2),
       at_rule.name,
       at_rule.params,
       "{"
-    );
+    )?;
     self.level += 1;
-    at_rule
-      .children
-      .iter_mut()
-      .for_each(|rule_child| match rule_child {
-        recursive_parser::parser::RuleOrAtRuleOrDecl::Rule(rule) => {
-          self.visit_rule(rule);
+    for child in at_rule.children.iter_mut() {
+      match child {
+        RuleOrAtRuleOrDecl::Rule(rule) => {
+          self.visit_rule(rule)?;
         }
-        recursive_parser::parser::RuleOrAtRuleOrDecl::AtRule(at_rule) => {
-          self.visit_at_rule(at_rule);
+        RuleOrAtRuleOrDecl::AtRule(at_rule) => {
+          self.visit_at_rule(at_rule)?;
         }
-        recursive_parser::parser::RuleOrAtRuleOrDecl::Declaration(_decl) => {
+        RuleOrAtRuleOrDecl::Declaration(_decl) => {
           //   self.visit_declaration(decl);
         }
-      });
+      }
+    }
     self.level -= 1;
-    print!("{}{}\n", " ".repeat(self.level * 2), "}");
+    write!(self.writer, "{}{}\n", " ".repeat(self.level * 2), "}")
   }
 
-  fn visit_declaration(&mut self, decl: &mut recursive_parser::parser::Declaration) {
-    println!(
+  fn visit_declaration(&mut self, decl: &mut Declaration) -> std::io::Result<()> {
+    write!(
+      self.writer,
       "{}{} : {};",
       " ".repeat(self.level * 2),
       decl.prop,
       decl.value
-    );
+    )
   }
 }
 
@@ -104,55 +125,55 @@ impl VisitMut for SimplePrettier {
 struct ReverseProp {}
 
 impl VisitMut for ReverseProp {
-  fn visit_root(&mut self, root: &mut recursive_parser::parser::Root) {
+  fn visit_root(&mut self, root: &mut Root) {
     root.children.iter_mut().for_each(|child| match child {
-      recursive_parser::parser::RuleOrAtRuleOrDecl::Rule(rule) => {
+      RuleOrAtRuleOrDecl::Rule(rule) => {
         self.visit_rule(rule);
       }
-      recursive_parser::parser::RuleOrAtRuleOrDecl::AtRule(at_rule) => {
+      RuleOrAtRuleOrDecl::AtRule(at_rule) => {
         self.visit_at_rule(at_rule);
       }
-      recursive_parser::parser::RuleOrAtRuleOrDecl::Declaration(_) => {
+      RuleOrAtRuleOrDecl::Declaration(_) => {
         unreachable!()
       }
     });
   }
 
-  fn visit_rule(&mut self, rule: &mut recursive_parser::parser::Rule) {
+  fn visit_rule(&mut self, rule: &mut Rule) {
     rule
       .children
       .iter_mut()
       .for_each(|rule_child| match rule_child {
-        recursive_parser::parser::RuleOrAtRuleOrDecl::Rule(_) => {
+        RuleOrAtRuleOrDecl::Rule(_) => {
           unreachable!()
         }
-        recursive_parser::parser::RuleOrAtRuleOrDecl::AtRule(at_rule) => {
+        RuleOrAtRuleOrDecl::AtRule(at_rule) => {
           self.visit_at_rule(at_rule);
         }
-        recursive_parser::parser::RuleOrAtRuleOrDecl::Declaration(decl) => {
+        RuleOrAtRuleOrDecl::Declaration(decl) => {
           self.visit_declaration(decl);
         }
       });
   }
 
-  fn visit_at_rule(&mut self, at_rule: &mut recursive_parser::parser::AtRule) {
+  fn visit_at_rule(&mut self, at_rule: &mut AtRule) {
     at_rule
       .children
       .iter_mut()
       .for_each(|rule_child| match rule_child {
-        recursive_parser::parser::RuleOrAtRuleOrDecl::Rule(rule) => {
+        RuleOrAtRuleOrDecl::Rule(rule) => {
           self.visit_rule(rule);
         }
-        recursive_parser::parser::RuleOrAtRuleOrDecl::AtRule(at_rule) => {
+        RuleOrAtRuleOrDecl::AtRule(at_rule) => {
           self.visit_at_rule(at_rule);
         }
-        recursive_parser::parser::RuleOrAtRuleOrDecl::Declaration(_decl) => {
+        RuleOrAtRuleOrDecl::Declaration(_decl) => {
           unreachable!()
         }
       });
   }
 
-  fn visit_declaration(&mut self, decl: &mut recursive_parser::parser::Declaration) {
+  fn visit_declaration(&mut self, decl: &mut Declaration) {
     decl.prop.content = Cow::Owned(decl.prop.content.chars().rev().collect());
   }
 }
