@@ -1,4 +1,4 @@
-use std::time::Instant;
+use std::{borrow::Cow, ops::Add, os::raw::c_long, time::Instant};
 
 use mimalloc_rust::*;
 use recursive_parser::{
@@ -35,25 +35,11 @@ fn main() {
     ;
   }"#;
   let css_test2 = r#"
-/* a { color: black } */
-/**/
-/* */
-div {
-    /* inside */
-    color: black;
-    /* between */
-    border-radius: 3px / 7px
-    /* end */
-}
-/* b */
-
-@a {
-  .test {
-    
-  }
+a {
+	color: black
 }
 
-  "#;
+"#;
   // let tokens = tokenize(css_test2);
   //  println!("{:#?}", tokens);
   
@@ -62,4 +48,5 @@ div {
   let mut _root = parser.parse();
   println!("{:?}", start.elapsed());
   AstPrinter::default().print(&_root);
+
 }

@@ -376,6 +376,9 @@ impl<'a> Parser<'a> {
           //   self.finish_node();
           self.bump();
           break;
+        },
+        CloseCurly => {
+          break;
         }
         _ => {
           if !self.parse_component() {
