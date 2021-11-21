@@ -1,4 +1,4 @@
-use std::{borrow::Cow, time::Instant};
+use std::{borrow::Cow, io::Write, time::Instant};
 
 use mimalloc_rust::*;
 use recursive_parser::{parser::*, visitor::VisitMut};
@@ -19,89 +19,105 @@ fn main() {
   start = Instant::now();
   ReverseProp::default().visit_root(&mut root);
   println!("reverse {:?}", start.elapsed());
-  // SimplePrettier::default().visit_root(&mut root);
+  let start = Instant::now();
+  let mut printer = SimplePrettier::new(Vec::with_capacity(bootstrap.len()));
+  printer.visit_root(&mut root).unwrap();
+  println!("stringify {:?}", start.elapsed());
 }
 
 #[derive(Default)]
-struct SimplePrettier {
+struct SimplePrettier<W: Write> {
   level: usize,
+  writer: W,
 }
 
-impl VisitMut for SimplePrettier {
-  fn visit_root(&mut self, root: &mut Root) {
-    root.children.iter_mut().for_each(|child| match child {
-      RuleOrAtRuleOrDecl::Rule(rule) => {
-        self.visit_rule(rule);
+impl<W: Write> SimplePrettier<W> {
+  pub fn new(writer: W) -> Self {
+    Self { level: 0, writer }
+  }
+}
+impl<W: std::io::Write> VisitMut<std::io::Result<()>> for SimplePrettier<W> {
+  fn visit_root(&mut self, root: &mut Root) -> std::io::Result<()> {
+    for child in root.children.iter_mut() {
+      match child {
+        RuleOrAtRuleOrDecl::Rule(rule) => {
+          self.visit_rule(rule)?;
+        }
+        RuleOrAtRuleOrDecl::AtRule(at_rule) => {
+          self.visit_at_rule(at_rule)?;
+        }
+        RuleOrAtRuleOrDecl::Declaration(_) => {
+          unreachable!()
+        }
       }
-      RuleOrAtRuleOrDecl::AtRule(at_rule) => {
-        self.visit_at_rule(at_rule);
-      }
-      RuleOrAtRuleOrDecl::Declaration(_) => {
-        unreachable!()
-      }
-    });
+    }
+    Ok(())
   }
 
-  fn visit_rule(&mut self, rule: &mut Rule) {
-    print!(
-      "{}{} {}\n",
-      " ".repeat(self.level * 2),
-      rule.selector.content,
-      "{"
-    );
+  fn visit_rule(&mut self, rule: &mut Rule) -> std::io::Result<()> {
+    self.writer.write(
+      format!(
+        "{}{} {}\n",
+        " ".repeat(self.level * 2),
+        rule.selector.content,
+        "{"
+      )
+      .as_bytes(),
+    )?;
     self.level += 1;
-    rule
-      .children
-      .iter_mut()
-      .for_each(|rule_child| match rule_child {
+    for child in rule.children.iter_mut() {
+      match child {
         RuleOrAtRuleOrDecl::Rule(_) => {
           unreachable!()
         }
         RuleOrAtRuleOrDecl::AtRule(at_rule) => {
-          self.visit_at_rule(at_rule);
+          self.visit_at_rule(at_rule)?;
         }
         RuleOrAtRuleOrDecl::Declaration(decl) => {
-          self.visit_declaration(decl);
+          self.visit_declaration(decl)?;
         }
-      });
+      }
+    }
     self.level -= 1;
-    print!("{}{}\n", " ".repeat(self.level * 2), "}");
+    write!(self.writer, "{}{}\n", " ".repeat(self.level * 2), "}")?;
+    Ok(())
   }
 
-  fn visit_at_rule(&mut self, at_rule: &mut AtRule) {
-    print!(
+  fn visit_at_rule(&mut self, at_rule: &mut AtRule) -> std::io::Result<()> {
+    write!(
+      self.writer,
       "{}{} {} {}\n",
       " ".repeat(self.level * 2),
       at_rule.name,
       at_rule.params,
       "{"
-    );
+    )?;
     self.level += 1;
-    at_rule
-      .children
-      .iter_mut()
-      .for_each(|rule_child| match rule_child {
+    for child in at_rule.children.iter_mut() {
+      match child {
         RuleOrAtRuleOrDecl::Rule(rule) => {
-          self.visit_rule(rule);
+          self.visit_rule(rule)?;
         }
         RuleOrAtRuleOrDecl::AtRule(at_rule) => {
-          self.visit_at_rule(at_rule);
+          self.visit_at_rule(at_rule)?;
         }
         RuleOrAtRuleOrDecl::Declaration(_decl) => {
           //   self.visit_declaration(decl);
         }
-      });
+      }
+    }
     self.level -= 1;
-    print!("{}{}\n", " ".repeat(self.level * 2), "}");
+    write!(self.writer, "{}{}\n", " ".repeat(self.level * 2), "}")
   }
 
-  fn visit_declaration(&mut self, decl: &mut Declaration) {
-    println!(
+  fn visit_declaration(&mut self, decl: &mut Declaration) -> std::io::Result<()> {
+    write!(
+      self.writer,
       "{}{} : {};",
       " ".repeat(self.level * 2),
       decl.prop,
       decl.value
-    );
+    )
   }
 }
 
