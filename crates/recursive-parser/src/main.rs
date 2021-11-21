@@ -35,15 +35,28 @@ fn main() {
     ;
   }"#;
   let css_test2 = r#"
-a test test, result /**/
-{}
+/* a { color: black } */
+/**/
+/* */
+div {
+    /* inside */
+    color: black;
+    /* between */
+    border-radius: 3px / 7px
+    /* end */
+}
+/* b */
 
-
-  
+@a {
+  .test {
+    
+  }
+}
 
   "#;
-  let tokens = tokenize(css_test2);
-  println!("{:?}", tokens);
+  // let tokens = tokenize(css_test2);
+  //  println!("{:#?}", tokens);
+  
   let start = Instant::now();
   let mut parser = parser::Parser::new(css_test2);
   let mut _root = parser.parse();

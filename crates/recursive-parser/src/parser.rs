@@ -269,7 +269,7 @@ impl<'a> Parser<'a> {
             self.bump();
           }
           AtWord => ret.push(RuleOrAtRuleOrDecl::AtRule(self.parse_at_rule())),
-          Space => {
+          Space | Comment => {
             self.bump();
           }
           CloseCurly => {
