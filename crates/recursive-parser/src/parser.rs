@@ -128,40 +128,29 @@ impl<'a> Parser<'a> {
           }
         }
         _ => {
-          let mut last_end = self.pos;
           self.parse_component();
+          let mut selector_end = self.pos;
           loop {
             match self.peek() {
               Some(kind) => match kind {
                 TokenType::OpenCurly => {
-                  let selector = &self.source[start..self.pos];
-                  if selector.chars().last().unwrap().is_ascii_whitespace() {
-                    return Rule {
-                      selector: Selector::new(
-                        Cow::Borrowed(&self.source[start..last_end]),
-                        start,
-                        last_end,
-                      ),
-                      children: self.parse_curly_block(false),
+                  return Rule {
+                    selector: Selector::new(
+                      Cow::Borrowed(&self.source[start..selector_end]),
                       start,
-                      end: self.pos,
-                    };
-                  } else {
-                    return Rule {
-                      selector: Selector::new(Cow::Borrowed(selector), start, self.pos),
-                      children: self.parse_curly_block(false),
-                      start,
-                      end: self.pos,
-                    };
-                  }
+                      selector_end,
+                    ),
+                    children: self.parse_curly_block(false),
+                    start,
+                    end: self.pos,
+                  };
                 }
-                TokenType::Space => {
-                  last_end = self.pos;
+                TokenType::Space | TokenType::Comment => {
                   self.bump();
                 }
                 _ => {
-                  last_end = self.pos;
                   self.parse_component();
+                  selector_end = self.pos;
                 }
               },
               None => {

@@ -5,6 +5,7 @@ use recursive_parser::{
   parser::{self, Rule, RuleOrAtRuleOrDecl},
   AstPrinter,
 };
+use tokenizer::{Tokenizer, tokenize};
 
 // #[global_allocator]
 // static GLOBAL_MIMALLOC: GlobalMiMalloc = GlobalMiMalloc;
@@ -34,12 +35,15 @@ fn main() {
     ;
   }"#;
   let css_test2 = r#"
-@-moz-document/* near */ /* filter */ url("example.com/{") /* a */ {}
+a test test, result /**/
+{}
 
 
   
 
   "#;
+  let tokens = tokenize(css_test2);
+  println!("{:?}", tokens);
   let start = Instant::now();
   let mut parser = parser::Parser::new(css_test2);
   let mut _root = parser.parse();

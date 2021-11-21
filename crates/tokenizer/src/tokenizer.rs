@@ -51,7 +51,7 @@ pub enum TokenType {
 }
 
 #[derive(Debug, Clone, Eq, PartialEq)]
-/// quarter nary tuple (token_type, content, start_offset, end_offset), content is slice with range `start_offset..end_offset`
+/// quarter nary tuple (token_type, content, start_offset, end_offset), content is a slice with range `start_offset..end_offset`
 pub struct Token<'a>(pub TokenType, pub &'a str, pub usize, pub usize);
 
 impl<'a> Token<'a> {
