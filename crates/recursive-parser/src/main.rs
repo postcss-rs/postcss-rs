@@ -5,7 +5,7 @@ use recursive_parser::{
   parser::{self, Rule, RuleOrAtRuleOrDecl},
   AstPrinter,
 };
-use tokenizer::{Tokenizer, tokenize};
+use tokenizer::{tokenize, Tokenizer};
 
 // #[global_allocator]
 // static GLOBAL_MIMALLOC: GlobalMiMalloc = GlobalMiMalloc;
@@ -42,11 +42,10 @@ a {
 "#;
   // let tokens = tokenize(css_test2);
   //  println!("{:#?}", tokens);
-  
+
   let start = Instant::now();
   let mut parser = parser::Parser::new(css_test2);
   let mut _root = parser.parse();
   println!("{:?}", start.elapsed());
   AstPrinter::default().print(&_root);
-
 }
