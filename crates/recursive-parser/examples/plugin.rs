@@ -1,3 +1,5 @@
+use std::{borrow::Cow, ops::Add};
+
 use mimalloc_rust::*;
 use recursive_parser::{parser::Parser, visitor::VisitMut};
 
@@ -11,6 +13,7 @@ fn main() {
     }
 }";
   let mut root = Parser::new(css).parse();
+  ReverseProp::default().visit_root(&mut root);
   SimplePrettier::default().visit_root(&mut root);
 }
 
@@ -94,5 +97,62 @@ impl VisitMut for SimplePrettier {
       decl.prop,
       decl.value
     );
+  }
+}
+
+#[derive(Default)]
+struct ReverseProp {}
+
+impl VisitMut for ReverseProp {
+  fn visit_root(&mut self, root: &mut recursive_parser::parser::Root) {
+    root.children.iter_mut().for_each(|child| match child {
+      recursive_parser::parser::RuleOrAtRuleOrDecl::Rule(rule) => {
+        self.visit_rule(rule);
+      }
+      recursive_parser::parser::RuleOrAtRuleOrDecl::AtRule(at_rule) => {
+        self.visit_at_rule(at_rule);
+      }
+      recursive_parser::parser::RuleOrAtRuleOrDecl::Declaration(_) => {
+        unreachable!()
+      }
+    });
+  }
+
+  fn visit_rule(&mut self, rule: &mut recursive_parser::parser::Rule) {
+    rule
+      .children
+      .iter_mut()
+      .for_each(|rule_child| match rule_child {
+        recursive_parser::parser::RuleOrAtRuleOrDecl::Rule(_) => {
+          unreachable!()
+        }
+        recursive_parser::parser::RuleOrAtRuleOrDecl::AtRule(at_rule) => {
+          self.visit_at_rule(at_rule);
+        }
+        recursive_parser::parser::RuleOrAtRuleOrDecl::Declaration(decl) => {
+          self.visit_declaration(decl);
+        }
+      });
+  }
+
+  fn visit_at_rule(&mut self, at_rule: &mut recursive_parser::parser::AtRule) {
+    at_rule
+      .children
+      .iter_mut()
+      .for_each(|rule_child| match rule_child {
+        recursive_parser::parser::RuleOrAtRuleOrDecl::Rule(rule) => {
+          self.visit_rule(rule);
+        }
+        recursive_parser::parser::RuleOrAtRuleOrDecl::AtRule(at_rule) => {
+          self.visit_at_rule(at_rule);
+        }
+        recursive_parser::parser::RuleOrAtRuleOrDecl::Declaration(_decl) => {
+          unreachable!()
+        }
+      });
+  }
+
+  fn visit_declaration(&mut self, decl: &mut recursive_parser::parser::Declaration) {
+    decl.prop.content = Cow::Owned(decl.prop.content.chars().rev().collect());
   }
 }

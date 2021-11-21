@@ -33,15 +33,15 @@ pub struct Declaration<'a> {
 }
 
 pub struct Prop<'a> {
-  pub(crate) content: Cow<'a, str>,
+  pub content: Cow<'a, str>,
   pub start: usize,
   pub end: usize,
 }
 
 impl<'a> std::fmt::Display for Prop<'a> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-      write!(f, "{}", self.content)
-    }
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    write!(f, "{}", self.content)
+  }
 }
 
 pub struct Value<'a> {
@@ -51,9 +51,9 @@ pub struct Value<'a> {
 }
 
 impl<'a> std::fmt::Display for Value<'a> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-      write!(f, "{}", self.content)
-    }
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    write!(f, "{}", self.content)
+  }
 }
 
 pub struct AtRule<'a> {
