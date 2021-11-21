@@ -36,8 +36,8 @@ impl<W: Write> SimplePrettier<W> {
     Self { level: 0, writer }
   }
 }
-impl<W: std::io::Write> VisitMut<std::io::Result<()>> for SimplePrettier<W> {
-  fn visit_root(&mut self, root: &mut Root) -> std::io::Result<()> {
+impl<'a, W: std::io::Write> VisitMut<'a, std::io::Result<()>> for SimplePrettier<W> {
+  fn visit_root(&mut self, root: &mut Root<'a>) -> std::io::Result<()> {
     for child in root.children.iter_mut() {
       match child {
         RuleOrAtRuleOrDecl::Rule(rule) => {
@@ -54,7 +54,7 @@ impl<W: std::io::Write> VisitMut<std::io::Result<()>> for SimplePrettier<W> {
     Ok(())
   }
 
-  fn visit_rule(&mut self, rule: &mut Rule) -> std::io::Result<()> {
+  fn visit_rule(&mut self, rule: &mut Rule<'a>) -> std::io::Result<()> {
     self.writer.write(
       format!(
         "{}{} {}\n",
@@ -83,7 +83,7 @@ impl<W: std::io::Write> VisitMut<std::io::Result<()>> for SimplePrettier<W> {
     Ok(())
   }
 
-  fn visit_at_rule(&mut self, at_rule: &mut AtRule) -> std::io::Result<()> {
+  fn visit_at_rule(&mut self, at_rule: &mut AtRule<'a>) -> std::io::Result<()> {
     write!(
       self.writer,
       "{}{} {} {}\n",
@@ -110,7 +110,7 @@ impl<W: std::io::Write> VisitMut<std::io::Result<()>> for SimplePrettier<W> {
     write!(self.writer, "{}{}\n", " ".repeat(self.level * 2), "}")
   }
 
-  fn visit_declaration(&mut self, decl: &mut Declaration) -> std::io::Result<()> {
+  fn visit_declaration(&mut self, decl: &mut Declaration<'a>) -> std::io::Result<()> {
     write!(
       self.writer,
       "{}{} : {};",
@@ -124,8 +124,8 @@ impl<W: std::io::Write> VisitMut<std::io::Result<()>> for SimplePrettier<W> {
 #[derive(Default)]
 struct ReverseProp {}
 
-impl VisitMut for ReverseProp {
-  fn visit_root(&mut self, root: &mut Root) {
+impl<'a> VisitMut<'a> for ReverseProp {
+  fn visit_root(&mut self, root: &mut Root<'a>) {
     root.children.iter_mut().for_each(|child| match child {
       RuleOrAtRuleOrDecl::Rule(rule) => {
         self.visit_rule(rule);
@@ -139,7 +139,7 @@ impl VisitMut for ReverseProp {
     });
   }
 
-  fn visit_rule(&mut self, rule: &mut Rule) {
+  fn visit_rule(&mut self, rule: &mut Rule<'a>) {
     rule
       .children
       .iter_mut()
@@ -156,7 +156,7 @@ impl VisitMut for ReverseProp {
       });
   }
 
-  fn visit_at_rule(&mut self, at_rule: &mut AtRule) {
+  fn visit_at_rule(&mut self, at_rule: &mut AtRule<'a>) {
     at_rule
       .children
       .iter_mut()
@@ -173,7 +173,7 @@ impl VisitMut for ReverseProp {
       });
   }
 
-  fn visit_declaration(&mut self, decl: &mut Declaration) {
+  fn visit_declaration(&mut self, decl: &mut Declaration<'a>) {
     decl.prop.content = Cow::Owned(decl.prop.content.chars().rev().collect());
   }
 }

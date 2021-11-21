@@ -11,11 +11,11 @@ pub struct AstPrinter {
 }
 
 impl AstPrinter {
-  pub fn print(&mut self, root: &parser::Root) {
+  pub fn print<'a>(&mut self, root: &'a parser::Root<'a>) {
     self.visit_root(root);
   }
 }
-impl Visit<()> for AstPrinter {
+impl<'a> Visit<'a, ()> for AstPrinter {
   fn visit_root(&mut self, root: &parser::Root) {
     println!(
       "{}Root@{:?}",
