@@ -177,7 +177,8 @@ impl<'a> Parser<'a> {
   }
   // https://drafts.csswg.org/css-syntax/#component-value-diagram
   #[inline]
-  fn parse_component(&mut self) {
+  /// return bump token is trivial
+  fn parse_component(&mut self) -> bool {
     // self.start_node(TokenType::Component);
     if let Some(kind) = self.peek() {
       match kind {
@@ -193,10 +194,13 @@ impl<'a> Parser<'a> {
         }
         _ => {
           // println!("need to bump {:?} from parse component", self.peek());
-          self.bump();
+          return matches!(self.bump().0, TokenType::Space | TokenType::Comment);
         }
       }
+    } else {
+      eprintln!("expected token found none");
     }
+    false
     // self.finish_node();
   }
 
@@ -268,7 +272,7 @@ impl<'a> Parser<'a> {
     // println!("parse curlyblock");
     let mut ret: Vec<RuleOrAtRuleOrDecl> = vec![];
     self.bump(); // bump {
-    self.skip_whitespace();
+    self.skip_whitespace_comment();
     loop {
       match self.peek() {
         Some(kind) => match kind {
@@ -316,14 +320,14 @@ impl<'a> Parser<'a> {
       start,
       end,
     };
-    self.skip_whitespace();
+    self.skip_whitespace_comment();
     assert!(
       matches!(self.peek(), Some(TokenType::Colon)),
       "expected : found {:?}",
       self.peek()
     );
     self.bump();
-    self.skip_whitespace();
+    self.skip_whitespace_comment();
     let mut has_finish = false;
     let mut value = Value {
       content: Cow::Borrowed(""),
@@ -368,31 +372,31 @@ impl<'a> Parser<'a> {
     use TokenType::*;
     let start = self.pos;
     let Token(_, name, _, _) = self.bump(); // bump atWord
-    self.skip_whitespace();
+    self.skip_whitespace_comment();
     let mut children = vec![];
     let params_start = self.pos;
     let mut params_end = self.pos;
     while let Some(kind) = self.peek() {
       match kind {
         OpenCurly => {
-          params_end = self.pos;
           //   self.finish_node(); finish params
           children = self.parse_curly_block(true);
           break;
         }
         Semicolon => {
           //   self.finish_node();
-          params_end = self.pos;
           self.bump();
           break;
         }
         _ => {
-          self.parse_component();
+          if !self.parse_component() {
+            params_end = self.pos;
+          }
         }
       }
     }
     AtRule {
-      params: Cow::Borrowed(&self.source[params_start..params_end].trim()),
+      params: Cow::Borrowed(&self.source[params_start..params_end]),
       name: Cow::Borrowed(name),
       start,
       end: self.pos,
@@ -401,8 +405,8 @@ impl<'a> Parser<'a> {
   }
 
   #[inline]
-  pub fn skip_whitespace(&mut self) {
-    if let Some(TokenType::Space) = self.peek() {
+  pub fn skip_whitespace_comment(&mut self) {
+    while matches!(self.peek(), Some(TokenType::Space | TokenType::Comment)) {
       self.bump();
     }
   }

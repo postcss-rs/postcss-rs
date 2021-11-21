@@ -34,40 +34,8 @@ fn main() {
     ;
   }"#;
   let css_test2 = r#"
-  /* 我的 */
-@supports (--element(".minwidth", { "minWidth": 300 })) {
-  [--self] {
-    background: greenyellow;
-  }
-}
+@-moz-document/* near */ /* filter */ url("example.com/{") /* a */ {}
 
-@supports ({"example": 1}) {
-  * { background: red; }
-}
-
-@supports (("example": 1)) {
-  * { background: red; }
-}
-
-@supports (func("example": 1)) {
-  * { background: red; }
-}
-
-@supports (--var) {
-  * { background: red; }
-}
-
-@supports ([]) {
-  * { background: red; }
-}
-
-@supports ([color: red]) {
-  * { background: red; }
-}
-
-@supports ([[[[[{ --func(color: { red }) }]]]]]) {
-  * { background: red; }
-}
 
   
 
@@ -76,5 +44,5 @@ fn main() {
   let mut parser = parser::Parser::new(css_test2);
   let mut _root = parser.parse();
   println!("{:?}", start.elapsed());
-// AstPrinter::default().print(&_root);
+  AstPrinter::default().print(&_root);
 }
