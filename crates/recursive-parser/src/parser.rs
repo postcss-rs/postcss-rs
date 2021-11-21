@@ -321,13 +321,14 @@ impl<'a> Parser<'a> {
     let mut value = Value {
       content: Cow::Borrowed(""),
       start: self.pos,
-      end: 0,
+      end: self.pos,
     };
+    let mut value_end = self.pos;
     while let Some(kind) = self.peek() {
       match kind {
         CloseCurly | Semicolon => {
           has_finish = true;
-          value.end = self.pos;
+          value.end = value_end;
           value.content = Cow::Borrowed(&self.source[value.start..value.end]);
           break;
         }
@@ -337,11 +338,12 @@ impl<'a> Parser<'a> {
         _ => {
           // println!("parse the component");
           self.parse_component();
+          value_end = self.pos;
         }
       }
     }
     if !has_finish {
-      value.end = self.pos;
+      value.end = value_end;
       value.content = Cow::Borrowed(&self.source[value.start..value.end]);
     }
     let end = if matches!(self.peek(), Some(Semicolon)) {
