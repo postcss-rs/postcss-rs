@@ -9,11 +9,7 @@ mod test_ast {
 
   #[test]
   fn integration_test_css() -> Result<()> {
-    let file_list = [
-      "simple.css",
-      "bootstrap-reboot.css",
-      "bootstrap-grid.css",
-    ];
+    let file_list = ["simple.css", "bootstrap-reboot.css", "bootstrap-grid.css"];
     for file_name in file_list {
       let file = read_to_string(format!("../../assets/{}", file_name))?;
       let expected_ast_path = format!(
