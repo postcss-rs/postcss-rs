@@ -1,7 +1,7 @@
 pub mod parser;
 pub mod syntax;
 
-pub mod visitor;
 mod ast_util;
+pub mod visitor;
 
 pub use ast_util::*;
