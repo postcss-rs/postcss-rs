@@ -1,0 +1,6554 @@
+Root@0..71560
+  Rule@224..292
+    selector: `.clearfix::after`
+    Declaration@245..260
+      prop: `display`
+      value: `block`
+    Declaration@263..275
+      prop: `clear`
+      value: `both`
+    Declaration@278..290
+      prop: `content`
+      value: `""`
+  Rule@294..329
+    selector: `.link-primary`
+    Declaration@312..327
+      prop: `color`
+      value: `#0d6efd`
+  Rule@330..392
+    selector: `.link-primary:hover, .link-primary:focus`
+    Declaration@375..390
+      prop: `color`
+      value: `#0a58ca`
+  Rule@394..431
+    selector: `.link-secondary`
+    Declaration@414..429
+      prop: `color`
+      value: `#6c757d`
+  Rule@432..498
+    selector: `.link-secondary:hover, .link-secondary:focus`
+    Declaration@481..496
+      prop: `color`
+      value: `#565e64`
+  Rule@500..535
+    selector: `.link-success`
+    Declaration@518..533
+      prop: `color`
+      value: `#198754`
+  Rule@536..598
+    selector: `.link-success:hover, .link-success:focus`
+    Declaration@581..596
+      prop: `color`
+      value: `#146c43`
+  Rule@600..632
+    selector: `.link-info`
+    Declaration@615..630
+      prop: `color`
+      value: `#0dcaf0`
+  Rule@633..689
+    selector: `.link-info:hover, .link-info:focus`
+    Declaration@672..687
+      prop: `color`
+      value: `#3dd5f3`
+  Rule@691..726
+    selector: `.link-warning`
+    Declaration@709..724
+      prop: `color`
+      value: `#ffc107`
+  Rule@727..789
+    selector: `.link-warning:hover, .link-warning:focus`
+    Declaration@772..787
+      prop: `color`
+      value: `#ffcd39`
+  Rule@791..825
+    selector: `.link-danger`
+    Declaration@808..823
+      prop: `color`
+      value: `#dc3545`
+  Rule@826..886
+    selector: `.link-danger:hover, .link-danger:focus`
+    Declaration@869..884
+      prop: `color`
+      value: `#b02a37`
+  Rule@888..921
+    selector: `.link-light`
+    Declaration@904..919
+      prop: `color`
+      value: `#f8f9fa`
+  Rule@922..980
+    selector: `.link-light:hover, .link-light:focus`
+    Declaration@963..978
+      prop: `color`
+      value: `#f9fafb`
+  Rule@982..1014
+    selector: `.link-dark`
+    Declaration@997..1012
+      prop: `color`
+      value: `#212529`
+  Rule@1015..1071
+    selector: `.link-dark:hover, .link-dark:focus`
+    Declaration@1054..1069
+      prop: `color`
+      value: `#1a1e21`
+  Rule@1073..1120
+    selector: `.ratio`
+    Declaration@1084..1103
+      prop: `position`
+      value: `relative`
+    Declaration@1106..1118
+      prop: `width`
+      value: `100%`
+  Rule@1121..1211
+    selector: `.ratio::before`
+    Declaration@1140..1155
+      prop: `display`
+      value: `block`
+    Declaration@1158..1194
+      prop: `padding-top`
+      value: `var(--bs-aspect-ratio)`
+    Declaration@1197..1209
+      prop: `content`
+      value: `""`
+  Rule@1212..1300
+    selector: `.ratio > *`
+    Declaration@1227..1246
+      prop: `position`
+      value: `absolute`
+    Declaration@1249..1256
+      prop: `top`
+      value: `0`
+    Declaration@1259..1267
+      prop: `left`
+      value: `0`
+    Declaration@1270..1282
+      prop: `width`
+      value: `100%`
+    Declaration@1285..1298
+      prop: `height`
+      value: `100%`
+  Rule@1302..1343
+    selector: `.ratio-1x1`
+    Declaration@1317..1341
+      prop: `--bs-aspect-ratio`
+      value: `100%`
+  Rule@1345..1385
+    selector: `.ratio-4x3`
+    Declaration@1360..1383
+      prop: `--bs-aspect-ratio`
+      value: `75%`
+  Rule@1387..1431
+    selector: `.ratio-16x9`
+    Declaration@1403..1429
+      prop: `--bs-aspect-ratio`
+      value: `56.25%`
+  Rule@1433..1485
+    selector: `.ratio-21x9`
+    Declaration@1449..1483
+      prop: `--bs-aspect-ratio`
+      value: `42.8571428571%`
+  Rule@1487..1570
+    selector: `.fixed-top`
+    Declaration@1502..1518
+      prop: `position`
+      value: `fixed`
+    Declaration@1521..1528
+      prop: `top`
+      value: `0`
+    Declaration@1531..1540
+      prop: `right`
+      value: `0`
+    Declaration@1543..1551
+      prop: `left`
+      value: `0`
+    Declaration@1554..1568
+      prop: `z-index`
+      value: `1030`
+  Rule@1572..1661
+    selector: `.fixed-bottom`
+    Declaration@1590..1606
+      prop: `position`
+      value: `fixed`
+    Declaration@1609..1618
+      prop: `right`
+      value: `0`
+    Declaration@1621..1631
+      prop: `bottom`
+      value: `0`
+    Declaration@1634..1642
+      prop: `left`
+      value: `0`
+    Declaration@1645..1659
+      prop: `z-index`
+      value: `1030`
+  Rule@1663..1753
+    selector: `.sticky-top`
+    Declaration@1679..1704
+      prop: `position`
+      value: `-webkit-sticky`
+    Declaration@1707..1724
+      prop: `position`
+      value: `sticky`
+    Declaration@1727..1734
+      prop: `top`
+      value: `0`
+    Declaration@1737..1751
+      prop: `z-index`
+      value: `1020`
+  AtRule@1755..1890
+    name: `media`
+    params: `(min-width: 576px)`
+    Rule@1785..1888
+      selector: `.sticky-sm-top`
+      Declaration@1806..1831
+        prop: `position`
+        value: `-webkit-sticky`
+      Declaration@1836..1853
+        prop: `position`
+        value: `sticky`
+      Declaration@1858..1865
+        prop: `top`
+        value: `0`
+      Declaration@1870..1884
+        prop: `z-index`
+        value: `1020`
+  AtRule@1891..2026
+    name: `media`
+    params: `(min-width: 768px)`
+    Rule@1921..2024
+      selector: `.sticky-md-top`
+      Declaration@1942..1967
+        prop: `position`
+        value: `-webkit-sticky`
+      Declaration@1972..1989
+        prop: `position`
+        value: `sticky`
+      Declaration@1994..2001
+        prop: `top`
+        value: `0`
+      Declaration@2006..2020
+        prop: `z-index`
+        value: `1020`
+  AtRule@2027..2162
+    name: `media`
+    params: `(min-width: 992px)`
+    Rule@2057..2160
+      selector: `.sticky-lg-top`
+      Declaration@2078..2103
+        prop: `position`
+        value: `-webkit-sticky`
+      Declaration@2108..2125
+        prop: `position`
+        value: `sticky`
+      Declaration@2130..2137
+        prop: `top`
+        value: `0`
+      Declaration@2142..2156
+        prop: `z-index`
+        value: `1020`
+  AtRule@2163..2299
+    name: `media`
+    params: `(min-width: 1200px)`
+    Rule@2194..2297
+      selector: `.sticky-xl-top`
+      Declaration@2215..2240
+        prop: `position`
+        value: `-webkit-sticky`
+      Declaration@2245..2262
+        prop: `position`
+        value: `sticky`
+      Declaration@2267..2274
+        prop: `top`
+        value: `0`
+      Declaration@2279..2293
+        prop: `z-index`
+        value: `1020`
+  AtRule@2300..2437
+    name: `media`
+    params: `(min-width: 1400px)`
+    Rule@2331..2435
+      selector: `.sticky-xxl-top`
+      Declaration@2353..2378
+        prop: `position`
+        value: `-webkit-sticky`
+      Declaration@2383..2400
+        prop: `position`
+        value: `sticky`
+      Declaration@2405..2412
+        prop: `top`
+        value: `0`
+      Declaration@2417..2431
+        prop: `z-index`
+        value: `1020`
+  Rule@2438..2535
+    selector: `.hstack`
+    Declaration@2450..2464
+      prop: `display`
+      value: `flex`
+    Declaration@2467..2487
+      prop: `flex-direction`
+      value: `row`
+    Declaration@2490..2510
+      prop: `align-items`
+      value: `center`
+    Declaration@2513..2533
+      prop: `align-self`
+      value: `stretch`
+  Rule@2537..2632
+    selector: `.vstack`
+    Declaration@2549..2563
+      prop: `display`
+      value: `flex`
+    Declaration@2566..2581
+      prop: `flex`
+      value: `1 1 auto`
+    Declaration@2584..2607
+      prop: `flex-direction`
+      value: `column`
+    Declaration@2610..2630
+      prop: `align-self`
+      value: `stretch`
+  Rule@2634..2975
+    selector: `.visually-hidden,
+.visually-hidden-focusable:not(:focus):not(:focus-within)`
+    Declaration@2714..2744
+      prop: `position`
+      value: `absolute`
+    Declaration@2747..2769
+      prop: `width`
+      value: `1px`
+    Declaration@2772..2795
+      prop: `height`
+      value: `1px`
+    Declaration@2798..2820
+      prop: `padding`
+      value: `0`
+    Declaration@2823..2847
+      prop: `margin`
+      value: `-1px`
+    Declaration@2850..2878
+      prop: `overflow`
+      value: `hidden`
+    Declaration@2881..2915
+      prop: `clip`
+      value: `rect(0, 0, 0, 0)`
+    Declaration@2918..2949
+      prop: `white-space`
+      value: `nowrap`
+    Declaration@2952..2973
+      prop: `border`
+      value: `0`
+  Rule@2977..3100
+    selector: `.stretched-link::after`
+    Declaration@3004..3023
+      prop: `position`
+      value: `absolute`
+    Declaration@3026..3033
+      prop: `top`
+      value: `0`
+    Declaration@3036..3045
+      prop: `right`
+      value: `0`
+    Declaration@3048..3058
+      prop: `bottom`
+      value: `0`
+    Declaration@3061..3069
+      prop: `left`
+      value: `0`
+    Declaration@3072..3083
+      prop: `z-index`
+      value: `1`
+    Declaration@3086..3098
+      prop: `content`
+      value: `""`
+  Rule@3102..3190
+    selector: `.text-truncate`
+    Declaration@3121..3138
+      prop: `overflow`
+      value: `hidden`
+    Declaration@3141..3165
+      prop: `text-overflow`
+      value: `ellipsis`
+    Declaration@3168..3188
+      prop: `white-space`
+      value: `nowrap`
+  Rule@3192..3331
+    selector: `.vr`
+    Declaration@3200..3222
+      prop: `display`
+      value: `inline-block`
+    Declaration@3225..3245
+      prop: `align-self`
+      value: `stretch`
+    Declaration@3248..3259
+      prop: `width`
+      value: `1px`
+    Declaration@3262..3278
+      prop: `min-height`
+      value: `1em`
+    Declaration@3281..3312
+      prop: `background-color`
+      value: `currentColor`
+    Declaration@3315..3329
+      prop: `opacity`
+      value: `0.25`
+  Rule@3333..3391
+    selector: `.align-baseline`
+    Declaration@3353..3389
+      prop: `vertical-align`
+      value: `baseline`
+  Rule@3393..3441
+    selector: `.align-top`
+    Declaration@3408..3439
+      prop: `vertical-align`
+      value: `top`
+  Rule@3443..3497
+    selector: `.align-middle`
+    Declaration@3461..3495
+      prop: `vertical-align`
+      value: `middle`
+  Rule@3499..3553
+    selector: `.align-bottom`
+    Declaration@3517..3551
+      prop: `vertical-align`
+      value: `bottom`
+  Rule@3555..3619
+    selector: `.align-text-bottom`
+    Declaration@3578..3617
+      prop: `vertical-align`
+      value: `text-bottom`
+  Rule@3621..3679
+    selector: `.align-text-top`
+    Declaration@3641..3677
+      prop: `vertical-align`
+      value: `text-top`
+  Rule@3681..3723
+    selector: `.float-start`
+    Declaration@3698..3721
+      prop: `float`
+      value: `left`
+  Rule@3725..3766
+    selector: `.float-end`
+    Declaration@3740..3764
+      prop: `float`
+      value: `right`
+  Rule@3768..3809
+    selector: `.float-none`
+    Declaration@3784..3807
+      prop: `float`
+      value: `none`
+  Rule@3811..3850
+    selector: `.opacity-0`
+    Declaration@3826..3848
+      prop: `opacity`
+      value: `0`
+  Rule@3852..3895
+    selector: `.opacity-25`
+    Declaration@3868..3893
+      prop: `opacity`
+      value: `0.25`
+  Rule@3897..3939
+    selector: `.opacity-50`
+    Declaration@3913..3937
+      prop: `opacity`
+      value: `0.5`
+  Rule@3941..3984
+    selector: `.opacity-75`
+    Declaration@3957..3982
+      prop: `opacity`
+      value: `0.75`
+  Rule@3986..4027
+    selector: `.opacity-100`
+    Declaration@4003..4025
+      prop: `opacity`
+      value: `1`
+  Rule@4029..4076
+    selector: `.overflow-auto`
+    Declaration@4048..4074
+      prop: `overflow`
+      value: `auto`
+  Rule@4078..4129
+    selector: `.overflow-hidden`
+    Declaration@4099..4127
+      prop: `overflow`
+      value: `hidden`
+  Rule@4131..4184
+    selector: `.overflow-visible`
+    Declaration@4153..4182
+      prop: `overflow`
+      value: `visible`
+  Rule@4186..4237
+    selector: `.overflow-scroll`
+    Declaration@4207..4235
+      prop: `overflow`
+      value: `scroll`
+  Rule@4239..4282
+    selector: `.d-inline`
+    Declaration@4253..4280
+      prop: `display`
+      value: `inline`
+  Rule@4284..4339
+    selector: `.d-inline-block`
+    Declaration@4304..4337
+      prop: `display`
+      value: `inline-block`
+  Rule@4341..4382
+    selector: `.d-block`
+    Declaration@4354..4380
+      prop: `display`
+      value: `block`
+  Rule@4384..4423
+    selector: `.d-grid`
+    Declaration@4396..4421
+      prop: `display`
+      value: `grid`
+  Rule@4425..4466
+    selector: `.d-table`
+    Declaration@4438..4464
+      prop: `display`
+      value: `table`
+  Rule@4468..4517
+    selector: `.d-table-row`
+    Declaration@4485..4515
+      prop: `display`
+      value: `table-row`
+  Rule@4519..4570
+    selector: `.d-table-cell`
+    Declaration@4537..4568
+      prop: `display`
+      value: `table-cell`
+  Rule@4572..4611
+    selector: `.d-flex`
+    Declaration@4584..4609
+      prop: `display`
+      value: `flex`
+  Rule@4613..4666
+    selector: `.d-inline-flex`
+    Declaration@4632..4664
+      prop: `display`
+      value: `inline-flex`
+  Rule@4668..4707
+    selector: `.d-none`
+    Declaration@4680..4705
+      prop: `display`
+      value: `none`
+  Rule@4709..4780
+    selector: `.shadow`
+    Declaration@4721..4778
+      prop: `box-shadow`
+      value: `0 0.5rem 1rem rgba(0, 0, 0, 0.15)`
+  Rule@4782..4862
+    selector: `.shadow-sm`
+    Declaration@4797..4860
+      prop: `box-shadow`
+      value: `0 0.125rem 0.25rem rgba(0, 0, 0, 0.075)`
+  Rule@4864..4937
+    selector: `.shadow-lg`
+    Declaration@4879..4935
+      prop: `box-shadow`
+      value: `0 1rem 3rem rgba(0, 0, 0, 0.175)`
+  Rule@4939..4986
+    selector: `.shadow-none`
+    Declaration@4956..4984
+      prop: `box-shadow`
+      value: `none`
+  Rule@4988..5039
+    selector: `.position-static`
+    Declaration@5009..5037
+      prop: `position`
+      value: `static`
+  Rule@5041..5096
+    selector: `.position-relative`
+    Declaration@5064..5094
+      prop: `position`
+      value: `relative`
+  Rule@5098..5153
+    selector: `.position-absolute`
+    Declaration@5121..5151
+      prop: `position`
+      value: `absolute`
+  Rule@5155..5204
+    selector: `.position-fixed`
+    Declaration@5175..5202
+      prop: `position`
+      value: `fixed`
+  Rule@5206..5296
+    selector: `.position-sticky`
+    Declaration@5227..5263
+      prop: `position`
+      value: `-webkit-sticky`
+    Declaration@5266..5294
+      prop: `position`
+      value: `sticky`
+  Rule@5298..5329
+    selector: `.top-0`
+    Declaration@5309..5327
+      prop: `top`
+      value: `0`
+  Rule@5331..5365
+    selector: `.top-50`
+    Declaration@5343..5363
+      prop: `top`
+      value: `50%`
+  Rule@5367..5403
+    selector: `.top-100`
+    Declaration@5380..5401
+      prop: `top`
+      value: `100%`
+  Rule@5405..5442
+    selector: `.bottom-0`
+    Declaration@5419..5440
+      prop: `bottom`
+      value: `0`
+  Rule@5444..5484
+    selector: `.bottom-50`
+    Declaration@5459..5482
+      prop: `bottom`
+      value: `50%`
+  Rule@5486..5528
+    selector: `.bottom-100`
+    Declaration@5502..5526
+      prop: `bottom`
+      value: `100%`
+  Rule@5530..5564
+    selector: `.start-0`
+    Declaration@5543..5562
+      prop: `left`
+      value: `0`
+  Rule@5566..5603
+    selector: `.start-50`
+    Declaration@5580..5601
+      prop: `left`
+      value: `50%`
+  Rule@5605..5644
+    selector: `.start-100`
+    Declaration@5620..5642
+      prop: `left`
+      value: `100%`
+  Rule@5646..5679
+    selector: `.end-0`
+    Declaration@5657..5677
+      prop: `right`
+      value: `0`
+  Rule@5681..5717
+    selector: `.end-50`
+    Declaration@5693..5715
+      prop: `right`
+      value: `50%`
+  Rule@5719..5757
+    selector: `.end-100`
+    Declaration@5732..5755
+      prop: `right`
+      value: `100%`
+  Rule@5759..5827
+    selector: `.translate-middle`
+    Declaration@5781..5825
+      prop: `transform`
+      value: `translate(-50%, -50%)`
+  Rule@5829..5894
+    selector: `.translate-middle-x`
+    Declaration@5853..5892
+      prop: `transform`
+      value: `translateX(-50%)`
+  Rule@5896..5961
+    selector: `.translate-middle-y`
+    Declaration@5920..5959
+      prop: `transform`
+      value: `translateY(-50%)`
+  Rule@5963..6014
+    selector: `.border`
+    Declaration@5975..6012
+      prop: `border`
+      value: `1px solid #dee2e6`
+  Rule@6016..6053
+    selector: `.border-0`
+    Declaration@6030..6051
+      prop: `border`
+      value: `0`
+  Rule@6055..6114
+    selector: `.border-top`
+    Declaration@6071..6112
+      prop: `border-top`
+      value: `1px solid #dee2e6`
+  Rule@6116..6161
+    selector: `.border-top-0`
+    Declaration@6134..6159
+      prop: `border-top`
+      value: `0`
+  Rule@6163..6224
+    selector: `.border-end`
+    Declaration@6179..6222
+      prop: `border-right`
+      value: `1px solid #dee2e6`
+  Rule@6226..6273
+    selector: `.border-end-0`
+    Declaration@6244..6271
+      prop: `border-right`
+      value: `0`
+  Rule@6275..6340
+    selector: `.border-bottom`
+    Declaration@6294..6338
+      prop: `border-bottom`
+      value: `1px solid #dee2e6`
+  Rule@6342..6393
+    selector: `.border-bottom-0`
+    Declaration@6363..6391
+      prop: `border-bottom`
+      value: `0`
+  Rule@6395..6457
+    selector: `.border-start`
+    Declaration@6413..6455
+      prop: `border-left`
+      value: `1px solid #dee2e6`
+  Rule@6459..6507
+    selector: `.border-start-0`
+    Declaration@6479..6505
+      prop: `border-left`
+      value: `0`
+  Rule@6509..6564
+    selector: `.border-primary`
+    Declaration@6529..6562
+      prop: `border-color`
+      value: `#0d6efd`
+  Rule@6566..6623
+    selector: `.border-secondary`
+    Declaration@6588..6621
+      prop: `border-color`
+      value: `#6c757d`
+  Rule@6625..6680
+    selector: `.border-success`
+    Declaration@6645..6678
+      prop: `border-color`
+      value: `#198754`
+  Rule@6682..6734
+    selector: `.border-info`
+    Declaration@6699..6732
+      prop: `border-color`
+      value: `#0dcaf0`
+  Rule@6736..6791
+    selector: `.border-warning`
+    Declaration@6756..6789
+      prop: `border-color`
+      value: `#ffc107`
+  Rule@6793..6847
+    selector: `.border-danger`
+    Declaration@6812..6845
+      prop: `border-color`
+      value: `#dc3545`
+  Rule@6849..6902
+    selector: `.border-light`
+    Declaration@6867..6900
+      prop: `border-color`
+      value: `#f8f9fa`
+  Rule@6904..6956
+    selector: `.border-dark`
+    Declaration@6921..6954
+      prop: `border-color`
+      value: `#212529`
+  Rule@6958..7008
+    selector: `.border-white`
+    Declaration@6976..7006
+      prop: `border-color`
+      value: `#fff`
+  Rule@7010..7055
+    selector: `.border-1`
+    Declaration@7024..7053
+      prop: `border-width`
+      value: `1px`
+  Rule@7057..7102
+    selector: `.border-2`
+    Declaration@7071..7100
+      prop: `border-width`
+      value: `2px`
+  Rule@7104..7149
+    selector: `.border-3`
+    Declaration@7118..7147
+      prop: `border-width`
+      value: `3px`
+  Rule@7151..7196
+    selector: `.border-4`
+    Declaration@7165..7194
+      prop: `border-width`
+      value: `4px`
+  Rule@7198..7243
+    selector: `.border-5`
+    Declaration@7212..7241
+      prop: `border-width`
+      value: `5px`
+  Rule@7245..7279
+    selector: `.w-25`
+    Declaration@7255..7277
+      prop: `width`
+      value: `25%`
+  Rule@7281..7315
+    selector: `.w-50`
+    Declaration@7291..7313
+      prop: `width`
+      value: `50%`
+  Rule@7317..7351
+    selector: `.w-75`
+    Declaration@7327..7349
+      prop: `width`
+      value: `75%`
+  Rule@7353..7389
+    selector: `.w-100`
+    Declaration@7364..7387
+      prop: `width`
+      value: `100%`
+  Rule@7391..7428
+    selector: `.w-auto`
+    Declaration@7403..7426
+      prop: `width`
+      value: `auto`
+  Rule@7430..7471
+    selector: `.mw-100`
+    Declaration@7442..7469
+      prop: `max-width`
+      value: `100%`
+  Rule@7473..7511
+    selector: `.vw-100`
+    Declaration@7485..7509
+      prop: `width`
+      value: `100vw`
+  Rule@7513..7559
+    selector: `.min-vw-100`
+    Declaration@7529..7557
+      prop: `min-width`
+      value: `100vw`
+  Rule@7561..7596
+    selector: `.h-25`
+    Declaration@7571..7594
+      prop: `height`
+      value: `25%`
+  Rule@7598..7633
+    selector: `.h-50`
+    Declaration@7608..7631
+      prop: `height`
+      value: `50%`
+  Rule@7635..7670
+    selector: `.h-75`
+    Declaration@7645..7668
+      prop: `height`
+      value: `75%`
+  Rule@7672..7709
+    selector: `.h-100`
+    Declaration@7683..7707
+      prop: `height`
+      value: `100%`
+  Rule@7711..7749
+    selector: `.h-auto`
+    Declaration@7723..7747
+      prop: `height`
+      value: `auto`
+  Rule@7751..7793
+    selector: `.mh-100`
+    Declaration@7763..7791
+      prop: `max-height`
+      value: `100%`
+  Rule@7795..7834
+    selector: `.vh-100`
+    Declaration@7807..7832
+      prop: `height`
+      value: `100vh`
+  Rule@7836..7883
+    selector: `.min-vh-100`
+    Declaration@7852..7881
+      prop: `min-height`
+      value: `100vh`
+  Rule@7885..7928
+    selector: `.flex-fill`
+    Declaration@7900..7926
+      prop: `flex`
+      value: `1 1 auto`
+  Rule@7930..7977
+    selector: `.flex-row`
+    Declaration@7944..7975
+      prop: `flex-direction`
+      value: `row`
+  Rule@7979..8032
+    selector: `.flex-column`
+    Declaration@7996..8030
+      prop: `flex-direction`
+      value: `column`
+  Rule@8034..8097
+    selector: `.flex-row-reverse`
+    Declaration@8056..8095
+      prop: `flex-direction`
+      value: `row-reverse`
+  Rule@8099..8168
+    selector: `.flex-column-reverse`
+    Declaration@8124..8166
+      prop: `flex-direction`
+      value: `column-reverse`
+  Rule@8170..8213
+    selector: `.flex-grow-0`
+    Declaration@8187..8211
+      prop: `flex-grow`
+      value: `0`
+  Rule@8215..8258
+    selector: `.flex-grow-1`
+    Declaration@8232..8256
+      prop: `flex-grow`
+      value: `1`
+  Rule@8260..8307
+    selector: `.flex-shrink-0`
+    Declaration@8279..8305
+      prop: `flex-shrink`
+      value: `0`
+  Rule@8309..8356
+    selector: `.flex-shrink-1`
+    Declaration@8328..8354
+      prop: `flex-shrink`
+      value: `1`
+  Rule@8358..8402
+    selector: `.flex-wrap`
+    Declaration@8373..8400
+      prop: `flex-wrap`
+      value: `wrap`
+  Rule@8404..8452
+    selector: `.flex-nowrap`
+    Declaration@8421..8450
+      prop: `flex-wrap`
+      value: `nowrap`
+  Rule@8454..8514
+    selector: `.flex-wrap-reverse`
+    Declaration@8477..8512
+      prop: `flex-wrap`
+      value: `wrap-reverse`
+  Rule@8516..8547
+    selector: `.gap-0`
+    Declaration@8527..8545
+      prop: `gap`
+      value: `0`
+  Rule@8549..8586
+    selector: `.gap-1`
+    Declaration@8560..8584
+      prop: `gap`
+      value: `0.25rem`
+  Rule@8588..8624
+    selector: `.gap-2`
+    Declaration@8599..8622
+      prop: `gap`
+      value: `0.5rem`
+  Rule@8626..8660
+    selector: `.gap-3`
+    Declaration@8637..8658
+      prop: `gap`
+      value: `1rem`
+  Rule@8662..8698
+    selector: `.gap-4`
+    Declaration@8673..8696
+      prop: `gap`
+      value: `1.5rem`
+  Rule@8700..8734
+    selector: `.gap-5`
+    Declaration@8711..8732
+      prop: `gap`
+      value: `3rem`
+  Rule@8736..8804
+    selector: `.justify-content-start`
+    Declaration@8763..8802
+      prop: `justify-content`
+      value: `flex-start`
+  Rule@8806..8870
+    selector: `.justify-content-end`
+    Declaration@8831..8868
+      prop: `justify-content`
+      value: `flex-end`
+  Rule@8872..8937
+    selector: `.justify-content-center`
+    Declaration@8900..8935
+      prop: `justify-content`
+      value: `center`
+  Rule@8939..9012
+    selector: `.justify-content-between`
+    Declaration@8968..9010
+      prop: `justify-content`
+      value: `space-between`
+  Rule@9014..9085
+    selector: `.justify-content-around`
+    Declaration@9042..9083
+      prop: `justify-content`
+      value: `space-around`
+  Rule@9087..9158
+    selector: `.justify-content-evenly`
+    Declaration@9115..9156
+      prop: `justify-content`
+      value: `space-evenly`
+  Rule@9160..9220
+    selector: `.align-items-start`
+    Declaration@9183..9218
+      prop: `align-items`
+      value: `flex-start`
+  Rule@9222..9278
+    selector: `.align-items-end`
+    Declaration@9243..9276
+      prop: `align-items`
+      value: `flex-end`
+  Rule@9280..9337
+    selector: `.align-items-center`
+    Declaration@9304..9335
+      prop: `align-items`
+      value: `center`
+  Rule@9339..9400
+    selector: `.align-items-baseline`
+    Declaration@9365..9398
+      prop: `align-items`
+      value: `baseline`
+  Rule@9402..9461
+    selector: `.align-items-stretch`
+    Declaration@9427..9459
+      prop: `align-items`
+      value: `stretch`
+  Rule@9463..9527
+    selector: `.align-content-start`
+    Declaration@9488..9525
+      prop: `align-content`
+      value: `flex-start`
+  Rule@9529..9589
+    selector: `.align-content-end`
+    Declaration@9552..9587
+      prop: `align-content`
+      value: `flex-end`
+  Rule@9591..9652
+    selector: `.align-content-center`
+    Declaration@9617..9650
+      prop: `align-content`
+      value: `center`
+  Rule@9654..9723
+    selector: `.align-content-between`
+    Declaration@9681..9721
+      prop: `align-content`
+      value: `space-between`
+  Rule@9725..9792
+    selector: `.align-content-around`
+    Declaration@9751..9790
+      prop: `align-content`
+      value: `space-around`
+  Rule@9794..9857
+    selector: `.align-content-stretch`
+    Declaration@9821..9855
+      prop: `align-content`
+      value: `stretch`
+  Rule@9859..9910
+    selector: `.align-self-auto`
+    Declaration@9880..9908
+      prop: `align-self`
+      value: `auto`
+  Rule@9912..9970
+    selector: `.align-self-start`
+    Declaration@9934..9968
+      prop: `align-self`
+      value: `flex-start`
+  Rule@9972..10026
+    selector: `.align-self-end`
+    Declaration@9992..10024
+      prop: `align-self`
+      value: `flex-end`
+  Rule@10028..10083
+    selector: `.align-self-center`
+    Declaration@10051..10081
+      prop: `align-self`
+      value: `center`
+  Rule@10085..10144
+    selector: `.align-self-baseline`
+    Declaration@10110..10142
+      prop: `align-self`
+      value: `baseline`
+  Rule@10146..10203
+    selector: `.align-self-stretch`
+    Declaration@10170..10201
+      prop: `align-self`
+      value: `stretch`
+  Rule@10205..10245
+    selector: `.order-first`
+    Declaration@10222..10243
+      prop: `order`
+      value: `-1`
+  Rule@10247..10282
+    selector: `.order-0`
+    Declaration@10260..10280
+      prop: `order`
+      value: `0`
+  Rule@10284..10319
+    selector: `.order-1`
+    Declaration@10297..10317
+      prop: `order`
+      value: `1`
+  Rule@10321..10356
+    selector: `.order-2`
+    Declaration@10334..10354
+      prop: `order`
+      value: `2`
+  Rule@10358..10393
+    selector: `.order-3`
+    Declaration@10371..10391
+      prop: `order`
+      value: `3`
+  Rule@10395..10430
+    selector: `.order-4`
+    Declaration@10408..10428
+      prop: `order`
+      value: `4`
+  Rule@10432..10467
+    selector: `.order-5`
+    Declaration@10445..10465
+      prop: `order`
+      value: `5`
+  Rule@10469..10507
+    selector: `.order-last`
+    Declaration@10485..10505
+      prop: `order`
+      value: `6`
+  Rule@10509..10541
+    selector: `.m-0`
+    Declaration@10518..10539
+      prop: `margin`
+      value: `0`
+  Rule@10543..10581
+    selector: `.m-1`
+    Declaration@10552..10579
+      prop: `margin`
+      value: `0.25rem`
+  Rule@10583..10620
+    selector: `.m-2`
+    Declaration@10592..10618
+      prop: `margin`
+      value: `0.5rem`
+  Rule@10622..10657
+    selector: `.m-3`
+    Declaration@10631..10655
+      prop: `margin`
+      value: `1rem`
+  Rule@10659..10696
+    selector: `.m-4`
+    Declaration@10668..10694
+      prop: `margin`
+      value: `1.5rem`
+  Rule@10698..10733
+    selector: `.m-5`
+    Declaration@10707..10731
+      prop: `margin`
+      value: `3rem`
+  Rule@10735..10773
+    selector: `.m-auto`
+    Declaration@10747..10771
+      prop: `margin`
+      value: `auto`
+  Rule@10775..10843
+    selector: `.mx-0`
+    Declaration@10785..10812
+      prop: `margin-right`
+      value: `0`
+    Declaration@10815..10841
+      prop: `margin-left`
+      value: `0`
+  Rule@10845..10925
+    selector: `.mx-1`
+    Declaration@10855..10888
+      prop: `margin-right`
+      value: `0.25rem`
+    Declaration@10891..10923
+      prop: `margin-left`
+      value: `0.25rem`
+  Rule@10927..11005
+    selector: `.mx-2`
+    Declaration@10937..10969
+      prop: `margin-right`
+      value: `0.5rem`
+    Declaration@10972..11003
+      prop: `margin-left`
+      value: `0.5rem`
+  Rule@11007..11081
+    selector: `.mx-3`
+    Declaration@11017..11047
+      prop: `margin-right`
+      value: `1rem`
+    Declaration@11050..11079
+      prop: `margin-left`
+      value: `1rem`
+  Rule@11083..11161
+    selector: `.mx-4`
+    Declaration@11093..11125
+      prop: `margin-right`
+      value: `1.5rem`
+    Declaration@11128..11159
+      prop: `margin-left`
+      value: `1.5rem`
+  Rule@11163..11237
+    selector: `.mx-5`
+    Declaration@11173..11203
+      prop: `margin-right`
+      value: `3rem`
+    Declaration@11206..11235
+      prop: `margin-left`
+      value: `3rem`
+  Rule@11239..11316
+    selector: `.mx-auto`
+    Declaration@11252..11282
+      prop: `margin-right`
+      value: `auto`
+    Declaration@11285..11314
+      prop: `margin-left`
+      value: `auto`
+  Rule@11318..11386
+    selector: `.my-0`
+    Declaration@11328..11353
+      prop: `margin-top`
+      value: `0`
+    Declaration@11356..11384
+      prop: `margin-bottom`
+      value: `0`
+  Rule@11388..11468
+    selector: `.my-1`
+    Declaration@11398..11429
+      prop: `margin-top`
+      value: `0.25rem`
+    Declaration@11432..11466
+      prop: `margin-bottom`
+      value: `0.25rem`
+  Rule@11470..11548
+    selector: `.my-2`
+    Declaration@11480..11510
+      prop: `margin-top`
+      value: `0.5rem`
+    Declaration@11513..11546
+      prop: `margin-bottom`
+      value: `0.5rem`
+  Rule@11550..11624
+    selector: `.my-3`
+    Declaration@11560..11588
+      prop: `margin-top`
+      value: `1rem`
+    Declaration@11591..11622
+      prop: `margin-bottom`
+      value: `1rem`
+  Rule@11626..11704
+    selector: `.my-4`
+    Declaration@11636..11666
+      prop: `margin-top`
+      value: `1.5rem`
+    Declaration@11669..11702
+      prop: `margin-bottom`
+      value: `1.5rem`
+  Rule@11706..11780
+    selector: `.my-5`
+    Declaration@11716..11744
+      prop: `margin-top`
+      value: `3rem`
+    Declaration@11747..11778
+      prop: `margin-bottom`
+      value: `3rem`
+  Rule@11782..11859
+    selector: `.my-auto`
+    Declaration@11795..11823
+      prop: `margin-top`
+      value: `auto`
+    Declaration@11826..11857
+      prop: `margin-bottom`
+      value: `auto`
+  Rule@11861..11898
+    selector: `.mt-0`
+    Declaration@11871..11896
+      prop: `margin-top`
+      value: `0`
+  Rule@11900..11943
+    selector: `.mt-1`
+    Declaration@11910..11941
+      prop: `margin-top`
+      value: `0.25rem`
+  Rule@11945..11987
+    selector: `.mt-2`
+    Declaration@11955..11985
+      prop: `margin-top`
+      value: `0.5rem`
+  Rule@11989..12029
+    selector: `.mt-3`
+    Declaration@11999..12027
+      prop: `margin-top`
+      value: `1rem`
+  Rule@12031..12073
+    selector: `.mt-4`
+    Declaration@12041..12071
+      prop: `margin-top`
+      value: `1.5rem`
+  Rule@12075..12115
+    selector: `.mt-5`
+    Declaration@12085..12113
+      prop: `margin-top`
+      value: `3rem`
+  Rule@12117..12160
+    selector: `.mt-auto`
+    Declaration@12130..12158
+      prop: `margin-top`
+      value: `auto`
+  Rule@12162..12201
+    selector: `.me-0`
+    Declaration@12172..12199
+      prop: `margin-right`
+      value: `0`
+  Rule@12203..12248
+    selector: `.me-1`
+    Declaration@12213..12246
+      prop: `margin-right`
+      value: `0.25rem`
+  Rule@12250..12294
+    selector: `.me-2`
+    Declaration@12260..12292
+      prop: `margin-right`
+      value: `0.5rem`
+  Rule@12296..12338
+    selector: `.me-3`
+    Declaration@12306..12336
+      prop: `margin-right`
+      value: `1rem`
+  Rule@12340..12384
+    selector: `.me-4`
+    Declaration@12350..12382
+      prop: `margin-right`
+      value: `1.5rem`
+  Rule@12386..12428
+    selector: `.me-5`
+    Declaration@12396..12426
+      prop: `margin-right`
+      value: `3rem`
+  Rule@12430..12475
+    selector: `.me-auto`
+    Declaration@12443..12473
+      prop: `margin-right`
+      value: `auto`
+  Rule@12477..12517
+    selector: `.mb-0`
+    Declaration@12487..12515
+      prop: `margin-bottom`
+      value: `0`
+  Rule@12519..12565
+    selector: `.mb-1`
+    Declaration@12529..12563
+      prop: `margin-bottom`
+      value: `0.25rem`
+  Rule@12567..12612
+    selector: `.mb-2`
+    Declaration@12577..12610
+      prop: `margin-bottom`
+      value: `0.5rem`
+  Rule@12614..12657
+    selector: `.mb-3`
+    Declaration@12624..12655
+      prop: `margin-bottom`
+      value: `1rem`
+  Rule@12659..12704
+    selector: `.mb-4`
+    Declaration@12669..12702
+      prop: `margin-bottom`
+      value: `1.5rem`
+  Rule@12706..12749
+    selector: `.mb-5`
+    Declaration@12716..12747
+      prop: `margin-bottom`
+      value: `3rem`
+  Rule@12751..12797
+    selector: `.mb-auto`
+    Declaration@12764..12795
+      prop: `margin-bottom`
+      value: `auto`
+  Rule@12799..12837
+    selector: `.ms-0`
+    Declaration@12809..12835
+      prop: `margin-left`
+      value: `0`
+  Rule@12839..12883
+    selector: `.ms-1`
+    Declaration@12849..12881
+      prop: `margin-left`
+      value: `0.25rem`
+  Rule@12885..12928
+    selector: `.ms-2`
+    Declaration@12895..12926
+      prop: `margin-left`
+      value: `0.5rem`
+  Rule@12930..12971
+    selector: `.ms-3`
+    Declaration@12940..12969
+      prop: `margin-left`
+      value: `1rem`
+  Rule@12973..13016
+    selector: `.ms-4`
+    Declaration@12983..13014
+      prop: `margin-left`
+      value: `1.5rem`
+  Rule@13018..13059
+    selector: `.ms-5`
+    Declaration@13028..13057
+      prop: `margin-left`
+      value: `3rem`
+  Rule@13061..13105
+    selector: `.ms-auto`
+    Declaration@13074..13103
+      prop: `margin-left`
+      value: `auto`
+  Rule@13107..13140
+    selector: `.p-0`
+    Declaration@13116..13138
+      prop: `padding`
+      value: `0`
+  Rule@13142..13181
+    selector: `.p-1`
+    Declaration@13151..13179
+      prop: `padding`
+      value: `0.25rem`
+  Rule@13183..13221
+    selector: `.p-2`
+    Declaration@13192..13219
+      prop: `padding`
+      value: `0.5rem`
+  Rule@13223..13259
+    selector: `.p-3`
+    Declaration@13232..13257
+      prop: `padding`
+      value: `1rem`
+  Rule@13261..13299
+    selector: `.p-4`
+    Declaration@13270..13297
+      prop: `padding`
+      value: `1.5rem`
+  Rule@13301..13337
+    selector: `.p-5`
+    Declaration@13310..13335
+      prop: `padding`
+      value: `3rem`
+  Rule@13339..13409
+    selector: `.px-0`
+    Declaration@13349..13377
+      prop: `padding-right`
+      value: `0`
+    Declaration@13380..13407
+      prop: `padding-left`
+      value: `0`
+  Rule@13411..13493
+    selector: `.px-1`
+    Declaration@13421..13455
+      prop: `padding-right`
+      value: `0.25rem`
+    Declaration@13458..13491
+      prop: `padding-left`
+      value: `0.25rem`
+  Rule@13495..13575
+    selector: `.px-2`
+    Declaration@13505..13538
+      prop: `padding-right`
+      value: `0.5rem`
+    Declaration@13541..13573
+      prop: `padding-left`
+      value: `0.5rem`
+  Rule@13577..13653
+    selector: `.px-3`
+    Declaration@13587..13618
+      prop: `padding-right`
+      value: `1rem`
+    Declaration@13621..13651
+      prop: `padding-left`
+      value: `1rem`
+  Rule@13655..13735
+    selector: `.px-4`
+    Declaration@13665..13698
+      prop: `padding-right`
+      value: `1.5rem`
+    Declaration@13701..13733
+      prop: `padding-left`
+      value: `1.5rem`
+  Rule@13737..13813
+    selector: `.px-5`
+    Declaration@13747..13778
+      prop: `padding-right`
+      value: `3rem`
+    Declaration@13781..13811
+      prop: `padding-left`
+      value: `3rem`
+  Rule@13815..13885
+    selector: `.py-0`
+    Declaration@13825..13851
+      prop: `padding-top`
+      value: `0`
+    Declaration@13854..13883
+      prop: `padding-bottom`
+      value: `0`
+  Rule@13887..13969
+    selector: `.py-1`
+    Declaration@13897..13929
+      prop: `padding-top`
+      value: `0.25rem`
+    Declaration@13932..13967
+      prop: `padding-bottom`
+      value: `0.25rem`
+  Rule@13971..14051
+    selector: `.py-2`
+    Declaration@13981..14012
+      prop: `padding-top`
+      value: `0.5rem`
+    Declaration@14015..14049
+      prop: `padding-bottom`
+      value: `0.5rem`
+  Rule@14053..14129
+    selector: `.py-3`
+    Declaration@14063..14092
+      prop: `padding-top`
+      value: `1rem`
+    Declaration@14095..14127
+      prop: `padding-bottom`
+      value: `1rem`
+  Rule@14131..14211
+    selector: `.py-4`
+    Declaration@14141..14172
+      prop: `padding-top`
+      value: `1.5rem`
+    Declaration@14175..14209
+      prop: `padding-bottom`
+      value: `1.5rem`
+  Rule@14213..14289
+    selector: `.py-5`
+    Declaration@14223..14252
+      prop: `padding-top`
+      value: `3rem`
+    Declaration@14255..14287
+      prop: `padding-bottom`
+      value: `3rem`
+  Rule@14291..14329
+    selector: `.pt-0`
+    Declaration@14301..14327
+      prop: `padding-top`
+      value: `0`
+  Rule@14331..14375
+    selector: `.pt-1`
+    Declaration@14341..14373
+      prop: `padding-top`
+      value: `0.25rem`
+  Rule@14377..14420
+    selector: `.pt-2`
+    Declaration@14387..14418
+      prop: `padding-top`
+      value: `0.5rem`
+  Rule@14422..14463
+    selector: `.pt-3`
+    Declaration@14432..14461
+      prop: `padding-top`
+      value: `1rem`
+  Rule@14465..14508
+    selector: `.pt-4`
+    Declaration@14475..14506
+      prop: `padding-top`
+      value: `1.5rem`
+  Rule@14510..14551
+    selector: `.pt-5`
+    Declaration@14520..14549
+      prop: `padding-top`
+      value: `3rem`
+  Rule@14553..14593
+    selector: `.pe-0`
+    Declaration@14563..14591
+      prop: `padding-right`
+      value: `0`
+  Rule@14595..14641
+    selector: `.pe-1`
+    Declaration@14605..14639
+      prop: `padding-right`
+      value: `0.25rem`
+  Rule@14643..14688
+    selector: `.pe-2`
+    Declaration@14653..14686
+      prop: `padding-right`
+      value: `0.5rem`
+  Rule@14690..14733
+    selector: `.pe-3`
+    Declaration@14700..14731
+      prop: `padding-right`
+      value: `1rem`
+  Rule@14735..14780
+    selector: `.pe-4`
+    Declaration@14745..14778
+      prop: `padding-right`
+      value: `1.5rem`
+  Rule@14782..14825
+    selector: `.pe-5`
+    Declaration@14792..14823
+      prop: `padding-right`
+      value: `3rem`
+  Rule@14827..14868
+    selector: `.pb-0`
+    Declaration@14837..14866
+      prop: `padding-bottom`
+      value: `0`
+  Rule@14870..14917
+    selector: `.pb-1`
+    Declaration@14880..14915
+      prop: `padding-bottom`
+      value: `0.25rem`
+  Rule@14919..14965
+    selector: `.pb-2`
+    Declaration@14929..14963
+      prop: `padding-bottom`
+      value: `0.5rem`
+  Rule@14967..15011
+    selector: `.pb-3`
+    Declaration@14977..15009
+      prop: `padding-bottom`
+      value: `1rem`
+  Rule@15013..15059
+    selector: `.pb-4`
+    Declaration@15023..15057
+      prop: `padding-bottom`
+      value: `1.5rem`
+  Rule@15061..15105
+    selector: `.pb-5`
+    Declaration@15071..15103
+      prop: `padding-bottom`
+      value: `3rem`
+  Rule@15107..15146
+    selector: `.ps-0`
+    Declaration@15117..15144
+      prop: `padding-left`
+      value: `0`
+  Rule@15148..15193
+    selector: `.ps-1`
+    Declaration@15158..15191
+      prop: `padding-left`
+      value: `0.25rem`
+  Rule@15195..15239
+    selector: `.ps-2`
+    Declaration@15205..15237
+      prop: `padding-left`
+      value: `0.5rem`
+  Rule@15241..15283
+    selector: `.ps-3`
+    Declaration@15251..15281
+      prop: `padding-left`
+      value: `1rem`
+  Rule@15285..15329
+    selector: `.ps-4`
+    Declaration@15295..15327
+      prop: `padding-left`
+      value: `1.5rem`
+  Rule@15331..15373
+    selector: `.ps-5`
+    Declaration@15341..15371
+      prop: `padding-left`
+      value: `3rem`
+  Rule@15375..15446
+    selector: `.font-monospace`
+    Declaration@15395..15444
+      prop: `font-family`
+      value: `var(--bs-font-monospace)`
+  Rule@15448..15505
+    selector: `.fs-1`
+    Declaration@15458..15503
+      prop: `font-size`
+      value: `calc(1.375rem + 1.5vw)`
+  Rule@15507..15564
+    selector: `.fs-2`
+    Declaration@15517..15562
+      prop: `font-size`
+      value: `calc(1.325rem + 0.9vw)`
+  Rule@15566..15621
+    selector: `.fs-3`
+    Declaration@15576..15619
+      prop: `font-size`
+      value: `calc(1.3rem + 0.6vw)`
+  Rule@15623..15680
+    selector: `.fs-4`
+    Declaration@15633..15678
+      prop: `font-size`
+      value: `calc(1.275rem + 0.3vw)`
+  Rule@15682..15724
+    selector: `.fs-5`
+    Declaration@15692..15722
+      prop: `font-size`
+      value: `1.25rem`
+  Rule@15726..15765
+    selector: `.fs-6`
+    Declaration@15736..15763
+      prop: `font-size`
+      value: `1rem`
+  Rule@15767..15815
+    selector: `.fst-italic`
+    Declaration@15783..15813
+      prop: `font-style`
+      value: `italic`
+  Rule@15817..15865
+    selector: `.fst-normal`
+    Declaration@15833..15863
+      prop: `font-style`
+      value: `normal`
+  Rule@15867..15911
+    selector: `.fw-light`
+    Declaration@15881..15909
+      prop: `font-weight`
+      value: `300`
+  Rule@15913..15963
+    selector: `.fw-lighter`
+    Declaration@15929..15961
+      prop: `font-weight`
+      value: `lighter`
+  Rule@15965..16010
+    selector: `.fw-normal`
+    Declaration@15980..16008
+      prop: `font-weight`
+      value: `400`
+  Rule@16012..16055
+    selector: `.fw-bold`
+    Declaration@16025..16053
+      prop: `font-weight`
+      value: `700`
+  Rule@16057..16105
+    selector: `.fw-bolder`
+    Declaration@16072..16103
+      prop: `font-weight`
+      value: `bolder`
+  Rule@16107..16145
+    selector: `.lh-1`
+    Declaration@16117..16143
+      prop: `line-height`
+      value: `1`
+  Rule@16147..16189
+    selector: `.lh-sm`
+    Declaration@16158..16187
+      prop: `line-height`
+      value: `1.25`
+  Rule@16191..16234
+    selector: `.lh-base`
+    Declaration@16204..16232
+      prop: `line-height`
+      value: `1.5`
+  Rule@16236..16275
+    selector: `.lh-lg`
+    Declaration@16247..16273
+      prop: `line-height`
+      value: `2`
+  Rule@16277..16323
+    selector: `.text-start`
+    Declaration@16293..16321
+      prop: `text-align`
+      value: `left`
+  Rule@16325..16370
+    selector: `.text-end`
+    Declaration@16339..16368
+      prop: `text-align`
+      value: `right`
+  Rule@16372..16421
+    selector: `.text-center`
+    Declaration@16389..16419
+      prop: `text-align`
+      value: `center`
+  Rule@16423..16484
+    selector: `.text-decoration-none`
+    Declaration@16449..16482
+      prop: `text-decoration`
+      value: `none`
+  Rule@16486..16557
+    selector: `.text-decoration-underline`
+    Declaration@16517..16555
+      prop: `text-decoration`
+      value: `underline`
+  Rule@16559..16636
+    selector: `.text-decoration-line-through`
+    Declaration@16593..16634
+      prop: `text-decoration`
+      value: `line-through`
+  Rule@16638..16697
+    selector: `.text-lowercase`
+    Declaration@16658..16695
+      prop: `text-transform`
+      value: `lowercase`
+  Rule@16699..16758
+    selector: `.text-uppercase`
+    Declaration@16719..16756
+      prop: `text-transform`
+      value: `uppercase`
+  Rule@16760..16821
+    selector: `.text-capitalize`
+    Declaration@16781..16819
+      prop: `text-transform`
+      value: `capitalize`
+  Rule@16823..16871
+    selector: `.text-wrap`
+    Declaration@16838..16869
+      prop: `white-space`
+      value: `normal`
+  Rule@16873..16923
+    selector: `.text-nowrap`
+    Declaration@16890..16921
+      prop: `white-space`
+      value: `nowrap`
+  Rule@16948..17036
+    selector: `.text-break`
+    Declaration@16964..16997
+      prop: `word-wrap`
+      value: `break-word`
+    Declaration@17000..17034
+      prop: `word-break`
+      value: `break-word`
+  Rule@17059..17173
+    selector: `.text-primary`
+    Declaration@17077..17098
+      prop: `--bs-text-opacity`
+      value: `1`
+    Declaration@17101..17171
+      prop: `color`
+      value: `rgba(var(--bs-primary-rgb), var(--bs-text-opacity))`
+  Rule@17175..17293
+    selector: `.text-secondary`
+    Declaration@17195..17216
+      prop: `--bs-text-opacity`
+      value: `1`
+    Declaration@17219..17291
+      prop: `color`
+      value: `rgba(var(--bs-secondary-rgb), var(--bs-text-opacity))`
+  Rule@17295..17409
+    selector: `.text-success`
+    Declaration@17313..17334
+      prop: `--bs-text-opacity`
+      value: `1`
+    Declaration@17337..17407
+      prop: `color`
+      value: `rgba(var(--bs-success-rgb), var(--bs-text-opacity))`
+  Rule@17411..17519
+    selector: `.text-info`
+    Declaration@17426..17447
+      prop: `--bs-text-opacity`
+      value: `1`
+    Declaration@17450..17517
+      prop: `color`
+      value: `rgba(var(--bs-info-rgb), var(--bs-text-opacity))`
+  Rule@17521..17635
+    selector: `.text-warning`
+    Declaration@17539..17560
+      prop: `--bs-text-opacity`
+      value: `1`
+    Declaration@17563..17633
+      prop: `color`
+      value: `rgba(var(--bs-warning-rgb), var(--bs-text-opacity))`
+  Rule@17637..17749
+    selector: `.text-danger`
+    Declaration@17654..17675
+      prop: `--bs-text-opacity`
+      value: `1`
+    Declaration@17678..17747
+      prop: `color`
+      value: `rgba(var(--bs-danger-rgb), var(--bs-text-opacity))`
+  Rule@17751..17861
+    selector: `.text-light`
+    Declaration@17767..17788
+      prop: `--bs-text-opacity`
+      value: `1`
+    Declaration@17791..17859
+      prop: `color`
+      value: `rgba(var(--bs-light-rgb), var(--bs-text-opacity))`
+  Rule@17863..17971
+    selector: `.text-dark`
+    Declaration@17878..17899
+      prop: `--bs-text-opacity`
+      value: `1`
+    Declaration@17902..17969
+      prop: `color`
+      value: `rgba(var(--bs-dark-rgb), var(--bs-text-opacity))`
+  Rule@17973..18083
+    selector: `.text-black`
+    Declaration@17989..18010
+      prop: `--bs-text-opacity`
+      value: `1`
+    Declaration@18013..18081
+      prop: `color`
+      value: `rgba(var(--bs-black-rgb), var(--bs-text-opacity))`
+  Rule@18085..18195
+    selector: `.text-white`
+    Declaration@18101..18122
+      prop: `--bs-text-opacity`
+      value: `1`
+    Declaration@18125..18193
+      prop: `color`
+      value: `rgba(var(--bs-white-rgb), var(--bs-text-opacity))`
+  Rule@18197..18311
+    selector: `.text-body`
+    Declaration@18212..18233
+      prop: `--bs-text-opacity`
+      value: `1`
+    Declaration@18236..18309
+      prop: `color`
+      value: `rgba(var(--bs-body-color-rgb), var(--bs-text-opacity))`
+  Rule@18313..18381
+    selector: `.text-muted`
+    Declaration@18329..18350
+      prop: `--bs-text-opacity`
+      value: `1`
+    Declaration@18353..18379
+      prop: `color`
+      value: `#6c757d`
+  Rule@18383..18465
+    selector: `.text-black-50`
+    Declaration@18402..18423
+      prop: `--bs-text-opacity`
+      value: `1`
+    Declaration@18426..18463
+      prop: `color`
+      value: `rgba(0, 0, 0, 0.5)`
+  Rule@18467..18555
+    selector: `.text-white-50`
+    Declaration@18486..18507
+      prop: `--bs-text-opacity`
+      value: `1`
+    Declaration@18510..18553
+      prop: `color`
+      value: `rgba(255, 255, 255, 0.5)`
+  Rule@18557..18625
+    selector: `.text-reset`
+    Declaration@18573..18594
+      prop: `--bs-text-opacity`
+      value: `1`
+    Declaration@18597..18623
+      prop: `color`
+      value: `inherit`
+  Rule@18627..18674
+    selector: `.text-opacity-25`
+    Declaration@18648..18672
+      prop: `--bs-text-opacity`
+      value: `0.25`
+  Rule@18676..18722
+    selector: `.text-opacity-50`
+    Declaration@18697..18720
+      prop: `--bs-text-opacity`
+      value: `0.5`
+  Rule@18724..18771
+    selector: `.text-opacity-75`
+    Declaration@18745..18769
+      prop: `--bs-text-opacity`
+      value: `0.75`
+  Rule@18773..18818
+    selector: `.text-opacity-100`
+    Declaration@18795..18816
+      prop: `--bs-text-opacity`
+      value: `1`
+  Rule@18820..18939
+    selector: `.bg-primary`
+    Declaration@18836..18855
+      prop: `--bs-bg-opacity`
+      value: `1`
+    Declaration@18858..18937
+      prop: `background-color`
+      value: `rgba(var(--bs-primary-rgb), var(--bs-bg-opacity))`
+  Rule@18941..19064
+    selector: `.bg-secondary`
+    Declaration@18959..18978
+      prop: `--bs-bg-opacity`
+      value: `1`
+    Declaration@18981..19062
+      prop: `background-color`
+      value: `rgba(var(--bs-secondary-rgb), var(--bs-bg-opacity))`
+  Rule@19066..19185
+    selector: `.bg-success`
+    Declaration@19082..19101
+      prop: `--bs-bg-opacity`
+      value: `1`
+    Declaration@19104..19183
+      prop: `background-color`
+      value: `rgba(var(--bs-success-rgb), var(--bs-bg-opacity))`
+  Rule@19187..19300
+    selector: `.bg-info`
+    Declaration@19200..19219
+      prop: `--bs-bg-opacity`
+      value: `1`
+    Declaration@19222..19298
+      prop: `background-color`
+      value: `rgba(var(--bs-info-rgb), var(--bs-bg-opacity))`
+  Rule@19302..19421
+    selector: `.bg-warning`
+    Declaration@19318..19337
+      prop: `--bs-bg-opacity`
+      value: `1`
+    Declaration@19340..19419
+      prop: `background-color`
+      value: `rgba(var(--bs-warning-rgb), var(--bs-bg-opacity))`
+  Rule@19423..19540
+    selector: `.bg-danger`
+    Declaration@19438..19457
+      prop: `--bs-bg-opacity`
+      value: `1`
+    Declaration@19460..19538
+      prop: `background-color`
+      value: `rgba(var(--bs-danger-rgb), var(--bs-bg-opacity))`
+  Rule@19542..19657
+    selector: `.bg-light`
+    Declaration@19556..19575
+      prop: `--bs-bg-opacity`
+      value: `1`
+    Declaration@19578..19655
+      prop: `background-color`
+      value: `rgba(var(--bs-light-rgb), var(--bs-bg-opacity))`
+  Rule@19659..19772
+    selector: `.bg-dark`
+    Declaration@19672..19691
+      prop: `--bs-bg-opacity`
+      value: `1`
+    Declaration@19694..19770
+      prop: `background-color`
+      value: `rgba(var(--bs-dark-rgb), var(--bs-bg-opacity))`
+  Rule@19774..19889
+    selector: `.bg-black`
+    Declaration@19788..19807
+      prop: `--bs-bg-opacity`
+      value: `1`
+    Declaration@19810..19887
+      prop: `background-color`
+      value: `rgba(var(--bs-black-rgb), var(--bs-bg-opacity))`
+  Rule@19891..20006
+    selector: `.bg-white`
+    Declaration@19905..19924
+      prop: `--bs-bg-opacity`
+      value: `1`
+    Declaration@19927..20004
+      prop: `background-color`
+      value: `rgba(var(--bs-white-rgb), var(--bs-bg-opacity))`
+  Rule@20008..20124
+    selector: `.bg-body`
+    Declaration@20021..20040
+      prop: `--bs-bg-opacity`
+      value: `1`
+    Declaration@20043..20122
+      prop: `background-color`
+      value: `rgba(var(--bs-body-bg-rgb), var(--bs-bg-opacity))`
+  Rule@20126..20211
+    selector: `.bg-transparent`
+    Declaration@20146..20165
+      prop: `--bs-bg-opacity`
+      value: `1`
+    Declaration@20168..20209
+      prop: `background-color`
+      value: `transparent`
+  Rule@20213..20255
+    selector: `.bg-opacity-10`
+    Declaration@20232..20253
+      prop: `--bs-bg-opacity`
+      value: `0.1`
+  Rule@20257..20300
+    selector: `.bg-opacity-25`
+    Declaration@20276..20298
+      prop: `--bs-bg-opacity`
+      value: `0.25`
+  Rule@20302..20344
+    selector: `.bg-opacity-50`
+    Declaration@20321..20342
+      prop: `--bs-bg-opacity`
+      value: `0.5`
+  Rule@20346..20389
+    selector: `.bg-opacity-75`
+    Declaration@20365..20387
+      prop: `--bs-bg-opacity`
+      value: `0.75`
+  Rule@20391..20432
+    selector: `.bg-opacity-100`
+    Declaration@20411..20430
+      prop: `--bs-bg-opacity`
+      value: `1`
+  Rule@20434..20501
+    selector: `.bg-gradient`
+    Declaration@20451..20499
+      prop: `background-image`
+      value: `var(--bs-gradient)`
+  Rule@20503..20629
+    selector: `.user-select-all`
+    Declaration@20524..20560
+      prop: `-webkit-user-select`
+      value: `all`
+    Declaration@20563..20596
+      prop: `-moz-user-select`
+      value: `all`
+    Declaration@20599..20627
+      prop: `user-select`
+      value: `all`
+  Rule@20631..20761
+    selector: `.user-select-auto`
+    Declaration@20653..20690
+      prop: `-webkit-user-select`
+      value: `auto`
+    Declaration@20693..20727
+      prop: `-moz-user-select`
+      value: `auto`
+    Declaration@20730..20759
+      prop: `user-select`
+      value: `auto`
+  Rule@20763..20893
+    selector: `.user-select-none`
+    Declaration@20785..20822
+      prop: `-webkit-user-select`
+      value: `none`
+    Declaration@20825..20859
+      prop: `-moz-user-select`
+      value: `none`
+    Declaration@20862..20891
+      prop: `user-select`
+      value: `none`
+  Rule@20895..20942
+    selector: `.pe-none`
+    Declaration@20908..20940
+      prop: `pointer-events`
+      value: `none`
+  Rule@20944..20991
+    selector: `.pe-auto`
+    Declaration@20957..20989
+      prop: `pointer-events`
+      value: `auto`
+  Rule@20993..21042
+    selector: `.rounded`
+    Declaration@21006..21040
+      prop: `border-radius`
+      value: `0.25rem`
+  Rule@21044..21089
+    selector: `.rounded-0`
+    Declaration@21059..21087
+      prop: `border-radius`
+      value: `0`
+  Rule@21091..21141
+    selector: `.rounded-1`
+    Declaration@21106..21139
+      prop: `border-radius`
+      value: `0.2rem`
+  Rule@21143..21194
+    selector: `.rounded-2`
+    Declaration@21158..21192
+      prop: `border-radius`
+      value: `0.25rem`
+  Rule@21196..21246
+    selector: `.rounded-3`
+    Declaration@21211..21244
+      prop: `border-radius`
+      value: `0.3rem`
+  Rule@21248..21300
+    selector: `.rounded-circle`
+    Declaration@21268..21298
+      prop: `border-radius`
+      value: `50%`
+  Rule@21302..21354
+    selector: `.rounded-pill`
+    Declaration@21320..21352
+      prop: `border-radius`
+      value: `50rem`
+  Rule@21356..21465
+    selector: `.rounded-top`
+    Declaration@21373..21416
+      prop: `border-top-left-radius`
+      value: `0.25rem`
+    Declaration@21419..21463
+      prop: `border-top-right-radius`
+      value: `0.25rem`
+  Rule@21467..21580
+    selector: `.rounded-end`
+    Declaration@21484..21528
+      prop: `border-top-right-radius`
+      value: `0.25rem`
+    Declaration@21531..21578
+      prop: `border-bottom-right-radius`
+      value: `0.25rem`
+  Rule@21582..21700
+    selector: `.rounded-bottom`
+    Declaration@21602..21649
+      prop: `border-bottom-right-radius`
+      value: `0.25rem`
+    Declaration@21652..21698
+      prop: `border-bottom-left-radius`
+      value: `0.25rem`
+  Rule@21702..21815
+    selector: `.rounded-start`
+    Declaration@21721..21767
+      prop: `border-bottom-left-radius`
+      value: `0.25rem`
+    Declaration@21770..21813
+      prop: `border-top-left-radius`
+      value: `0.25rem`
+  Rule@21817..21863
+    selector: `.visible`
+    Declaration@21830..21861
+      prop: `visibility`
+      value: `visible`
+  Rule@21865..21912
+    selector: `.invisible`
+    Declaration@21880..21910
+      prop: `visibility`
+      value: `hidden`
+  AtRule@21914..31634
+    name: `media`
+    params: `(min-width: 576px)`
+    Rule@21944..21993
+      selector: `.float-sm-start`
+      Declaration@21966..21989
+        prop: `float`
+        value: `left`
+    Rule@21997..22045
+      selector: `.float-sm-end`
+      Declaration@22017..22041
+        prop: `float`
+        value: `right`
+    Rule@22049..22097
+      selector: `.float-sm-none`
+      Declaration@22070..22093
+        prop: `float`
+        value: `none`
+    Rule@22101..22151
+      selector: `.d-sm-inline`
+      Declaration@22120..22147
+        prop: `display`
+        value: `inline`
+    Rule@22155..22217
+      selector: `.d-sm-inline-block`
+      Declaration@22180..22213
+        prop: `display`
+        value: `inline-block`
+    Rule@22221..22269
+      selector: `.d-sm-block`
+      Declaration@22239..22265
+        prop: `display`
+        value: `block`
+    Rule@22273..22319
+      selector: `.d-sm-grid`
+      Declaration@22290..22315
+        prop: `display`
+        value: `grid`
+    Rule@22323..22371
+      selector: `.d-sm-table`
+      Declaration@22341..22367
+        prop: `display`
+        value: `table`
+    Rule@22375..22431
+      selector: `.d-sm-table-row`
+      Declaration@22397..22427
+        prop: `display`
+        value: `table-row`
+    Rule@22435..22493
+      selector: `.d-sm-table-cell`
+      Declaration@22458..22489
+        prop: `display`
+        value: `table-cell`
+    Rule@22497..22543
+      selector: `.d-sm-flex`
+      Declaration@22514..22539
+        prop: `display`
+        value: `flex`
+    Rule@22547..22607
+      selector: `.d-sm-inline-flex`
+      Declaration@22571..22603
+        prop: `display`
+        value: `inline-flex`
+    Rule@22611..22657
+      selector: `.d-sm-none`
+      Declaration@22628..22653
+        prop: `display`
+        value: `none`
+    Rule@22661..22711
+      selector: `.flex-sm-fill`
+      Declaration@22681..22707
+        prop: `flex`
+        value: `1 1 auto`
+    Rule@22715..22769
+      selector: `.flex-sm-row`
+      Declaration@22734..22765
+        prop: `flex-direction`
+        value: `row`
+    Rule@22773..22833
+      selector: `.flex-sm-column`
+      Declaration@22795..22829
+        prop: `flex-direction`
+        value: `column`
+    Rule@22837..22907
+      selector: `.flex-sm-row-reverse`
+      Declaration@22864..22903
+        prop: `flex-direction`
+        value: `row-reverse`
+    Rule@22911..22987
+      selector: `.flex-sm-column-reverse`
+      Declaration@22941..22983
+        prop: `flex-direction`
+        value: `column-reverse`
+    Rule@22991..23041
+      selector: `.flex-sm-grow-0`
+      Declaration@23013..23037
+        prop: `flex-grow`
+        value: `0`
+    Rule@23045..23095
+      selector: `.flex-sm-grow-1`
+      Declaration@23067..23091
+        prop: `flex-grow`
+        value: `1`
+    Rule@23099..23153
+      selector: `.flex-sm-shrink-0`
+      Declaration@23123..23149
+        prop: `flex-shrink`
+        value: `0`
+    Rule@23157..23211
+      selector: `.flex-sm-shrink-1`
+      Declaration@23181..23207
+        prop: `flex-shrink`
+        value: `1`
+    Rule@23215..23266
+      selector: `.flex-sm-wrap`
+      Declaration@23235..23262
+        prop: `flex-wrap`
+        value: `wrap`
+    Rule@23270..23325
+      selector: `.flex-sm-nowrap`
+      Declaration@23292..23321
+        prop: `flex-wrap`
+        value: `nowrap`
+    Rule@23329..23396
+      selector: `.flex-sm-wrap-reverse`
+      Declaration@23357..23392
+        prop: `flex-wrap`
+        value: `wrap-reverse`
+    Rule@23400..23438
+      selector: `.gap-sm-0`
+      Declaration@23416..23434
+        prop: `gap`
+        value: `0`
+    Rule@23442..23486
+      selector: `.gap-sm-1`
+      Declaration@23458..23482
+        prop: `gap`
+        value: `0.25rem`
+    Rule@23490..23533
+      selector: `.gap-sm-2`
+      Declaration@23506..23529
+        prop: `gap`
+        value: `0.5rem`
+    Rule@23537..23578
+      selector: `.gap-sm-3`
+      Declaration@23553..23574
+        prop: `gap`
+        value: `1rem`
+    Rule@23582..23625
+      selector: `.gap-sm-4`
+      Declaration@23598..23621
+        prop: `gap`
+        value: `1.5rem`
+    Rule@23629..23670
+      selector: `.gap-sm-5`
+      Declaration@23645..23666
+        prop: `gap`
+        value: `3rem`
+    Rule@23674..23749
+      selector: `.justify-content-sm-start`
+      Declaration@23706..23745
+        prop: `justify-content`
+        value: `flex-start`
+    Rule@23753..23824
+      selector: `.justify-content-sm-end`
+      Declaration@23783..23820
+        prop: `justify-content`
+        value: `flex-end`
+    Rule@23828..23900
+      selector: `.justify-content-sm-center`
+      Declaration@23861..23896
+        prop: `justify-content`
+        value: `center`
+    Rule@23904..23984
+      selector: `.justify-content-sm-between`
+      Declaration@23938..23980
+        prop: `justify-content`
+        value: `space-between`
+    Rule@23988..24066
+      selector: `.justify-content-sm-around`
+      Declaration@24021..24062
+        prop: `justify-content`
+        value: `space-around`
+    Rule@24070..24148
+      selector: `.justify-content-sm-evenly`
+      Declaration@24103..24144
+        prop: `justify-content`
+        value: `space-evenly`
+    Rule@24152..24219
+      selector: `.align-items-sm-start`
+      Declaration@24180..24215
+        prop: `align-items`
+        value: `flex-start`
+    Rule@24223..24286
+      selector: `.align-items-sm-end`
+      Declaration@24249..24282
+        prop: `align-items`
+        value: `flex-end`
+    Rule@24290..24354
+      selector: `.align-items-sm-center`
+      Declaration@24319..24350
+        prop: `align-items`
+        value: `center`
+    Rule@24358..24426
+      selector: `.align-items-sm-baseline`
+      Declaration@24389..24422
+        prop: `align-items`
+        value: `baseline`
+    Rule@24430..24496
+      selector: `.align-items-sm-stretch`
+      Declaration@24460..24492
+        prop: `align-items`
+        value: `stretch`
+    Rule@24500..24571
+      selector: `.align-content-sm-start`
+      Declaration@24530..24567
+        prop: `align-content`
+        value: `flex-start`
+    Rule@24575..24642
+      selector: `.align-content-sm-end`
+      Declaration@24603..24638
+        prop: `align-content`
+        value: `flex-end`
+    Rule@24646..24714
+      selector: `.align-content-sm-center`
+      Declaration@24677..24710
+        prop: `align-content`
+        value: `center`
+    Rule@24718..24794
+      selector: `.align-content-sm-between`
+      Declaration@24750..24790
+        prop: `align-content`
+        value: `space-between`
+    Rule@24798..24872
+      selector: `.align-content-sm-around`
+      Declaration@24829..24868
+        prop: `align-content`
+        value: `space-around`
+    Rule@24876..24946
+      selector: `.align-content-sm-stretch`
+      Declaration@24908..24942
+        prop: `align-content`
+        value: `stretch`
+    Rule@24950..25008
+      selector: `.align-self-sm-auto`
+      Declaration@24976..25004
+        prop: `align-self`
+        value: `auto`
+    Rule@25012..25077
+      selector: `.align-self-sm-start`
+      Declaration@25039..25073
+        prop: `align-self`
+        value: `flex-start`
+    Rule@25081..25142
+      selector: `.align-self-sm-end`
+      Declaration@25106..25138
+        prop: `align-self`
+        value: `flex-end`
+    Rule@25146..25208
+      selector: `.align-self-sm-center`
+      Declaration@25174..25204
+        prop: `align-self`
+        value: `center`
+    Rule@25212..25278
+      selector: `.align-self-sm-baseline`
+      Declaration@25242..25274
+        prop: `align-self`
+        value: `baseline`
+    Rule@25282..25346
+      selector: `.align-self-sm-stretch`
+      Declaration@25311..25342
+        prop: `align-self`
+        value: `stretch`
+    Rule@25350..25397
+      selector: `.order-sm-first`
+      Declaration@25372..25393
+        prop: `order`
+        value: `-1`
+    Rule@25401..25443
+      selector: `.order-sm-0`
+      Declaration@25419..25439
+        prop: `order`
+        value: `0`
+    Rule@25447..25489
+      selector: `.order-sm-1`
+      Declaration@25465..25485
+        prop: `order`
+        value: `1`
+    Rule@25493..25535
+      selector: `.order-sm-2`
+      Declaration@25511..25531
+        prop: `order`
+        value: `2`
+    Rule@25539..25581
+      selector: `.order-sm-3`
+      Declaration@25557..25577
+        prop: `order`
+        value: `3`
+    Rule@25585..25627
+      selector: `.order-sm-4`
+      Declaration@25603..25623
+        prop: `order`
+        value: `4`
+    Rule@25631..25673
+      selector: `.order-sm-5`
+      Declaration@25649..25669
+        prop: `order`
+        value: `5`
+    Rule@25677..25722
+      selector: `.order-sm-last`
+      Declaration@25698..25718
+        prop: `order`
+        value: `6`
+    Rule@25726..25765
+      selector: `.m-sm-0`
+      Declaration@25740..25761
+        prop: `margin`
+        value: `0`
+    Rule@25769..25814
+      selector: `.m-sm-1`
+      Declaration@25783..25810
+        prop: `margin`
+        value: `0.25rem`
+    Rule@25818..25862
+      selector: `.m-sm-2`
+      Declaration@25832..25858
+        prop: `margin`
+        value: `0.5rem`
+    Rule@25866..25908
+      selector: `.m-sm-3`
+      Declaration@25880..25904
+        prop: `margin`
+        value: `1rem`
+    Rule@25912..25956
+      selector: `.m-sm-4`
+      Declaration@25926..25952
+        prop: `margin`
+        value: `1.5rem`
+    Rule@25960..26002
+      selector: `.m-sm-5`
+      Declaration@25974..25998
+        prop: `margin`
+        value: `3rem`
+    Rule@26006..26051
+      selector: `.m-sm-auto`
+      Declaration@26023..26047
+        prop: `margin`
+        value: `auto`
+    Rule@26055..26132
+      selector: `.mx-sm-0`
+      Declaration@26070..26097
+        prop: `margin-right`
+        value: `0`
+      Declaration@26102..26128
+        prop: `margin-left`
+        value: `0`
+    Rule@26136..26225
+      selector: `.mx-sm-1`
+      Declaration@26151..26184
+        prop: `margin-right`
+        value: `0.25rem`
+      Declaration@26189..26221
+        prop: `margin-left`
+        value: `0.25rem`
+    Rule@26229..26316
+      selector: `.mx-sm-2`
+      Declaration@26244..26276
+        prop: `margin-right`
+        value: `0.5rem`
+      Declaration@26281..26312
+        prop: `margin-left`
+        value: `0.5rem`
+    Rule@26320..26403
+      selector: `.mx-sm-3`
+      Declaration@26335..26365
+        prop: `margin-right`
+        value: `1rem`
+      Declaration@26370..26399
+        prop: `margin-left`
+        value: `1rem`
+    Rule@26407..26494
+      selector: `.mx-sm-4`
+      Declaration@26422..26454
+        prop: `margin-right`
+        value: `1.5rem`
+      Declaration@26459..26490
+        prop: `margin-left`
+        value: `1.5rem`
+    Rule@26498..26581
+      selector: `.mx-sm-5`
+      Declaration@26513..26543
+        prop: `margin-right`
+        value: `3rem`
+      Declaration@26548..26577
+        prop: `margin-left`
+        value: `3rem`
+    Rule@26585..26671
+      selector: `.mx-sm-auto`
+      Declaration@26603..26633
+        prop: `margin-right`
+        value: `auto`
+      Declaration@26638..26667
+        prop: `margin-left`
+        value: `auto`
+    Rule@26675..26752
+      selector: `.my-sm-0`
+      Declaration@26690..26715
+        prop: `margin-top`
+        value: `0`
+      Declaration@26720..26748
+        prop: `margin-bottom`
+        value: `0`
+    Rule@26756..26845
+      selector: `.my-sm-1`
+      Declaration@26771..26802
+        prop: `margin-top`
+        value: `0.25rem`
+      Declaration@26807..26841
+        prop: `margin-bottom`
+        value: `0.25rem`
+    Rule@26849..26936
+      selector: `.my-sm-2`
+      Declaration@26864..26894
+        prop: `margin-top`
+        value: `0.5rem`
+      Declaration@26899..26932
+        prop: `margin-bottom`
+        value: `0.5rem`
+    Rule@26940..27023
+      selector: `.my-sm-3`
+      Declaration@26955..26983
+        prop: `margin-top`
+        value: `1rem`
+      Declaration@26988..27019
+        prop: `margin-bottom`
+        value: `1rem`
+    Rule@27027..27114
+      selector: `.my-sm-4`
+      Declaration@27042..27072
+        prop: `margin-top`
+        value: `1.5rem`
+      Declaration@27077..27110
+        prop: `margin-bottom`
+        value: `1.5rem`
+    Rule@27118..27201
+      selector: `.my-sm-5`
+      Declaration@27133..27161
+        prop: `margin-top`
+        value: `3rem`
+      Declaration@27166..27197
+        prop: `margin-bottom`
+        value: `3rem`
+    Rule@27205..27291
+      selector: `.my-sm-auto`
+      Declaration@27223..27251
+        prop: `margin-top`
+        value: `auto`
+      Declaration@27256..27287
+        prop: `margin-bottom`
+        value: `auto`
+    Rule@27295..27339
+      selector: `.mt-sm-0`
+      Declaration@27310..27335
+        prop: `margin-top`
+        value: `0`
+    Rule@27343..27393
+      selector: `.mt-sm-1`
+      Declaration@27358..27389
+        prop: `margin-top`
+        value: `0.25rem`
+    Rule@27397..27446
+      selector: `.mt-sm-2`
+      Declaration@27412..27442
+        prop: `margin-top`
+        value: `0.5rem`
+    Rule@27450..27497
+      selector: `.mt-sm-3`
+      Declaration@27465..27493
+        prop: `margin-top`
+        value: `1rem`
+    Rule@27501..27550
+      selector: `.mt-sm-4`
+      Declaration@27516..27546
+        prop: `margin-top`
+        value: `1.5rem`
+    Rule@27554..27601
+      selector: `.mt-sm-5`
+      Declaration@27569..27597
+        prop: `margin-top`
+        value: `3rem`
+    Rule@27605..27655
+      selector: `.mt-sm-auto`
+      Declaration@27623..27651
+        prop: `margin-top`
+        value: `auto`
+    Rule@27659..27705
+      selector: `.me-sm-0`
+      Declaration@27674..27701
+        prop: `margin-right`
+        value: `0`
+    Rule@27709..27761
+      selector: `.me-sm-1`
+      Declaration@27724..27757
+        prop: `margin-right`
+        value: `0.25rem`
+    Rule@27765..27816
+      selector: `.me-sm-2`
+      Declaration@27780..27812
+        prop: `margin-right`
+        value: `0.5rem`
+    Rule@27820..27869
+      selector: `.me-sm-3`
+      Declaration@27835..27865
+        prop: `margin-right`
+        value: `1rem`
+    Rule@27873..27924
+      selector: `.me-sm-4`
+      Declaration@27888..27920
+        prop: `margin-right`
+        value: `1.5rem`
+    Rule@27928..27977
+      selector: `.me-sm-5`
+      Declaration@27943..27973
+        prop: `margin-right`
+        value: `3rem`
+    Rule@27981..28033
+      selector: `.me-sm-auto`
+      Declaration@27999..28029
+        prop: `margin-right`
+        value: `auto`
+    Rule@28037..28084
+      selector: `.mb-sm-0`
+      Declaration@28052..28080
+        prop: `margin-bottom`
+        value: `0`
+    Rule@28088..28141
+      selector: `.mb-sm-1`
+      Declaration@28103..28137
+        prop: `margin-bottom`
+        value: `0.25rem`
+    Rule@28145..28197
+      selector: `.mb-sm-2`
+      Declaration@28160..28193
+        prop: `margin-bottom`
+        value: `0.5rem`
+    Rule@28201..28251
+      selector: `.mb-sm-3`
+      Declaration@28216..28247
+        prop: `margin-bottom`
+        value: `1rem`
+    Rule@28255..28307
+      selector: `.mb-sm-4`
+      Declaration@28270..28303
+        prop: `margin-bottom`
+        value: `1.5rem`
+    Rule@28311..28361
+      selector: `.mb-sm-5`
+      Declaration@28326..28357
+        prop: `margin-bottom`
+        value: `3rem`
+    Rule@28365..28418
+      selector: `.mb-sm-auto`
+      Declaration@28383..28414
+        prop: `margin-bottom`
+        value: `auto`
+    Rule@28422..28467
+      selector: `.ms-sm-0`
+      Declaration@28437..28463
+        prop: `margin-left`
+        value: `0`
+    Rule@28471..28522
+      selector: `.ms-sm-1`
+      Declaration@28486..28518
+        prop: `margin-left`
+        value: `0.25rem`
+    Rule@28526..28576
+      selector: `.ms-sm-2`
+      Declaration@28541..28572
+        prop: `margin-left`
+        value: `0.5rem`
+    Rule@28580..28628
+      selector: `.ms-sm-3`
+      Declaration@28595..28624
+        prop: `margin-left`
+        value: `1rem`
+    Rule@28632..28682
+      selector: `.ms-sm-4`
+      Declaration@28647..28678
+        prop: `margin-left`
+        value: `1.5rem`
+    Rule@28686..28734
+      selector: `.ms-sm-5`
+      Declaration@28701..28730
+        prop: `margin-left`
+        value: `3rem`
+    Rule@28738..28789
+      selector: `.ms-sm-auto`
+      Declaration@28756..28785
+        prop: `margin-left`
+        value: `auto`
+    Rule@28793..28833
+      selector: `.p-sm-0`
+      Declaration@28807..28829
+        prop: `padding`
+        value: `0`
+    Rule@28837..28883
+      selector: `.p-sm-1`
+      Declaration@28851..28879
+        prop: `padding`
+        value: `0.25rem`
+    Rule@28887..28932
+      selector: `.p-sm-2`
+      Declaration@28901..28928
+        prop: `padding`
+        value: `0.5rem`
+    Rule@28936..28979
+      selector: `.p-sm-3`
+      Declaration@28950..28975
+        prop: `padding`
+        value: `1rem`
+    Rule@28983..29028
+      selector: `.p-sm-4`
+      Declaration@28997..29024
+        prop: `padding`
+        value: `1.5rem`
+    Rule@29032..29075
+      selector: `.p-sm-5`
+      Declaration@29046..29071
+        prop: `padding`
+        value: `3rem`
+    Rule@29079..29158
+      selector: `.px-sm-0`
+      Declaration@29094..29122
+        prop: `padding-right`
+        value: `0`
+      Declaration@29127..29154
+        prop: `padding-left`
+        value: `0`
+    Rule@29162..29253
+      selector: `.px-sm-1`
+      Declaration@29177..29211
+        prop: `padding-right`
+        value: `0.25rem`
+      Declaration@29216..29249
+        prop: `padding-left`
+        value: `0.25rem`
+    Rule@29257..29346
+      selector: `.px-sm-2`
+      Declaration@29272..29305
+        prop: `padding-right`
+        value: `0.5rem`
+      Declaration@29310..29342
+        prop: `padding-left`
+        value: `0.5rem`
+    Rule@29350..29435
+      selector: `.px-sm-3`
+      Declaration@29365..29396
+        prop: `padding-right`
+        value: `1rem`
+      Declaration@29401..29431
+        prop: `padding-left`
+        value: `1rem`
+    Rule@29439..29528
+      selector: `.px-sm-4`
+      Declaration@29454..29487
+        prop: `padding-right`
+        value: `1.5rem`
+      Declaration@29492..29524
+        prop: `padding-left`
+        value: `1.5rem`
+    Rule@29532..29617
+      selector: `.px-sm-5`
+      Declaration@29547..29578
+        prop: `padding-right`
+        value: `3rem`
+      Declaration@29583..29613
+        prop: `padding-left`
+        value: `3rem`
+    Rule@29621..29700
+      selector: `.py-sm-0`
+      Declaration@29636..29662
+        prop: `padding-top`
+        value: `0`
+      Declaration@29667..29696
+        prop: `padding-bottom`
+        value: `0`
+    Rule@29704..29795
+      selector: `.py-sm-1`
+      Declaration@29719..29751
+        prop: `padding-top`
+        value: `0.25rem`
+      Declaration@29756..29791
+        prop: `padding-bottom`
+        value: `0.25rem`
+    Rule@29799..29888
+      selector: `.py-sm-2`
+      Declaration@29814..29845
+        prop: `padding-top`
+        value: `0.5rem`
+      Declaration@29850..29884
+        prop: `padding-bottom`
+        value: `0.5rem`
+    Rule@29892..29977
+      selector: `.py-sm-3`
+      Declaration@29907..29936
+        prop: `padding-top`
+        value: `1rem`
+      Declaration@29941..29973
+        prop: `padding-bottom`
+        value: `1rem`
+    Rule@29981..30070
+      selector: `.py-sm-4`
+      Declaration@29996..30027
+        prop: `padding-top`
+        value: `1.5rem`
+      Declaration@30032..30066
+        prop: `padding-bottom`
+        value: `1.5rem`
+    Rule@30074..30159
+      selector: `.py-sm-5`
+      Declaration@30089..30118
+        prop: `padding-top`
+        value: `3rem`
+      Declaration@30123..30155
+        prop: `padding-bottom`
+        value: `3rem`
+    Rule@30163..30208
+      selector: `.pt-sm-0`
+      Declaration@30178..30204
+        prop: `padding-top`
+        value: `0`
+    Rule@30212..30263
+      selector: `.pt-sm-1`
+      Declaration@30227..30259
+        prop: `padding-top`
+        value: `0.25rem`
+    Rule@30267..30317
+      selector: `.pt-sm-2`
+      Declaration@30282..30313
+        prop: `padding-top`
+        value: `0.5rem`
+    Rule@30321..30369
+      selector: `.pt-sm-3`
+      Declaration@30336..30365
+        prop: `padding-top`
+        value: `1rem`
+    Rule@30373..30423
+      selector: `.pt-sm-4`
+      Declaration@30388..30419
+        prop: `padding-top`
+        value: `1.5rem`
+    Rule@30427..30475
+      selector: `.pt-sm-5`
+      Declaration@30442..30471
+        prop: `padding-top`
+        value: `3rem`
+    Rule@30479..30526
+      selector: `.pe-sm-0`
+      Declaration@30494..30522
+        prop: `padding-right`
+        value: `0`
+    Rule@30530..30583
+      selector: `.pe-sm-1`
+      Declaration@30545..30579
+        prop: `padding-right`
+        value: `0.25rem`
+    Rule@30587..30639
+      selector: `.pe-sm-2`
+      Declaration@30602..30635
+        prop: `padding-right`
+        value: `0.5rem`
+    Rule@30643..30693
+      selector: `.pe-sm-3`
+      Declaration@30658..30689
+        prop: `padding-right`
+        value: `1rem`
+    Rule@30697..30749
+      selector: `.pe-sm-4`
+      Declaration@30712..30745
+        prop: `padding-right`
+        value: `1.5rem`
+    Rule@30753..30803
+      selector: `.pe-sm-5`
+      Declaration@30768..30799
+        prop: `padding-right`
+        value: `3rem`
+    Rule@30807..30855
+      selector: `.pb-sm-0`
+      Declaration@30822..30851
+        prop: `padding-bottom`
+        value: `0`
+    Rule@30859..30913
+      selector: `.pb-sm-1`
+      Declaration@30874..30909
+        prop: `padding-bottom`
+        value: `0.25rem`
+    Rule@30917..30970
+      selector: `.pb-sm-2`
+      Declaration@30932..30966
+        prop: `padding-bottom`
+        value: `0.5rem`
+    Rule@30974..31025
+      selector: `.pb-sm-3`
+      Declaration@30989..31021
+        prop: `padding-bottom`
+        value: `1rem`
+    Rule@31029..31082
+      selector: `.pb-sm-4`
+      Declaration@31044..31078
+        prop: `padding-bottom`
+        value: `1.5rem`
+    Rule@31086..31137
+      selector: `.pb-sm-5`
+      Declaration@31101..31133
+        prop: `padding-bottom`
+        value: `3rem`
+    Rule@31141..31187
+      selector: `.ps-sm-0`
+      Declaration@31156..31183
+        prop: `padding-left`
+        value: `0`
+    Rule@31191..31243
+      selector: `.ps-sm-1`
+      Declaration@31206..31239
+        prop: `padding-left`
+        value: `0.25rem`
+    Rule@31247..31298
+      selector: `.ps-sm-2`
+      Declaration@31262..31294
+        prop: `padding-left`
+        value: `0.5rem`
+    Rule@31302..31351
+      selector: `.ps-sm-3`
+      Declaration@31317..31347
+        prop: `padding-left`
+        value: `1rem`
+    Rule@31355..31406
+      selector: `.ps-sm-4`
+      Declaration@31370..31402
+        prop: `padding-left`
+        value: `1.5rem`
+    Rule@31410..31459
+      selector: `.ps-sm-5`
+      Declaration@31425..31455
+        prop: `padding-left`
+        value: `3rem`
+    Rule@31463..31516
+      selector: `.text-sm-start`
+      Declaration@31484..31512
+        prop: `text-align`
+        value: `left`
+    Rule@31520..31572
+      selector: `.text-sm-end`
+      Declaration@31539..31568
+        prop: `text-align`
+        value: `right`
+    Rule@31576..31632
+      selector: `.text-sm-center`
+      Declaration@31598..31628
+        prop: `text-align`
+        value: `center`
+  AtRule@31635..41355
+    name: `media`
+    params: `(min-width: 768px)`
+    Rule@31665..31714
+      selector: `.float-md-start`
+      Declaration@31687..31710
+        prop: `float`
+        value: `left`
+    Rule@31718..31766
+      selector: `.float-md-end`
+      Declaration@31738..31762
+        prop: `float`
+        value: `right`
+    Rule@31770..31818
+      selector: `.float-md-none`
+      Declaration@31791..31814
+        prop: `float`
+        value: `none`
+    Rule@31822..31872
+      selector: `.d-md-inline`
+      Declaration@31841..31868
+        prop: `display`
+        value: `inline`
+    Rule@31876..31938
+      selector: `.d-md-inline-block`
+      Declaration@31901..31934
+        prop: `display`
+        value: `inline-block`
+    Rule@31942..31990
+      selector: `.d-md-block`
+      Declaration@31960..31986
+        prop: `display`
+        value: `block`
+    Rule@31994..32040
+      selector: `.d-md-grid`
+      Declaration@32011..32036
+        prop: `display`
+        value: `grid`
+    Rule@32044..32092
+      selector: `.d-md-table`
+      Declaration@32062..32088
+        prop: `display`
+        value: `table`
+    Rule@32096..32152
+      selector: `.d-md-table-row`
+      Declaration@32118..32148
+        prop: `display`
+        value: `table-row`
+    Rule@32156..32214
+      selector: `.d-md-table-cell`
+      Declaration@32179..32210
+        prop: `display`
+        value: `table-cell`
+    Rule@32218..32264
+      selector: `.d-md-flex`
+      Declaration@32235..32260
+        prop: `display`
+        value: `flex`
+    Rule@32268..32328
+      selector: `.d-md-inline-flex`
+      Declaration@32292..32324
+        prop: `display`
+        value: `inline-flex`
+    Rule@32332..32378
+      selector: `.d-md-none`
+      Declaration@32349..32374
+        prop: `display`
+        value: `none`
+    Rule@32382..32432
+      selector: `.flex-md-fill`
+      Declaration@32402..32428
+        prop: `flex`
+        value: `1 1 auto`
+    Rule@32436..32490
+      selector: `.flex-md-row`
+      Declaration@32455..32486
+        prop: `flex-direction`
+        value: `row`
+    Rule@32494..32554
+      selector: `.flex-md-column`
+      Declaration@32516..32550
+        prop: `flex-direction`
+        value: `column`
+    Rule@32558..32628
+      selector: `.flex-md-row-reverse`
+      Declaration@32585..32624
+        prop: `flex-direction`
+        value: `row-reverse`
+    Rule@32632..32708
+      selector: `.flex-md-column-reverse`
+      Declaration@32662..32704
+        prop: `flex-direction`
+        value: `column-reverse`
+    Rule@32712..32762
+      selector: `.flex-md-grow-0`
+      Declaration@32734..32758
+        prop: `flex-grow`
+        value: `0`
+    Rule@32766..32816
+      selector: `.flex-md-grow-1`
+      Declaration@32788..32812
+        prop: `flex-grow`
+        value: `1`
+    Rule@32820..32874
+      selector: `.flex-md-shrink-0`
+      Declaration@32844..32870
+        prop: `flex-shrink`
+        value: `0`
+    Rule@32878..32932
+      selector: `.flex-md-shrink-1`
+      Declaration@32902..32928
+        prop: `flex-shrink`
+        value: `1`
+    Rule@32936..32987
+      selector: `.flex-md-wrap`
+      Declaration@32956..32983
+        prop: `flex-wrap`
+        value: `wrap`
+    Rule@32991..33046
+      selector: `.flex-md-nowrap`
+      Declaration@33013..33042
+        prop: `flex-wrap`
+        value: `nowrap`
+    Rule@33050..33117
+      selector: `.flex-md-wrap-reverse`
+      Declaration@33078..33113
+        prop: `flex-wrap`
+        value: `wrap-reverse`
+    Rule@33121..33159
+      selector: `.gap-md-0`
+      Declaration@33137..33155
+        prop: `gap`
+        value: `0`
+    Rule@33163..33207
+      selector: `.gap-md-1`
+      Declaration@33179..33203
+        prop: `gap`
+        value: `0.25rem`
+    Rule@33211..33254
+      selector: `.gap-md-2`
+      Declaration@33227..33250
+        prop: `gap`
+        value: `0.5rem`
+    Rule@33258..33299
+      selector: `.gap-md-3`
+      Declaration@33274..33295
+        prop: `gap`
+        value: `1rem`
+    Rule@33303..33346
+      selector: `.gap-md-4`
+      Declaration@33319..33342
+        prop: `gap`
+        value: `1.5rem`
+    Rule@33350..33391
+      selector: `.gap-md-5`
+      Declaration@33366..33387
+        prop: `gap`
+        value: `3rem`
+    Rule@33395..33470
+      selector: `.justify-content-md-start`
+      Declaration@33427..33466
+        prop: `justify-content`
+        value: `flex-start`
+    Rule@33474..33545
+      selector: `.justify-content-md-end`
+      Declaration@33504..33541
+        prop: `justify-content`
+        value: `flex-end`
+    Rule@33549..33621
+      selector: `.justify-content-md-center`
+      Declaration@33582..33617
+        prop: `justify-content`
+        value: `center`
+    Rule@33625..33705
+      selector: `.justify-content-md-between`
+      Declaration@33659..33701
+        prop: `justify-content`
+        value: `space-between`
+    Rule@33709..33787
+      selector: `.justify-content-md-around`
+      Declaration@33742..33783
+        prop: `justify-content`
+        value: `space-around`
+    Rule@33791..33869
+      selector: `.justify-content-md-evenly`
+      Declaration@33824..33865
+        prop: `justify-content`
+        value: `space-evenly`
+    Rule@33873..33940
+      selector: `.align-items-md-start`
+      Declaration@33901..33936
+        prop: `align-items`
+        value: `flex-start`
+    Rule@33944..34007
+      selector: `.align-items-md-end`
+      Declaration@33970..34003
+        prop: `align-items`
+        value: `flex-end`
+    Rule@34011..34075
+      selector: `.align-items-md-center`
+      Declaration@34040..34071
+        prop: `align-items`
+        value: `center`
+    Rule@34079..34147
+      selector: `.align-items-md-baseline`
+      Declaration@34110..34143
+        prop: `align-items`
+        value: `baseline`
+    Rule@34151..34217
+      selector: `.align-items-md-stretch`
+      Declaration@34181..34213
+        prop: `align-items`
+        value: `stretch`
+    Rule@34221..34292
+      selector: `.align-content-md-start`
+      Declaration@34251..34288
+        prop: `align-content`
+        value: `flex-start`
+    Rule@34296..34363
+      selector: `.align-content-md-end`
+      Declaration@34324..34359
+        prop: `align-content`
+        value: `flex-end`
+    Rule@34367..34435
+      selector: `.align-content-md-center`
+      Declaration@34398..34431
+        prop: `align-content`
+        value: `center`
+    Rule@34439..34515
+      selector: `.align-content-md-between`
+      Declaration@34471..34511
+        prop: `align-content`
+        value: `space-between`
+    Rule@34519..34593
+      selector: `.align-content-md-around`
+      Declaration@34550..34589
+        prop: `align-content`
+        value: `space-around`
+    Rule@34597..34667
+      selector: `.align-content-md-stretch`
+      Declaration@34629..34663
+        prop: `align-content`
+        value: `stretch`
+    Rule@34671..34729
+      selector: `.align-self-md-auto`
+      Declaration@34697..34725
+        prop: `align-self`
+        value: `auto`
+    Rule@34733..34798
+      selector: `.align-self-md-start`
+      Declaration@34760..34794
+        prop: `align-self`
+        value: `flex-start`
+    Rule@34802..34863
+      selector: `.align-self-md-end`
+      Declaration@34827..34859
+        prop: `align-self`
+        value: `flex-end`
+    Rule@34867..34929
+      selector: `.align-self-md-center`
+      Declaration@34895..34925
+        prop: `align-self`
+        value: `center`
+    Rule@34933..34999
+      selector: `.align-self-md-baseline`
+      Declaration@34963..34995
+        prop: `align-self`
+        value: `baseline`
+    Rule@35003..35067
+      selector: `.align-self-md-stretch`
+      Declaration@35032..35063
+        prop: `align-self`
+        value: `stretch`
+    Rule@35071..35118
+      selector: `.order-md-first`
+      Declaration@35093..35114
+        prop: `order`
+        value: `-1`
+    Rule@35122..35164
+      selector: `.order-md-0`
+      Declaration@35140..35160
+        prop: `order`
+        value: `0`
+    Rule@35168..35210
+      selector: `.order-md-1`
+      Declaration@35186..35206
+        prop: `order`
+        value: `1`
+    Rule@35214..35256
+      selector: `.order-md-2`
+      Declaration@35232..35252
+        prop: `order`
+        value: `2`
+    Rule@35260..35302
+      selector: `.order-md-3`
+      Declaration@35278..35298
+        prop: `order`
+        value: `3`
+    Rule@35306..35348
+      selector: `.order-md-4`
+      Declaration@35324..35344
+        prop: `order`
+        value: `4`
+    Rule@35352..35394
+      selector: `.order-md-5`
+      Declaration@35370..35390
+        prop: `order`
+        value: `5`
+    Rule@35398..35443
+      selector: `.order-md-last`
+      Declaration@35419..35439
+        prop: `order`
+        value: `6`
+    Rule@35447..35486
+      selector: `.m-md-0`
+      Declaration@35461..35482
+        prop: `margin`
+        value: `0`
+    Rule@35490..35535
+      selector: `.m-md-1`
+      Declaration@35504..35531
+        prop: `margin`
+        value: `0.25rem`
+    Rule@35539..35583
+      selector: `.m-md-2`
+      Declaration@35553..35579
+        prop: `margin`
+        value: `0.5rem`
+    Rule@35587..35629
+      selector: `.m-md-3`
+      Declaration@35601..35625
+        prop: `margin`
+        value: `1rem`
+    Rule@35633..35677
+      selector: `.m-md-4`
+      Declaration@35647..35673
+        prop: `margin`
+        value: `1.5rem`
+    Rule@35681..35723
+      selector: `.m-md-5`
+      Declaration@35695..35719
+        prop: `margin`
+        value: `3rem`
+    Rule@35727..35772
+      selector: `.m-md-auto`
+      Declaration@35744..35768
+        prop: `margin`
+        value: `auto`
+    Rule@35776..35853
+      selector: `.mx-md-0`
+      Declaration@35791..35818
+        prop: `margin-right`
+        value: `0`
+      Declaration@35823..35849
+        prop: `margin-left`
+        value: `0`
+    Rule@35857..35946
+      selector: `.mx-md-1`
+      Declaration@35872..35905
+        prop: `margin-right`
+        value: `0.25rem`
+      Declaration@35910..35942
+        prop: `margin-left`
+        value: `0.25rem`
+    Rule@35950..36037
+      selector: `.mx-md-2`
+      Declaration@35965..35997
+        prop: `margin-right`
+        value: `0.5rem`
+      Declaration@36002..36033
+        prop: `margin-left`
+        value: `0.5rem`
+    Rule@36041..36124
+      selector: `.mx-md-3`
+      Declaration@36056..36086
+        prop: `margin-right`
+        value: `1rem`
+      Declaration@36091..36120
+        prop: `margin-left`
+        value: `1rem`
+    Rule@36128..36215
+      selector: `.mx-md-4`
+      Declaration@36143..36175
+        prop: `margin-right`
+        value: `1.5rem`
+      Declaration@36180..36211
+        prop: `margin-left`
+        value: `1.5rem`
+    Rule@36219..36302
+      selector: `.mx-md-5`
+      Declaration@36234..36264
+        prop: `margin-right`
+        value: `3rem`
+      Declaration@36269..36298
+        prop: `margin-left`
+        value: `3rem`
+    Rule@36306..36392
+      selector: `.mx-md-auto`
+      Declaration@36324..36354
+        prop: `margin-right`
+        value: `auto`
+      Declaration@36359..36388
+        prop: `margin-left`
+        value: `auto`
+    Rule@36396..36473
+      selector: `.my-md-0`
+      Declaration@36411..36436
+        prop: `margin-top`
+        value: `0`
+      Declaration@36441..36469
+        prop: `margin-bottom`
+        value: `0`
+    Rule@36477..36566
+      selector: `.my-md-1`
+      Declaration@36492..36523
+        prop: `margin-top`
+        value: `0.25rem`
+      Declaration@36528..36562
+        prop: `margin-bottom`
+        value: `0.25rem`
+    Rule@36570..36657
+      selector: `.my-md-2`
+      Declaration@36585..36615
+        prop: `margin-top`
+        value: `0.5rem`
+      Declaration@36620..36653
+        prop: `margin-bottom`
+        value: `0.5rem`
+    Rule@36661..36744
+      selector: `.my-md-3`
+      Declaration@36676..36704
+        prop: `margin-top`
+        value: `1rem`
+      Declaration@36709..36740
+        prop: `margin-bottom`
+        value: `1rem`
+    Rule@36748..36835
+      selector: `.my-md-4`
+      Declaration@36763..36793
+        prop: `margin-top`
+        value: `1.5rem`
+      Declaration@36798..36831
+        prop: `margin-bottom`
+        value: `1.5rem`
+    Rule@36839..36922
+      selector: `.my-md-5`
+      Declaration@36854..36882
+        prop: `margin-top`
+        value: `3rem`
+      Declaration@36887..36918
+        prop: `margin-bottom`
+        value: `3rem`
+    Rule@36926..37012
+      selector: `.my-md-auto`
+      Declaration@36944..36972
+        prop: `margin-top`
+        value: `auto`
+      Declaration@36977..37008
+        prop: `margin-bottom`
+        value: `auto`
+    Rule@37016..37060
+      selector: `.mt-md-0`
+      Declaration@37031..37056
+        prop: `margin-top`
+        value: `0`
+    Rule@37064..37114
+      selector: `.mt-md-1`
+      Declaration@37079..37110
+        prop: `margin-top`
+        value: `0.25rem`
+    Rule@37118..37167
+      selector: `.mt-md-2`
+      Declaration@37133..37163
+        prop: `margin-top`
+        value: `0.5rem`
+    Rule@37171..37218
+      selector: `.mt-md-3`
+      Declaration@37186..37214
+        prop: `margin-top`
+        value: `1rem`
+    Rule@37222..37271
+      selector: `.mt-md-4`
+      Declaration@37237..37267
+        prop: `margin-top`
+        value: `1.5rem`
+    Rule@37275..37322
+      selector: `.mt-md-5`
+      Declaration@37290..37318
+        prop: `margin-top`
+        value: `3rem`
+    Rule@37326..37376
+      selector: `.mt-md-auto`
+      Declaration@37344..37372
+        prop: `margin-top`
+        value: `auto`
+    Rule@37380..37426
+      selector: `.me-md-0`
+      Declaration@37395..37422
+        prop: `margin-right`
+        value: `0`
+    Rule@37430..37482
+      selector: `.me-md-1`
+      Declaration@37445..37478
+        prop: `margin-right`
+        value: `0.25rem`
+    Rule@37486..37537
+      selector: `.me-md-2`
+      Declaration@37501..37533
+        prop: `margin-right`
+        value: `0.5rem`
+    Rule@37541..37590
+      selector: `.me-md-3`
+      Declaration@37556..37586
+        prop: `margin-right`
+        value: `1rem`
+    Rule@37594..37645
+      selector: `.me-md-4`
+      Declaration@37609..37641
+        prop: `margin-right`
+        value: `1.5rem`
+    Rule@37649..37698
+      selector: `.me-md-5`
+      Declaration@37664..37694
+        prop: `margin-right`
+        value: `3rem`
+    Rule@37702..37754
+      selector: `.me-md-auto`
+      Declaration@37720..37750
+        prop: `margin-right`
+        value: `auto`
+    Rule@37758..37805
+      selector: `.mb-md-0`
+      Declaration@37773..37801
+        prop: `margin-bottom`
+        value: `0`
+    Rule@37809..37862
+      selector: `.mb-md-1`
+      Declaration@37824..37858
+        prop: `margin-bottom`
+        value: `0.25rem`
+    Rule@37866..37918
+      selector: `.mb-md-2`
+      Declaration@37881..37914
+        prop: `margin-bottom`
+        value: `0.5rem`
+    Rule@37922..37972
+      selector: `.mb-md-3`
+      Declaration@37937..37968
+        prop: `margin-bottom`
+        value: `1rem`
+    Rule@37976..38028
+      selector: `.mb-md-4`
+      Declaration@37991..38024
+        prop: `margin-bottom`
+        value: `1.5rem`
+    Rule@38032..38082
+      selector: `.mb-md-5`
+      Declaration@38047..38078
+        prop: `margin-bottom`
+        value: `3rem`
+    Rule@38086..38139
+      selector: `.mb-md-auto`
+      Declaration@38104..38135
+        prop: `margin-bottom`
+        value: `auto`
+    Rule@38143..38188
+      selector: `.ms-md-0`
+      Declaration@38158..38184
+        prop: `margin-left`
+        value: `0`
+    Rule@38192..38243
+      selector: `.ms-md-1`
+      Declaration@38207..38239
+        prop: `margin-left`
+        value: `0.25rem`
+    Rule@38247..38297
+      selector: `.ms-md-2`
+      Declaration@38262..38293
+        prop: `margin-left`
+        value: `0.5rem`
+    Rule@38301..38349
+      selector: `.ms-md-3`
+      Declaration@38316..38345
+        prop: `margin-left`
+        value: `1rem`
+    Rule@38353..38403
+      selector: `.ms-md-4`
+      Declaration@38368..38399
+        prop: `margin-left`
+        value: `1.5rem`
+    Rule@38407..38455
+      selector: `.ms-md-5`
+      Declaration@38422..38451
+        prop: `margin-left`
+        value: `3rem`
+    Rule@38459..38510
+      selector: `.ms-md-auto`
+      Declaration@38477..38506
+        prop: `margin-left`
+        value: `auto`
+    Rule@38514..38554
+      selector: `.p-md-0`
+      Declaration@38528..38550
+        prop: `padding`
+        value: `0`
+    Rule@38558..38604
+      selector: `.p-md-1`
+      Declaration@38572..38600
+        prop: `padding`
+        value: `0.25rem`
+    Rule@38608..38653
+      selector: `.p-md-2`
+      Declaration@38622..38649
+        prop: `padding`
+        value: `0.5rem`
+    Rule@38657..38700
+      selector: `.p-md-3`
+      Declaration@38671..38696
+        prop: `padding`
+        value: `1rem`
+    Rule@38704..38749
+      selector: `.p-md-4`
+      Declaration@38718..38745
+        prop: `padding`
+        value: `1.5rem`
+    Rule@38753..38796
+      selector: `.p-md-5`
+      Declaration@38767..38792
+        prop: `padding`
+        value: `3rem`
+    Rule@38800..38879
+      selector: `.px-md-0`
+      Declaration@38815..38843
+        prop: `padding-right`
+        value: `0`
+      Declaration@38848..38875
+        prop: `padding-left`
+        value: `0`
+    Rule@38883..38974
+      selector: `.px-md-1`
+      Declaration@38898..38932
+        prop: `padding-right`
+        value: `0.25rem`
+      Declaration@38937..38970
+        prop: `padding-left`
+        value: `0.25rem`
+    Rule@38978..39067
+      selector: `.px-md-2`
+      Declaration@38993..39026
+        prop: `padding-right`
+        value: `0.5rem`
+      Declaration@39031..39063
+        prop: `padding-left`
+        value: `0.5rem`
+    Rule@39071..39156
+      selector: `.px-md-3`
+      Declaration@39086..39117
+        prop: `padding-right`
+        value: `1rem`
+      Declaration@39122..39152
+        prop: `padding-left`
+        value: `1rem`
+    Rule@39160..39249
+      selector: `.px-md-4`
+      Declaration@39175..39208
+        prop: `padding-right`
+        value: `1.5rem`
+      Declaration@39213..39245
+        prop: `padding-left`
+        value: `1.5rem`
+    Rule@39253..39338
+      selector: `.px-md-5`
+      Declaration@39268..39299
+        prop: `padding-right`
+        value: `3rem`
+      Declaration@39304..39334
+        prop: `padding-left`
+        value: `3rem`
+    Rule@39342..39421
+      selector: `.py-md-0`
+      Declaration@39357..39383
+        prop: `padding-top`
+        value: `0`
+      Declaration@39388..39417
+        prop: `padding-bottom`
+        value: `0`
+    Rule@39425..39516
+      selector: `.py-md-1`
+      Declaration@39440..39472
+        prop: `padding-top`
+        value: `0.25rem`
+      Declaration@39477..39512
+        prop: `padding-bottom`
+        value: `0.25rem`
+    Rule@39520..39609
+      selector: `.py-md-2`
+      Declaration@39535..39566
+        prop: `padding-top`
+        value: `0.5rem`
+      Declaration@39571..39605
+        prop: `padding-bottom`
+        value: `0.5rem`
+    Rule@39613..39698
+      selector: `.py-md-3`
+      Declaration@39628..39657
+        prop: `padding-top`
+        value: `1rem`
+      Declaration@39662..39694
+        prop: `padding-bottom`
+        value: `1rem`
+    Rule@39702..39791
+      selector: `.py-md-4`
+      Declaration@39717..39748
+        prop: `padding-top`
+        value: `1.5rem`
+      Declaration@39753..39787
+        prop: `padding-bottom`
+        value: `1.5rem`
+    Rule@39795..39880
+      selector: `.py-md-5`
+      Declaration@39810..39839
+        prop: `padding-top`
+        value: `3rem`
+      Declaration@39844..39876
+        prop: `padding-bottom`
+        value: `3rem`
+    Rule@39884..39929
+      selector: `.pt-md-0`
+      Declaration@39899..39925
+        prop: `padding-top`
+        value: `0`
+    Rule@39933..39984
+      selector: `.pt-md-1`
+      Declaration@39948..39980
+        prop: `padding-top`
+        value: `0.25rem`
+    Rule@39988..40038
+      selector: `.pt-md-2`
+      Declaration@40003..40034
+        prop: `padding-top`
+        value: `0.5rem`
+    Rule@40042..40090
+      selector: `.pt-md-3`
+      Declaration@40057..40086
+        prop: `padding-top`
+        value: `1rem`
+    Rule@40094..40144
+      selector: `.pt-md-4`
+      Declaration@40109..40140
+        prop: `padding-top`
+        value: `1.5rem`
+    Rule@40148..40196
+      selector: `.pt-md-5`
+      Declaration@40163..40192
+        prop: `padding-top`
+        value: `3rem`
+    Rule@40200..40247
+      selector: `.pe-md-0`
+      Declaration@40215..40243
+        prop: `padding-right`
+        value: `0`
+    Rule@40251..40304
+      selector: `.pe-md-1`
+      Declaration@40266..40300
+        prop: `padding-right`
+        value: `0.25rem`
+    Rule@40308..40360
+      selector: `.pe-md-2`
+      Declaration@40323..40356
+        prop: `padding-right`
+        value: `0.5rem`
+    Rule@40364..40414
+      selector: `.pe-md-3`
+      Declaration@40379..40410
+        prop: `padding-right`
+        value: `1rem`
+    Rule@40418..40470
+      selector: `.pe-md-4`
+      Declaration@40433..40466
+        prop: `padding-right`
+        value: `1.5rem`
+    Rule@40474..40524
+      selector: `.pe-md-5`
+      Declaration@40489..40520
+        prop: `padding-right`
+        value: `3rem`
+    Rule@40528..40576
+      selector: `.pb-md-0`
+      Declaration@40543..40572
+        prop: `padding-bottom`
+        value: `0`
+    Rule@40580..40634
+      selector: `.pb-md-1`
+      Declaration@40595..40630
+        prop: `padding-bottom`
+        value: `0.25rem`
+    Rule@40638..40691
+      selector: `.pb-md-2`
+      Declaration@40653..40687
+        prop: `padding-bottom`
+        value: `0.5rem`
+    Rule@40695..40746
+      selector: `.pb-md-3`
+      Declaration@40710..40742
+        prop: `padding-bottom`
+        value: `1rem`
+    Rule@40750..40803
+      selector: `.pb-md-4`
+      Declaration@40765..40799
+        prop: `padding-bottom`
+        value: `1.5rem`
+    Rule@40807..40858
+      selector: `.pb-md-5`
+      Declaration@40822..40854
+        prop: `padding-bottom`
+        value: `3rem`
+    Rule@40862..40908
+      selector: `.ps-md-0`
+      Declaration@40877..40904
+        prop: `padding-left`
+        value: `0`
+    Rule@40912..40964
+      selector: `.ps-md-1`
+      Declaration@40927..40960
+        prop: `padding-left`
+        value: `0.25rem`
+    Rule@40968..41019
+      selector: `.ps-md-2`
+      Declaration@40983..41015
+        prop: `padding-left`
+        value: `0.5rem`
+    Rule@41023..41072
+      selector: `.ps-md-3`
+      Declaration@41038..41068
+        prop: `padding-left`
+        value: `1rem`
+    Rule@41076..41127
+      selector: `.ps-md-4`
+      Declaration@41091..41123
+        prop: `padding-left`
+        value: `1.5rem`
+    Rule@41131..41180
+      selector: `.ps-md-5`
+      Declaration@41146..41176
+        prop: `padding-left`
+        value: `3rem`
+    Rule@41184..41237
+      selector: `.text-md-start`
+      Declaration@41205..41233
+        prop: `text-align`
+        value: `left`
+    Rule@41241..41293
+      selector: `.text-md-end`
+      Declaration@41260..41289
+        prop: `text-align`
+        value: `right`
+    Rule@41297..41353
+      selector: `.text-md-center`
+      Declaration@41319..41349
+        prop: `text-align`
+        value: `center`
+  AtRule@41356..51076
+    name: `media`
+    params: `(min-width: 992px)`
+    Rule@41386..41435
+      selector: `.float-lg-start`
+      Declaration@41408..41431
+        prop: `float`
+        value: `left`
+    Rule@41439..41487
+      selector: `.float-lg-end`
+      Declaration@41459..41483
+        prop: `float`
+        value: `right`
+    Rule@41491..41539
+      selector: `.float-lg-none`
+      Declaration@41512..41535
+        prop: `float`
+        value: `none`
+    Rule@41543..41593
+      selector: `.d-lg-inline`
+      Declaration@41562..41589
+        prop: `display`
+        value: `inline`
+    Rule@41597..41659
+      selector: `.d-lg-inline-block`
+      Declaration@41622..41655
+        prop: `display`
+        value: `inline-block`
+    Rule@41663..41711
+      selector: `.d-lg-block`
+      Declaration@41681..41707
+        prop: `display`
+        value: `block`
+    Rule@41715..41761
+      selector: `.d-lg-grid`
+      Declaration@41732..41757
+        prop: `display`
+        value: `grid`
+    Rule@41765..41813
+      selector: `.d-lg-table`
+      Declaration@41783..41809
+        prop: `display`
+        value: `table`
+    Rule@41817..41873
+      selector: `.d-lg-table-row`
+      Declaration@41839..41869
+        prop: `display`
+        value: `table-row`
+    Rule@41877..41935
+      selector: `.d-lg-table-cell`
+      Declaration@41900..41931
+        prop: `display`
+        value: `table-cell`
+    Rule@41939..41985
+      selector: `.d-lg-flex`
+      Declaration@41956..41981
+        prop: `display`
+        value: `flex`
+    Rule@41989..42049
+      selector: `.d-lg-inline-flex`
+      Declaration@42013..42045
+        prop: `display`
+        value: `inline-flex`
+    Rule@42053..42099
+      selector: `.d-lg-none`
+      Declaration@42070..42095
+        prop: `display`
+        value: `none`
+    Rule@42103..42153
+      selector: `.flex-lg-fill`
+      Declaration@42123..42149
+        prop: `flex`
+        value: `1 1 auto`
+    Rule@42157..42211
+      selector: `.flex-lg-row`
+      Declaration@42176..42207
+        prop: `flex-direction`
+        value: `row`
+    Rule@42215..42275
+      selector: `.flex-lg-column`
+      Declaration@42237..42271
+        prop: `flex-direction`
+        value: `column`
+    Rule@42279..42349
+      selector: `.flex-lg-row-reverse`
+      Declaration@42306..42345
+        prop: `flex-direction`
+        value: `row-reverse`
+    Rule@42353..42429
+      selector: `.flex-lg-column-reverse`
+      Declaration@42383..42425
+        prop: `flex-direction`
+        value: `column-reverse`
+    Rule@42433..42483
+      selector: `.flex-lg-grow-0`
+      Declaration@42455..42479
+        prop: `flex-grow`
+        value: `0`
+    Rule@42487..42537
+      selector: `.flex-lg-grow-1`
+      Declaration@42509..42533
+        prop: `flex-grow`
+        value: `1`
+    Rule@42541..42595
+      selector: `.flex-lg-shrink-0`
+      Declaration@42565..42591
+        prop: `flex-shrink`
+        value: `0`
+    Rule@42599..42653
+      selector: `.flex-lg-shrink-1`
+      Declaration@42623..42649
+        prop: `flex-shrink`
+        value: `1`
+    Rule@42657..42708
+      selector: `.flex-lg-wrap`
+      Declaration@42677..42704
+        prop: `flex-wrap`
+        value: `wrap`
+    Rule@42712..42767
+      selector: `.flex-lg-nowrap`
+      Declaration@42734..42763
+        prop: `flex-wrap`
+        value: `nowrap`
+    Rule@42771..42838
+      selector: `.flex-lg-wrap-reverse`
+      Declaration@42799..42834
+        prop: `flex-wrap`
+        value: `wrap-reverse`
+    Rule@42842..42880
+      selector: `.gap-lg-0`
+      Declaration@42858..42876
+        prop: `gap`
+        value: `0`
+    Rule@42884..42928
+      selector: `.gap-lg-1`
+      Declaration@42900..42924
+        prop: `gap`
+        value: `0.25rem`
+    Rule@42932..42975
+      selector: `.gap-lg-2`
+      Declaration@42948..42971
+        prop: `gap`
+        value: `0.5rem`
+    Rule@42979..43020
+      selector: `.gap-lg-3`
+      Declaration@42995..43016
+        prop: `gap`
+        value: `1rem`
+    Rule@43024..43067
+      selector: `.gap-lg-4`
+      Declaration@43040..43063
+        prop: `gap`
+        value: `1.5rem`
+    Rule@43071..43112
+      selector: `.gap-lg-5`
+      Declaration@43087..43108
+        prop: `gap`
+        value: `3rem`
+    Rule@43116..43191
+      selector: `.justify-content-lg-start`
+      Declaration@43148..43187
+        prop: `justify-content`
+        value: `flex-start`
+    Rule@43195..43266
+      selector: `.justify-content-lg-end`
+      Declaration@43225..43262
+        prop: `justify-content`
+        value: `flex-end`
+    Rule@43270..43342
+      selector: `.justify-content-lg-center`
+      Declaration@43303..43338
+        prop: `justify-content`
+        value: `center`
+    Rule@43346..43426
+      selector: `.justify-content-lg-between`
+      Declaration@43380..43422
+        prop: `justify-content`
+        value: `space-between`
+    Rule@43430..43508
+      selector: `.justify-content-lg-around`
+      Declaration@43463..43504
+        prop: `justify-content`
+        value: `space-around`
+    Rule@43512..43590
+      selector: `.justify-content-lg-evenly`
+      Declaration@43545..43586
+        prop: `justify-content`
+        value: `space-evenly`
+    Rule@43594..43661
+      selector: `.align-items-lg-start`
+      Declaration@43622..43657
+        prop: `align-items`
+        value: `flex-start`
+    Rule@43665..43728
+      selector: `.align-items-lg-end`
+      Declaration@43691..43724
+        prop: `align-items`
+        value: `flex-end`
+    Rule@43732..43796
+      selector: `.align-items-lg-center`
+      Declaration@43761..43792
+        prop: `align-items`
+        value: `center`
+    Rule@43800..43868
+      selector: `.align-items-lg-baseline`
+      Declaration@43831..43864
+        prop: `align-items`
+        value: `baseline`
+    Rule@43872..43938
+      selector: `.align-items-lg-stretch`
+      Declaration@43902..43934
+        prop: `align-items`
+        value: `stretch`
+    Rule@43942..44013
+      selector: `.align-content-lg-start`
+      Declaration@43972..44009
+        prop: `align-content`
+        value: `flex-start`
+    Rule@44017..44084
+      selector: `.align-content-lg-end`
+      Declaration@44045..44080
+        prop: `align-content`
+        value: `flex-end`
+    Rule@44088..44156
+      selector: `.align-content-lg-center`
+      Declaration@44119..44152
+        prop: `align-content`
+        value: `center`
+    Rule@44160..44236
+      selector: `.align-content-lg-between`
+      Declaration@44192..44232
+        prop: `align-content`
+        value: `space-between`
+    Rule@44240..44314
+      selector: `.align-content-lg-around`
+      Declaration@44271..44310
+        prop: `align-content`
+        value: `space-around`
+    Rule@44318..44388
+      selector: `.align-content-lg-stretch`
+      Declaration@44350..44384
+        prop: `align-content`
+        value: `stretch`
+    Rule@44392..44450
+      selector: `.align-self-lg-auto`
+      Declaration@44418..44446
+        prop: `align-self`
+        value: `auto`
+    Rule@44454..44519
+      selector: `.align-self-lg-start`
+      Declaration@44481..44515
+        prop: `align-self`
+        value: `flex-start`
+    Rule@44523..44584
+      selector: `.align-self-lg-end`
+      Declaration@44548..44580
+        prop: `align-self`
+        value: `flex-end`
+    Rule@44588..44650
+      selector: `.align-self-lg-center`
+      Declaration@44616..44646
+        prop: `align-self`
+        value: `center`
+    Rule@44654..44720
+      selector: `.align-self-lg-baseline`
+      Declaration@44684..44716
+        prop: `align-self`
+        value: `baseline`
+    Rule@44724..44788
+      selector: `.align-self-lg-stretch`
+      Declaration@44753..44784
+        prop: `align-self`
+        value: `stretch`
+    Rule@44792..44839
+      selector: `.order-lg-first`
+      Declaration@44814..44835
+        prop: `order`
+        value: `-1`
+    Rule@44843..44885
+      selector: `.order-lg-0`
+      Declaration@44861..44881
+        prop: `order`
+        value: `0`
+    Rule@44889..44931
+      selector: `.order-lg-1`
+      Declaration@44907..44927
+        prop: `order`
+        value: `1`
+    Rule@44935..44977
+      selector: `.order-lg-2`
+      Declaration@44953..44973
+        prop: `order`
+        value: `2`
+    Rule@44981..45023
+      selector: `.order-lg-3`
+      Declaration@44999..45019
+        prop: `order`
+        value: `3`
+    Rule@45027..45069
+      selector: `.order-lg-4`
+      Declaration@45045..45065
+        prop: `order`
+        value: `4`
+    Rule@45073..45115
+      selector: `.order-lg-5`
+      Declaration@45091..45111
+        prop: `order`
+        value: `5`
+    Rule@45119..45164
+      selector: `.order-lg-last`
+      Declaration@45140..45160
+        prop: `order`
+        value: `6`
+    Rule@45168..45207
+      selector: `.m-lg-0`
+      Declaration@45182..45203
+        prop: `margin`
+        value: `0`
+    Rule@45211..45256
+      selector: `.m-lg-1`
+      Declaration@45225..45252
+        prop: `margin`
+        value: `0.25rem`
+    Rule@45260..45304
+      selector: `.m-lg-2`
+      Declaration@45274..45300
+        prop: `margin`
+        value: `0.5rem`
+    Rule@45308..45350
+      selector: `.m-lg-3`
+      Declaration@45322..45346
+        prop: `margin`
+        value: `1rem`
+    Rule@45354..45398
+      selector: `.m-lg-4`
+      Declaration@45368..45394
+        prop: `margin`
+        value: `1.5rem`
+    Rule@45402..45444
+      selector: `.m-lg-5`
+      Declaration@45416..45440
+        prop: `margin`
+        value: `3rem`
+    Rule@45448..45493
+      selector: `.m-lg-auto`
+      Declaration@45465..45489
+        prop: `margin`
+        value: `auto`
+    Rule@45497..45574
+      selector: `.mx-lg-0`
+      Declaration@45512..45539
+        prop: `margin-right`
+        value: `0`
+      Declaration@45544..45570
+        prop: `margin-left`
+        value: `0`
+    Rule@45578..45667
+      selector: `.mx-lg-1`
+      Declaration@45593..45626
+        prop: `margin-right`
+        value: `0.25rem`
+      Declaration@45631..45663
+        prop: `margin-left`
+        value: `0.25rem`
+    Rule@45671..45758
+      selector: `.mx-lg-2`
+      Declaration@45686..45718
+        prop: `margin-right`
+        value: `0.5rem`
+      Declaration@45723..45754
+        prop: `margin-left`
+        value: `0.5rem`
+    Rule@45762..45845
+      selector: `.mx-lg-3`
+      Declaration@45777..45807
+        prop: `margin-right`
+        value: `1rem`
+      Declaration@45812..45841
+        prop: `margin-left`
+        value: `1rem`
+    Rule@45849..45936
+      selector: `.mx-lg-4`
+      Declaration@45864..45896
+        prop: `margin-right`
+        value: `1.5rem`
+      Declaration@45901..45932
+        prop: `margin-left`
+        value: `1.5rem`
+    Rule@45940..46023
+      selector: `.mx-lg-5`
+      Declaration@45955..45985
+        prop: `margin-right`
+        value: `3rem`
+      Declaration@45990..46019
+        prop: `margin-left`
+        value: `3rem`
+    Rule@46027..46113
+      selector: `.mx-lg-auto`
+      Declaration@46045..46075
+        prop: `margin-right`
+        value: `auto`
+      Declaration@46080..46109
+        prop: `margin-left`
+        value: `auto`
+    Rule@46117..46194
+      selector: `.my-lg-0`
+      Declaration@46132..46157
+        prop: `margin-top`
+        value: `0`
+      Declaration@46162..46190
+        prop: `margin-bottom`
+        value: `0`
+    Rule@46198..46287
+      selector: `.my-lg-1`
+      Declaration@46213..46244
+        prop: `margin-top`
+        value: `0.25rem`
+      Declaration@46249..46283
+        prop: `margin-bottom`
+        value: `0.25rem`
+    Rule@46291..46378
+      selector: `.my-lg-2`
+      Declaration@46306..46336
+        prop: `margin-top`
+        value: `0.5rem`
+      Declaration@46341..46374
+        prop: `margin-bottom`
+        value: `0.5rem`
+    Rule@46382..46465
+      selector: `.my-lg-3`
+      Declaration@46397..46425
+        prop: `margin-top`
+        value: `1rem`
+      Declaration@46430..46461
+        prop: `margin-bottom`
+        value: `1rem`
+    Rule@46469..46556
+      selector: `.my-lg-4`
+      Declaration@46484..46514
+        prop: `margin-top`
+        value: `1.5rem`
+      Declaration@46519..46552
+        prop: `margin-bottom`
+        value: `1.5rem`
+    Rule@46560..46643
+      selector: `.my-lg-5`
+      Declaration@46575..46603
+        prop: `margin-top`
+        value: `3rem`
+      Declaration@46608..46639
+        prop: `margin-bottom`
+        value: `3rem`
+    Rule@46647..46733
+      selector: `.my-lg-auto`
+      Declaration@46665..46693
+        prop: `margin-top`
+        value: `auto`
+      Declaration@46698..46729
+        prop: `margin-bottom`
+        value: `auto`
+    Rule@46737..46781
+      selector: `.mt-lg-0`
+      Declaration@46752..46777
+        prop: `margin-top`
+        value: `0`
+    Rule@46785..46835
+      selector: `.mt-lg-1`
+      Declaration@46800..46831
+        prop: `margin-top`
+        value: `0.25rem`
+    Rule@46839..46888
+      selector: `.mt-lg-2`
+      Declaration@46854..46884
+        prop: `margin-top`
+        value: `0.5rem`
+    Rule@46892..46939
+      selector: `.mt-lg-3`
+      Declaration@46907..46935
+        prop: `margin-top`
+        value: `1rem`
+    Rule@46943..46992
+      selector: `.mt-lg-4`
+      Declaration@46958..46988
+        prop: `margin-top`
+        value: `1.5rem`
+    Rule@46996..47043
+      selector: `.mt-lg-5`
+      Declaration@47011..47039
+        prop: `margin-top`
+        value: `3rem`
+    Rule@47047..47097
+      selector: `.mt-lg-auto`
+      Declaration@47065..47093
+        prop: `margin-top`
+        value: `auto`
+    Rule@47101..47147
+      selector: `.me-lg-0`
+      Declaration@47116..47143
+        prop: `margin-right`
+        value: `0`
+    Rule@47151..47203
+      selector: `.me-lg-1`
+      Declaration@47166..47199
+        prop: `margin-right`
+        value: `0.25rem`
+    Rule@47207..47258
+      selector: `.me-lg-2`
+      Declaration@47222..47254
+        prop: `margin-right`
+        value: `0.5rem`
+    Rule@47262..47311
+      selector: `.me-lg-3`
+      Declaration@47277..47307
+        prop: `margin-right`
+        value: `1rem`
+    Rule@47315..47366
+      selector: `.me-lg-4`
+      Declaration@47330..47362
+        prop: `margin-right`
+        value: `1.5rem`
+    Rule@47370..47419
+      selector: `.me-lg-5`
+      Declaration@47385..47415
+        prop: `margin-right`
+        value: `3rem`
+    Rule@47423..47475
+      selector: `.me-lg-auto`
+      Declaration@47441..47471
+        prop: `margin-right`
+        value: `auto`
+    Rule@47479..47526
+      selector: `.mb-lg-0`
+      Declaration@47494..47522
+        prop: `margin-bottom`
+        value: `0`
+    Rule@47530..47583
+      selector: `.mb-lg-1`
+      Declaration@47545..47579
+        prop: `margin-bottom`
+        value: `0.25rem`
+    Rule@47587..47639
+      selector: `.mb-lg-2`
+      Declaration@47602..47635
+        prop: `margin-bottom`
+        value: `0.5rem`
+    Rule@47643..47693
+      selector: `.mb-lg-3`
+      Declaration@47658..47689
+        prop: `margin-bottom`
+        value: `1rem`
+    Rule@47697..47749
+      selector: `.mb-lg-4`
+      Declaration@47712..47745
+        prop: `margin-bottom`
+        value: `1.5rem`
+    Rule@47753..47803
+      selector: `.mb-lg-5`
+      Declaration@47768..47799
+        prop: `margin-bottom`
+        value: `3rem`
+    Rule@47807..47860
+      selector: `.mb-lg-auto`
+      Declaration@47825..47856
+        prop: `margin-bottom`
+        value: `auto`
+    Rule@47864..47909
+      selector: `.ms-lg-0`
+      Declaration@47879..47905
+        prop: `margin-left`
+        value: `0`
+    Rule@47913..47964
+      selector: `.ms-lg-1`
+      Declaration@47928..47960
+        prop: `margin-left`
+        value: `0.25rem`
+    Rule@47968..48018
+      selector: `.ms-lg-2`
+      Declaration@47983..48014
+        prop: `margin-left`
+        value: `0.5rem`
+    Rule@48022..48070
+      selector: `.ms-lg-3`
+      Declaration@48037..48066
+        prop: `margin-left`
+        value: `1rem`
+    Rule@48074..48124
+      selector: `.ms-lg-4`
+      Declaration@48089..48120
+        prop: `margin-left`
+        value: `1.5rem`
+    Rule@48128..48176
+      selector: `.ms-lg-5`
+      Declaration@48143..48172
+        prop: `margin-left`
+        value: `3rem`
+    Rule@48180..48231
+      selector: `.ms-lg-auto`
+      Declaration@48198..48227
+        prop: `margin-left`
+        value: `auto`
+    Rule@48235..48275
+      selector: `.p-lg-0`
+      Declaration@48249..48271
+        prop: `padding`
+        value: `0`
+    Rule@48279..48325
+      selector: `.p-lg-1`
+      Declaration@48293..48321
+        prop: `padding`
+        value: `0.25rem`
+    Rule@48329..48374
+      selector: `.p-lg-2`
+      Declaration@48343..48370
+        prop: `padding`
+        value: `0.5rem`
+    Rule@48378..48421
+      selector: `.p-lg-3`
+      Declaration@48392..48417
+        prop: `padding`
+        value: `1rem`
+    Rule@48425..48470
+      selector: `.p-lg-4`
+      Declaration@48439..48466
+        prop: `padding`
+        value: `1.5rem`
+    Rule@48474..48517
+      selector: `.p-lg-5`
+      Declaration@48488..48513
+        prop: `padding`
+        value: `3rem`
+    Rule@48521..48600
+      selector: `.px-lg-0`
+      Declaration@48536..48564
+        prop: `padding-right`
+        value: `0`
+      Declaration@48569..48596
+        prop: `padding-left`
+        value: `0`
+    Rule@48604..48695
+      selector: `.px-lg-1`
+      Declaration@48619..48653
+        prop: `padding-right`
+        value: `0.25rem`
+      Declaration@48658..48691
+        prop: `padding-left`
+        value: `0.25rem`
+    Rule@48699..48788
+      selector: `.px-lg-2`
+      Declaration@48714..48747
+        prop: `padding-right`
+        value: `0.5rem`
+      Declaration@48752..48784
+        prop: `padding-left`
+        value: `0.5rem`
+    Rule@48792..48877
+      selector: `.px-lg-3`
+      Declaration@48807..48838
+        prop: `padding-right`
+        value: `1rem`
+      Declaration@48843..48873
+        prop: `padding-left`
+        value: `1rem`
+    Rule@48881..48970
+      selector: `.px-lg-4`
+      Declaration@48896..48929
+        prop: `padding-right`
+        value: `1.5rem`
+      Declaration@48934..48966
+        prop: `padding-left`
+        value: `1.5rem`
+    Rule@48974..49059
+      selector: `.px-lg-5`
+      Declaration@48989..49020
+        prop: `padding-right`
+        value: `3rem`
+      Declaration@49025..49055
+        prop: `padding-left`
+        value: `3rem`
+    Rule@49063..49142
+      selector: `.py-lg-0`
+      Declaration@49078..49104
+        prop: `padding-top`
+        value: `0`
+      Declaration@49109..49138
+        prop: `padding-bottom`
+        value: `0`
+    Rule@49146..49237
+      selector: `.py-lg-1`
+      Declaration@49161..49193
+        prop: `padding-top`
+        value: `0.25rem`
+      Declaration@49198..49233
+        prop: `padding-bottom`
+        value: `0.25rem`
+    Rule@49241..49330
+      selector: `.py-lg-2`
+      Declaration@49256..49287
+        prop: `padding-top`
+        value: `0.5rem`
+      Declaration@49292..49326
+        prop: `padding-bottom`
+        value: `0.5rem`
+    Rule@49334..49419
+      selector: `.py-lg-3`
+      Declaration@49349..49378
+        prop: `padding-top`
+        value: `1rem`
+      Declaration@49383..49415
+        prop: `padding-bottom`
+        value: `1rem`
+    Rule@49423..49512
+      selector: `.py-lg-4`
+      Declaration@49438..49469
+        prop: `padding-top`
+        value: `1.5rem`
+      Declaration@49474..49508
+        prop: `padding-bottom`
+        value: `1.5rem`
+    Rule@49516..49601
+      selector: `.py-lg-5`
+      Declaration@49531..49560
+        prop: `padding-top`
+        value: `3rem`
+      Declaration@49565..49597
+        prop: `padding-bottom`
+        value: `3rem`
+    Rule@49605..49650
+      selector: `.pt-lg-0`
+      Declaration@49620..49646
+        prop: `padding-top`
+        value: `0`
+    Rule@49654..49705
+      selector: `.pt-lg-1`
+      Declaration@49669..49701
+        prop: `padding-top`
+        value: `0.25rem`
+    Rule@49709..49759
+      selector: `.pt-lg-2`
+      Declaration@49724..49755
+        prop: `padding-top`
+        value: `0.5rem`
+    Rule@49763..49811
+      selector: `.pt-lg-3`
+      Declaration@49778..49807
+        prop: `padding-top`
+        value: `1rem`
+    Rule@49815..49865
+      selector: `.pt-lg-4`
+      Declaration@49830..49861
+        prop: `padding-top`
+        value: `1.5rem`
+    Rule@49869..49917
+      selector: `.pt-lg-5`
+      Declaration@49884..49913
+        prop: `padding-top`
+        value: `3rem`
+    Rule@49921..49968
+      selector: `.pe-lg-0`
+      Declaration@49936..49964
+        prop: `padding-right`
+        value: `0`
+    Rule@49972..50025
+      selector: `.pe-lg-1`
+      Declaration@49987..50021
+        prop: `padding-right`
+        value: `0.25rem`
+    Rule@50029..50081
+      selector: `.pe-lg-2`
+      Declaration@50044..50077
+        prop: `padding-right`
+        value: `0.5rem`
+    Rule@50085..50135
+      selector: `.pe-lg-3`
+      Declaration@50100..50131
+        prop: `padding-right`
+        value: `1rem`
+    Rule@50139..50191
+      selector: `.pe-lg-4`
+      Declaration@50154..50187
+        prop: `padding-right`
+        value: `1.5rem`
+    Rule@50195..50245
+      selector: `.pe-lg-5`
+      Declaration@50210..50241
+        prop: `padding-right`
+        value: `3rem`
+    Rule@50249..50297
+      selector: `.pb-lg-0`
+      Declaration@50264..50293
+        prop: `padding-bottom`
+        value: `0`
+    Rule@50301..50355
+      selector: `.pb-lg-1`
+      Declaration@50316..50351
+        prop: `padding-bottom`
+        value: `0.25rem`
+    Rule@50359..50412
+      selector: `.pb-lg-2`
+      Declaration@50374..50408
+        prop: `padding-bottom`
+        value: `0.5rem`
+    Rule@50416..50467
+      selector: `.pb-lg-3`
+      Declaration@50431..50463
+        prop: `padding-bottom`
+        value: `1rem`
+    Rule@50471..50524
+      selector: `.pb-lg-4`
+      Declaration@50486..50520
+        prop: `padding-bottom`
+        value: `1.5rem`
+    Rule@50528..50579
+      selector: `.pb-lg-5`
+      Declaration@50543..50575
+        prop: `padding-bottom`
+        value: `3rem`
+    Rule@50583..50629
+      selector: `.ps-lg-0`
+      Declaration@50598..50625
+        prop: `padding-left`
+        value: `0`
+    Rule@50633..50685
+      selector: `.ps-lg-1`
+      Declaration@50648..50681
+        prop: `padding-left`
+        value: `0.25rem`
+    Rule@50689..50740
+      selector: `.ps-lg-2`
+      Declaration@50704..50736
+        prop: `padding-left`
+        value: `0.5rem`
+    Rule@50744..50793
+      selector: `.ps-lg-3`
+      Declaration@50759..50789
+        prop: `padding-left`
+        value: `1rem`
+    Rule@50797..50848
+      selector: `.ps-lg-4`
+      Declaration@50812..50844
+        prop: `padding-left`
+        value: `1.5rem`
+    Rule@50852..50901
+      selector: `.ps-lg-5`
+      Declaration@50867..50897
+        prop: `padding-left`
+        value: `3rem`
+    Rule@50905..50958
+      selector: `.text-lg-start`
+      Declaration@50926..50954
+        prop: `text-align`
+        value: `left`
+    Rule@50962..51014
+      selector: `.text-lg-end`
+      Declaration@50981..51010
+        prop: `text-align`
+        value: `right`
+    Rule@51018..51074
+      selector: `.text-lg-center`
+      Declaration@51040..51070
+        prop: `text-align`
+        value: `center`
+  AtRule@51077..60798
+    name: `media`
+    params: `(min-width: 1200px)`
+    Rule@51108..51157
+      selector: `.float-xl-start`
+      Declaration@51130..51153
+        prop: `float`
+        value: `left`
+    Rule@51161..51209
+      selector: `.float-xl-end`
+      Declaration@51181..51205
+        prop: `float`
+        value: `right`
+    Rule@51213..51261
+      selector: `.float-xl-none`
+      Declaration@51234..51257
+        prop: `float`
+        value: `none`
+    Rule@51265..51315
+      selector: `.d-xl-inline`
+      Declaration@51284..51311
+        prop: `display`
+        value: `inline`
+    Rule@51319..51381
+      selector: `.d-xl-inline-block`
+      Declaration@51344..51377
+        prop: `display`
+        value: `inline-block`
+    Rule@51385..51433
+      selector: `.d-xl-block`
+      Declaration@51403..51429
+        prop: `display`
+        value: `block`
+    Rule@51437..51483
+      selector: `.d-xl-grid`
+      Declaration@51454..51479
+        prop: `display`
+        value: `grid`
+    Rule@51487..51535
+      selector: `.d-xl-table`
+      Declaration@51505..51531
+        prop: `display`
+        value: `table`
+    Rule@51539..51595
+      selector: `.d-xl-table-row`
+      Declaration@51561..51591
+        prop: `display`
+        value: `table-row`
+    Rule@51599..51657
+      selector: `.d-xl-table-cell`
+      Declaration@51622..51653
+        prop: `display`
+        value: `table-cell`
+    Rule@51661..51707
+      selector: `.d-xl-flex`
+      Declaration@51678..51703
+        prop: `display`
+        value: `flex`
+    Rule@51711..51771
+      selector: `.d-xl-inline-flex`
+      Declaration@51735..51767
+        prop: `display`
+        value: `inline-flex`
+    Rule@51775..51821
+      selector: `.d-xl-none`
+      Declaration@51792..51817
+        prop: `display`
+        value: `none`
+    Rule@51825..51875
+      selector: `.flex-xl-fill`
+      Declaration@51845..51871
+        prop: `flex`
+        value: `1 1 auto`
+    Rule@51879..51933
+      selector: `.flex-xl-row`
+      Declaration@51898..51929
+        prop: `flex-direction`
+        value: `row`
+    Rule@51937..51997
+      selector: `.flex-xl-column`
+      Declaration@51959..51993
+        prop: `flex-direction`
+        value: `column`
+    Rule@52001..52071
+      selector: `.flex-xl-row-reverse`
+      Declaration@52028..52067
+        prop: `flex-direction`
+        value: `row-reverse`
+    Rule@52075..52151
+      selector: `.flex-xl-column-reverse`
+      Declaration@52105..52147
+        prop: `flex-direction`
+        value: `column-reverse`
+    Rule@52155..52205
+      selector: `.flex-xl-grow-0`
+      Declaration@52177..52201
+        prop: `flex-grow`
+        value: `0`
+    Rule@52209..52259
+      selector: `.flex-xl-grow-1`
+      Declaration@52231..52255
+        prop: `flex-grow`
+        value: `1`
+    Rule@52263..52317
+      selector: `.flex-xl-shrink-0`
+      Declaration@52287..52313
+        prop: `flex-shrink`
+        value: `0`
+    Rule@52321..52375
+      selector: `.flex-xl-shrink-1`
+      Declaration@52345..52371
+        prop: `flex-shrink`
+        value: `1`
+    Rule@52379..52430
+      selector: `.flex-xl-wrap`
+      Declaration@52399..52426
+        prop: `flex-wrap`
+        value: `wrap`
+    Rule@52434..52489
+      selector: `.flex-xl-nowrap`
+      Declaration@52456..52485
+        prop: `flex-wrap`
+        value: `nowrap`
+    Rule@52493..52560
+      selector: `.flex-xl-wrap-reverse`
+      Declaration@52521..52556
+        prop: `flex-wrap`
+        value: `wrap-reverse`
+    Rule@52564..52602
+      selector: `.gap-xl-0`
+      Declaration@52580..52598
+        prop: `gap`
+        value: `0`
+    Rule@52606..52650
+      selector: `.gap-xl-1`
+      Declaration@52622..52646
+        prop: `gap`
+        value: `0.25rem`
+    Rule@52654..52697
+      selector: `.gap-xl-2`
+      Declaration@52670..52693
+        prop: `gap`
+        value: `0.5rem`
+    Rule@52701..52742
+      selector: `.gap-xl-3`
+      Declaration@52717..52738
+        prop: `gap`
+        value: `1rem`
+    Rule@52746..52789
+      selector: `.gap-xl-4`
+      Declaration@52762..52785
+        prop: `gap`
+        value: `1.5rem`
+    Rule@52793..52834
+      selector: `.gap-xl-5`
+      Declaration@52809..52830
+        prop: `gap`
+        value: `3rem`
+    Rule@52838..52913
+      selector: `.justify-content-xl-start`
+      Declaration@52870..52909
+        prop: `justify-content`
+        value: `flex-start`
+    Rule@52917..52988
+      selector: `.justify-content-xl-end`
+      Declaration@52947..52984
+        prop: `justify-content`
+        value: `flex-end`
+    Rule@52992..53064
+      selector: `.justify-content-xl-center`
+      Declaration@53025..53060
+        prop: `justify-content`
+        value: `center`
+    Rule@53068..53148
+      selector: `.justify-content-xl-between`
+      Declaration@53102..53144
+        prop: `justify-content`
+        value: `space-between`
+    Rule@53152..53230
+      selector: `.justify-content-xl-around`
+      Declaration@53185..53226
+        prop: `justify-content`
+        value: `space-around`
+    Rule@53234..53312
+      selector: `.justify-content-xl-evenly`
+      Declaration@53267..53308
+        prop: `justify-content`
+        value: `space-evenly`
+    Rule@53316..53383
+      selector: `.align-items-xl-start`
+      Declaration@53344..53379
+        prop: `align-items`
+        value: `flex-start`
+    Rule@53387..53450
+      selector: `.align-items-xl-end`
+      Declaration@53413..53446
+        prop: `align-items`
+        value: `flex-end`
+    Rule@53454..53518
+      selector: `.align-items-xl-center`
+      Declaration@53483..53514
+        prop: `align-items`
+        value: `center`
+    Rule@53522..53590
+      selector: `.align-items-xl-baseline`
+      Declaration@53553..53586
+        prop: `align-items`
+        value: `baseline`
+    Rule@53594..53660
+      selector: `.align-items-xl-stretch`
+      Declaration@53624..53656
+        prop: `align-items`
+        value: `stretch`
+    Rule@53664..53735
+      selector: `.align-content-xl-start`
+      Declaration@53694..53731
+        prop: `align-content`
+        value: `flex-start`
+    Rule@53739..53806
+      selector: `.align-content-xl-end`
+      Declaration@53767..53802
+        prop: `align-content`
+        value: `flex-end`
+    Rule@53810..53878
+      selector: `.align-content-xl-center`
+      Declaration@53841..53874
+        prop: `align-content`
+        value: `center`
+    Rule@53882..53958
+      selector: `.align-content-xl-between`
+      Declaration@53914..53954
+        prop: `align-content`
+        value: `space-between`
+    Rule@53962..54036
+      selector: `.align-content-xl-around`
+      Declaration@53993..54032
+        prop: `align-content`
+        value: `space-around`
+    Rule@54040..54110
+      selector: `.align-content-xl-stretch`
+      Declaration@54072..54106
+        prop: `align-content`
+        value: `stretch`
+    Rule@54114..54172
+      selector: `.align-self-xl-auto`
+      Declaration@54140..54168
+        prop: `align-self`
+        value: `auto`
+    Rule@54176..54241
+      selector: `.align-self-xl-start`
+      Declaration@54203..54237
+        prop: `align-self`
+        value: `flex-start`
+    Rule@54245..54306
+      selector: `.align-self-xl-end`
+      Declaration@54270..54302
+        prop: `align-self`
+        value: `flex-end`
+    Rule@54310..54372
+      selector: `.align-self-xl-center`
+      Declaration@54338..54368
+        prop: `align-self`
+        value: `center`
+    Rule@54376..54442
+      selector: `.align-self-xl-baseline`
+      Declaration@54406..54438
+        prop: `align-self`
+        value: `baseline`
+    Rule@54446..54510
+      selector: `.align-self-xl-stretch`
+      Declaration@54475..54506
+        prop: `align-self`
+        value: `stretch`
+    Rule@54514..54561
+      selector: `.order-xl-first`
+      Declaration@54536..54557
+        prop: `order`
+        value: `-1`
+    Rule@54565..54607
+      selector: `.order-xl-0`
+      Declaration@54583..54603
+        prop: `order`
+        value: `0`
+    Rule@54611..54653
+      selector: `.order-xl-1`
+      Declaration@54629..54649
+        prop: `order`
+        value: `1`
+    Rule@54657..54699
+      selector: `.order-xl-2`
+      Declaration@54675..54695
+        prop: `order`
+        value: `2`
+    Rule@54703..54745
+      selector: `.order-xl-3`
+      Declaration@54721..54741
+        prop: `order`
+        value: `3`
+    Rule@54749..54791
+      selector: `.order-xl-4`
+      Declaration@54767..54787
+        prop: `order`
+        value: `4`
+    Rule@54795..54837
+      selector: `.order-xl-5`
+      Declaration@54813..54833
+        prop: `order`
+        value: `5`
+    Rule@54841..54886
+      selector: `.order-xl-last`
+      Declaration@54862..54882
+        prop: `order`
+        value: `6`
+    Rule@54890..54929
+      selector: `.m-xl-0`
+      Declaration@54904..54925
+        prop: `margin`
+        value: `0`
+    Rule@54933..54978
+      selector: `.m-xl-1`
+      Declaration@54947..54974
+        prop: `margin`
+        value: `0.25rem`
+    Rule@54982..55026
+      selector: `.m-xl-2`
+      Declaration@54996..55022
+        prop: `margin`
+        value: `0.5rem`
+    Rule@55030..55072
+      selector: `.m-xl-3`
+      Declaration@55044..55068
+        prop: `margin`
+        value: `1rem`
+    Rule@55076..55120
+      selector: `.m-xl-4`
+      Declaration@55090..55116
+        prop: `margin`
+        value: `1.5rem`
+    Rule@55124..55166
+      selector: `.m-xl-5`
+      Declaration@55138..55162
+        prop: `margin`
+        value: `3rem`
+    Rule@55170..55215
+      selector: `.m-xl-auto`
+      Declaration@55187..55211
+        prop: `margin`
+        value: `auto`
+    Rule@55219..55296
+      selector: `.mx-xl-0`
+      Declaration@55234..55261
+        prop: `margin-right`
+        value: `0`
+      Declaration@55266..55292
+        prop: `margin-left`
+        value: `0`
+    Rule@55300..55389
+      selector: `.mx-xl-1`
+      Declaration@55315..55348
+        prop: `margin-right`
+        value: `0.25rem`
+      Declaration@55353..55385
+        prop: `margin-left`
+        value: `0.25rem`
+    Rule@55393..55480
+      selector: `.mx-xl-2`
+      Declaration@55408..55440
+        prop: `margin-right`
+        value: `0.5rem`
+      Declaration@55445..55476
+        prop: `margin-left`
+        value: `0.5rem`
+    Rule@55484..55567
+      selector: `.mx-xl-3`
+      Declaration@55499..55529
+        prop: `margin-right`
+        value: `1rem`
+      Declaration@55534..55563
+        prop: `margin-left`
+        value: `1rem`
+    Rule@55571..55658
+      selector: `.mx-xl-4`
+      Declaration@55586..55618
+        prop: `margin-right`
+        value: `1.5rem`
+      Declaration@55623..55654
+        prop: `margin-left`
+        value: `1.5rem`
+    Rule@55662..55745
+      selector: `.mx-xl-5`
+      Declaration@55677..55707
+        prop: `margin-right`
+        value: `3rem`
+      Declaration@55712..55741
+        prop: `margin-left`
+        value: `3rem`
+    Rule@55749..55835
+      selector: `.mx-xl-auto`
+      Declaration@55767..55797
+        prop: `margin-right`
+        value: `auto`
+      Declaration@55802..55831
+        prop: `margin-left`
+        value: `auto`
+    Rule@55839..55916
+      selector: `.my-xl-0`
+      Declaration@55854..55879
+        prop: `margin-top`
+        value: `0`
+      Declaration@55884..55912
+        prop: `margin-bottom`
+        value: `0`
+    Rule@55920..56009
+      selector: `.my-xl-1`
+      Declaration@55935..55966
+        prop: `margin-top`
+        value: `0.25rem`
+      Declaration@55971..56005
+        prop: `margin-bottom`
+        value: `0.25rem`
+    Rule@56013..56100
+      selector: `.my-xl-2`
+      Declaration@56028..56058
+        prop: `margin-top`
+        value: `0.5rem`
+      Declaration@56063..56096
+        prop: `margin-bottom`
+        value: `0.5rem`
+    Rule@56104..56187
+      selector: `.my-xl-3`
+      Declaration@56119..56147
+        prop: `margin-top`
+        value: `1rem`
+      Declaration@56152..56183
+        prop: `margin-bottom`
+        value: `1rem`
+    Rule@56191..56278
+      selector: `.my-xl-4`
+      Declaration@56206..56236
+        prop: `margin-top`
+        value: `1.5rem`
+      Declaration@56241..56274
+        prop: `margin-bottom`
+        value: `1.5rem`
+    Rule@56282..56365
+      selector: `.my-xl-5`
+      Declaration@56297..56325
+        prop: `margin-top`
+        value: `3rem`
+      Declaration@56330..56361
+        prop: `margin-bottom`
+        value: `3rem`
+    Rule@56369..56455
+      selector: `.my-xl-auto`
+      Declaration@56387..56415
+        prop: `margin-top`
+        value: `auto`
+      Declaration@56420..56451
+        prop: `margin-bottom`
+        value: `auto`
+    Rule@56459..56503
+      selector: `.mt-xl-0`
+      Declaration@56474..56499
+        prop: `margin-top`
+        value: `0`
+    Rule@56507..56557
+      selector: `.mt-xl-1`
+      Declaration@56522..56553
+        prop: `margin-top`
+        value: `0.25rem`
+    Rule@56561..56610
+      selector: `.mt-xl-2`
+      Declaration@56576..56606
+        prop: `margin-top`
+        value: `0.5rem`
+    Rule@56614..56661
+      selector: `.mt-xl-3`
+      Declaration@56629..56657
+        prop: `margin-top`
+        value: `1rem`
+    Rule@56665..56714
+      selector: `.mt-xl-4`
+      Declaration@56680..56710
+        prop: `margin-top`
+        value: `1.5rem`
+    Rule@56718..56765
+      selector: `.mt-xl-5`
+      Declaration@56733..56761
+        prop: `margin-top`
+        value: `3rem`
+    Rule@56769..56819
+      selector: `.mt-xl-auto`
+      Declaration@56787..56815
+        prop: `margin-top`
+        value: `auto`
+    Rule@56823..56869
+      selector: `.me-xl-0`
+      Declaration@56838..56865
+        prop: `margin-right`
+        value: `0`
+    Rule@56873..56925
+      selector: `.me-xl-1`
+      Declaration@56888..56921
+        prop: `margin-right`
+        value: `0.25rem`
+    Rule@56929..56980
+      selector: `.me-xl-2`
+      Declaration@56944..56976
+        prop: `margin-right`
+        value: `0.5rem`
+    Rule@56984..57033
+      selector: `.me-xl-3`
+      Declaration@56999..57029
+        prop: `margin-right`
+        value: `1rem`
+    Rule@57037..57088
+      selector: `.me-xl-4`
+      Declaration@57052..57084
+        prop: `margin-right`
+        value: `1.5rem`
+    Rule@57092..57141
+      selector: `.me-xl-5`
+      Declaration@57107..57137
+        prop: `margin-right`
+        value: `3rem`
+    Rule@57145..57197
+      selector: `.me-xl-auto`
+      Declaration@57163..57193
+        prop: `margin-right`
+        value: `auto`
+    Rule@57201..57248
+      selector: `.mb-xl-0`
+      Declaration@57216..57244
+        prop: `margin-bottom`
+        value: `0`
+    Rule@57252..57305
+      selector: `.mb-xl-1`
+      Declaration@57267..57301
+        prop: `margin-bottom`
+        value: `0.25rem`
+    Rule@57309..57361
+      selector: `.mb-xl-2`
+      Declaration@57324..57357
+        prop: `margin-bottom`
+        value: `0.5rem`
+    Rule@57365..57415
+      selector: `.mb-xl-3`
+      Declaration@57380..57411
+        prop: `margin-bottom`
+        value: `1rem`
+    Rule@57419..57471
+      selector: `.mb-xl-4`
+      Declaration@57434..57467
+        prop: `margin-bottom`
+        value: `1.5rem`
+    Rule@57475..57525
+      selector: `.mb-xl-5`
+      Declaration@57490..57521
+        prop: `margin-bottom`
+        value: `3rem`
+    Rule@57529..57582
+      selector: `.mb-xl-auto`
+      Declaration@57547..57578
+        prop: `margin-bottom`
+        value: `auto`
+    Rule@57586..57631
+      selector: `.ms-xl-0`
+      Declaration@57601..57627
+        prop: `margin-left`
+        value: `0`
+    Rule@57635..57686
+      selector: `.ms-xl-1`
+      Declaration@57650..57682
+        prop: `margin-left`
+        value: `0.25rem`
+    Rule@57690..57740
+      selector: `.ms-xl-2`
+      Declaration@57705..57736
+        prop: `margin-left`
+        value: `0.5rem`
+    Rule@57744..57792
+      selector: `.ms-xl-3`
+      Declaration@57759..57788
+        prop: `margin-left`
+        value: `1rem`
+    Rule@57796..57846
+      selector: `.ms-xl-4`
+      Declaration@57811..57842
+        prop: `margin-left`
+        value: `1.5rem`
+    Rule@57850..57898
+      selector: `.ms-xl-5`
+      Declaration@57865..57894
+        prop: `margin-left`
+        value: `3rem`
+    Rule@57902..57953
+      selector: `.ms-xl-auto`
+      Declaration@57920..57949
+        prop: `margin-left`
+        value: `auto`
+    Rule@57957..57997
+      selector: `.p-xl-0`
+      Declaration@57971..57993
+        prop: `padding`
+        value: `0`
+    Rule@58001..58047
+      selector: `.p-xl-1`
+      Declaration@58015..58043
+        prop: `padding`
+        value: `0.25rem`
+    Rule@58051..58096
+      selector: `.p-xl-2`
+      Declaration@58065..58092
+        prop: `padding`
+        value: `0.5rem`
+    Rule@58100..58143
+      selector: `.p-xl-3`
+      Declaration@58114..58139
+        prop: `padding`
+        value: `1rem`
+    Rule@58147..58192
+      selector: `.p-xl-4`
+      Declaration@58161..58188
+        prop: `padding`
+        value: `1.5rem`
+    Rule@58196..58239
+      selector: `.p-xl-5`
+      Declaration@58210..58235
+        prop: `padding`
+        value: `3rem`
+    Rule@58243..58322
+      selector: `.px-xl-0`
+      Declaration@58258..58286
+        prop: `padding-right`
+        value: `0`
+      Declaration@58291..58318
+        prop: `padding-left`
+        value: `0`
+    Rule@58326..58417
+      selector: `.px-xl-1`
+      Declaration@58341..58375
+        prop: `padding-right`
+        value: `0.25rem`
+      Declaration@58380..58413
+        prop: `padding-left`
+        value: `0.25rem`
+    Rule@58421..58510
+      selector: `.px-xl-2`
+      Declaration@58436..58469
+        prop: `padding-right`
+        value: `0.5rem`
+      Declaration@58474..58506
+        prop: `padding-left`
+        value: `0.5rem`
+    Rule@58514..58599
+      selector: `.px-xl-3`
+      Declaration@58529..58560
+        prop: `padding-right`
+        value: `1rem`
+      Declaration@58565..58595
+        prop: `padding-left`
+        value: `1rem`
+    Rule@58603..58692
+      selector: `.px-xl-4`
+      Declaration@58618..58651
+        prop: `padding-right`
+        value: `1.5rem`
+      Declaration@58656..58688
+        prop: `padding-left`
+        value: `1.5rem`
+    Rule@58696..58781
+      selector: `.px-xl-5`
+      Declaration@58711..58742
+        prop: `padding-right`
+        value: `3rem`
+      Declaration@58747..58777
+        prop: `padding-left`
+        value: `3rem`
+    Rule@58785..58864
+      selector: `.py-xl-0`
+      Declaration@58800..58826
+        prop: `padding-top`
+        value: `0`
+      Declaration@58831..58860
+        prop: `padding-bottom`
+        value: `0`
+    Rule@58868..58959
+      selector: `.py-xl-1`
+      Declaration@58883..58915
+        prop: `padding-top`
+        value: `0.25rem`
+      Declaration@58920..58955
+        prop: `padding-bottom`
+        value: `0.25rem`
+    Rule@58963..59052
+      selector: `.py-xl-2`
+      Declaration@58978..59009
+        prop: `padding-top`
+        value: `0.5rem`
+      Declaration@59014..59048
+        prop: `padding-bottom`
+        value: `0.5rem`
+    Rule@59056..59141
+      selector: `.py-xl-3`
+      Declaration@59071..59100
+        prop: `padding-top`
+        value: `1rem`
+      Declaration@59105..59137
+        prop: `padding-bottom`
+        value: `1rem`
+    Rule@59145..59234
+      selector: `.py-xl-4`
+      Declaration@59160..59191
+        prop: `padding-top`
+        value: `1.5rem`
+      Declaration@59196..59230
+        prop: `padding-bottom`
+        value: `1.5rem`
+    Rule@59238..59323
+      selector: `.py-xl-5`
+      Declaration@59253..59282
+        prop: `padding-top`
+        value: `3rem`
+      Declaration@59287..59319
+        prop: `padding-bottom`
+        value: `3rem`
+    Rule@59327..59372
+      selector: `.pt-xl-0`
+      Declaration@59342..59368
+        prop: `padding-top`
+        value: `0`
+    Rule@59376..59427
+      selector: `.pt-xl-1`
+      Declaration@59391..59423
+        prop: `padding-top`
+        value: `0.25rem`
+    Rule@59431..59481
+      selector: `.pt-xl-2`
+      Declaration@59446..59477
+        prop: `padding-top`
+        value: `0.5rem`
+    Rule@59485..59533
+      selector: `.pt-xl-3`
+      Declaration@59500..59529
+        prop: `padding-top`
+        value: `1rem`
+    Rule@59537..59587
+      selector: `.pt-xl-4`
+      Declaration@59552..59583
+        prop: `padding-top`
+        value: `1.5rem`
+    Rule@59591..59639
+      selector: `.pt-xl-5`
+      Declaration@59606..59635
+        prop: `padding-top`
+        value: `3rem`
+    Rule@59643..59690
+      selector: `.pe-xl-0`
+      Declaration@59658..59686
+        prop: `padding-right`
+        value: `0`
+    Rule@59694..59747
+      selector: `.pe-xl-1`
+      Declaration@59709..59743
+        prop: `padding-right`
+        value: `0.25rem`
+    Rule@59751..59803
+      selector: `.pe-xl-2`
+      Declaration@59766..59799
+        prop: `padding-right`
+        value: `0.5rem`
+    Rule@59807..59857
+      selector: `.pe-xl-3`
+      Declaration@59822..59853
+        prop: `padding-right`
+        value: `1rem`
+    Rule@59861..59913
+      selector: `.pe-xl-4`
+      Declaration@59876..59909
+        prop: `padding-right`
+        value: `1.5rem`
+    Rule@59917..59967
+      selector: `.pe-xl-5`
+      Declaration@59932..59963
+        prop: `padding-right`
+        value: `3rem`
+    Rule@59971..60019
+      selector: `.pb-xl-0`
+      Declaration@59986..60015
+        prop: `padding-bottom`
+        value: `0`
+    Rule@60023..60077
+      selector: `.pb-xl-1`
+      Declaration@60038..60073
+        prop: `padding-bottom`
+        value: `0.25rem`
+    Rule@60081..60134
+      selector: `.pb-xl-2`
+      Declaration@60096..60130
+        prop: `padding-bottom`
+        value: `0.5rem`
+    Rule@60138..60189
+      selector: `.pb-xl-3`
+      Declaration@60153..60185
+        prop: `padding-bottom`
+        value: `1rem`
+    Rule@60193..60246
+      selector: `.pb-xl-4`
+      Declaration@60208..60242
+        prop: `padding-bottom`
+        value: `1.5rem`
+    Rule@60250..60301
+      selector: `.pb-xl-5`
+      Declaration@60265..60297
+        prop: `padding-bottom`
+        value: `3rem`
+    Rule@60305..60351
+      selector: `.ps-xl-0`
+      Declaration@60320..60347
+        prop: `padding-left`
+        value: `0`
+    Rule@60355..60407
+      selector: `.ps-xl-1`
+      Declaration@60370..60403
+        prop: `padding-left`
+        value: `0.25rem`
+    Rule@60411..60462
+      selector: `.ps-xl-2`
+      Declaration@60426..60458
+        prop: `padding-left`
+        value: `0.5rem`
+    Rule@60466..60515
+      selector: `.ps-xl-3`
+      Declaration@60481..60511
+        prop: `padding-left`
+        value: `1rem`
+    Rule@60519..60570
+      selector: `.ps-xl-4`
+      Declaration@60534..60566
+        prop: `padding-left`
+        value: `1.5rem`
+    Rule@60574..60623
+      selector: `.ps-xl-5`
+      Declaration@60589..60619
+        prop: `padding-left`
+        value: `3rem`
+    Rule@60627..60680
+      selector: `.text-xl-start`
+      Declaration@60648..60676
+        prop: `text-align`
+        value: `left`
+    Rule@60684..60736
+      selector: `.text-xl-end`
+      Declaration@60703..60732
+        prop: `text-align`
+        value: `right`
+    Rule@60740..60796
+      selector: `.text-xl-center`
+      Declaration@60762..60792
+        prop: `text-align`
+        value: `center`
+  AtRule@60799..70676
+    name: `media`
+    params: `(min-width: 1400px)`
+    Rule@60830..60880
+      selector: `.float-xxl-start`
+      Declaration@60853..60876
+        prop: `float`
+        value: `left`
+    Rule@60884..60933
+      selector: `.float-xxl-end`
+      Declaration@60905..60929
+        prop: `float`
+        value: `right`
+    Rule@60937..60986
+      selector: `.float-xxl-none`
+      Declaration@60959..60982
+        prop: `float`
+        value: `none`
+    Rule@60990..61041
+      selector: `.d-xxl-inline`
+      Declaration@61010..61037
+        prop: `display`
+        value: `inline`
+    Rule@61045..61108
+      selector: `.d-xxl-inline-block`
+      Declaration@61071..61104
+        prop: `display`
+        value: `inline-block`
+    Rule@61112..61161
+      selector: `.d-xxl-block`
+      Declaration@61131..61157
+        prop: `display`
+        value: `block`
+    Rule@61165..61212
+      selector: `.d-xxl-grid`
+      Declaration@61183..61208
+        prop: `display`
+        value: `grid`
+    Rule@61216..61265
+      selector: `.d-xxl-table`
+      Declaration@61235..61261
+        prop: `display`
+        value: `table`
+    Rule@61269..61326
+      selector: `.d-xxl-table-row`
+      Declaration@61292..61322
+        prop: `display`
+        value: `table-row`
+    Rule@61330..61389
+      selector: `.d-xxl-table-cell`
+      Declaration@61354..61385
+        prop: `display`
+        value: `table-cell`
+    Rule@61393..61440
+      selector: `.d-xxl-flex`
+      Declaration@61411..61436
+        prop: `display`
+        value: `flex`
+    Rule@61444..61505
+      selector: `.d-xxl-inline-flex`
+      Declaration@61469..61501
+        prop: `display`
+        value: `inline-flex`
+    Rule@61509..61556
+      selector: `.d-xxl-none`
+      Declaration@61527..61552
+        prop: `display`
+        value: `none`
+    Rule@61560..61611
+      selector: `.flex-xxl-fill`
+      Declaration@61581..61607
+        prop: `flex`
+        value: `1 1 auto`
+    Rule@61615..61670
+      selector: `.flex-xxl-row`
+      Declaration@61635..61666
+        prop: `flex-direction`
+        value: `row`
+    Rule@61674..61735
+      selector: `.flex-xxl-column`
+      Declaration@61697..61731
+        prop: `flex-direction`
+        value: `column`
+    Rule@61739..61810
+      selector: `.flex-xxl-row-reverse`
+      Declaration@61767..61806
+        prop: `flex-direction`
+        value: `row-reverse`
+    Rule@61814..61891
+      selector: `.flex-xxl-column-reverse`
+      Declaration@61845..61887
+        prop: `flex-direction`
+        value: `column-reverse`
+    Rule@61895..61946
+      selector: `.flex-xxl-grow-0`
+      Declaration@61918..61942
+        prop: `flex-grow`
+        value: `0`
+    Rule@61950..62001
+      selector: `.flex-xxl-grow-1`
+      Declaration@61973..61997
+        prop: `flex-grow`
+        value: `1`
+    Rule@62005..62060
+      selector: `.flex-xxl-shrink-0`
+      Declaration@62030..62056
+        prop: `flex-shrink`
+        value: `0`
+    Rule@62064..62119
+      selector: `.flex-xxl-shrink-1`
+      Declaration@62089..62115
+        prop: `flex-shrink`
+        value: `1`
+    Rule@62123..62175
+      selector: `.flex-xxl-wrap`
+      Declaration@62144..62171
+        prop: `flex-wrap`
+        value: `wrap`
+    Rule@62179..62235
+      selector: `.flex-xxl-nowrap`
+      Declaration@62202..62231
+        prop: `flex-wrap`
+        value: `nowrap`
+    Rule@62239..62307
+      selector: `.flex-xxl-wrap-reverse`
+      Declaration@62268..62303
+        prop: `flex-wrap`
+        value: `wrap-reverse`
+    Rule@62311..62350
+      selector: `.gap-xxl-0`
+      Declaration@62328..62346
+        prop: `gap`
+        value: `0`
+    Rule@62354..62399
+      selector: `.gap-xxl-1`
+      Declaration@62371..62395
+        prop: `gap`
+        value: `0.25rem`
+    Rule@62403..62447
+      selector: `.gap-xxl-2`
+      Declaration@62420..62443
+        prop: `gap`
+        value: `0.5rem`
+    Rule@62451..62493
+      selector: `.gap-xxl-3`
+      Declaration@62468..62489
+        prop: `gap`
+        value: `1rem`
+    Rule@62497..62541
+      selector: `.gap-xxl-4`
+      Declaration@62514..62537
+        prop: `gap`
+        value: `1.5rem`
+    Rule@62545..62587
+      selector: `.gap-xxl-5`
+      Declaration@62562..62583
+        prop: `gap`
+        value: `3rem`
+    Rule@62591..62667
+      selector: `.justify-content-xxl-start`
+      Declaration@62624..62663
+        prop: `justify-content`
+        value: `flex-start`
+    Rule@62671..62743
+      selector: `.justify-content-xxl-end`
+      Declaration@62702..62739
+        prop: `justify-content`
+        value: `flex-end`
+    Rule@62747..62820
+      selector: `.justify-content-xxl-center`
+      Declaration@62781..62816
+        prop: `justify-content`
+        value: `center`
+    Rule@62824..62905
+      selector: `.justify-content-xxl-between`
+      Declaration@62859..62901
+        prop: `justify-content`
+        value: `space-between`
+    Rule@62909..62988
+      selector: `.justify-content-xxl-around`
+      Declaration@62943..62984
+        prop: `justify-content`
+        value: `space-around`
+    Rule@62992..63071
+      selector: `.justify-content-xxl-evenly`
+      Declaration@63026..63067
+        prop: `justify-content`
+        value: `space-evenly`
+    Rule@63075..63143
+      selector: `.align-items-xxl-start`
+      Declaration@63104..63139
+        prop: `align-items`
+        value: `flex-start`
+    Rule@63147..63211
+      selector: `.align-items-xxl-end`
+      Declaration@63174..63207
+        prop: `align-items`
+        value: `flex-end`
+    Rule@63215..63280
+      selector: `.align-items-xxl-center`
+      Declaration@63245..63276
+        prop: `align-items`
+        value: `center`
+    Rule@63284..63353
+      selector: `.align-items-xxl-baseline`
+      Declaration@63316..63349
+        prop: `align-items`
+        value: `baseline`
+    Rule@63357..63424
+      selector: `.align-items-xxl-stretch`
+      Declaration@63388..63420
+        prop: `align-items`
+        value: `stretch`
+    Rule@63428..63500
+      selector: `.align-content-xxl-start`
+      Declaration@63459..63496
+        prop: `align-content`
+        value: `flex-start`
+    Rule@63504..63572
+      selector: `.align-content-xxl-end`
+      Declaration@63533..63568
+        prop: `align-content`
+        value: `flex-end`
+    Rule@63576..63645
+      selector: `.align-content-xxl-center`
+      Declaration@63608..63641
+        prop: `align-content`
+        value: `center`
+    Rule@63649..63726
+      selector: `.align-content-xxl-between`
+      Declaration@63682..63722
+        prop: `align-content`
+        value: `space-between`
+    Rule@63730..63805
+      selector: `.align-content-xxl-around`
+      Declaration@63762..63801
+        prop: `align-content`
+        value: `space-around`
+    Rule@63809..63880
+      selector: `.align-content-xxl-stretch`
+      Declaration@63842..63876
+        prop: `align-content`
+        value: `stretch`
+    Rule@63884..63943
+      selector: `.align-self-xxl-auto`
+      Declaration@63911..63939
+        prop: `align-self`
+        value: `auto`
+    Rule@63947..64013
+      selector: `.align-self-xxl-start`
+      Declaration@63975..64009
+        prop: `align-self`
+        value: `flex-start`
+    Rule@64017..64079
+      selector: `.align-self-xxl-end`
+      Declaration@64043..64075
+        prop: `align-self`
+        value: `flex-end`
+    Rule@64083..64146
+      selector: `.align-self-xxl-center`
+      Declaration@64112..64142
+        prop: `align-self`
+        value: `center`
+    Rule@64150..64217
+      selector: `.align-self-xxl-baseline`
+      Declaration@64181..64213
+        prop: `align-self`
+        value: `baseline`
+    Rule@64221..64286
+      selector: `.align-self-xxl-stretch`
+      Declaration@64251..64282
+        prop: `align-self`
+        value: `stretch`
+    Rule@64290..64338
+      selector: `.order-xxl-first`
+      Declaration@64313..64334
+        prop: `order`
+        value: `-1`
+    Rule@64342..64385
+      selector: `.order-xxl-0`
+      Declaration@64361..64381
+        prop: `order`
+        value: `0`
+    Rule@64389..64432
+      selector: `.order-xxl-1`
+      Declaration@64408..64428
+        prop: `order`
+        value: `1`
+    Rule@64436..64479
+      selector: `.order-xxl-2`
+      Declaration@64455..64475
+        prop: `order`
+        value: `2`
+    Rule@64483..64526
+      selector: `.order-xxl-3`
+      Declaration@64502..64522
+        prop: `order`
+        value: `3`
+    Rule@64530..64573
+      selector: `.order-xxl-4`
+      Declaration@64549..64569
+        prop: `order`
+        value: `4`
+    Rule@64577..64620
+      selector: `.order-xxl-5`
+      Declaration@64596..64616
+        prop: `order`
+        value: `5`
+    Rule@64624..64670
+      selector: `.order-xxl-last`
+      Declaration@64646..64666
+        prop: `order`
+        value: `6`
+    Rule@64674..64714
+      selector: `.m-xxl-0`
+      Declaration@64689..64710
+        prop: `margin`
+        value: `0`
+    Rule@64718..64764
+      selector: `.m-xxl-1`
+      Declaration@64733..64760
+        prop: `margin`
+        value: `0.25rem`
+    Rule@64768..64813
+      selector: `.m-xxl-2`
+      Declaration@64783..64809
+        prop: `margin`
+        value: `0.5rem`
+    Rule@64817..64860
+      selector: `.m-xxl-3`
+      Declaration@64832..64856
+        prop: `margin`
+        value: `1rem`
+    Rule@64864..64909
+      selector: `.m-xxl-4`
+      Declaration@64879..64905
+        prop: `margin`
+        value: `1.5rem`
+    Rule@64913..64956
+      selector: `.m-xxl-5`
+      Declaration@64928..64952
+        prop: `margin`
+        value: `3rem`
+    Rule@64960..65006
+      selector: `.m-xxl-auto`
+      Declaration@64978..65002
+        prop: `margin`
+        value: `auto`
+    Rule@65010..65088
+      selector: `.mx-xxl-0`
+      Declaration@65026..65053
+        prop: `margin-right`
+        value: `0`
+      Declaration@65058..65084
+        prop: `margin-left`
+        value: `0`
+    Rule@65092..65182
+      selector: `.mx-xxl-1`
+      Declaration@65108..65141
+        prop: `margin-right`
+        value: `0.25rem`
+      Declaration@65146..65178
+        prop: `margin-left`
+        value: `0.25rem`
+    Rule@65186..65274
+      selector: `.mx-xxl-2`
+      Declaration@65202..65234
+        prop: `margin-right`
+        value: `0.5rem`
+      Declaration@65239..65270
+        prop: `margin-left`
+        value: `0.5rem`
+    Rule@65278..65362
+      selector: `.mx-xxl-3`
+      Declaration@65294..65324
+        prop: `margin-right`
+        value: `1rem`
+      Declaration@65329..65358
+        prop: `margin-left`
+        value: `1rem`
+    Rule@65366..65454
+      selector: `.mx-xxl-4`
+      Declaration@65382..65414
+        prop: `margin-right`
+        value: `1.5rem`
+      Declaration@65419..65450
+        prop: `margin-left`
+        value: `1.5rem`
+    Rule@65458..65542
+      selector: `.mx-xxl-5`
+      Declaration@65474..65504
+        prop: `margin-right`
+        value: `3rem`
+      Declaration@65509..65538
+        prop: `margin-left`
+        value: `3rem`
+    Rule@65546..65633
+      selector: `.mx-xxl-auto`
+      Declaration@65565..65595
+        prop: `margin-right`
+        value: `auto`
+      Declaration@65600..65629
+        prop: `margin-left`
+        value: `auto`
+    Rule@65637..65715
+      selector: `.my-xxl-0`
+      Declaration@65653..65678
+        prop: `margin-top`
+        value: `0`
+      Declaration@65683..65711
+        prop: `margin-bottom`
+        value: `0`
+    Rule@65719..65809
+      selector: `.my-xxl-1`
+      Declaration@65735..65766
+        prop: `margin-top`
+        value: `0.25rem`
+      Declaration@65771..65805
+        prop: `margin-bottom`
+        value: `0.25rem`
+    Rule@65813..65901
+      selector: `.my-xxl-2`
+      Declaration@65829..65859
+        prop: `margin-top`
+        value: `0.5rem`
+      Declaration@65864..65897
+        prop: `margin-bottom`
+        value: `0.5rem`
+    Rule@65905..65989
+      selector: `.my-xxl-3`
+      Declaration@65921..65949
+        prop: `margin-top`
+        value: `1rem`
+      Declaration@65954..65985
+        prop: `margin-bottom`
+        value: `1rem`
+    Rule@65993..66081
+      selector: `.my-xxl-4`
+      Declaration@66009..66039
+        prop: `margin-top`
+        value: `1.5rem`
+      Declaration@66044..66077
+        prop: `margin-bottom`
+        value: `1.5rem`
+    Rule@66085..66169
+      selector: `.my-xxl-5`
+      Declaration@66101..66129
+        prop: `margin-top`
+        value: `3rem`
+      Declaration@66134..66165
+        prop: `margin-bottom`
+        value: `3rem`
+    Rule@66173..66260
+      selector: `.my-xxl-auto`
+      Declaration@66192..66220
+        prop: `margin-top`
+        value: `auto`
+      Declaration@66225..66256
+        prop: `margin-bottom`
+        value: `auto`
+    Rule@66264..66309
+      selector: `.mt-xxl-0`
+      Declaration@66280..66305
+        prop: `margin-top`
+        value: `0`
+    Rule@66313..66364
+      selector: `.mt-xxl-1`
+      Declaration@66329..66360
+        prop: `margin-top`
+        value: `0.25rem`
+    Rule@66368..66418
+      selector: `.mt-xxl-2`
+      Declaration@66384..66414
+        prop: `margin-top`
+        value: `0.5rem`
+    Rule@66422..66470
+      selector: `.mt-xxl-3`
+      Declaration@66438..66466
+        prop: `margin-top`
+        value: `1rem`
+    Rule@66474..66524
+      selector: `.mt-xxl-4`
+      Declaration@66490..66520
+        prop: `margin-top`
+        value: `1.5rem`
+    Rule@66528..66576
+      selector: `.mt-xxl-5`
+      Declaration@66544..66572
+        prop: `margin-top`
+        value: `3rem`
+    Rule@66580..66631
+      selector: `.mt-xxl-auto`
+      Declaration@66599..66627
+        prop: `margin-top`
+        value: `auto`
+    Rule@66635..66682
+      selector: `.me-xxl-0`
+      Declaration@66651..66678
+        prop: `margin-right`
+        value: `0`
+    Rule@66686..66739
+      selector: `.me-xxl-1`
+      Declaration@66702..66735
+        prop: `margin-right`
+        value: `0.25rem`
+    Rule@66743..66795
+      selector: `.me-xxl-2`
+      Declaration@66759..66791
+        prop: `margin-right`
+        value: `0.5rem`
+    Rule@66799..66849
+      selector: `.me-xxl-3`
+      Declaration@66815..66845
+        prop: `margin-right`
+        value: `1rem`
+    Rule@66853..66905
+      selector: `.me-xxl-4`
+      Declaration@66869..66901
+        prop: `margin-right`
+        value: `1.5rem`
+    Rule@66909..66959
+      selector: `.me-xxl-5`
+      Declaration@66925..66955
+        prop: `margin-right`
+        value: `3rem`
+    Rule@66963..67016
+      selector: `.me-xxl-auto`
+      Declaration@66982..67012
+        prop: `margin-right`
+        value: `auto`
+    Rule@67020..67068
+      selector: `.mb-xxl-0`
+      Declaration@67036..67064
+        prop: `margin-bottom`
+        value: `0`
+    Rule@67072..67126
+      selector: `.mb-xxl-1`
+      Declaration@67088..67122
+        prop: `margin-bottom`
+        value: `0.25rem`
+    Rule@67130..67183
+      selector: `.mb-xxl-2`
+      Declaration@67146..67179
+        prop: `margin-bottom`
+        value: `0.5rem`
+    Rule@67187..67238
+      selector: `.mb-xxl-3`
+      Declaration@67203..67234
+        prop: `margin-bottom`
+        value: `1rem`
+    Rule@67242..67295
+      selector: `.mb-xxl-4`
+      Declaration@67258..67291
+        prop: `margin-bottom`
+        value: `1.5rem`
+    Rule@67299..67350
+      selector: `.mb-xxl-5`
+      Declaration@67315..67346
+        prop: `margin-bottom`
+        value: `3rem`
+    Rule@67354..67408
+      selector: `.mb-xxl-auto`
+      Declaration@67373..67404
+        prop: `margin-bottom`
+        value: `auto`
+    Rule@67412..67458
+      selector: `.ms-xxl-0`
+      Declaration@67428..67454
+        prop: `margin-left`
+        value: `0`
+    Rule@67462..67514
+      selector: `.ms-xxl-1`
+      Declaration@67478..67510
+        prop: `margin-left`
+        value: `0.25rem`
+    Rule@67518..67569
+      selector: `.ms-xxl-2`
+      Declaration@67534..67565
+        prop: `margin-left`
+        value: `0.5rem`
+    Rule@67573..67622
+      selector: `.ms-xxl-3`
+      Declaration@67589..67618
+        prop: `margin-left`
+        value: `1rem`
+    Rule@67626..67677
+      selector: `.ms-xxl-4`
+      Declaration@67642..67673
+        prop: `margin-left`
+        value: `1.5rem`
+    Rule@67681..67730
+      selector: `.ms-xxl-5`
+      Declaration@67697..67726
+        prop: `margin-left`
+        value: `3rem`
+    Rule@67734..67786
+      selector: `.ms-xxl-auto`
+      Declaration@67753..67782
+        prop: `margin-left`
+        value: `auto`
+    Rule@67790..67831
+      selector: `.p-xxl-0`
+      Declaration@67805..67827
+        prop: `padding`
+        value: `0`
+    Rule@67835..67882
+      selector: `.p-xxl-1`
+      Declaration@67850..67878
+        prop: `padding`
+        value: `0.25rem`
+    Rule@67886..67932
+      selector: `.p-xxl-2`
+      Declaration@67901..67928
+        prop: `padding`
+        value: `0.5rem`
+    Rule@67936..67980
+      selector: `.p-xxl-3`
+      Declaration@67951..67976
+        prop: `padding`
+        value: `1rem`
+    Rule@67984..68030
+      selector: `.p-xxl-4`
+      Declaration@67999..68026
+        prop: `padding`
+        value: `1.5rem`
+    Rule@68034..68078
+      selector: `.p-xxl-5`
+      Declaration@68049..68074
+        prop: `padding`
+        value: `3rem`
+    Rule@68082..68162
+      selector: `.px-xxl-0`
+      Declaration@68098..68126
+        prop: `padding-right`
+        value: `0`
+      Declaration@68131..68158
+        prop: `padding-left`
+        value: `0`
+    Rule@68166..68258
+      selector: `.px-xxl-1`
+      Declaration@68182..68216
+        prop: `padding-right`
+        value: `0.25rem`
+      Declaration@68221..68254
+        prop: `padding-left`
+        value: `0.25rem`
+    Rule@68262..68352
+      selector: `.px-xxl-2`
+      Declaration@68278..68311
+        prop: `padding-right`
+        value: `0.5rem`
+      Declaration@68316..68348
+        prop: `padding-left`
+        value: `0.5rem`
+    Rule@68356..68442
+      selector: `.px-xxl-3`
+      Declaration@68372..68403
+        prop: `padding-right`
+        value: `1rem`
+      Declaration@68408..68438
+        prop: `padding-left`
+        value: `1rem`
+    Rule@68446..68536
+      selector: `.px-xxl-4`
+      Declaration@68462..68495
+        prop: `padding-right`
+        value: `1.5rem`
+      Declaration@68500..68532
+        prop: `padding-left`
+        value: `1.5rem`
+    Rule@68540..68626
+      selector: `.px-xxl-5`
+      Declaration@68556..68587
+        prop: `padding-right`
+        value: `3rem`
+      Declaration@68592..68622
+        prop: `padding-left`
+        value: `3rem`
+    Rule@68630..68710
+      selector: `.py-xxl-0`
+      Declaration@68646..68672
+        prop: `padding-top`
+        value: `0`
+      Declaration@68677..68706
+        prop: `padding-bottom`
+        value: `0`
+    Rule@68714..68806
+      selector: `.py-xxl-1`
+      Declaration@68730..68762
+        prop: `padding-top`
+        value: `0.25rem`
+      Declaration@68767..68802
+        prop: `padding-bottom`
+        value: `0.25rem`
+    Rule@68810..68900
+      selector: `.py-xxl-2`
+      Declaration@68826..68857
+        prop: `padding-top`
+        value: `0.5rem`
+      Declaration@68862..68896
+        prop: `padding-bottom`
+        value: `0.5rem`
+    Rule@68904..68990
+      selector: `.py-xxl-3`
+      Declaration@68920..68949
+        prop: `padding-top`
+        value: `1rem`
+      Declaration@68954..68986
+        prop: `padding-bottom`
+        value: `1rem`
+    Rule@68994..69084
+      selector: `.py-xxl-4`
+      Declaration@69010..69041
+        prop: `padding-top`
+        value: `1.5rem`
+      Declaration@69046..69080
+        prop: `padding-bottom`
+        value: `1.5rem`
+    Rule@69088..69174
+      selector: `.py-xxl-5`
+      Declaration@69104..69133
+        prop: `padding-top`
+        value: `3rem`
+      Declaration@69138..69170
+        prop: `padding-bottom`
+        value: `3rem`
+    Rule@69178..69224
+      selector: `.pt-xxl-0`
+      Declaration@69194..69220
+        prop: `padding-top`
+        value: `0`
+    Rule@69228..69280
+      selector: `.pt-xxl-1`
+      Declaration@69244..69276
+        prop: `padding-top`
+        value: `0.25rem`
+    Rule@69284..69335
+      selector: `.pt-xxl-2`
+      Declaration@69300..69331
+        prop: `padding-top`
+        value: `0.5rem`
+    Rule@69339..69388
+      selector: `.pt-xxl-3`
+      Declaration@69355..69384
+        prop: `padding-top`
+        value: `1rem`
+    Rule@69392..69443
+      selector: `.pt-xxl-4`
+      Declaration@69408..69439
+        prop: `padding-top`
+        value: `1.5rem`
+    Rule@69447..69496
+      selector: `.pt-xxl-5`
+      Declaration@69463..69492
+        prop: `padding-top`
+        value: `3rem`
+    Rule@69500..69548
+      selector: `.pe-xxl-0`
+      Declaration@69516..69544
+        prop: `padding-right`
+        value: `0`
+    Rule@69552..69606
+      selector: `.pe-xxl-1`
+      Declaration@69568..69602
+        prop: `padding-right`
+        value: `0.25rem`
+    Rule@69610..69663
+      selector: `.pe-xxl-2`
+      Declaration@69626..69659
+        prop: `padding-right`
+        value: `0.5rem`
+    Rule@69667..69718
+      selector: `.pe-xxl-3`
+      Declaration@69683..69714
+        prop: `padding-right`
+        value: `1rem`
+    Rule@69722..69775
+      selector: `.pe-xxl-4`
+      Declaration@69738..69771
+        prop: `padding-right`
+        value: `1.5rem`
+    Rule@69779..69830
+      selector: `.pe-xxl-5`
+      Declaration@69795..69826
+        prop: `padding-right`
+        value: `3rem`
+    Rule@69834..69883
+      selector: `.pb-xxl-0`
+      Declaration@69850..69879
+        prop: `padding-bottom`
+        value: `0`
+    Rule@69887..69942
+      selector: `.pb-xxl-1`
+      Declaration@69903..69938
+        prop: `padding-bottom`
+        value: `0.25rem`
+    Rule@69946..70000
+      selector: `.pb-xxl-2`
+      Declaration@69962..69996
+        prop: `padding-bottom`
+        value: `0.5rem`
+    Rule@70004..70056
+      selector: `.pb-xxl-3`
+      Declaration@70020..70052
+        prop: `padding-bottom`
+        value: `1rem`
+    Rule@70060..70114
+      selector: `.pb-xxl-4`
+      Declaration@70076..70110
+        prop: `padding-bottom`
+        value: `1.5rem`
+    Rule@70118..70170
+      selector: `.pb-xxl-5`
+      Declaration@70134..70166
+        prop: `padding-bottom`
+        value: `3rem`
+    Rule@70174..70221
+      selector: `.ps-xxl-0`
+      Declaration@70190..70217
+        prop: `padding-left`
+        value: `0`
+    Rule@70225..70278
+      selector: `.ps-xxl-1`
+      Declaration@70241..70274
+        prop: `padding-left`
+        value: `0.25rem`
+    Rule@70282..70334
+      selector: `.ps-xxl-2`
+      Declaration@70298..70330
+        prop: `padding-left`
+        value: `0.5rem`
+    Rule@70338..70388
+      selector: `.ps-xxl-3`
+      Declaration@70354..70384
+        prop: `padding-left`
+        value: `1rem`
+    Rule@70392..70444
+      selector: `.ps-xxl-4`
+      Declaration@70408..70440
+        prop: `padding-left`
+        value: `1.5rem`
+    Rule@70448..70498
+      selector: `.ps-xxl-5`
+      Declaration@70464..70494
+        prop: `padding-left`
+        value: `3rem`
+    Rule@70502..70556
+      selector: `.text-xxl-start`
+      Declaration@70524..70552
+        prop: `text-align`
+        value: `left`
+    Rule@70560..70613
+      selector: `.text-xxl-end`
+      Declaration@70580..70609
+        prop: `text-align`
+        value: `right`
+    Rule@70617..70674
+      selector: `.text-xxl-center`
+      Declaration@70640..70670
+        prop: `text-align`
+        value: `center`
+  AtRule@70677..70901
+    name: `media`
+    params: `(min-width: 1200px)`
+    Rule@70708..70753
+      selector: `.fs-1`
+      Declaration@70720..70749
+        prop: `font-size`
+        value: `2.5rem`
+    Rule@70757..70800
+      selector: `.fs-2`
+      Declaration@70769..70796
+        prop: `font-size`
+        value: `2rem`
+    Rule@70804..70850
+      selector: `.fs-3`
+      Declaration@70816..70846
+        prop: `font-size`
+        value: `1.75rem`
+    Rule@70854..70899
+      selector: `.fs-4`
+      Declaration@70866..70895
+        prop: `font-size`
+        value: `1.5rem`
+  AtRule@70902..71507
+    name: `media`
+    params: `print`
+    Rule@70919..70972
+      selector: `.d-print-inline`
+      Declaration@70941..70968
+        prop: `display`
+        value: `inline`
+    Rule@70976..71041
+      selector: `.d-print-inline-block`
+      Declaration@71004..71037
+        prop: `display`
+        value: `inline-block`
+    Rule@71045..71096
+      selector: `.d-print-block`
+      Declaration@71066..71092
+        prop: `display`
+        value: `block`
+    Rule@71100..71149
+      selector: `.d-print-grid`
+      Declaration@71120..71145
+        prop: `display`
+        value: `grid`
+    Rule@71153..71204
+      selector: `.d-print-table`
+      Declaration@71174..71200
+        prop: `display`
+        value: `table`
+    Rule@71208..71267
+      selector: `.d-print-table-row`
+      Declaration@71233..71263
+        prop: `display`
+        value: `table-row`
+    Rule@71271..71332
+      selector: `.d-print-table-cell`
+      Declaration@71297..71328
+        prop: `display`
+        value: `table-cell`
+    Rule@71336..71385
+      selector: `.d-print-flex`
+      Declaration@71356..71381
+        prop: `display`
+        value: `flex`
+    Rule@71389..71452
+      selector: `.d-print-inline-flex`
+      Declaration@71416..71448
+        prop: `display`
+        value: `inline-flex`
+    Rule@71456..71505
+      selector: `.d-print-none`
+      Declaration@71476..71501
+        prop: `display`
+        value: `none`

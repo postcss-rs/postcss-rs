@@ -1,0 +1,806 @@
+Root@0..7578
+  Rule@330..2065
+    selector: `:root`
+    Declaration@340..359
+      prop: `--bs-blue`
+      value: `#0d6efd`
+    Declaration@362..383
+      prop: `--bs-indigo`
+      value: `#6610f2`
+    Declaration@386..407
+      prop: `--bs-purple`
+      value: `#6f42c1`
+    Declaration@410..429
+      prop: `--bs-pink`
+      value: `#d63384`
+    Declaration@432..450
+      prop: `--bs-red`
+      value: `#dc3545`
+    Declaration@453..474
+      prop: `--bs-orange`
+      value: `#fd7e14`
+    Declaration@477..498
+      prop: `--bs-yellow`
+      value: `#ffc107`
+    Declaration@501..521
+      prop: `--bs-green`
+      value: `#198754`
+    Declaration@524..543
+      prop: `--bs-teal`
+      value: `#20c997`
+    Declaration@546..565
+      prop: `--bs-cyan`
+      value: `#0dcaf0`
+    Declaration@568..585
+      prop: `--bs-white`
+      value: `#fff`
+    Declaration@588..607
+      prop: `--bs-gray`
+      value: `#6c757d`
+    Declaration@610..634
+      prop: `--bs-gray-dark`
+      value: `#343a40`
+    Declaration@637..660
+      prop: `--bs-gray-100`
+      value: `#f8f9fa`
+    Declaration@663..686
+      prop: `--bs-gray-200`
+      value: `#e9ecef`
+    Declaration@689..712
+      prop: `--bs-gray-300`
+      value: `#dee2e6`
+    Declaration@715..738
+      prop: `--bs-gray-400`
+      value: `#ced4da`
+    Declaration@741..764
+      prop: `--bs-gray-500`
+      value: `#adb5bd`
+    Declaration@767..790
+      prop: `--bs-gray-600`
+      value: `#6c757d`
+    Declaration@793..816
+      prop: `--bs-gray-700`
+      value: `#495057`
+    Declaration@819..842
+      prop: `--bs-gray-800`
+      value: `#343a40`
+    Declaration@845..868
+      prop: `--bs-gray-900`
+      value: `#212529`
+    Declaration@871..893
+      prop: `--bs-primary`
+      value: `#0d6efd`
+    Declaration@896..920
+      prop: `--bs-secondary`
+      value: `#6c757d`
+    Declaration@923..945
+      prop: `--bs-success`
+      value: `#198754`
+    Declaration@948..967
+      prop: `--bs-info`
+      value: `#0dcaf0`
+    Declaration@970..992
+      prop: `--bs-warning`
+      value: `#ffc107`
+    Declaration@995..1016
+      prop: `--bs-danger`
+      value: `#dc3545`
+    Declaration@1019..1039
+      prop: `--bs-light`
+      value: `#f8f9fa`
+    Declaration@1042..1061
+      prop: `--bs-dark`
+      value: `#212529`
+    Declaration@1064..1095
+      prop: `--bs-primary-rgb`
+      value: `13, 110, 253`
+    Declaration@1098..1132
+      prop: `--bs-secondary-rgb`
+      value: `108, 117, 125`
+    Declaration@1135..1165
+      prop: `--bs-success-rgb`
+      value: `25, 135, 84`
+    Declaration@1168..1196
+      prop: `--bs-info-rgb`
+      value: `13, 202, 240`
+    Declaration@1199..1229
+      prop: `--bs-warning-rgb`
+      value: `255, 193, 7`
+    Declaration@1232..1261
+      prop: `--bs-danger-rgb`
+      value: `220, 53, 69`
+    Declaration@1264..1294
+      prop: `--bs-light-rgb`
+      value: `248, 249, 250`
+    Declaration@1297..1323
+      prop: `--bs-dark-rgb`
+      value: `33, 37, 41`
+    Declaration@1326..1356
+      prop: `--bs-white-rgb`
+      value: `255, 255, 255`
+    Declaration@1359..1383
+      prop: `--bs-black-rgb`
+      value: `0, 0, 0`
+    Declaration@1386..1418
+      prop: `--bs-body-color-rgb`
+      value: `33, 37, 41`
+    Declaration@1421..1453
+      prop: `--bs-body-bg-rgb`
+      value: `255, 255, 255`
+    Declaration@1456..1670
+      prop: `--bs-font-sans-serif`
+      value: `system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"`
+    Declaration@1673..1779
+      prop: `--bs-font-monospace`
+      value: `SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace`
+    Declaration@1782..1872
+      prop: `--bs-gradient`
+      value: `linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0))`
+    Declaration@1875..1924
+      prop: `--bs-body-font-family`
+      value: `var(--bs-font-sans-serif)`
+    Declaration@1927..1953
+      prop: `--bs-body-font-size`
+      value: `1rem`
+    Declaration@1956..1983
+      prop: `--bs-body-font-weight`
+      value: `400`
+    Declaration@1986..2013
+      prop: `--bs-body-line-height`
+      value: `1.5`
+    Declaration@2016..2041
+      prop: `--bs-body-color`
+      value: `#212529`
+    Declaration@2044..2063
+      prop: `--bs-body-bg`
+      value: `#fff`
+  Rule@2067..2119
+    selector: `*,
+*::before,
+*::after`
+    Declaration@2094..2117
+      prop: `box-sizing`
+      value: `border-box`
+  AtRule@2121..2214
+    name: `media`
+    params: `(prefers-reduced-motion: no-preference)`
+    Rule@2172..2212
+      selector: `:root`
+      Declaration@2184..2208
+        prop: `scroll-behavior`
+        value: `smooth`
+  Rule@2216..2599
+    selector: `body`
+    Declaration@2225..2235
+      prop: `margin`
+      value: `0`
+    Declaration@2238..2278
+      prop: `font-family`
+      value: `var(--bs-body-font-family)`
+    Declaration@2281..2317
+      prop: `font-size`
+      value: `var(--bs-body-font-size)`
+    Declaration@2320..2360
+      prop: `font-weight`
+      value: `var(--bs-body-font-weight)`
+    Declaration@2363..2403
+      prop: `line-height`
+      value: `var(--bs-body-line-height)`
+    Declaration@2406..2434
+      prop: `color`
+      value: `var(--bs-body-color)`
+    Declaration@2437..2475
+      prop: `text-align`
+      value: `var(--bs-body-text-align)`
+    Declaration@2478..2514
+      prop: `background-color`
+      value: `var(--bs-body-bg)`
+    Declaration@2517..2548
+      prop: `-webkit-text-size-adjust`
+      value: `100%`
+    Declaration@2551..2597
+      prop: `-webkit-tap-highlight-color`
+      value: `rgba(0, 0, 0, 0)`
+  Rule@2601..2707
+    selector: `hr`
+    Declaration@2608..2623
+      prop: `margin`
+      value: `1rem 0`
+    Declaration@2626..2641
+      prop: `color`
+      value: `inherit`
+    Declaration@2644..2675
+      prop: `background-color`
+      value: `currentColor`
+    Declaration@2678..2688
+      prop: `border`
+      value: `0`
+    Declaration@2691..2705
+      prop: `opacity`
+      value: `0.25`
+  Rule@2709..2742
+    selector: `hr:not([size])`
+    Declaration@2728..2740
+      prop: `height`
+      value: `1px`
+  Rule@2744..2852
+    selector: `h6, h5, h4, h3, h2, h1`
+    Declaration@2771..2785
+      prop: `margin-top`
+      value: `0`
+    Declaration@2788..2810
+      prop: `margin-bottom`
+      value: `0.5rem`
+    Declaration@2813..2830
+      prop: `font-weight`
+      value: `500`
+    Declaration@2833..2850
+      prop: `line-height`
+      value: `1.2`
+  Rule@2854..2897
+    selector: `h1`
+    Declaration@2861..2895
+      prop: `font-size`
+      value: `calc(1.375rem + 1.5vw)`
+  AtRule@2898..2962
+    name: `media`
+    params: `(min-width: 1200px)`
+    Rule@2929..2960
+      selector: `h1`
+      Declaration@2938..2956
+        prop: `font-size`
+        value: `2.5rem`
+  Rule@2964..3007
+    selector: `h2`
+    Declaration@2971..3005
+      prop: `font-size`
+      value: `calc(1.325rem + 0.9vw)`
+  AtRule@3008..3070
+    name: `media`
+    params: `(min-width: 1200px)`
+    Rule@3039..3068
+      selector: `h2`
+      Declaration@3048..3064
+        prop: `font-size`
+        value: `2rem`
+  Rule@3072..3113
+    selector: `h3`
+    Declaration@3079..3111
+      prop: `font-size`
+      value: `calc(1.3rem + 0.6vw)`
+  AtRule@3114..3179
+    name: `media`
+    params: `(min-width: 1200px)`
+    Rule@3145..3177
+      selector: `h3`
+      Declaration@3154..3173
+        prop: `font-size`
+        value: `1.75rem`
+  Rule@3181..3224
+    selector: `h4`
+    Declaration@3188..3222
+      prop: `font-size`
+      value: `calc(1.275rem + 0.3vw)`
+  AtRule@3225..3289
+    name: `media`
+    params: `(min-width: 1200px)`
+    Rule@3256..3287
+      selector: `h4`
+      Declaration@3265..3283
+        prop: `font-size`
+        value: `1.5rem`
+  Rule@3291..3319
+    selector: `h5`
+    Declaration@3298..3317
+      prop: `font-size`
+      value: `1.25rem`
+  Rule@3321..3346
+    selector: `h6`
+    Declaration@3328..3344
+      prop: `font-size`
+      value: `1rem`
+  Rule@3348..3393
+    selector: `p`
+    Declaration@3354..3368
+      prop: `margin-top`
+      value: `0`
+    Declaration@3371..3391
+      prop: `margin-bottom`
+      value: `1rem`
+  Rule@3395..3614
+    selector: `abbr[title],
+abbr[data-bs-original-title]`
+    Declaration@3441..3483
+      prop: `-webkit-text-decoration`
+      value: `underline dotted`
+    Declaration@3486..3520
+      prop: `text-decoration`
+      value: `underline dotted`
+    Declaration@3523..3536
+      prop: `cursor`
+      value: `help`
+    Declaration@3539..3578
+      prop: `-webkit-text-decoration-skip-ink`
+      value: `none`
+    Declaration@3581..3612
+      prop: `text-decoration-skip-ink`
+      value: `none`
+  Rule@3616..3696
+    selector: `address`
+    Declaration@3628..3648
+      prop: `margin-bottom`
+      value: `1rem`
+    Declaration@3651..3670
+      prop: `font-style`
+      value: `normal`
+    Declaration@3673..3694
+      prop: `line-height`
+      value: `inherit`
+  Rule@3698..3730
+    selector: `ol,
+ul`
+    Declaration@3709..3728
+      prop: `padding-left`
+      value: `2rem`
+  Rule@3732..3786
+    selector: `ol,
+ul,
+dl`
+    Declaration@3747..3761
+      prop: `margin-top`
+      value: `0`
+    Declaration@3764..3784
+      prop: `margin-bottom`
+      value: `1rem`
+  Rule@3788..3838
+    selector: `ol ol,
+ul ul,
+ol ul,
+ul ol`
+    Declaration@3819..3836
+      prop: `margin-bottom`
+      value: `0`
+  Rule@3840..3866
+    selector: `dt`
+    Declaration@3847..3864
+      prop: `font-weight`
+      value: `700`
+  Rule@3868..3917
+    selector: `dd`
+    Declaration@3875..3897
+      prop: `margin-bottom`
+      value: `0.5rem`
+    Declaration@3900..3915
+      prop: `margin-left`
+      value: `0`
+  Rule@3919..3953
+    selector: `blockquote`
+    Declaration@3934..3951
+      prop: `margin`
+      value: `0 0 1rem`
+  Rule@3955..3991
+    selector: `b,
+strong`
+    Declaration@3969..3989
+      prop: `font-weight`
+      value: `bolder`
+  Rule@3993..4024
+    selector: `small`
+    Declaration@4003..4022
+      prop: `font-size`
+      value: `0.875em`
+  Rule@4026..4081
+    selector: `mark`
+    Declaration@4035..4050
+      prop: `padding`
+      value: `0.2em`
+    Declaration@4053..4079
+      prop: `background-color`
+      value: `#fcf8e3`
+  Rule@4083..4184
+    selector: `sub,
+sup`
+    Declaration@4096..4115
+      prop: `position`
+      value: `relative`
+    Declaration@4118..4136
+      prop: `font-size`
+      value: `0.75em`
+    Declaration@4139..4154
+      prop: `line-height`
+      value: `0`
+    Declaration@4157..4182
+      prop: `vertical-align`
+      value: `baseline`
+  Rule@4186..4212
+    selector: `sub`
+    Declaration@4194..4210
+      prop: `bottom`
+      value: `-0.25em`
+  Rule@4214..4236
+    selector: `sup`
+    Declaration@4222..4234
+      prop: `top`
+      value: `-0.5em`
+  Rule@4238..4291
+    selector: `a`
+    Declaration@4244..4259
+      prop: `color`
+      value: `#0d6efd`
+    Declaration@4262..4289
+      prop: `text-decoration`
+      value: `underline`
+  Rule@4292..4321
+    selector: `a:hover`
+    Declaration@4304..4319
+      prop: `color`
+      value: `#0a58ca`
+  Rule@4323..4430
+    selector: `a:not([href]):not([class]), a:not([href]):not([class]):hover`
+    Declaration@4388..4403
+      prop: `color`
+      value: `inherit`
+    Declaration@4406..4428
+      prop: `text-decoration`
+      value: `none`
+  Rule@4432..4581
+    selector: `pre,
+code,
+kbd,
+samp`
+    Declaration@4457..4495
+      prop: `font-family`
+      value: `var(--bs-font-monospace)`
+    Declaration@4498..4513
+      prop: `font-size`
+      value: `1em`
+    Declaration@4516..4548
+      prop: `direction`
+      value: `ltr /* rtl:ignore */`
+    Declaration@4551..4579
+      prop: `unicode-bidi`
+      value: `bidi-override`
+  Rule@4583..4688
+    selector: `pre`
+    Declaration@4591..4606
+      prop: `display`
+      value: `block`
+    Declaration@4609..4623
+      prop: `margin-top`
+      value: `0`
+    Declaration@4626..4646
+      prop: `margin-bottom`
+      value: `1rem`
+    Declaration@4649..4664
+      prop: `overflow`
+      value: `auto`
+    Declaration@4667..4686
+      prop: `font-size`
+      value: `0.875em`
+  Rule@4689..4763
+    selector: `pre code`
+    Declaration@4702..4721
+      prop: `font-size`
+      value: `inherit`
+    Declaration@4724..4739
+      prop: `color`
+      value: `inherit`
+    Declaration@4742..4761
+      prop: `word-break`
+      value: `normal`
+  Rule@4765..4838
+    selector: `code`
+    Declaration@4774..4793
+      prop: `font-size`
+      value: `0.875em`
+    Declaration@4796..4811
+      prop: `color`
+      value: `#d63384`
+    Declaration@4814..4836
+      prop: `word-wrap`
+      value: `break-word`
+  Rule@4839..4869
+    selector: `a > code`
+    Declaration@4852..4867
+      prop: `color`
+      value: `inherit`
+  Rule@4871..4995
+    selector: `kbd`
+    Declaration@4879..4902
+      prop: `padding`
+      value: `0.2rem 0.4rem`
+    Declaration@4905..4924
+      prop: `font-size`
+      value: `0.875em`
+    Declaration@4927..4939
+      prop: `color`
+      value: `#fff`
+    Declaration@4942..4968
+      prop: `background-color`
+      value: `#212529`
+    Declaration@4971..4993
+      prop: `border-radius`
+      value: `0.2rem`
+  Rule@4996..5059
+    selector: `kbd kbd`
+    Declaration@5008..5019
+      prop: `padding`
+      value: `0`
+    Declaration@5022..5037
+      prop: `font-size`
+      value: `1em`
+    Declaration@5040..5057
+      prop: `font-weight`
+      value: `700`
+  Rule@5061..5091
+    selector: `figure`
+    Declaration@5072..5089
+      prop: `margin`
+      value: `0 0 1rem`
+  Rule@5093..5131
+    selector: `img,
+svg`
+    Declaration@5106..5129
+      prop: `vertical-align`
+      value: `middle`
+  Rule@5133..5195
+    selector: `table`
+    Declaration@5143..5164
+      prop: `caption-side`
+      value: `bottom`
+    Declaration@5167..5193
+      prop: `border-collapse`
+      value: `collapse`
+  Rule@5197..5295
+    selector: `caption`
+    Declaration@5209..5229
+      prop: `padding-top`
+      value: `0.5rem`
+    Declaration@5232..5255
+      prop: `padding-bottom`
+      value: `0.5rem`
+    Declaration@5258..5273
+      prop: `color`
+      value: `#6c757d`
+    Declaration@5276..5293
+      prop: `text-align`
+      value: `left`
+  Rule@5297..5362
+    selector: `th`
+    Declaration@5304..5324
+      prop: `text-align`
+      value: `inherit`
+    Declaration@5327..5360
+      prop: `text-align`
+      value: `-webkit-match-parent`
+  Rule@5364..5466
+    selector: `thead,
+tbody,
+tfoot,
+tr,
+td,
+th`
+    Declaration@5400..5422
+      prop: `border-color`
+      value: `inherit`
+    Declaration@5425..5445
+      prop: `border-style`
+      value: `solid`
+    Declaration@5448..5464
+      prop: `border-width`
+      value: `0`
+  Rule@5468..5502
+    selector: `label`
+    Declaration@5478..5500
+      prop: `display`
+      value: `inline-block`
+  Rule@5504..5534
+    selector: `button`
+    Declaration@5515..5532
+      prop: `border-radius`
+      value: `0`
+  Rule@5536..5586
+    selector: `button:focus:not(:focus-visible)`
+    Declaration@5573..5584
+      prop: `outline`
+      value: `0`
+  Rule@5588..5716
+    selector: `input,
+button,
+select,
+optgroup,
+textarea`
+    Declaration@5634..5644
+      prop: `margin`
+      value: `0`
+    Declaration@5647..5668
+      prop: `font-family`
+      value: `inherit`
+    Declaration@5671..5690
+      prop: `font-size`
+      value: `inherit`
+    Declaration@5693..5714
+      prop: `line-height`
+      value: `inherit`
+  Rule@5718..5760
+    selector: `button,
+select`
+    Declaration@5737..5758
+      prop: `text-transform`
+      value: `none`
+  Rule@5762..5798
+    selector: `[role=button]`
+    Declaration@5780..5796
+      prop: `cursor`
+      value: `pointer`
+  Rule@5800..5831
+    selector: `select`
+    Declaration@5811..5829
+      prop: `word-wrap`
+      value: `normal`
+  Rule@5832..5865
+    selector: `select:disabled`
+    Declaration@5852..5863
+      prop: `opacity`
+      value: `1`
+  Rule@5867..5929
+    selector: `[list]::-webkit-calendar-picker-indicator`
+    Declaration@5913..5927
+      prop: `display`
+      value: `none`
+  Rule@5931..6015
+    selector: `button,
+[type=button],
+[type=reset],
+[type=submit]`
+    Declaration@5986..6013
+      prop: `-webkit-appearance`
+      value: `button`
+  Rule@6016..6149
+    selector: `button:not(:disabled),
+[type=button]:not(:disabled),
+[type=reset]:not(:disabled),
+[type=submit]:not(:disabled)`
+    Declaration@6131..6147
+      prop: `cursor`
+      value: `pointer`
+  Rule@6151..6209
+    selector: `::-moz-focus-inner`
+    Declaration@6174..6185
+      prop: `padding`
+      value: `0`
+    Declaration@6188..6207
+      prop: `border-style`
+      value: `none`
+  Rule@6211..6243
+    selector: `textarea`
+    Declaration@6224..6241
+      prop: `resize`
+      value: `vertical`
+  Rule@6245..6313
+    selector: `fieldset`
+    Declaration@6258..6271
+      prop: `min-width`
+      value: `0`
+    Declaration@6274..6285
+      prop: `padding`
+      value: `0`
+    Declaration@6288..6298
+      prop: `margin`
+      value: `0`
+    Declaration@6301..6311
+      prop: `border`
+      value: `0`
+  Rule@6315..6455
+    selector: `legend`
+    Declaration@6326..6338
+      prop: `float`
+      value: `left`
+    Declaration@6341..6353
+      prop: `width`
+      value: `100%`
+    Declaration@6356..6367
+      prop: `padding`
+      value: `0`
+    Declaration@6370..6392
+      prop: `margin-bottom`
+      value: `0.5rem`
+    Declaration@6395..6429
+      prop: `font-size`
+      value: `calc(1.275rem + 0.3vw)`
+    Declaration@6432..6453
+      prop: `line-height`
+      value: `inherit`
+  AtRule@6456..6524
+    name: `media`
+    params: `(min-width: 1200px)`
+    Rule@6487..6522
+      selector: `legend`
+      Declaration@6500..6518
+        prop: `font-size`
+        value: `1.5rem`
+  Rule@6525..6554
+    selector: `legend + *`
+    Declaration@6540..6552
+      prop: `clear`
+      value: `left`
+  Rule@6556..6818
+    selector: `::-webkit-datetime-edit-fields-wrapper,
+::-webkit-datetime-edit-text,
+::-webkit-datetime-edit-minute,
+::-webkit-datetime-edit-hour-field,
+::-webkit-datetime-edit-day-field,
+::-webkit-datetime-edit-month-field,
+::-webkit-datetime-edit-year-field`
+    Declaration@6805..6816
+      prop: `padding`
+      value: `0`
+  Rule@6820..6867
+    selector: `::-webkit-inner-spin-button`
+    Declaration@6852..6865
+      prop: `height`
+      value: `auto`
+  Rule@6869..6943
+    selector: `[type=search]`
+    Declaration@6887..6908
+      prop: `outline-offset`
+      value: `-2px`
+    Declaration@6911..6941
+      prop: `-webkit-appearance`
+      value: `textfield`
+  Rule@7042..7101
+    selector: `::-webkit-search-decoration`
+    Declaration@7074..7099
+      prop: `-webkit-appearance`
+      value: `none`
+  Rule@7103..7151
+    selector: `::-webkit-color-swatch-wrapper`
+    Declaration@7138..7149
+      prop: `padding`
+      value: `0`
+  Rule@7153..7202
+    selector: `::-webkit-file-upload-button`
+    Declaration@7186..7200
+      prop: `font`
+      value: `inherit`
+  Rule@7204..7247
+    selector: `::file-selector-button`
+    Declaration@7231..7245
+      prop: `font`
+      value: `inherit`
+  Rule@7249..7328
+    selector: `::-webkit-file-upload-button`
+    Declaration@7282..7296
+      prop: `font`
+      value: `inherit`
+    Declaration@7299..7326
+      prop: `-webkit-appearance`
+      value: `button`
+  Rule@7330..7365
+    selector: `output`
+    Declaration@7341..7363
+      prop: `display`
+      value: `inline-block`
+  Rule@7367..7390
+    selector: `iframe`
+    Declaration@7378..7388
+      prop: `border`
+      value: `0`
+  Rule@7392..7444
+    selector: `summary`
+    Declaration@7404..7423
+      prop: `display`
+      value: `list-item`
+    Declaration@7426..7442
+      prop: `cursor`
+      value: `pointer`
+  Rule@7446..7486
+    selector: `progress`
+    Declaration@7459..7484
+      prop: `vertical-align`
+      value: `baseline`
+  Rule@7488..7528
+    selector: `[hidden]`
+    Declaration@7501..7526
+      prop: `display`
+      value: `none`

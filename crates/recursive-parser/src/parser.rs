@@ -403,7 +403,7 @@ impl<'a> Parser<'a> {
     }
     AtRule {
       params: Cow::Borrowed(&self.source[params_start..params_end]),
-      name: Cow::Borrowed(name),
+      name: Cow::Borrowed(&name[1..]),
       start,
       end: self.pos,
       children,

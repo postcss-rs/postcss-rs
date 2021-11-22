@@ -1,0 +1,14 @@
+Root@0..144
+  AtRule@0..92
+    name: `media`
+    params: `screen and (min-width: 480px)`
+    Rule@46..90
+      selector: `body`
+      Declaration@57..86
+        prop: `background-color`
+        value: `lightgreen`
+  Rule@94..144
+    selector: `#main /**/ test`
+    Declaration@118..142
+      prop: `border`
+      value: `1px solid black`

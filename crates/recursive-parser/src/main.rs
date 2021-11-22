@@ -1,4 +1,5 @@
-use std::{borrow::Cow, ops::Add, os::raw::c_long, time::Instant};
+#![feature(path_file_prefix)]
+use std::{borrow::Cow, io::Stdout, ops::Add, os::raw::c_long, path::PathBuf, time::Instant};
 
 use mimalloc_rust::*;
 use recursive_parser::{
@@ -44,8 +45,11 @@ a {
   //  println!("{:#?}", tokens);
 
   let start = Instant::now();
-  let mut parser = parser::Parser::new(css_test2);
-  let mut _root = parser.parse();
+  let parser = parser::Parser::new(css_test2);
+  let mut root = parser.parse();
   println!("{:?}", start.elapsed());
-  AstPrinter::default().print(&_root);
+  let stdout = std::io::stdout();
+  AstPrinter::new(0, stdout).print(&root).unwrap();
+  let res = PathBuf::from("test.css");
+  println!("{:?}", res.file_prefix());
 }
