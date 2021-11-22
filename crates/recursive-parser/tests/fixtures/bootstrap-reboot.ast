@@ -1,4 +1,4 @@
-Root@0..7555
+Root@0..7578
   Rule@330..2065
     selector: `:root`
     Declaration@340..359
@@ -336,395 +336,395 @@ abbr[data-bs-original-title]`
     Declaration@3673..3694
       prop: `line-height`
       value: `inherit`
-  Rule@3698..3731
+  Rule@3698..3730
     selector: `ol,
 ul`
-    Declaration@3709..3729
-      prop: `padding-right`
+    Declaration@3709..3728
+      prop: `padding-left`
       value: `2rem`
-  Rule@3733..3787
+  Rule@3732..3786
     selector: `ol,
 ul,
 dl`
-    Declaration@3748..3762
+    Declaration@3747..3761
       prop: `margin-top`
       value: `0`
-    Declaration@3765..3785
+    Declaration@3764..3784
       prop: `margin-bottom`
       value: `1rem`
-  Rule@3789..3839
+  Rule@3788..3838
     selector: `ol ol,
 ul ul,
 ol ul,
 ul ol`
-    Declaration@3820..3837
+    Declaration@3819..3836
       prop: `margin-bottom`
       value: `0`
-  Rule@3841..3867
+  Rule@3840..3866
     selector: `dt`
-    Declaration@3848..3865
+    Declaration@3847..3864
       prop: `font-weight`
       value: `700`
-  Rule@3869..3919
+  Rule@3868..3917
     selector: `dd`
-    Declaration@3876..3898
+    Declaration@3875..3897
       prop: `margin-bottom`
       value: `0.5rem`
-    Declaration@3901..3917
-      prop: `margin-right`
+    Declaration@3900..3915
+      prop: `margin-left`
       value: `0`
-  Rule@3921..3955
+  Rule@3919..3953
     selector: `blockquote`
-    Declaration@3936..3953
+    Declaration@3934..3951
       prop: `margin`
       value: `0 0 1rem`
-  Rule@3957..3993
+  Rule@3955..3991
     selector: `b,
 strong`
-    Declaration@3971..3991
+    Declaration@3969..3989
       prop: `font-weight`
       value: `bolder`
-  Rule@3995..4026
+  Rule@3993..4024
     selector: `small`
-    Declaration@4005..4024
+    Declaration@4003..4022
       prop: `font-size`
       value: `0.875em`
-  Rule@4028..4083
+  Rule@4026..4081
     selector: `mark`
-    Declaration@4037..4052
+    Declaration@4035..4050
       prop: `padding`
       value: `0.2em`
-    Declaration@4055..4081
+    Declaration@4053..4079
       prop: `background-color`
       value: `#fcf8e3`
-  Rule@4085..4186
+  Rule@4083..4184
     selector: `sub,
 sup`
-    Declaration@4098..4117
+    Declaration@4096..4115
       prop: `position`
       value: `relative`
-    Declaration@4120..4138
+    Declaration@4118..4136
       prop: `font-size`
       value: `0.75em`
-    Declaration@4141..4156
+    Declaration@4139..4154
       prop: `line-height`
       value: `0`
-    Declaration@4159..4184
+    Declaration@4157..4182
       prop: `vertical-align`
       value: `baseline`
-  Rule@4188..4214
+  Rule@4186..4212
     selector: `sub`
-    Declaration@4196..4212
+    Declaration@4194..4210
       prop: `bottom`
       value: `-0.25em`
-  Rule@4216..4238
+  Rule@4214..4236
     selector: `sup`
-    Declaration@4224..4236
+    Declaration@4222..4234
       prop: `top`
       value: `-0.5em`
-  Rule@4240..4293
+  Rule@4238..4291
     selector: `a`
-    Declaration@4246..4261
+    Declaration@4244..4259
       prop: `color`
       value: `#0d6efd`
-    Declaration@4264..4291
+    Declaration@4262..4289
       prop: `text-decoration`
       value: `underline`
-  Rule@4294..4323
+  Rule@4292..4321
     selector: `a:hover`
-    Declaration@4306..4321
+    Declaration@4304..4319
       prop: `color`
       value: `#0a58ca`
-  Rule@4325..4432
+  Rule@4323..4430
     selector: `a:not([href]):not([class]), a:not([href]):not([class]):hover`
-    Declaration@4390..4405
+    Declaration@4388..4403
       prop: `color`
       value: `inherit`
-    Declaration@4408..4430
+    Declaration@4406..4428
       prop: `text-decoration`
       value: `none`
-  Rule@4434..4567
+  Rule@4432..4581
     selector: `pre,
 code,
 kbd,
 samp`
-    Declaration@4459..4497
+    Declaration@4457..4495
       prop: `font-family`
       value: `var(--bs-font-monospace)`
-    Declaration@4500..4515
+    Declaration@4498..4513
       prop: `font-size`
       value: `1em`
-    Declaration@4518..4534
+    Declaration@4516..4548
       prop: `direction`
-      value: `ltr `
-    Declaration@4537..4565
+      value: `ltr /* rtl:ignore */`
+    Declaration@4551..4579
       prop: `unicode-bidi`
       value: `bidi-override`
-  Rule@4569..4674
+  Rule@4583..4688
     selector: `pre`
-    Declaration@4577..4592
+    Declaration@4591..4606
       prop: `display`
       value: `block`
-    Declaration@4595..4609
+    Declaration@4609..4623
       prop: `margin-top`
       value: `0`
-    Declaration@4612..4632
+    Declaration@4626..4646
       prop: `margin-bottom`
       value: `1rem`
-    Declaration@4635..4650
+    Declaration@4649..4664
       prop: `overflow`
       value: `auto`
-    Declaration@4653..4672
+    Declaration@4667..4686
       prop: `font-size`
       value: `0.875em`
-  Rule@4675..4749
+  Rule@4689..4763
     selector: `pre code`
-    Declaration@4688..4707
+    Declaration@4702..4721
       prop: `font-size`
       value: `inherit`
-    Declaration@4710..4725
+    Declaration@4724..4739
       prop: `color`
       value: `inherit`
-    Declaration@4728..4747
+    Declaration@4742..4761
       prop: `word-break`
       value: `normal`
-  Rule@4751..4824
+  Rule@4765..4838
     selector: `code`
-    Declaration@4760..4779
+    Declaration@4774..4793
       prop: `font-size`
       value: `0.875em`
-    Declaration@4782..4797
+    Declaration@4796..4811
       prop: `color`
       value: `#d63384`
-    Declaration@4800..4822
+    Declaration@4814..4836
       prop: `word-wrap`
       value: `break-word`
-  Rule@4825..4855
+  Rule@4839..4869
     selector: `a > code`
-    Declaration@4838..4853
+    Declaration@4852..4867
       prop: `color`
       value: `inherit`
-  Rule@4857..4981
+  Rule@4871..4995
     selector: `kbd`
-    Declaration@4865..4888
+    Declaration@4879..4902
       prop: `padding`
       value: `0.2rem 0.4rem`
-    Declaration@4891..4910
+    Declaration@4905..4924
       prop: `font-size`
       value: `0.875em`
-    Declaration@4913..4925
+    Declaration@4927..4939
       prop: `color`
       value: `#fff`
-    Declaration@4928..4954
+    Declaration@4942..4968
       prop: `background-color`
       value: `#212529`
-    Declaration@4957..4979
+    Declaration@4971..4993
       prop: `border-radius`
       value: `0.2rem`
-  Rule@4982..5045
+  Rule@4996..5059
     selector: `kbd kbd`
-    Declaration@4994..5005
+    Declaration@5008..5019
       prop: `padding`
       value: `0`
-    Declaration@5008..5023
+    Declaration@5022..5037
       prop: `font-size`
       value: `1em`
-    Declaration@5026..5043
+    Declaration@5040..5057
       prop: `font-weight`
       value: `700`
-  Rule@5047..5077
+  Rule@5061..5091
     selector: `figure`
-    Declaration@5058..5075
+    Declaration@5072..5089
       prop: `margin`
       value: `0 0 1rem`
-  Rule@5079..5117
+  Rule@5093..5131
     selector: `img,
 svg`
-    Declaration@5092..5115
+    Declaration@5106..5129
       prop: `vertical-align`
       value: `middle`
-  Rule@5119..5181
+  Rule@5133..5195
     selector: `table`
-    Declaration@5129..5150
+    Declaration@5143..5164
       prop: `caption-side`
       value: `bottom`
-    Declaration@5153..5179
+    Declaration@5167..5193
       prop: `border-collapse`
       value: `collapse`
-  Rule@5183..5282
+  Rule@5197..5295
     selector: `caption`
-    Declaration@5195..5215
+    Declaration@5209..5229
       prop: `padding-top`
       value: `0.5rem`
-    Declaration@5218..5241
+    Declaration@5232..5255
       prop: `padding-bottom`
       value: `0.5rem`
-    Declaration@5244..5259
+    Declaration@5258..5273
       prop: `color`
       value: `#6c757d`
-    Declaration@5262..5280
+    Declaration@5276..5293
       prop: `text-align`
-      value: `right`
-  Rule@5284..5349
+      value: `left`
+  Rule@5297..5362
     selector: `th`
-    Declaration@5291..5311
+    Declaration@5304..5324
       prop: `text-align`
       value: `inherit`
-    Declaration@5314..5347
+    Declaration@5327..5360
       prop: `text-align`
       value: `-webkit-match-parent`
-  Rule@5351..5453
+  Rule@5364..5466
     selector: `thead,
 tbody,
 tfoot,
 tr,
 td,
 th`
-    Declaration@5387..5409
+    Declaration@5400..5422
       prop: `border-color`
       value: `inherit`
-    Declaration@5412..5432
+    Declaration@5425..5445
       prop: `border-style`
       value: `solid`
-    Declaration@5435..5451
+    Declaration@5448..5464
       prop: `border-width`
       value: `0`
-  Rule@5455..5489
+  Rule@5468..5502
     selector: `label`
-    Declaration@5465..5487
+    Declaration@5478..5500
       prop: `display`
       value: `inline-block`
-  Rule@5491..5521
+  Rule@5504..5534
     selector: `button`
-    Declaration@5502..5519
+    Declaration@5515..5532
       prop: `border-radius`
       value: `0`
-  Rule@5523..5573
+  Rule@5536..5586
     selector: `button:focus:not(:focus-visible)`
-    Declaration@5560..5571
+    Declaration@5573..5584
       prop: `outline`
       value: `0`
-  Rule@5575..5703
+  Rule@5588..5716
     selector: `input,
 button,
 select,
 optgroup,
 textarea`
-    Declaration@5621..5631
+    Declaration@5634..5644
       prop: `margin`
       value: `0`
-    Declaration@5634..5655
+    Declaration@5647..5668
       prop: `font-family`
       value: `inherit`
-    Declaration@5658..5677
+    Declaration@5671..5690
       prop: `font-size`
       value: `inherit`
-    Declaration@5680..5701
+    Declaration@5693..5714
       prop: `line-height`
       value: `inherit`
-  Rule@5705..5747
+  Rule@5718..5760
     selector: `button,
 select`
-    Declaration@5724..5745
+    Declaration@5737..5758
       prop: `text-transform`
       value: `none`
-  Rule@5749..5785
+  Rule@5762..5798
     selector: `[role=button]`
-    Declaration@5767..5783
+    Declaration@5780..5796
       prop: `cursor`
       value: `pointer`
-  Rule@5787..5818
+  Rule@5800..5831
     selector: `select`
-    Declaration@5798..5816
+    Declaration@5811..5829
       prop: `word-wrap`
       value: `normal`
-  Rule@5819..5852
+  Rule@5832..5865
     selector: `select:disabled`
-    Declaration@5839..5850
+    Declaration@5852..5863
       prop: `opacity`
       value: `1`
-  Rule@5854..5916
+  Rule@5867..5929
     selector: `[list]::-webkit-calendar-picker-indicator`
-    Declaration@5900..5914
+    Declaration@5913..5927
       prop: `display`
       value: `none`
-  Rule@5918..6002
+  Rule@5931..6015
     selector: `button,
 [type=button],
 [type=reset],
 [type=submit]`
-    Declaration@5973..6000
+    Declaration@5986..6013
       prop: `-webkit-appearance`
       value: `button`
-  Rule@6003..6136
+  Rule@6016..6149
     selector: `button:not(:disabled),
 [type=button]:not(:disabled),
 [type=reset]:not(:disabled),
 [type=submit]:not(:disabled)`
-    Declaration@6118..6134
+    Declaration@6131..6147
       prop: `cursor`
       value: `pointer`
-  Rule@6138..6196
+  Rule@6151..6209
     selector: `::-moz-focus-inner`
-    Declaration@6161..6172
+    Declaration@6174..6185
       prop: `padding`
       value: `0`
-    Declaration@6175..6194
+    Declaration@6188..6207
       prop: `border-style`
       value: `none`
-  Rule@6198..6230
+  Rule@6211..6243
     selector: `textarea`
-    Declaration@6211..6228
+    Declaration@6224..6241
       prop: `resize`
       value: `vertical`
-  Rule@6232..6300
+  Rule@6245..6313
     selector: `fieldset`
-    Declaration@6245..6258
+    Declaration@6258..6271
       prop: `min-width`
       value: `0`
-    Declaration@6261..6272
+    Declaration@6274..6285
       prop: `padding`
-      value: `0`
-    Declaration@6275..6285
-      prop: `margin`
       value: `0`
     Declaration@6288..6298
+      prop: `margin`
+      value: `0`
+    Declaration@6301..6311
       prop: `border`
       value: `0`
-  Rule@6302..6443
+  Rule@6315..6455
     selector: `legend`
-    Declaration@6313..6326
+    Declaration@6326..6338
       prop: `float`
-      value: `right`
-    Declaration@6329..6341
+      value: `left`
+    Declaration@6341..6353
       prop: `width`
       value: `100%`
-    Declaration@6344..6355
+    Declaration@6356..6367
       prop: `padding`
       value: `0`
-    Declaration@6358..6380
+    Declaration@6370..6392
       prop: `margin-bottom`
       value: `0.5rem`
-    Declaration@6383..6417
+    Declaration@6395..6429
       prop: `font-size`
       value: `calc(1.275rem + 0.3vw)`
-    Declaration@6420..6441
+    Declaration@6432..6453
       prop: `line-height`
       value: `inherit`
-  AtRule@6444..6512
+  AtRule@6456..6524
     name: `media`
     params: `(min-width: 1200px)`
-    Rule@6475..6510
+    Rule@6487..6522
       selector: `legend`
-      Declaration@6488..6506
+      Declaration@6500..6518
         prop: `font-size`
         value: `1.5rem`
-  Rule@6513..6543
+  Rule@6525..6554
     selector: `legend + *`
-    Declaration@6528..6541
+    Declaration@6540..6552
       prop: `clear`
-      value: `right`
-  Rule@6545..6807
+      value: `left`
+  Rule@6556..6818
     selector: `::-webkit-datetime-edit-fields-wrapper,
 ::-webkit-datetime-edit-text,
 ::-webkit-datetime-edit-minute,
@@ -732,83 +732,75 @@ select`
 ::-webkit-datetime-edit-day-field,
 ::-webkit-datetime-edit-month-field,
 ::-webkit-datetime-edit-year-field`
-    Declaration@6794..6805
+    Declaration@6805..6816
       prop: `padding`
       value: `0`
-  Rule@6809..6856
+  Rule@6820..6867
     selector: `::-webkit-inner-spin-button`
-    Declaration@6841..6854
+    Declaration@6852..6865
       prop: `height`
       value: `auto`
-  Rule@6858..6932
+  Rule@6869..6943
     selector: `[type=search]`
-    Declaration@6876..6897
+    Declaration@6887..6908
       prop: `outline-offset`
       value: `-2px`
-    Declaration@6900..6930
+    Declaration@6911..6941
       prop: `-webkit-appearance`
       value: `textfield`
-  Rule@6934..7015
-    selector: `[type="tel"],
-[type="url"],
-[type="email"],
-[type="number"]`
-    Declaration@6998..7013
-      prop: `direction`
-      value: `ltr`
-  Rule@7016..7075
+  Rule@7042..7101
     selector: `::-webkit-search-decoration`
-    Declaration@7048..7073
+    Declaration@7074..7099
       prop: `-webkit-appearance`
       value: `none`
-  Rule@7077..7125
+  Rule@7103..7151
     selector: `::-webkit-color-swatch-wrapper`
-    Declaration@7112..7123
+    Declaration@7138..7149
       prop: `padding`
       value: `0`
-  Rule@7127..7176
+  Rule@7153..7202
     selector: `::-webkit-file-upload-button`
-    Declaration@7160..7174
+    Declaration@7186..7200
       prop: `font`
       value: `inherit`
-  Rule@7178..7221
+  Rule@7204..7247
     selector: `::file-selector-button`
-    Declaration@7205..7219
+    Declaration@7231..7245
       prop: `font`
       value: `inherit`
-  Rule@7223..7302
+  Rule@7249..7328
     selector: `::-webkit-file-upload-button`
-    Declaration@7256..7270
+    Declaration@7282..7296
       prop: `font`
       value: `inherit`
-    Declaration@7273..7300
+    Declaration@7299..7326
       prop: `-webkit-appearance`
       value: `button`
-  Rule@7304..7339
+  Rule@7330..7365
     selector: `output`
-    Declaration@7315..7337
+    Declaration@7341..7363
       prop: `display`
       value: `inline-block`
-  Rule@7341..7364
+  Rule@7367..7390
     selector: `iframe`
-    Declaration@7352..7362
+    Declaration@7378..7388
       prop: `border`
       value: `0`
-  Rule@7366..7418
+  Rule@7392..7444
     selector: `summary`
-    Declaration@7378..7397
+    Declaration@7404..7423
       prop: `display`
       value: `list-item`
-    Declaration@7400..7416
+    Declaration@7426..7442
       prop: `cursor`
       value: `pointer`
-  Rule@7420..7460
+  Rule@7446..7486
     selector: `progress`
-    Declaration@7433..7458
+    Declaration@7459..7484
       prop: `vertical-align`
       value: `baseline`
-  Rule@7462..7502
+  Rule@7488..7528
     selector: `[hidden]`
-    Declaration@7475..7500
+    Declaration@7501..7526
       prop: `display`
-      value: `none`
+      value: `none !important`
