@@ -404,7 +404,7 @@ dependencies = [
 name = "node"
 version = "0.1.0"
 dependencies = [
- "pretty_assertions 0.7.2",
+ "pretty_assertions",
  "serde",
  "serde_json",
  "tokenizer",
@@ -507,18 +507,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "pretty_assertions"
-version = "1.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ec0cfe1b2403f172ba0f234e500906ee0a3e493fb81092dac23ebefe129301cc"
-dependencies = [
- "ansi_term",
- "ctor",
- "diff",
- "output_vt100",
-]
-
-[[package]]
 name = "proc-macro2"
 version = "1.0.32"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -568,7 +556,6 @@ dependencies = [
  "anyhow",
  "criterion",
  "mimalloc-rust",
- "pretty_assertions 1.0.0",
  "similar-asserts",
  "tokenizer",
 ]
