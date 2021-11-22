@@ -47,10 +47,9 @@ impl<'a> Visit<'a, ()> for AstPrinter {
     );
     self.level += 1;
     println!(
-      "{}Selector`{}`@{:?}",
+      "{}selector: `{}`",
       " ".repeat(self.level * 2),
       rule.selector.content,
-      rule.selector.start..rule.selector.end
     );
     for child in &rule.children {
       match child {
@@ -101,16 +100,14 @@ impl<'a> Visit<'a, ()> for AstPrinter {
     );
     self.level += 1;
     println!(
-      "{}prop: `{}`@{:?}",
+      "{}prop: `{}`",
       " ".repeat(self.level * 2),
       decl.prop.content,
-      decl.prop.start..decl.prop.end
     );
     println!(
-      "{}value: `{}`@{:?}",
+      "{}value: `{}`",
       " ".repeat(self.level * 2),
       decl.value.content,
-      decl.value.start..decl.value.end
     );
     self.level -= 1;
   }
