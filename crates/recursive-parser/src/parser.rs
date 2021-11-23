@@ -1,7 +1,8 @@
-use std::{borrow::Cow, iter::Peekable, ops::Add};
-use tokenizer::{Token, TokenType, Tokenizer};
-
 use crate::syntax::Lexer;
+use std::borrow::Cow;
+use std::iter::Peekable;
+use tokenizer::{Token, TokenType};
+
 pub struct Root<'a> {
   pub children: Vec<RuleOrAtRuleOrDecl<'a>>,
   pub(crate) start: usize,
@@ -18,6 +19,7 @@ pub enum RuleOrAtRuleOrDecl<'a> {
 //   Declaration(Declaration<'a>),
 //   AtRule(AtRule<'a>),
 // }
+
 pub struct Rule<'a> {
   pub children: Vec<RuleOrAtRuleOrDecl<'a>>,
   pub start: usize,
@@ -63,6 +65,7 @@ pub struct AtRule<'a> {
   pub(crate) end: usize,
   pub children: Vec<RuleOrAtRuleOrDecl<'a>>,
 }
+
 pub struct Selector<'a> {
   pub content: Cow<'a, str>,
   pub start: usize,
@@ -176,6 +179,7 @@ impl<'a> Parser<'a> {
       unimplemented!("should parse a Rule")
     }
   }
+
   // https://drafts.csswg.org/css-syntax/#component-value-diagram
   #[inline]
   /// return bump token is trivial
@@ -416,6 +420,7 @@ impl<'a> Parser<'a> {
       self.bump();
     }
   }
+
   pub fn peek(&mut self) -> Option<TokenType> {
     self.lexer.peek().map(|token| token.0)
   }

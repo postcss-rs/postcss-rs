@@ -1,18 +1,15 @@
 #![feature(path_file_prefix)]
-use std::{borrow::Cow, io::Stdout, ops::Add, os::raw::c_long, path::PathBuf, time::Instant};
-
-use mimalloc_rust::*;
-use recursive_parser::{
-  parser::{self, Rule, RuleOrAtRuleOrDecl},
-  AstPrinter,
-};
-use tokenizer::{tokenize, Tokenizer};
+// use mimalloc_rust::*;
+use recursive_parser::parser::Parser;
+use recursive_parser::AstPrinter;
+use std::path::PathBuf;
+use std::time::Instant;
 
 // #[global_allocator]
 // static GLOBAL_MIMALLOC: GlobalMiMalloc = GlobalMiMalloc;
 fn main() {
-  let str = include_str!("../../../assets/bootstrap.css");
-  let css = r#".test {
+  let _str = include_str!("../../../assets/bootstrap.css");
+  let _css = r#".test {
       width: 100px
   }
   @media {
@@ -24,7 +21,7 @@ fn main() {
     }
   }
   "#;
-  let css_test = r#":root {
+  let _css_test = r#":root {
     --zero-size: {
       width: 0;
       height: 0;
@@ -45,8 +42,8 @@ a {
   //  println!("{:#?}", tokens);
 
   let start = Instant::now();
-  let parser = parser::Parser::new(css_test2);
-  let mut root = parser.parse();
+  let parser = Parser::new(css_test2);
+  let root = parser.parse();
   println!("{:?}", start.elapsed());
   let stdout = std::io::stdout();
   AstPrinter::new(0, stdout).print(&root).unwrap();
