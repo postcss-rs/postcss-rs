@@ -17,6 +17,9 @@ mod test_ast {
       "bootstrap-grid.rtl.css",
       "bootstrap-utilities.css",
       "bootstrap-utilities.rtl.css",
+      "utf8.css",
+      "bootstrap.css",
+      "bootstrap.rtl.css",
     ];
     for file_name in file_list {
       let file = read_to_string(format!("../../assets/{}", file_name))?;
