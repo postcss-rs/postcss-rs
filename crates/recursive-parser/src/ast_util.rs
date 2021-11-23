@@ -1,7 +1,7 @@
+use crate::{parser, visitor::Visit};
 use anyhow::Result;
 use std::io::Write;
 
-use crate::{parser, visitor::Visit};
 #[derive(Default)]
 pub struct AstPrinter<W: Write> {
   level: usize,
@@ -145,7 +145,7 @@ impl<'a, W: Write> Visit<'a, Result<()>> for AstPrinter<W> {
 #[derive(Debug, Default)]
 pub struct WrapString(pub String);
 impl WrapString {
-  pub fn inner_string(mut self) -> String {
+  pub fn inner_string(self) -> String {
     self.0
   }
 }

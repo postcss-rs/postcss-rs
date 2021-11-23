@@ -1,12 +1,11 @@
-use std::{borrow::Cow, io::Write, time::Instant};
-
-use mimalloc_rust::*;
+// use mimalloc_rust::*;
 use recursive_parser::{parser::*, visitor::VisitMut};
+use std::{borrow::Cow, io::Write, time::Instant};
 
 // #[global_allocator]
 // static GLOBAL_MIMALLOC: GlobalMiMalloc = GlobalMiMalloc;
 fn main() {
-  let css = "#id {                     font-size: 12px; 
+  let _css = "#id {                     font-size: 12px; 
     width: 100px;
     @media test {
         .test { width: 100px; height: 200px;}
@@ -36,6 +35,7 @@ impl<W: Write> SimplePrettier<W> {
     Self { level: 0, writer }
   }
 }
+
 impl<'a, W: std::io::Write> VisitMut<'a, std::io::Result<()>> for SimplePrettier<W> {
   fn visit_root(&mut self, root: &mut Root<'a>) -> std::io::Result<()> {
     for child in root.children.iter_mut() {

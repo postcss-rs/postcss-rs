@@ -72,8 +72,7 @@ jobs:
         run: cargo check --locked
 
       - name: Run cargo clippy
-        # run: cargo clippy -- -D warnings
-        run: cargo clippy --locked
+        run: cargo clippy -- -D warnings
 
       - name: Build release
         run: cargo build --release --locked

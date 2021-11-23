@@ -1,11 +1,11 @@
 use criterion::{criterion_group, criterion_main, Criterion};
-use recursive_parser::parser::{self, Root};
+use recursive_parser::parser::{Parser, Root};
 
 const SMALL_CSS_FILE: &str = include_str!("../../../assets/bootstrap-reboot.css");
 const LARGE_CSS_FILE: &str = include_str!("../../../assets/bootstrap.css");
 
 fn parse<'a>(css: &'a str) -> Root {
-  let parser = parser::Parser::new(css);
+  let parser = Parser::new(css);
   parser.parse()
 }
 
