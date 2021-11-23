@@ -456,7 +456,7 @@ samp`
       value: `1em`
     Declaration@4518..4534
       prop: `direction`
-      value: `ltr `
+      value: `ltr`
     Declaration@4537..4565
       prop: `unicode-bidi`
       value: `bidi-override`
