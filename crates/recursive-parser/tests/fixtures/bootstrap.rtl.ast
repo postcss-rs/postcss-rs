@@ -459,7 +459,7 @@ samp`
       value: `1em`
     Declaration@4515..4531
       prop: `direction`
-      value: `ltr `
+      value: `ltr`
     Declaration@4534..4562
       prop: `unicode-bidi`
       value: `bidi-override`
@@ -8548,7 +8548,7 @@ select`
       value: `#6c757d`
     Declaration@98508..98553
       prop: `content`
-      value: `var(--bs-breadcrumb-divider, "/") `
+      value: `var(--bs-breadcrumb-divider, "/")`
   Rule@98556..98601
     selector: `.breadcrumb-item.active`
     Declaration@98584..98599
@@ -10646,7 +10646,7 @@ select`
       value: `0`
     Declaration@121929..121938
       prop: `left`
-      value: `0 `
+      value: `0`
     Declaration@121941..121955
       prop: `z-index`
       value: `1070`
@@ -11320,7 +11320,7 @@ select`
       selector: `to`
       Declaration@129909..129936
         prop: `transform`
-        value: `rotate(360deg) `
+        value: `rotate(360deg)`
   AtRule@129944..130016
     name: `keyframes`
     params: `spinner-border`
@@ -11328,7 +11328,7 @@ select`
       selector: `to`
       Declaration@129983..130010
         prop: `transform`
-        value: `rotate(360deg) `
+        value: `rotate(360deg)`
   Rule@130017..130323
     selector: `.spinner-border`
     Declaration@130037..130059

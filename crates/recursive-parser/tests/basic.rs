@@ -9,12 +9,21 @@ mod test_ast {
 
   #[test]
   fn integration_test_css() -> Result<()> {
-    let file_list = ["simple.css", "bootstrap-reboot.css", "bootstrap-grid.css"];
+    let file_list = [
+      "simple.css",
+      "bootstrap-reboot.css",
+      "bootstrap-reboot.rtl.css",
+      "bootstrap-grid.css",
+      "bootstrap-grid.rtl.css",
+      "bootstrap-utilities.css",
+      "bootstrap-utilities.rtl.css",
+    ];
     for file_name in file_list {
       let file = read_to_string(format!("../../assets/{}", file_name))?;
+      dbg!(&file_name);
       let expected_ast_path = format!(
         "./tests/fixtures/{}.ast",
-        file_name.split(".").next().unwrap()
+        file_name.rsplit_once(".").unwrap().0
       );
       let expected_ast = read_to_string(expected_ast_path)?;
       let parser = Parser::new(&file);
