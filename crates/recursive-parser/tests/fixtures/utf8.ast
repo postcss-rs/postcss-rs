@@ -1,0 +1,6 @@
+Root@0..48
+  Rule@0..47
+    selector: `.blockquote-footer::before`
+    Declaration@31..45
+      prop: `content`
+      value: `"— "`

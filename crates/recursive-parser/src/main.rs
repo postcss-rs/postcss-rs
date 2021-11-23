@@ -1,7 +1,7 @@
 #![feature(path_file_prefix)]
 // use mimalloc_rust::*;
 use recursive_parser::parser::Parser;
-use recursive_parser::AstPrinter;
+use recursive_parser::{AstPrinter, WrapString};
 use std::path::PathBuf;
 use std::time::Instant;
 
@@ -49,4 +49,10 @@ a {
   AstPrinter::new(0, stdout).print(&root).unwrap();
   let res = PathBuf::from("test.css");
   println!("{:?}", res.file_prefix());
+  let parser = Parser::new(&_str);
+  let root = parser.parse();
+  let mut printer = AstPrinter::new(0, WrapString::default());
+  printer.print(&root).unwrap();
+  let ast = printer.result().0;
+  print!("{}", ast);
 }
