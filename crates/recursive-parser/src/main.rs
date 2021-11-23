@@ -1,13 +1,13 @@
 #![feature(path_file_prefix)]
-// use mimalloc_rust::*;
+use mimalloc_rust::*;
 use recursive_parser::parser::Parser;
 use recursive_parser::{parse, AstPrinter, WrapString};
 use std::time::Instant;
 
-// #[global_allocator]
-// static GLOBAL_MIMALLOC: GlobalMiMalloc = GlobalMiMalloc;
+#[global_allocator]
+static GLOBAL_MIMALLOC: GlobalMiMalloc = GlobalMiMalloc;
 fn main() {
-  let _str = include_str!("../../../assets/bootstrap.css");
+  let _file = include_str!("../../../assets/tailwind.css");
   let _css = r#".test {
       width: 100px
   }
@@ -20,7 +20,7 @@ fn main() {
     }
   }
   "#;
-  let _css_test = r#":root {
+  let _css1 = r#":root {
     --zero-size: {
       width: 0;
       height::"" 0;
@@ -31,14 +31,14 @@ fn main() {
     }
     ;
   }"#;
-  let css_test2 = r#"
+  let css2 = r#"
 a {
 
   test test test
 
 
 "#;
-  // let tokens = tokenize(css_test2);
+  // let tokens = tokenize(css2);
   //  println!("{:#?}", tokens);
 
   let start = Instant::now();
