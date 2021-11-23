@@ -1,0 +1,9 @@
+@media screen and (min-width: 480px)      {
+  body {
+    background-color: lightgreen;
+  }
+}
+
+#main /**/ test     {
+  border: 1px solid black;
+}
