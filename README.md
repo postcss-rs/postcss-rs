@@ -16,9 +16,9 @@ rust: 0.16s user 0.03s system  93% cpu 0.199 total
 | **file** | tailwind-components.css | bootstrap-reboot.css | bootstrap-grid.css | bootstrap.css | tailwind.css | tailwind-dark.css |
 | -------: | ----------------------: | -------------------: | -----------------: | ------------: | -----------: | ----------------: |
 | **size** |                    2.8K |                 7.4K |                71K |          201K |         3.5M |              5.8M |
-|   **js** |                 1.813ms |              2.380ms |           11.856ms |      33.919ms |    167.309ms |         224.577ms |
-| **rust** |                 0.019ms |              0.037ms |            0.191ms |       0.721ms |   9.624272ms |       15.743094ms |
-|    **~** |                     95x |                  64x |                61x |           47x |          17x |               14x |
+|   **js** |                 0.046ms |              0.121ms |            1.193ms |       3.716ms |    127.647ms |         217.074ms |
+| **rust** |                 0.047ms |              0.019ms |            0.139ms |       0.451ms |      6.732ms |          11.093ms |
+|    **~** |                    0.9x |                   6x |               8.5x |          8.2x |          19x |               19x |
 
 🎉 Welcome to contribute, here is a guide:
 

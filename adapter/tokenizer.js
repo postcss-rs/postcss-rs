@@ -1,6 +1,7 @@
-const fs = require('fs');
+const fs = require("fs");
 const Input = require("postcss/lib/input");
 const tokenize = require("postcss/lib/tokenize");
+const Benchmark = require("benchmark");
 
 const file_list = [
   ["tailwind-components.css", "2.8K"],
@@ -11,14 +12,21 @@ const file_list = [
   ["tailwind-dark.css", "5.8M"],
 ];
 
+const suite = new Benchmark.Suite();
+
 for ([file, size] of file_list) {
   const css = fs.readFileSync(`../assets/${file}`).toString();
-  const tag = `js: tokenizer/${file}(${size})`;
-  console.time(tag);
-  const input = new Input(css);
-  const processor = tokenize(input, { ignoreErrors: false });
-  while (!processor.endOfFile()) {
-    processor.nextToken();
-  }
-  console.timeEnd(tag);
+  suite.add(`js: tokenizer/${file}(${size})`, () => {
+    const input = new Input(css);
+    const processor = tokenize(input, { ignoreErrors: false });
+    while (!processor.endOfFile()) {
+      processor.nextToken();
+    }
+  });
 }
+
+suite.on("cycle", function ({ target }) {
+  console.log(`${target.name} ${(1 / target.hz * 1000).toFixed(3)}ms`);
+});
+
+suite.run();
