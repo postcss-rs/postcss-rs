@@ -49,7 +49,7 @@ a {
   AstPrinter::new(0, stdout).print(&root).unwrap();
   let res = PathBuf::from("test.css");
   println!("{:?}", res.file_prefix());
-  let parser = Parser::new(&_str);
+  let parser = Parser::new(_str);
   let root = parser.parse();
   let mut printer = AstPrinter::new(0, WrapString::default());
   printer.print(&root).unwrap();
