@@ -30,7 +30,7 @@ mod test_ast {
       );
       let expected_ast = read_to_string(expected_ast_path)?;
       let parser = Parser::new(&file);
-      let root = parser.parse();
+      let root = parser.parse().unwrap();
       let mut printer = AstPrinter::new(0, WrapString::default());
       printer.print(&root)?;
       let ast = printer.result().0;

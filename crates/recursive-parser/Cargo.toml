@@ -10,8 +10,9 @@ edition = "2021"
 # cssparser = "0.29.0"
 tokenizer = { path = "../tokenizer" }
 mimalloc-rust = "0.1"
-anyhow = "1.0.47"
+thiserror = "1.0.29"
 
+codespan-reporting = "0.11.1"
 [profile.release]
 lto = true
 codegen-units = 1
@@ -20,6 +21,7 @@ panic = "abort"
 [dev-dependencies]
 criterion = "0.3.5"
 similar-asserts = "1.1.0"
+anyhow = "1.0.47"
 
 [[bench]]
 name = "parse"

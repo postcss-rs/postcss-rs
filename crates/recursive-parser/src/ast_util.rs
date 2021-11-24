@@ -1,5 +1,5 @@
 use crate::{parser, visitor::Visit};
-use anyhow::Result;
+use std::io::Result;
 use std::io::Write;
 
 #[derive(Default)]

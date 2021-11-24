@@ -6,7 +6,7 @@ const LARGE_CSS_FILE: &str = include_str!("../../../assets/bootstrap.css");
 
 fn parse<'a>(css: &'a str) -> Root {
   let parser = Parser::new(css);
-  parser.parse()
+  parser.parse().unwrap()
 }
 
 fn tokenize_bench(c: &mut Criterion) {

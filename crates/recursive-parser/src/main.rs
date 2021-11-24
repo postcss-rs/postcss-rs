@@ -1,7 +1,7 @@
 #![feature(path_file_prefix)]
 // use mimalloc_rust::*;
 use recursive_parser::parser::Parser;
-use recursive_parser::{AstPrinter, WrapString};
+use recursive_parser::{parse, AstPrinter, WrapString};
 use std::path::PathBuf;
 use std::time::Instant;
 
@@ -34,23 +34,20 @@ fn main() {
   }"#;
   let css_test2 = r#"
 a {
-	color: black
-}
-
+	"test": 
+#test
 "#;
   // let tokens = tokenize(css_test2);
   //  println!("{:#?}", tokens);
 
   let start = Instant::now();
-  let parser = Parser::new(css_test2);
-  let root = parser.parse();
-  println!("{:?}", start.elapsed());
-  let stdout = std::io::stdout();
-  AstPrinter::new(0, stdout).print(&root).unwrap();
-  let res = PathBuf::from("test.css");
-  println!("{:?}", res.file_prefix());
   let parser = Parser::new(_str);
-  let root = parser.parse();
+  let root = parser.parse().unwrap();
+  println!("{:?}", start.elapsed());
+  // let stdout = std::io::stdout();
+  // AstPrinter::new(0, stdout).print(&root).unwrap();
+
+  let root = parse(css_test2, None);
   let mut printer = AstPrinter::new(0, WrapString::default());
   printer.print(&root).unwrap();
   let ast = printer.result().0;
