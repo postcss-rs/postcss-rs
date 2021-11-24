@@ -26,7 +26,9 @@ pub fn parse<'a>(input: &'a str, file_name: Option<&'a str>) -> Root<'a> {
 
         let diagnostic = Diagnostic::error()
           .with_message("postcss parse error")
-          .with_labels(vec![Label::primary(file_id, start..end).with_message("css parse error")])
+          .with_labels(vec![
+            Label::primary(file_id, start..end).with_message("css parse error")
+          ])
           .with_notes(vec![msg]);
 
         // We now set up the writer and configuration, and then finally render the

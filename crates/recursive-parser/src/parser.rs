@@ -325,11 +325,11 @@ impl<'a> Parser<'a> {
     match self.peek() {
       Some(Word) => {}
       Some(other) => {
-          return Err(PostcssError::ParseError(
-            format!("expected token word, found {:?}", other),
-            self.pos,
-            self.lexer.peek().unwrap().3,
-          ));
+        return Err(PostcssError::ParseError(
+          format!("expected token word, found {:?}", other),
+          self.pos,
+          self.lexer.peek().unwrap().3,
+        ));
       }
       None => {
         return Err(PostcssError::ParseError(
