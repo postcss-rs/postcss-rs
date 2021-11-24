@@ -24,7 +24,7 @@ fn main() {
   let _css_test = r#":root {
     --zero-size: {
       width: 0;
-      height: 0;
+      height::"" 0;
     };
     --small-icon: {
       width: 16px;
@@ -34,8 +34,10 @@ fn main() {
   }"#;
   let css_test2 = r#"
 a {
-	"test": 
-#test
+
+  test test test
+
+
 "#;
   // let tokens = tokenize(css_test2);
   //  println!("{:#?}", tokens);

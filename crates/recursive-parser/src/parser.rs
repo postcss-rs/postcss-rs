@@ -144,7 +144,7 @@ impl<'a> Parser<'a> {
           });
         }
         _ => {
-          self.parse_component();
+          self.parse_component()?;
           let mut selector_end = self.pos;
           loop {
             match self.peek() {
@@ -165,7 +165,7 @@ impl<'a> Parser<'a> {
                   self.bump();
                 }
                 _ => {
-                  self.parse_component();
+                  self.parse_component()?;
                   selector_end = self.pos;
                 }
               },
@@ -188,33 +188,40 @@ impl<'a> Parser<'a> {
   // https://drafts.csswg.org/css-syntax/#component-value-diagram
   #[inline]
   /// return bump token is trivial
-  fn parse_component(&mut self) -> bool {
+  fn parse_component(&mut self) -> Result<bool> {
     // self.start_node(TokenType::Component);
     if let Some(kind) = self.peek() {
       match kind {
         TokenType::OpenParentheses => {
           // println!("parse open parentheses");
-          self.parse_parentheses_block();
+          self.parse_parentheses_block()?;
         }
         TokenType::OpenSquare => {
-          self.parse_square_block();
+          self.parse_square_block()?;
         }
         TokenType::OpenCurly => {
-          self.parse_curly_block_in_component();
+          self.parse_curly_block_in_component()?;
         }
         _ => {
           // println!("need to bump {:?} from parse component", self.peek());
-          return matches!(self.bump().0, TokenType::Space | TokenType::Comment);
+          return Ok(matches!(
+            self.bump().0,
+            TokenType::Space | TokenType::Comment
+          ));
         }
       }
     } else {
-      eprintln!("expected token found none");
+      return Err(PostcssError::ParseError(
+        "expected token found <EOF>".to_string(),
+        self.pos,
+        self.pos,
+      ));
     }
-    false
+    Ok(false)
     // self.finish_node();
   }
 
-  fn parse_parentheses_block(&mut self) {
+  fn parse_parentheses_block(&mut self) -> Result<()> {
     self.bump(); // bump (
     loop {
       match self.peek() {
@@ -224,18 +231,23 @@ impl<'a> Parser<'a> {
             break;
           }
           _ => {
-            self.parse_component();
+            self.parse_component()?;
           }
         },
         None => {
           // TODO: error handle
-          panic!("expected ) found none");
+          return Err(PostcssError::ParseError(
+            "expected ) found <EOF>".to_string(),
+            self.pos,
+            self.pos,
+          ));
         }
       }
     }
+    Ok(())
   }
 
-  fn parse_square_block(&mut self) {
+  fn parse_square_block(&mut self) -> Result<()> {
     self.bump(); // bump [
     loop {
       match self.peek() {
@@ -245,18 +257,22 @@ impl<'a> Parser<'a> {
             break;
           }
           _ => {
-            self.parse_component();
+            self.parse_component()?;
           }
         },
         None => {
-          // TODO: error handle
-          panic!("expected ] found none");
+          return Err(PostcssError::ParseError(
+            "expected ] found <EOF>".to_string(),
+            self.pos,
+            self.pos,
+          ));
         }
       }
     }
+    Ok(())
   }
 
-  fn parse_curly_block_in_component(&mut self) {
+  fn parse_curly_block_in_component(&mut self) -> Result<()> {
     self.bump(); // bump {
     loop {
       match self.peek() {
@@ -266,15 +282,19 @@ impl<'a> Parser<'a> {
             break;
           }
           _ => {
-            self.parse_component();
+            self.parse_component()?;
           }
         },
         None => {
-          // TODO: error handle
-          panic!("expected {} found none", "}");
+          return Err(PostcssError::ParseError(
+            format!("expected {} found <EOF>", "}"),
+            self.pos,
+            self.pos,
+          ));
         }
       }
     }
+    Ok(())
   }
 
   fn parse_curly_block(&mut self, rule: bool) -> Result<Vec<RuleOrAtRuleOrDecl<'a>>> {
@@ -326,14 +346,14 @@ impl<'a> Parser<'a> {
       Some(Word) => {}
       Some(other) => {
         return Err(PostcssError::ParseError(
-          format!("expected token word, found {:?}", other),
+          format!("expected token word, found `{}`", other),
           self.pos,
           self.lexer.peek().unwrap().3,
         ));
       }
       None => {
         return Err(PostcssError::ParseError(
-          format!("expected token word, found {:?}", self.peek().unwrap()),
+          format!("expected token word, found <EOF>"),
           self.pos,
           self.pos,
         ));
@@ -348,12 +368,22 @@ impl<'a> Parser<'a> {
       end,
     };
     self.skip_whitespace_comment();
-    if !matches!(self.peek(), Some(TokenType::Colon)) {
-      return Err(PostcssError::ParseError(
-        format!("expected : found {:?}", self.peek()),
-        self.pos,
-        self.pos,
-      ));
+    match self.peek() {
+      Some(TokenType::Colon) => {}
+      Some(other) => {
+        return Err(PostcssError::ParseError(
+          format!("expected `:`, found `{}`", other),
+          self.pos,
+          self.lexer.peek().unwrap().3,
+        ));
+      }
+      None => {
+        return Err(PostcssError::ParseError(
+          format!("expected token word, found <EOF>"),
+          self.pos,
+          self.pos,
+        ));
+      }
     }
     self.bump();
     self.skip_whitespace_comment();
@@ -377,7 +407,7 @@ impl<'a> Parser<'a> {
         }
         _ => {
           // println!("parse the component");
-          self.parse_component();
+          self.parse_component()?;
           value_end = self.pos;
         }
       }
@@ -424,7 +454,7 @@ impl<'a> Parser<'a> {
           break;
         }
         _ => {
-          if !self.parse_component() {
+          if !self.parse_component()? {
             params_end = self.pos;
           }
         }
