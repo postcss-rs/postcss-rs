@@ -51,25 +51,25 @@ pub enum TokenType {
 }
 
 impl std::fmt::Display for TokenType {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-      match self {
-        TokenType::OpenParentheses => write!(f, "("),
-        TokenType::CloseParentheses => write!(f, ")"),
-        TokenType::Space => write!(f, "space"),
-        TokenType::Word => write!(f, "word"),
-        TokenType::String => write!(f, "string"),
-        TokenType::OpenSquare => write!(f, "["),
-        TokenType::CloseSquare => write!(f, "]"),
-        TokenType::OpenCurly => write!(f, "{{"),
-        TokenType::CloseCurly => write!(f, "}}"),
-        TokenType::Semicolon => write!(f, ";"),
-        TokenType::Colon => write!(f, ":"),
-        TokenType::Comment => write!(f, "comment"),
-        TokenType::AtWord => write!(f, "atword"),
-        TokenType::Brackets => write!(f, "brackets"),
-        TokenType::Unknown => write!(f, "unknown"),
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    match self {
+      TokenType::OpenParentheses => write!(f, "("),
+      TokenType::CloseParentheses => write!(f, ")"),
+      TokenType::Space => write!(f, "space"),
+      TokenType::Word => write!(f, "word"),
+      TokenType::String => write!(f, "string"),
+      TokenType::OpenSquare => write!(f, "["),
+      TokenType::CloseSquare => write!(f, "]"),
+      TokenType::OpenCurly => write!(f, "{{"),
+      TokenType::CloseCurly => write!(f, "}}"),
+      TokenType::Semicolon => write!(f, ";"),
+      TokenType::Colon => write!(f, ":"),
+      TokenType::Comment => write!(f, "comment"),
+      TokenType::AtWord => write!(f, "atword"),
+      TokenType::Brackets => write!(f, "brackets"),
+      TokenType::Unknown => write!(f, "unknown"),
     }
-    }
+  }
 }
 
 #[derive(Debug, Clone, Eq, PartialEq)]
