@@ -4,8 +4,6 @@ pub mod parser;
 pub mod syntax;
 pub mod visitor;
 
-use std::ops::Not;
-
 pub use ast_util::*;
 
 use codespan_reporting::term;

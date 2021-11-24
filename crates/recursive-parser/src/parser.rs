@@ -353,7 +353,7 @@ impl<'a> Parser<'a> {
       }
       None => {
         return Err(PostcssError::ParseError(
-          format!("expected token word, found <EOF>"),
+          "expected token word, found <EOF>".to_string(),
           self.pos,
           self.pos,
         ));
@@ -379,7 +379,7 @@ impl<'a> Parser<'a> {
       }
       None => {
         return Err(PostcssError::ParseError(
-          format!("expected token word, found <EOF>"),
+          "expected token word, found <EOF>".to_string(),
           self.pos,
           self.pos,
         ));

@@ -2,7 +2,6 @@
 // use mimalloc_rust::*;
 use recursive_parser::parser::Parser;
 use recursive_parser::{parse, AstPrinter, WrapString};
-use std::path::PathBuf;
 use std::time::Instant;
 
 // #[global_allocator]
@@ -44,7 +43,7 @@ a {
 
   let start = Instant::now();
   let parser = Parser::new(_str);
-  let root = parser.parse().unwrap();
+  let _root = parser.parse().unwrap();
   println!("{:?}", start.elapsed());
   // let stdout = std::io::stdout();
   // AstPrinter::new(0, stdout).print(&root).unwrap();
