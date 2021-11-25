@@ -13,7 +13,7 @@ fn main() {
 }";
   let bootstrap = include_str!("../../../assets/bootstrap.css");
   let mut start = Instant::now();
-  let mut root = Parser::new(bootstrap).parse();
+  let mut root = Parser::new(bootstrap).parse().unwrap();
   println!("parse {:?}", start.elapsed());
   start = Instant::now();
   ReverseProp::default().visit_root(&mut root);
