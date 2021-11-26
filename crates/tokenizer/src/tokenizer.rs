@@ -48,7 +48,6 @@ pub enum TokenType {
   Comment,
   AtWord,
   Brackets,
-  Unknown,
 }
 
 impl std::fmt::Display for TokenType {
@@ -68,7 +67,6 @@ impl std::fmt::Display for TokenType {
       TokenType::Comment => write!(f, "comment"),
       TokenType::AtWord => write!(f, "atword"),
       TokenType::Brackets => write!(f, "brackets"),
-      TokenType::Unknown => write!(f, "unknown"),
     }
   }
 }
