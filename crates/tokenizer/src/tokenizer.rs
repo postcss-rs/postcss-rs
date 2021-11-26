@@ -6,6 +6,7 @@ use std::cell::RefCell;
 use std::clone::Clone;
 use std::cmp::PartialEq;
 use std::cmp::{min, Eq};
+use std::hint::unreachable_unchecked;
 
 const SINGLE_QUOTE: char = '\'';
 const DOUBLE_QUOTE: char = '"';
@@ -492,7 +493,7 @@ const fn get_str(ch: char) -> &'static str {
     COLON => ":",
     SEMICOLON => ";",
     CLOSE_PARENTHESES => ")",
-    _ => "",
+    _ => unsafe { unreachable_unchecked() },
   }
 }
 
@@ -506,7 +507,7 @@ const fn get_token_type(ch: char) -> TokenType {
     COLON => TokenType::Colon,
     SEMICOLON => TokenType::Semicolon,
     CLOSE_PARENTHESES => TokenType::CloseParentheses,
-    _ => TokenType::Unknown,
+    _ => unsafe { unreachable_unchecked() },
   }
 }
 
