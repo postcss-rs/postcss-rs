@@ -1,6 +1,5 @@
 [workspace]
 members = ["crates/*"]
-exclude = ["crates/ast"]
 
 # NB: the `bench` and `release` profiles must remain EXACTLY the same.
 [profile.release]
