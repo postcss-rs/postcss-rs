@@ -7,7 +7,7 @@ use std::time::Instant;
 #[global_allocator]
 static GLOBAL_MIMALLOC: GlobalMiMalloc = GlobalMiMalloc;
 fn main() {
-  let _file = include_str!("../../../assets/tailwind.css");
+  let _str = include_str!("../../../assets/tailwind.css");
   let _css = r#".test {
       width: 100px
   }
@@ -48,7 +48,7 @@ a {
   // let stdout = std::io::stdout();
   // AstPrinter::new(0, stdout).print(&root).unwrap();
 
-  let root = parse(css_test2, None);
+  let root = parse(css2, None);
   let mut printer = AstPrinter::new(0, WrapString::default());
   printer.print(&root).unwrap();
   let ast = printer.result().0;
