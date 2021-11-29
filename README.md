@@ -4,22 +4,21 @@
 
 > ⚠️ DO NOT USE. STILL WORK IN PROGRESS.
 
-## Performance Improvement 
+## Performance Improvement
 
-Tokenize [bootstrap.css](./assets/bootstrap.css) (Compare with Node.js v16.13.0):
+Tokenizer (Compare with Node.js v16.13.0):
 
 ```bash
-js:   0.11s user 0.02s system 126% cpu 0.102 total
-rust: 0.00s user 0.00s system  66% cpu 0.006 total
-
-# tokenize bootstrap-reboot.css               ~45x
-js:   tokenizer/small(7K)                  3.063ms
-rust: tokenizer/small(7K)                  0.068ms
-
-# tokenize bootstrap.css                      ~26x
-js:   tokenizer/fairly_large(201K)        25.672ms
-rust: tokenizer/fairly_large(201K)         0.979ms
+js:   0.71s user 0.09s system 152% cpu 0.619 total
+rust: 0.16s user 0.03s system  93% cpu 0.199 total
 ```
+
+| **file** | tailwind-components.css | bootstrap-reboot.css | bootstrap-grid.css | bootstrap.css | tailwind.css | tailwind-dark.css |
+| -------: | ----------------------: | -------------------: | -----------------: | ------------: | -----------: | ----------------: |
+| **size** |                    2.8K |                 7.4K |                71K |          201K |         3.5M |              5.8M |
+|   **js** |                 1.813ms |              2.380ms |           11.856ms |      33.919ms |    167.309ms |         224.577ms |
+| **rust** |                 0.019ms |              0.037ms |            0.191ms |       0.721ms |   9.624272ms |       15.743094ms |
+|    **~** |                     95x |                  64x |                61x |           47x |          17x |               14x |
 
 🎉 Welcome to contribute, here is a guide:
 
@@ -31,7 +30,7 @@ cargo bench -- --save-baseline main
 Create a baseline, Then do some optimization work here.
 
 ```bash
-git checkout feature  ## `feature` is your branch 
+git checkout feature  ## `feature` is your branch
 ```
 
 Compare against the `main` baseline.
