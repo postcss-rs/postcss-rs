@@ -21,6 +21,6 @@ fn main() {
     let start = Instant::now();
     parse(css, Some(file));
     let end = start.elapsed();
-    println!("rust: tokenizer/{}({}): {:?}", file, size, end);
+    println!("rust: parser/{}({}): {:?}", file, size, end);
   }
 }
