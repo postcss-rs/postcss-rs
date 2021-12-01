@@ -6,6 +6,13 @@
 
 ## Performance Improvement
 
+Run benchmark:
+
+```bash
+cargo build --release --locked --bin "benchmark*"
+cargo run --release --bin benchmark
+```
+
 Tokenizer (Compare with Node.js v16.13.0):
 
 ```bash
