@@ -1,11 +1,13 @@
 use crate::error::{PostcssError, Result};
 use crate::syntax::Lexer;
+use smallvec::{smallvec, SmallVec};
 use std::borrow::Cow;
+use std::collections::LinkedList;
 use std::iter::Peekable;
 use tokenizer::{Token, TokenType};
 
 pub struct Root<'a> {
-  pub children: Vec<RuleOrAtRuleOrDecl<'a>>,
+  pub children: LinkedList<RuleOrAtRuleOrDecl<'a>>,
   pub(crate) start: usize,
   pub(crate) end: usize,
 }
@@ -22,7 +24,7 @@ pub enum RuleOrAtRuleOrDecl<'a> {
 // }
 
 pub struct Rule<'a> {
-  pub children: Vec<RuleOrAtRuleOrDecl<'a>>,
+  pub children: LinkedList<RuleOrAtRuleOrDecl<'a>>,
   pub start: usize,
   pub end: usize,
   pub selector: Selector<'a>,
@@ -64,7 +66,7 @@ pub struct AtRule<'a> {
   pub name: Cow<'a, str>,
   pub(crate) start: usize,
   pub(crate) end: usize,
-  pub children: Vec<RuleOrAtRuleOrDecl<'a>>,
+  pub children: LinkedList<RuleOrAtRuleOrDecl<'a>>,
 }
 
 pub struct Selector<'a> {
@@ -87,6 +89,7 @@ pub struct Parser<'a> {
   lexer: Peekable<Lexer<'a>>,
   source: &'a str,
   pos: usize,
+  back_store: SmallVec<[Token<'a>; 2]>,
 }
 
 impl<'a> Parser<'a> {
@@ -95,25 +98,26 @@ impl<'a> Parser<'a> {
       lexer: Lexer::new(input).peekable(),
       source: input,
       pos: 0,
+      back_store: SmallVec::with_capacity(2),
     }
   }
 
   pub fn parse(mut self) -> Result<Root<'a>> {
     // self.parse_element();
-    let mut children: Vec<RuleOrAtRuleOrDecl> = vec![];
+    let mut children: LinkedList<RuleOrAtRuleOrDecl> = LinkedList::default();
     while let Some(syntax) = self.peek() {
       match syntax {
         TokenType::Space => {
           self.bump();
         }
         TokenType::AtWord => {
-          children.push(RuleOrAtRuleOrDecl::AtRule(self.parse_at_rule()?));
+          children.push_back(RuleOrAtRuleOrDecl::AtRule(self.parse_at_rule()?));
         }
         TokenType::Comment => {
           self.parse_comment();
         }
         _ => {
-          children.push(RuleOrAtRuleOrDecl::Rule(self.parse_rule()?));
+          children.push_back(RuleOrAtRuleOrDecl::Rule(self.parse_rule()?));
         }
       };
     }
@@ -297,10 +301,10 @@ impl<'a> Parser<'a> {
     Ok(())
   }
 
-  fn parse_curly_block(&mut self, rule: bool) -> Result<Vec<RuleOrAtRuleOrDecl<'a>>> {
+  fn parse_curly_block(&mut self, rule: bool) -> Result<LinkedList<RuleOrAtRuleOrDecl<'a>>> {
     use TokenType::*;
     // println!("parse curlyblock");
-    let mut ret: Vec<RuleOrAtRuleOrDecl> = vec![];
+    let mut ret: LinkedList<RuleOrAtRuleOrDecl> = LinkedList::default();
     self.bump(); // bump {
     self.skip_whitespace_comment();
     loop {
@@ -309,7 +313,7 @@ impl<'a> Parser<'a> {
           Semicolon => {
             self.bump();
           }
-          AtWord => ret.push(RuleOrAtRuleOrDecl::AtRule(self.parse_at_rule()?)),
+          AtWord => ret.push_back(RuleOrAtRuleOrDecl::AtRule(self.parse_at_rule()?)),
           Space | Comment => {
             self.bump();
           }
@@ -321,10 +325,10 @@ impl<'a> Parser<'a> {
           _ => {
             if rule {
               // println!("parse rule -->");
-              ret.push(RuleOrAtRuleOrDecl::Rule(self.parse_rule()?));
+              ret.push_back(RuleOrAtRuleOrDecl::Rule(self.parse_rule()?));
             } else {
               // println!("parse declaration");
-              ret.push(RuleOrAtRuleOrDecl::Declaration(self.parse_declaration()?));
+              ret.push_back(RuleOrAtRuleOrDecl::Declaration(self.parse_declaration()?));
             }
           }
         },
@@ -435,7 +439,7 @@ impl<'a> Parser<'a> {
     let start = self.pos;
     let Token(_, name, _, _) = self.bump(); // bump atWord
     self.skip_whitespace_comment();
-    let mut children = vec![];
+    let mut children = LinkedList::default();
     let params_start = self.pos;
     let mut params_end = self.pos;
     while let Some(kind) = self.peek() {
@@ -477,11 +481,19 @@ impl<'a> Parser<'a> {
   }
 
   pub fn peek(&mut self) -> Option<TokenType> {
-    self.lexer.peek().map(|token| token.0)
+    if self.back_store.len() > 0 {
+      self.back_store.iter().next().map(|token| token.0)
+    } else {
+      self.lexer.peek().map(|token| token.0)
+    }
   }
 
   pub fn bump(&mut self) -> Token<'a> {
-    let token = self.lexer.next().unwrap();
+    let token = if self.back_store.len() > 0 {
+      self.back_store.swap_remove(0)
+    } else {
+      self.lexer.next().unwrap()
+    };
     self.pos = token.3;
     token
     // println!("{:?}, {:?}", kind, text);
