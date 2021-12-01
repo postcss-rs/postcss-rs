@@ -59,7 +59,7 @@ impl<'a, W: std::io::Write> VisitMut<'a, std::io::Result<()>> for SimplePrettier
       format!(
         "{}{} {}\n",
         " ".repeat(self.level * 2),
-        rule.selector.content,
+        rule.selector,
         "{"
       )
       .as_bytes(),
