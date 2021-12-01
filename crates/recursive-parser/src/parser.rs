@@ -43,16 +43,6 @@ pub struct AtRule<'a> {
   pub children: Vec<RuleOrAtRuleOrDecl<'a>>,
 }
 
-// pub struct Selector<'a> {
-//   pub content: Cow<'a, str>,
-// }
-
-// impl<'a> Selector<'a> {
-//   fn new(content: Cow<'a, str>) -> Self {
-//     Self { content }
-//   }
-// }
-
 pub struct Parser<'a> {
   lexer: Peekable<Lexer<'a>>,
   source: &'a str,
@@ -438,14 +428,9 @@ impl<'a> Parser<'a> {
     self.lexer.peek().map(|token| token.0)
   }
 
-  // #[inline]
-  // pub fn peek_next(&mut self) -> Option<TokenType> {
-  //   self.lexer.peek().
-  // }
   pub fn bump(&mut self) -> Token<'a> {
     let token = self.lexer.next().unwrap();
     self.pos = token.3;
     token
-    // println!("{:?}, {:?}", kind, text);
   }
 }
