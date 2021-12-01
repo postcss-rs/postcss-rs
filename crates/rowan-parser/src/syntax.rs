@@ -88,7 +88,7 @@ impl From<TokenType> for SyntaxKind {
       TokenType::Comment => SyntaxKind::Comment,
       TokenType::AtWord => SyntaxKind::AtWord,
       TokenType::Brackets => SyntaxKind::Brackets,
-      TokenType::Unknown => unreachable!()
+      TokenType::Unknown => unreachable!(),
     }
   }
 }

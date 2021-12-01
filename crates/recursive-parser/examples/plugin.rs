@@ -55,15 +55,9 @@ impl<'a, W: std::io::Write> VisitMut<'a, std::io::Result<()>> for SimplePrettier
   }
 
   fn visit_rule(&mut self, rule: &mut Rule<'a>) -> std::io::Result<()> {
-    self.writer.write(
-      format!(
-        "{}{} {}\n",
-        " ".repeat(self.level * 2),
-        rule.selector,
-        "{"
-      )
-      .as_bytes(),
-    )?;
+    self
+      .writer
+      .write(format!("{}{} {}\n", " ".repeat(self.level * 2), rule.selector, "{").as_bytes())?;
     self.level += 1;
     for child in rule.children.iter_mut() {
       match child {
