@@ -1,0 +1,21 @@
+[package]
+name = "benchmark"
+version = "0.0.1"
+edition = "2021"
+
+[dependencies]
+mimalloc-rust = "0.1"
+recursive-parser = { path = "../recursive-parser" }
+tokenizer = { path = "../tokenizer" }
+
+[[bin]]
+name = "benchmark"
+path = "src/main.rs"
+
+[[bin]]
+name = "benchmark_tokenizer"
+path = "src/benchmark_tokenizer.rs"
+
+[[bin]]
+name = "benchmark_parser"
+path = "src/benchmark_parser.rs"
