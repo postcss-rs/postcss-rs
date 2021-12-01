@@ -174,6 +174,6 @@ impl<'a> VisitMut<'a> for ReverseProp {
   }
 
   fn visit_declaration(&mut self, decl: &mut Declaration<'a>) {
-    decl.prop.content = Cow::Owned(decl.prop.content.chars().rev().collect());
+    decl.prop = Cow::Owned(decl.prop.chars().rev().collect());
   }
 }

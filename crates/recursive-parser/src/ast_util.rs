@@ -61,7 +61,7 @@ impl<'a, W: Write> Visit<'a, Result<()>> for AstPrinter<W> {
       self.writer,
       "{}selector: `{}`",
       " ".repeat(self.level * 2),
-      rule.selector.content,
+      rule.selector,
     )?;
     for child in &rule.children {
       match child {
@@ -129,13 +129,13 @@ impl<'a, W: Write> Visit<'a, Result<()>> for AstPrinter<W> {
       self.writer,
       "{}prop: `{}`",
       " ".repeat(self.level * 2),
-      decl.prop.content,
+      decl.prop,
     )?;
     writeln!(
       self.writer,
       "{}value: `{}`",
       " ".repeat(self.level * 2),
-      decl.value.content,
+      decl.value,
     )?;
     self.level -= 1;
     Ok(())
