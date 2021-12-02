@@ -1,7 +1,5 @@
 use crate::error::{PostcssError, Result};
-use crate::syntax::Lexer;
 use std::borrow::Cow;
-use std::iter::Peekable;
 use tokenizer::{tokenize, Token, TokenType};
 
 pub struct Root<'a> {
