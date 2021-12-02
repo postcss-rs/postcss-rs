@@ -303,7 +303,7 @@ impl<'a> Parser<'a> {
         return Err(PostcssError::ParseError(
           format!("expected token word, found `{}`", other),
           self.pos,
-          self.lexer.peek().unwrap().3,
+          self.lexer.peek().unwrap().2,
         ));
       }
       None => {
@@ -316,8 +316,8 @@ impl<'a> Parser<'a> {
     }
     // if !matches!(self.peek(), Some(Word)) {
     // }
-    let Token(_, content, prop_start, _) = self.bump();
-    let prop = Cow::Borrowed(content);
+    let Token(_, prop_start, prop_end) = self.bump();
+    let prop = Cow::Borrowed(&self.source[prop_start..prop_end]);
     self.skip_whitespace_comment();
     match self.peek() {
       Some(TokenType::Colon) => {}
@@ -325,7 +325,7 @@ impl<'a> Parser<'a> {
         return Err(PostcssError::ParseError(
           format!("expected `:`, found `{}`", other),
           self.pos,
-          self.lexer.peek().unwrap().3,
+          self.lexer.peek().unwrap().2,
         ));
       }
       None => {
@@ -364,7 +364,7 @@ impl<'a> Parser<'a> {
       value = Cow::Borrowed(&self.source[value_start..value_end]);
     }
     let end = if matches!(self.peek(), Some(Semicolon)) {
-      self.lexer.peek().unwrap().3
+      self.lexer.peek().unwrap().2
     } else {
       value_end
     };
@@ -380,7 +380,7 @@ impl<'a> Parser<'a> {
     // TODO: should parse declaration inside a at_rule
     use TokenType::*;
     let start = self.pos;
-    let Token(_, name, _, _) = self.bump(); // bump atWord
+    let Token(_, word_start, word_end) = self.bump(); // bump atWord
     self.skip_whitespace_comment();
     let mut children = vec![];
     let params_start = self.pos;
@@ -409,7 +409,7 @@ impl<'a> Parser<'a> {
     }
     Ok(AtRule {
       params: Cow::Borrowed(&self.source[params_start..params_end]),
-      name: Cow::Borrowed(&name[1..]),
+      name: Cow::Borrowed(&self.source[word_start + 1..word_end]),
       start,
       end: self.pos,
       children,
@@ -428,9 +428,9 @@ impl<'a> Parser<'a> {
     self.lexer.peek().map(|token| token.0)
   }
 
-  pub fn bump(&mut self) -> Token<'a> {
+  pub fn bump(&mut self) -> Token {
     let token = self.lexer.next().unwrap();
-    self.pos = token.3;
+    self.pos = token.2;
     token
   }
 }
