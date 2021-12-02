@@ -13,7 +13,7 @@ impl<'a> Lexer<'a> {
 }
 
 impl<'a> Iterator for Lexer<'a> {
-  type Item = Token<'a>;
+  type Item = Token;
 
   fn next(&mut self) -> Option<Self::Item> {
     if !self.inner.end_of_file() {

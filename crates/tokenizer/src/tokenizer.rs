@@ -71,13 +71,13 @@ impl std::fmt::Display for TokenType {
   }
 }
 
-#[derive(Debug, Clone, Eq, PartialEq)]
+#[derive(Debug, Clone, Eq, PartialEq, Copy)]
 /// quarter nary tuple (token_type, content, start_offset, end_offset), content is a slice with range `start_offset..end_offset`
-pub struct Token<'a>(pub TokenType, pub &'a str, pub usize, pub usize);
+pub struct Token(pub TokenType, pub usize, pub usize);
 
-impl<'a> Token<'a> {
-  pub fn new(kind: TokenType, content: &'a str, pos: usize, next: usize) -> Token {
-    Token(kind, content, pos, next)
+impl Token {
+  pub fn new(kind: TokenType, pos: usize, next: usize) -> Token {
+    Token(kind, pos, next)
   }
 }
 
@@ -88,7 +88,7 @@ pub struct Tokenizer<'a> {
   length: usize,
   pos: RefCell<usize>,
   buffer: RefCell<RefRing<'a>>,
-  returned: RefCell<Vec<Token<'a>>>,
+  returned: RefCell<Vec<Token>>,
   rope: Option<ropey::Rope>,
 }
 
@@ -124,7 +124,7 @@ impl<'a> Tokenizer<'a> {
     self.returned.borrow().is_empty() && self.position() >= self.length
   }
 
-  pub fn back(&self, token: Token<'a>) {
+  pub fn back(&self, token: Token) {
     self.returned.borrow_mut().push(token);
   }
 
@@ -133,7 +133,7 @@ impl<'a> Tokenizer<'a> {
     self.pos.replace_with(|it| *it + 1);
   }
 
-  pub fn next_token(&self, ignore_unclosed: bool) -> Token<'a> {
+  pub fn next_token(&self, ignore_unclosed: bool) -> Token {
     if !self.returned.borrow().is_empty() {
       return self.returned.borrow_mut().pop().unwrap();
     }
@@ -153,19 +153,14 @@ impl<'a> Tokenizer<'a> {
           }
         }
 
-        current_token = Token(
-          TokenType::Space,
-          self.css[self.position()..next].into(),
-          self.position(),
-          next,
-        );
+        current_token = Token(TokenType::Space, self.position(), next);
 
         self.pos.replace(next);
       }
       OPEN_SQUARE | CLOSE_SQUARE | OPEN_CURLY | CLOSE_CURLY | COLON | SEMICOLON
       | CLOSE_PARENTHESES => {
         let start = self.position();
-        current_token = Token(get_token_type(code), get_str(code), start, start + 1);
+        current_token = Token(get_token_type(code), start, start + 1);
         self.pos_plus_one();
       }
       OPEN_PARENTHESES => {
@@ -208,12 +203,7 @@ impl<'a> Tokenizer<'a> {
             }
           }
           let start_offset = self.position();
-          current_token = Token(
-            TokenType::Brackets,
-            sub_str(self.css, start_offset, next + 1),
-            start_offset,
-            next + 1,
-          );
+          current_token = Token(TokenType::Brackets, start_offset, next + 1);
 
           self.pos.replace(next + 1);
         } else {
@@ -223,25 +213,15 @@ impl<'a> Tokenizer<'a> {
 
               let start_offset = self.position();
               if is_bad_bracket(content) {
-                current_token = Token(
-                  TokenType::OpenParentheses,
-                  "(",
-                  start_offset,
-                  start_offset + 1,
-                );
+                current_token = Token(TokenType::OpenParentheses, start_offset, start_offset + 1);
               } else {
-                current_token = Token(TokenType::Brackets, content, start_offset, i + 1);
+                current_token = Token(TokenType::Brackets, start_offset, i + 1);
                 self.pos.replace(i);
               }
             }
             None => {
               let start_offset = self.position();
-              current_token = Token(
-                TokenType::OpenParentheses,
-                "(",
-                start_offset,
-                start_offset + 1,
-              );
+              current_token = Token(TokenType::OpenParentheses, start_offset, start_offset + 1);
             }
           };
           self.pos_plus_one();
@@ -277,22 +257,12 @@ impl<'a> Tokenizer<'a> {
           }
         }
 
-        current_token = Token(
-          TokenType::String,
-          sub_str(self.css, self.position(), next + 1),
-          self.position(),
-          next + 1,
-        );
+        current_token = Token(TokenType::String, self.position(), next + 1);
         self.pos.replace(next + 1);
       }
       AT => {
         let next = index_of_at_end(self.css, self.position() + 1) - 1;
-        current_token = Token(
-          TokenType::AtWord,
-          sub_str(self.css, self.position(), next + 1),
-          self.position(),
-          next + 1,
-        );
+        current_token = Token(TokenType::AtWord, self.position(), next + 1);
         self.pos.replace(next + 1);
       }
       BACKSLASH => {
@@ -322,12 +292,7 @@ impl<'a> Tokenizer<'a> {
           }
         }
 
-        current_token = Token(
-          TokenType::Word,
-          sub_str(self.css, self.position(), next + 1),
-          self.position(),
-          next + 1,
-        );
+        current_token = Token(TokenType::Word, self.position(), next + 1);
         self.pos.replace(next + 1);
       }
       _ => {
@@ -343,17 +308,12 @@ impl<'a> Tokenizer<'a> {
               }
             };
 
-            current_token = Token(
-              TokenType::Comment,
-              sub_str(self.css, self.position(), next + 1),
-              self.position(),
-              next + 1,
-            );
+            current_token = Token(TokenType::Comment, self.position(), next + 1);
             next
           } else {
             let next = index_of_word_end(self.css, self.position() + 1) - 1;
             let content = sub_str(self.css, self.position(), next + 1);
-            current_token = Token::new(TokenType::Word, content, self.position(), next + 1);
+            current_token = Token::new(TokenType::Word, self.position(), next + 1);
             self.push(content);
             next
           },
