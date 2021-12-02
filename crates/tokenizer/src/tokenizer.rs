@@ -442,20 +442,6 @@ fn index_of_word_end(s: &str, start: usize) -> usize {
 }
 
 /// SAFETY: YOU SHOULD NEVER CALL THIS FUNCTION WITH THE PARAM OTHER THAN THESE BELOW.
-const fn get_str(ch: char) -> &'static str {
-  match ch {
-    OPEN_SQUARE => "[",
-    CLOSE_SQUARE => "]",
-    OPEN_CURLY => "{",
-    CLOSE_CURLY => "}",
-    COLON => ":",
-    SEMICOLON => ";",
-    CLOSE_PARENTHESES => ")",
-    _ => unsafe { unreachable_unchecked() },
-  }
-}
-
-/// SAFETY: YOU SHOULD NEVER CALL THIS FUNCTION WITH THE PARAM OTHER THAN THESE BELOW.
 const fn get_token_type(ch: char) -> TokenType {
   match ch {
     OPEN_SQUARE => TokenType::OpenSquare,
