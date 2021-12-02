@@ -1,6 +1,10 @@
 use criterion::{criterion_group, criterion_main, Criterion};
 use recursive_parser::parser::{Parser, Root};
 
+use mimalloc_rust::*;
+
+#[global_allocator]
+static GLOBAL_MIMALLOC: GlobalMiMalloc = GlobalMiMalloc;
 const SMALL_CSS_FILE: &str = include_str!("../../../assets/bootstrap-reboot.css");
 const LARGE_CSS_FILE: &str = include_str!("../../../assets/bootstrap.css");
 

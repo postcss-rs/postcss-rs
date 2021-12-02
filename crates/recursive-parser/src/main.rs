@@ -9,11 +9,11 @@ use std::time::Instant;
 fn main() {
   let file_list = [
     ("tailwind-components.css", "2.8K"),
-    ("bootstrap-reboot.css", "7.4K"),
-    ("bootstrap-grid.css", "71K"),
-    ("bootstrap.css", "201K"),
-    ("tailwind.css", "3.5M"),
-    ("tailwind-dark.css", "5.8M"),
+    // ("bootstrap-reboot.css", "7.4K"),
+    // ("bootstrap-grid.css", "71K"),
+    // ("bootstrap.css", "201K"),
+    // ("tailwind.css", "3.5M"),
+    // ("tailwind-dark.css", "5.8M"),
   ];
 
   for (file, size) in file_list {
