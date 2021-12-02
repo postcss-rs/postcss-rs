@@ -511,6 +511,7 @@ dependencies = [
  "criterion",
  "mimalloc-rust",
  "similar-asserts",
+ "smallvec",
  "thiserror",
  "tokenizer",
 ]
@@ -820,6 +821,7 @@ dependencies = [
  "memchr",
  "once_cell",
  "ropey",
+ "smallvec",
 ]
 
 [[package]]

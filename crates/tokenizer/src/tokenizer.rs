@@ -2,6 +2,7 @@ use crate::ref_ring::RefRing;
 use memchr::memchr;
 use memchr::memmem::Finder;
 use once_cell::sync::Lazy;
+use smallvec::Array;
 use std::cell::RefCell;
 use std::clone::Clone;
 use std::cmp::PartialEq;
@@ -74,7 +75,13 @@ impl std::fmt::Display for TokenType {
 #[derive(Debug, Clone, Eq, PartialEq)]
 /// quarter nary tuple (token_type, content, start_offset, end_offset), content is a slice with range `start_offset..end_offset`
 pub struct Token<'a>(pub TokenType, pub &'a str, pub usize, pub usize);
+unsafe impl<'a> Array for Token<'a> {
+    type Item = Token<'a>;
 
+    fn size() -> usize {
+      2
+    }
+}
 impl<'a> Token<'a> {
   pub fn new(kind: TokenType, content: &'a str, pos: usize, next: usize) -> Token {
     Token(kind, content, pos, next)
