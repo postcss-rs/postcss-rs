@@ -821,7 +821,6 @@ dependencies = [
  "memchr",
  "once_cell",
  "ropey",
- "smallvec",
 ]
 
 [[package]]
