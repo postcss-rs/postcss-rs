@@ -2,7 +2,7 @@ use crate::error::{PostcssError, Result};
 use crate::syntax::Lexer;
 use std::borrow::Cow;
 use std::iter::Peekable;
-use tokenizer::{Token, TokenType};
+use tokenizer::{tokenize, Token, TokenType};
 
 pub struct Root<'a> {
   pub children: Vec<RuleOrAtRuleOrDecl<'a>>,
@@ -44,17 +44,19 @@ pub struct AtRule<'a> {
 }
 
 pub struct Parser<'a> {
-  lexer: Peekable<Lexer<'a>>,
+  lexer: Vec<Token>,
   source: &'a str,
   pos: usize,
+  cursor: usize,
 }
 
 impl<'a> Parser<'a> {
   pub fn new(input: &'a str) -> Self {
     Self {
-      lexer: Lexer::new(input).peekable(),
+      lexer: tokenize(input),
       source: input,
       pos: 0,
+      cursor: 0,
     }
   }
 
@@ -303,7 +305,7 @@ impl<'a> Parser<'a> {
         return Err(PostcssError::ParseError(
           format!("expected token word, found `{}`", other),
           self.pos,
-          self.lexer.peek().unwrap().2,
+          self.lexer[self.cursor].2,
         ));
       }
       None => {
@@ -325,7 +327,8 @@ impl<'a> Parser<'a> {
         return Err(PostcssError::ParseError(
           format!("expected `:`, found `{}`", other),
           self.pos,
-          self.lexer.peek().unwrap().2,
+          self.lexer[self.cursor].2,
+          // self.lexer.peek().unwrap().2,
         ));
       }
       None => {
@@ -364,7 +367,8 @@ impl<'a> Parser<'a> {
       value = Cow::Borrowed(&self.source[value_start..value_end]);
     }
     let end = if matches!(self.peek(), Some(Semicolon)) {
-      self.lexer.peek().unwrap().2
+      // self.lexer.peek().unwrap().2
+      self.lexer[self.cursor].2
     } else {
       value_end
     };
@@ -425,11 +429,18 @@ impl<'a> Parser<'a> {
 
   #[inline]
   pub fn peek(&mut self) -> Option<TokenType> {
-    self.lexer.peek().map(|token| token.0)
+    if self.cursor < self.lexer.len() {
+      Some(self.lexer[self.cursor].0)
+    } else {
+      None
+    }
+    // self.lexer.peek().map(|token| token.0)
+    // self.lexer[self.lexer]
   }
 
   pub fn bump(&mut self) -> Token {
-    let token = self.lexer.next().unwrap();
+    let token = self.lexer[self.cursor];
+    self.cursor += 1;
     self.pos = token.2;
     token
   }
