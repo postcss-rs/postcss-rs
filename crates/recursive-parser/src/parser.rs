@@ -25,38 +25,14 @@ pub struct Rule<'a> {
   pub children: Vec<RuleOrAtRuleOrDecl<'a>>,
   pub start: usize,
   pub end: usize,
-  pub selector: Selector<'a>,
+  pub selector: Cow<'a, str>,
 }
 
 pub struct Declaration<'a> {
-  pub prop: Prop<'a>,
-  pub value: Value<'a>,
+  pub prop: Cow<'a, str>,
+  pub value: Cow<'a, str>,
   pub(crate) start: usize,
   pub(crate) end: usize,
-}
-
-pub struct Prop<'a> {
-  pub content: Cow<'a, str>,
-  pub start: usize,
-  pub end: usize,
-}
-
-impl<'a> std::fmt::Display for Prop<'a> {
-  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-    write!(f, "{}", self.content)
-  }
-}
-
-pub struct Value<'a> {
-  pub content: Cow<'a, str>,
-  pub start: usize,
-  pub end: usize,
-}
-
-impl<'a> std::fmt::Display for Value<'a> {
-  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-    write!(f, "{}", self.content)
-  }
 }
 
 pub struct AtRule<'a> {
@@ -65,22 +41,6 @@ pub struct AtRule<'a> {
   pub(crate) start: usize,
   pub(crate) end: usize,
   pub children: Vec<RuleOrAtRuleOrDecl<'a>>,
-}
-
-pub struct Selector<'a> {
-  pub content: Cow<'a, str>,
-  pub start: usize,
-  pub end: usize,
-}
-
-impl<'a> Selector<'a> {
-  fn new(content: Cow<'a, str>, start: usize, end: usize) -> Self {
-    Self {
-      content,
-      start,
-      end,
-    }
-  }
 }
 
 pub struct Parser<'a> {
@@ -135,10 +95,9 @@ impl<'a> Parser<'a> {
     if let Some(kind) = self.peek() {
       match kind {
         TokenType::OpenCurly => {
-          let children = self.parse_curly_block(false)?;
           return Ok(Rule {
-            selector: Selector::new(Cow::Borrowed(""), start, start),
-            children,
+            selector: Cow::Borrowed(""),
+            children: self.parse_curly_block(false)?,
             start,
             end: self.pos,
           });
@@ -151,11 +110,7 @@ impl<'a> Parser<'a> {
               Some(kind) => match kind {
                 TokenType::OpenCurly => {
                   return Ok(Rule {
-                    selector: Selector::new(
-                      Cow::Borrowed(&self.source[start..selector_end]),
-                      start,
-                      selector_end,
-                    ),
+                    selector: Cow::Borrowed(&self.source[start..selector_end]),
                     children: self.parse_curly_block(false)?,
                     start,
                     end: self.pos,
@@ -192,15 +147,15 @@ impl<'a> Parser<'a> {
     // self.start_node(TokenType::Component);
     if let Some(kind) = self.peek() {
       match kind {
+        TokenType::OpenCurly => {
+          self.parse_curly_block_in_component()?;
+        }
         TokenType::OpenParentheses => {
           // println!("parse open parentheses");
           self.parse_parentheses_block()?;
         }
         TokenType::OpenSquare => {
           self.parse_square_block()?;
-        }
-        TokenType::OpenCurly => {
-          self.parse_curly_block_in_component()?;
         }
         _ => {
           // println!("need to bump {:?} from parse component", self.peek());
@@ -361,12 +316,8 @@ impl<'a> Parser<'a> {
     }
     // if !matches!(self.peek(), Some(Word)) {
     // }
-    let Token(_, content, start, end) = self.bump();
-    let prop = Prop {
-      content: Cow::Borrowed(content),
-      start,
-      end,
-    };
+    let Token(_, content, prop_start, _) = self.bump();
+    let prop = Cow::Borrowed(content);
     self.skip_whitespace_comment();
     match self.peek() {
       Some(TokenType::Colon) => {}
@@ -388,18 +339,14 @@ impl<'a> Parser<'a> {
     self.bump();
     self.skip_whitespace_comment();
     let mut has_finish = false;
-    let mut value = Value {
-      content: Cow::Borrowed(""),
-      start: self.pos,
-      end: self.pos,
-    };
+    let mut value: Cow<'a, str> = Cow::default();
+    let value_start = self.pos;
     let mut value_end = self.pos;
     while let Some(kind) = self.peek() {
       match kind {
         CloseCurly | Semicolon => {
           has_finish = true;
-          value.end = value_end;
-          value.content = Cow::Borrowed(&self.source[value.start..value.end]);
+          value = Cow::Borrowed(&self.source[value_start..value_end]);
           break;
         }
         Space => {
@@ -413,16 +360,16 @@ impl<'a> Parser<'a> {
       }
     }
     if !has_finish {
-      value.end = value_end;
-      value.content = Cow::Borrowed(&self.source[value.start..value.end]);
+      // value.end = value_end;
+      value = Cow::Borrowed(&self.source[value_start..value_end]);
     }
     let end = if matches!(self.peek(), Some(Semicolon)) {
       self.lexer.peek().unwrap().3
     } else {
-      value.end
+      value_end
     };
     Ok(Declaration {
-      start: prop.start,
+      start: prop_start,
       end,
       prop,
       value,
@@ -476,6 +423,7 @@ impl<'a> Parser<'a> {
     }
   }
 
+  #[inline]
   pub fn peek(&mut self) -> Option<TokenType> {
     self.lexer.peek().map(|token| token.0)
   }
@@ -484,6 +432,5 @@ impl<'a> Parser<'a> {
     let token = self.lexer.next().unwrap();
     self.pos = token.3;
     token
-    // println!("{:?}, {:?}", kind, text);
   }
 }
