@@ -274,13 +274,43 @@ impl<'a> Parser<'a> {
             break;
           }
           _ => {
-            if rule {
-              // println!("parse rule -->");
-              ret.push(RuleOrAtRuleOrDecl::Rule(self.parse_rule()?));
+            let mut checkpoint = self.cursor;
+            let first_token = self.lexer[checkpoint];
+            if matches!(first_token.0, Word)
+              || potential_id_token(
+                self.source[first_token.1..first_token.1 + 1]
+                  .chars()
+                  .next()
+                  .unwrap(),
+              )
+            {
+              checkpoint += 1;
+              while checkpoint < self.lexer.len()
+                && matches!(self.lexer[checkpoint].0, Comment | Space)
+              {
+                checkpoint += 1;
+              }
+              let second_token = if checkpoint < self.lexer.len() {
+                self.lexer[checkpoint]
+              } else {
+                panic!("expected token found <EOF>");
+              };
+              match second_token.0 {
+                Colon => ret.push(RuleOrAtRuleOrDecl::Declaration(self.parse_declaration()?)),
+                _ => {
+                  ret.push(RuleOrAtRuleOrDecl::Rule(self.parse_rule()?));
+                }
+              }
             } else {
-              // println!("parse declaration");
-              ret.push(RuleOrAtRuleOrDecl::Declaration(self.parse_declaration()?));
+              ret.push(RuleOrAtRuleOrDecl::Rule(self.parse_rule()?));
             }
+            // if rule {
+            //   // println!("parse rule -->");
+            //   ret.push(RuleOrAtRuleOrDecl::Rule(self.parse_rule()?));
+            // } else {
+            //   // println!("parse declaration");
+            //   ret.push(RuleOrAtRuleOrDecl::Declaration(self.parse_declaration()?));
+            // }
           }
         },
         None => {
@@ -441,5 +471,16 @@ impl<'a> Parser<'a> {
     self.cursor += 1;
     self.pos = token.2;
     token
+  }
+}
+
+fn potential_id_token(content: char) -> bool {
+  match content {
+    'a'..='z' => true,
+    'A'..='Z' => true,
+    '-' => true,
+    '_' => true,
+    '\\' => true,
+    _ => false,
   }
 }
