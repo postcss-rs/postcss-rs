@@ -1,0 +1,15 @@
+Root@0..122
+  Rule@0..121
+    selector: `:root`
+    Declaration@10..58
+      prop: `--zero-size`
+      value: `{
+    width: 0;
+    height: 0;
+  }`
+    Declaration@61..119
+      prop: `--small-icon`
+      value: `{
+    width: 16px;
+    height: 16px;
+  }`

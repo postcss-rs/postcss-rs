@@ -1,0 +1,41 @@
+Root@0..408
+  Rule@0..62
+    selector: `a`
+    Declaration@8..29
+      prop: `width`
+      value: `1px!important`
+    Declaration@34..60
+      prop: `color`
+      value: `black  !important `
+  Rule@64..407
+    selector: `p`
+    Declaration@72..88
+      prop: `prop`
+      value: `important`
+    Declaration@93..114
+      prop: `color`
+      value: `red important`
+    Declaration@119..154
+      prop: `margin`
+      value: `10px      !      important`
+    Declaration@159..203
+      prop: `padding`
+      value: `20px     !  /* test */   important`
+    Declaration@208..245
+      prop: `width`
+      value: `100px ! /*! test */ important`
+    Declaration@250..286
+      prop: `height`
+      value: `100px /*! test */ important`
+    Declaration@291..316
+      prop: `z-index`
+      value: `1 ""! important`
+    Declaration@321..353
+      prop: `padding`
+      value: `1px/* sep */!important`
+    Declaration@358..378
+      prop: `left`
+      value: `10 !IMPORTANT`
+    Declaration@383..405
+      prop: `right`
+      value: `10 ! IMPORTANT`

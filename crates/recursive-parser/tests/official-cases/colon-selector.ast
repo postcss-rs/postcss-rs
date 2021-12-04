@@ -1,0 +1,3 @@
+Root@0..15
+  Rule@0..14
+    selector: `:fullscreen`

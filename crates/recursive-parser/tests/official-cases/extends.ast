@@ -1,0 +1,14 @@
+Root@0..59
+  Declaration@0..7
+    prop: `one`
+    value: `1`
+  Rule@9..58
+    selector: `a`
+    Declaration@17..24
+      prop: `two`
+      value: `2`
+    Rule@29..56
+      selector: `b`
+      Declaration@41..50
+        prop: `three`
+        value: `3`

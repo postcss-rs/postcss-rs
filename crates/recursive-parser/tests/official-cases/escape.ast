@@ -1,0 +1,43 @@
+Root@0..337
+  Rule@0..109
+    selector: `a`
+    Declaration@8..34
+      prop: `background`
+      value: `url("a).png")`
+    Declaration@39..60
+      prop: `background`
+      value: `url(a;a)`
+    Declaration@65..86
+      prop: `background`
+      value: `url(a/*)`
+    Declaration@91..107
+      prop: `background`
+      value: `\;a`
+  Rule@111..130
+    selector: `:not([foo=")"])`
+  Rule@131..149
+    selector: `:not(div/*)*/)`
+  Rule@150..187
+    selector: `:not(:nth-child(2n of [foo=")"]))`
+  Rule@188..200
+    selector: `[foo=\"]`
+  Rule@201..213
+    selector: `[foo=\{]`
+  Rule@214..226
+    selector: `[foo=\(]`
+  Rule@227..257
+    selector: `[foo=yes\:\(it\'s\ work\)]`
+  Rule@259..269
+    selector: `\@noat`
+  Rule@271..293
+    selector: `h1\\`
+    Declaration@281..291
+      prop: `color`
+      value: `\\`
+  Rule@295..307
+    selector: `[attr=;]`
+  Rule@309..336
+    selector: `.prop`
+    Declaration@321..334
+      prop: `\62 olor`
+      value: `red`

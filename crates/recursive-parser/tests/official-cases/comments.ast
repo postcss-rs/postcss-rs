@@ -1,0 +1,14 @@
+Root@0..185
+  Rule@36..139
+    selector: `div`
+    Declaration@63..76
+      prop: `color`
+      value: `black`
+    Declaration@99..123
+      prop: `border-radius`
+      value: `3px / 7px`
+  Rule@149..184
+    selector: `a`
+    Declaration@157..170
+      prop: `color`
+      value: `black`

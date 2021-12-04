@@ -1,0 +1,4 @@
+Root@0..18
+  AtRule@0..17
+    name: `import`
+    params: `"test.css"`

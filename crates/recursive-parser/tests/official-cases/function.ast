@@ -1,0 +1,12 @@
+Root@0..207
+  Rule@0..206
+    selector: `a`
+    Declaration@8..110
+      prop: `background-image`
+      value: `url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7)`
+    Declaration@115..156
+      prop: `background-image`
+      value: `url("./image (1).jpg")`
+    Declaration@161..204
+      prop: `background-image`
+      value: `url( './image (1).jpg' )`

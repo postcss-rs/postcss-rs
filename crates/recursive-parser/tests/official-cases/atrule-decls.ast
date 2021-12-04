@@ -1,0 +1,31 @@
+Root@0..201
+  AtRule@0..37
+    name: `page`
+    params: `:left`
+    Declaration@18..35
+      prop: `background`
+      value: `black`
+  AtRule@39..85
+    name: `media`
+    params: `(min-width: 0)`
+    Declaration@66..83
+      prop: `background`
+      value: `white`
+  AtRule@87..130
+    name: `font-face`
+    params: ``
+    Declaration@104..128
+      prop: `family-name`
+      value: `"A;' /**/"`
+  AtRule@132..163
+    name: `viewport`
+    params: ``
+    Declaration@148..161
+      prop: `width`
+      value: `110px`
+  AtRule@165..200
+    name: `-ms-viewport`
+    params: ``
+    Declaration@185..198
+      prop: `width`
+      value: `100px`
