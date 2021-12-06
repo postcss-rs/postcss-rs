@@ -1,0 +1,4 @@
+Root@0..70
+  AtRule@0..69
+    name: `-moz-document`
+    params: `url("example.com/{")`

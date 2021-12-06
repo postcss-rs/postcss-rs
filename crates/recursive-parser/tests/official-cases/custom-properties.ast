@@ -1,0 +1,59 @@
+Root@0..486
+  Rule@0..471
+    selector: `:root`
+    Declaration@10..20
+      prop: `--empty`
+      value: ` `
+    Declaration@23..35
+      prop: `--number`
+      value: `1`
+    Declaration@38..52
+      prop: `--unit`
+      value: `100vw`
+    Declaration@55..69
+      prop: `--color`
+      value: `#06c`
+    Declaration@73..97
+      prop: `--function`
+      value: `calc(1 + 1)`
+    Declaration@100..124
+      prop: `--variable`
+      value: `var(--unit)`
+    Declaration@128..161
+      prop: `--string`
+      value: `'single quoted string'`
+    Declaration@164..197
+      prop: `--string`
+      value: `"double quoted string"`
+    Declaration@201..227
+      prop: `--square-block`
+      value: `[1, 2, 3]`
+    Declaration@230..255
+      prop: `--round-block`
+      value: `(1, 2, 3)`
+    Declaration@259..269
+      prop: `--empty`
+      value: ` `
+    Declaration@272..287
+      prop: `--empty2`
+      value: ` /**/`
+    Declaration@290..311
+      prop: `--empty3`
+      value: ` !important`
+    Declaration@314..339
+      prop: `--empty4`
+      value: `/**/ !important`
+    Declaration@343..370
+      prop: `--bracket-block`
+      value: `{1, 2, 3}`
+    Declaration@373..415
+      prop: `--JSON`
+      value: `[1, "2", {"three": {"a":1}}, [4]]`
+    Declaration@418..469
+      prop: `--javascript`
+      value: `function(rule) { console.log(rule) }`
+  Rule@473..485
+    selector: `:root`
+    Declaration@479..484
+      prop: `--a`
+      value: `1`

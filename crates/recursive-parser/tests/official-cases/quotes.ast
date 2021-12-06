@@ -1,0 +1,9 @@
+Root@0..63
+  Rule@0..62
+    selector: `a::before`
+    Declaration@16..38
+      prop: `content`
+      value: `";'@ /**/\""`
+    Declaration@43..60
+      prop: `content`
+      value: `'\'"\\'`

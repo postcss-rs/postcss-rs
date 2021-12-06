@@ -1,0 +1,6 @@
+Root@0..27
+  Rule@0..26
+    selector: `a`
+    Declaration@4..24
+      prop: `color`
+      value: `a/* ; */ b`

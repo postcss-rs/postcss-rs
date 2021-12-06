@@ -1,0 +1,6 @@
+Root@0..34
+  Rule@0..33
+    selector: `a`
+    Declaration@10..23
+      prop: `color`
+      value: `black`

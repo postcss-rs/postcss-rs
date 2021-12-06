@@ -1,0 +1,4 @@
+Root@0..9
+  AtRule@0..8
+    name: `page`
+    params: ``

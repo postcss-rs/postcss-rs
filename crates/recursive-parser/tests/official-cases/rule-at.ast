@@ -1,0 +1,15 @@
+Root@0..94
+  Rule@0..93
+    selector: `a`
+    Declaration@8..20
+      prop: `width`
+      value: `10px`
+    Declaration@25..42
+      prop: `margin`
+      value: `0 @width`
+    AtRule@47..91
+      name: `mixin`
+      params: `mobile`
+      Declaration@71..85
+        prop: `height`
+        value: `100px`

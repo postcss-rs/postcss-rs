@@ -1,0 +1,3 @@
+Root@0..3
+  Rule@0..2
+    selector: ``

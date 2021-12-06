@@ -1,0 +1,65 @@
+Root@0..508
+  AtRule@0..105
+    name: `supports`
+    params: `(--element(".minwidth", { "minWidth": 300 }))`
+    Rule@60..103
+      selector: `[--self]`
+      Declaration@75..99
+        prop: `background`
+        value: `greenyellow`
+  AtRule@107..162
+    name: `supports`
+    params: `({"example": 1})`
+    Rule@138..160
+      selector: `*`
+      Declaration@142..158
+        prop: `background`
+        value: `red`
+  AtRule@164..219
+    name: `supports`
+    params: `(("example": 1))`
+    Rule@195..217
+      selector: `*`
+      Declaration@199..215
+        prop: `background`
+        value: `red`
+  AtRule@221..280
+    name: `supports`
+    params: `(func("example": 1))`
+    Rule@256..278
+      selector: `*`
+      Declaration@260..276
+        prop: `background`
+        value: `red`
+  AtRule@282..328
+    name: `supports`
+    params: `(--var)`
+    Rule@304..326
+      selector: `*`
+      Declaration@308..324
+        prop: `background`
+        value: `red`
+  AtRule@330..373
+    name: `supports`
+    params: `([])`
+    Rule@349..371
+      selector: `*`
+      Declaration@353..369
+        prop: `background`
+        value: `red`
+  AtRule@375..428
+    name: `supports`
+    params: `([color: red])`
+    Rule@404..426
+      selector: `*`
+      Declaration@408..424
+        prop: `background`
+        value: `red`
+  AtRule@430..507
+    name: `supports`
+    params: `([[[[[{ --func(color: { red }) }]]]]])`
+    Rule@483..505
+      selector: `*`
+      Declaration@487..503
+        prop: `background`
+        value: `red`

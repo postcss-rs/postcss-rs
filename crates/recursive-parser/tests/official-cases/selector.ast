@@ -1,0 +1,5 @@
+Root@0..34
+  Rule@1..16
+    selector: `a/* { } */ b`
+  Rule@18..33
+    selector: `a/* test */b`

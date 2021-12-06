@@ -1,0 +1,15 @@
+Root@0..97
+  Rule@0..96
+    selector: `a`
+    Declaration@8..23
+      prop: `color`
+      value: `black`
+    Declaration@28..47
+      prop: `background`
+      value: `white`
+    Declaration@52..71
+      prop: `font-size`
+      value: `big`
+    Declaration@76..94
+      prop: `$(var)-size`
+      value: `100%`

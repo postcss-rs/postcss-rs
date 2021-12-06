@@ -1,0 +1,6 @@
+Root@0..125
+  Rule@0..124
+    selector: `a`
+    Declaration@8..122
+      prop: `filter`
+      value: `progid:DXImageTransform.Microsoft.Blur(pixelradius=2) progid:DXImageTransform.Microsoft.Wheel(duration=3)`

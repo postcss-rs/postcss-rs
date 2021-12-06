@@ -1,0 +1,17 @@
+Root@0..171
+  AtRule@0..170
+    name: `supports`
+    params: `(animation-name: test)`
+    AtRule@39..168
+      name: `-custom-keyframe`
+      params: `anim`
+      Rule@72..114
+        selector: `from`
+        Declaration@91..104
+          prop: `color`
+          value: `black`
+      Rule@123..162
+        selector: `to`
+        Declaration@140..152
+          prop: `color`
+          value: `white`

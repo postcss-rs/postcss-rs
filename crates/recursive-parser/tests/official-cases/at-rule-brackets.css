@@ -1,0 +1,33 @@
+@supports (--element(".minwidth", { "minWidth": 300 })) {
+  [--self] {
+    background: greenyellow;
+  }
+}
+
+@supports ({"example": 1}) {
+  * { background: red; }
+}
+
+@supports (("example": 1)) {
+  * { background: red; }
+}
+
+@supports (func("example": 1)) {
+  * { background: red; }
+}
+
+@supports (--var) {
+  * { background: red; }
+}
+
+@supports ([]) {
+  * { background: red; }
+}
+
+@supports ([color: red]) {
+  * { background: red; }
+}
+
+@supports ([[[[[{ --func(color: { red }) }]]]]]) {
+  * { background: red; }
+}

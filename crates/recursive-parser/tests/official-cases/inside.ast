@@ -1,0 +1,6 @@
+Root@0..22
+  Rule@0..21
+    selector: `a`
+    AtRule@4..19
+      name: `import`
+      params: `"a.css"`
