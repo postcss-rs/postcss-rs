@@ -1,7 +1,7 @@
+use std::env::current_exe;
 use std::fs::read_to_string;
 use std::time::Instant;
 use tokenizer::Tokenizer;
-use std::env::current_exe;
 
 fn main() {
   let file_list = [
