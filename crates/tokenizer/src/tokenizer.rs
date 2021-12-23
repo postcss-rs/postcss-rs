@@ -331,7 +331,7 @@ impl<'a> Tokenizer<'a> {
       rope
     } else {
       self.rope = Some(ropey::Rope::from_str(self.css));
-      &self.rope.as_ref().unwrap()
+      self.rope.as_ref().unwrap()
     };
     let column = rope.byte_to_char(offset);
     let line = rope.byte_to_line(offset);
