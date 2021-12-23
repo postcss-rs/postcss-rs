@@ -1,6 +1,8 @@
+use std::env::current_exe;
 use std::fs::read_to_string;
 use std::time::Instant;
 use tokenizer::Tokenizer;
+
 fn main() {
   let file_list = [
     // ("tailwind-components.css", "2.8K"),
@@ -11,8 +13,10 @@ fn main() {
     // ("tailwind-dark.css", "5.8M"),
   ];
 
+  let assets_path = get_assets_path();
+
   for (file, size) in file_list {
-    let css: String = read_to_string(format!("../../assets/{}", file)).unwrap();
+    let css: String = read_to_string(format!("{}/{}", assets_path, file)).unwrap();
     let mut vec = Vec::default();
     let start = Instant::now();
     let processor = Tokenizer::new(&css, false);
@@ -22,4 +26,10 @@ fn main() {
     let end = start.elapsed();
     println!("rust: tokenizer/{}({}): {:?}", file, size, end);
   }
+}
+
+fn get_assets_path() -> String {
+  let mut path = current_exe().unwrap();
+  path.push("../../../assets");
+  path.canonicalize().unwrap().to_str().unwrap().to_string()
 }
