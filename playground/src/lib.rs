@@ -1,7 +1,7 @@
 mod utils;
 
+use recursive_parser::{AstPrinter, WrapString};
 use wasm_bindgen::prelude::*;
-
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.
 #[cfg(feature = "wee_alloc")]
@@ -9,11 +9,16 @@ use wasm_bindgen::prelude::*;
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 #[wasm_bindgen]
-extern {
-    fn alert(s: &str);
-}
+pub fn ast(source: String) -> String {
+  let parser = recursive_parser::parser::Parser::new(&source);
 
-#[wasm_bindgen]
-pub fn greet() {
-    alert("Hello, playground!");
+  match parser.parse() {
+    Ok(root) => {
+      let mut printer = AstPrinter::new(0, WrapString::default());
+      printer.print(&root).unwrap();
+      let ast = printer.result().0;
+      return ast;
+    }
+    Err(_) => return "".to_string(),
+  };
 }
