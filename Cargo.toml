@@ -1,5 +1,5 @@
 [workspace]
-members = ["crates/*"]
+members = ["crates/*", "playground"]
 
 # NB: the `bench` and `release` profiles must remain EXACTLY the same.
 [profile.release]

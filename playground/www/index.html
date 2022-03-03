@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>Hello wasm-pack!</title>
+  <style>
+    .ͼ1 {
+      height: 100%;
+    }
+    .cm-focused {
+      outline: none;
+    }
+    #control-container {
+      width: 50%;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .ast-node {
+      list-style: none;
+      padding-left: 20px;
+      margin-top: 0;
+    }
+
+    .ast-node.highlight {
+      background: #eee;
+    }
+
+    .ast-child {
+      list-style: none;
+    }
+  </style>
+</head>
+
+<body>
+  <noscript>This page contains webassembly and javascript content, please enable
+    javascript in your browser.</noscript>
+  <div class="container" style="display: flex; height: calc(100vh - 40px)">
+    <div id="editor" style="width: 50%" ></div>
+    <div id="interactive-ast" style="display: flex; width: 50%; height: 100%; overflow-y: scroll;padding-left:5px"></div>
+    <!-- <textarea id="result" readonly style="width: 50%; height: 100%" rows="30"></textarea> -->
+  </div>
+  <script src="./index.js" type="module"></script>
+</body>
+
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "www",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@codemirror/next": "^0.16.0",
+    "postcss-rs-wasm": "file://../pkg"
+  },
+  "devDependencies": {
+    "vite": "^2.8.6"
+  }
+}
