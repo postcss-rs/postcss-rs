@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@codemirror/next": "^0.16.0",
     "postcss-rs-wasm": "file://../pkg"
   },
   "devDependencies": {
