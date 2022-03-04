@@ -3,7 +3,11 @@ mod utils;
 
 use std::io::Write;
 
-use recursive_parser::{AstPrinter, WrapString, parser::{Declaration, AtRule, Rule, Root, RuleOrAtRuleOrDecl}, visitor::VisitMut};
+use recursive_parser::{
+  parser::{AtRule, Declaration, Root, Rule, RuleOrAtRuleOrDecl},
+  visitor::VisitMut,
+  AstPrinter, WrapString,
+};
 use wasm_bindgen::prelude::*;
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.
