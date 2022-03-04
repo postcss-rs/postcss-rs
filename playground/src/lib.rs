@@ -1,7 +1,9 @@
-#![allow(clippy::unused_unit)]
+#![allow(clippy::unused_unit, clippy::unused_io_amount)]
 mod utils;
 
-use recursive_parser::{AstPrinter, WrapString};
+use std::io::Write;
+
+use recursive_parser::{AstPrinter, WrapString, parser::{Declaration, AtRule, Rule, Root, RuleOrAtRuleOrDecl}, visitor::VisitMut};
 use wasm_bindgen::prelude::*;
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.
