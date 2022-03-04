@@ -14,6 +14,9 @@ const code = `
 (async () => {
   const interactiveAst = document.getElementById("interactive-ast");
   const output = document.getElementById("output");
+  const minimize = document.getElementById("minimize");
+  const px2rem = document.getElementById("px2rem");
+
   await init();
   const languageTag = Symbol("language");
 
@@ -31,12 +34,22 @@ const code = `
     dispatch: t => {
       editor.update([t]);
       let sourceCode = editor.state.doc.text.join("\n");
-      output.innerHTML = gen(sourceCode);
+      output.innerHTML = `<pre>${gen(sourceCode, minimize.checked, px2rem.checked)}</pre>`;
       interactiveAst.innerHTML = `<pre>${ast(sourceCode)}</pre>`;
     },
   });
 
   let sourceCode = editor.state.doc.text.join("\n");
+  output.innerHTML = `<pre>${gen(sourceCode, minimize.checked, px2rem.checked)}</pre>`;
   interactiveAst.innerHTML = `<pre>${ast(sourceCode)}</pre>`;
-  output.innerHTML = gen(sourceCode);
+
+  minimize.addEventListener("change", e => {
+    let sourceCode = editor.state.doc.text.join("\n");
+    output.innerHTML = `<pre>${gen(sourceCode, minimize.checked, px2rem.checked)}</pre>`;
+  });
+
+  px2rem.addEventListener("change", e => {
+    let sourceCode = editor.state.doc.text.join("\n");
+    output.innerHTML = `<pre>${gen(sourceCode, minimize.checked, px2rem.checked)}</pre>`;
+  });
 })();
