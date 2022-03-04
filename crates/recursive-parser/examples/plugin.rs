@@ -11,17 +11,18 @@ fn main() {
         .test { width: 100px; height: 200px;}
     }
 }";
-  let bootstrap = include_str!("../../../assets/bootstrap.css");
+  let bootstrap = include_str!("../../../assets/bootstrap-reboot.css");
   let mut start = Instant::now();
   let mut root = Parser::new(bootstrap).parse().unwrap();
   println!("parse {:?}", start.elapsed());
-  start = Instant::now();
-  ReverseProp::default().visit_root(&mut root);
-  println!("reverse {:?}", start.elapsed());
+  // start = Instant::now();
+  // ReverseProp::default().visit_root(&mut root);
+  // println!("reverse {:?}", start.elapsed());
   let start = Instant::now();
   let mut printer = SimplePrettier::new(Vec::with_capacity(bootstrap.len()));
   printer.visit_root(&mut root).unwrap();
   println!("stringify {:?}", start.elapsed());
+  println!("{}", String::from_utf8(printer.writer).unwrap());
 }
 
 #[derive(Default)]
@@ -80,7 +81,7 @@ impl<'a, W: std::io::Write> VisitMut<'a, std::io::Result<()>> for SimplePrettier
   fn visit_at_rule(&mut self, at_rule: &mut AtRule<'a>) -> std::io::Result<()> {
     write!(
       self.writer,
-      "{}{} {} {}\n",
+      "{}@{} {} {}\n",
       " ".repeat(self.level * 2),
       at_rule.name,
       at_rule.params,
@@ -107,7 +108,7 @@ impl<'a, W: std::io::Write> VisitMut<'a, std::io::Result<()>> for SimplePrettier
   fn visit_declaration(&mut self, decl: &mut Declaration<'a>) -> std::io::Result<()> {
     write!(
       self.writer,
-      "{}{} : {};",
+      "{}{} : {};\n",
       " ".repeat(self.level * 2),
       decl.prop,
       decl.value
