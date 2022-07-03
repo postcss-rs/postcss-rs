@@ -1,6 +1,7 @@
 // use mimalloc_rust::*;
 use recursive_parser::{parser::*, visitor::VisitMut};
-use std::{borrow::Cow, io::Write, time::Instant};
+use std::fmt::Write;
+use std::{borrow::Cow, time::Instant};
 
 // #[global_allocator]
 // static GLOBAL_MIMALLOC: GlobalMiMalloc = GlobalMiMalloc;
@@ -12,17 +13,17 @@ fn main() {
     }
 }";
   let bootstrap = include_str!("../../../assets/bootstrap-reboot.css");
-  let mut start = Instant::now();
+  let start = Instant::now();
   let mut root = Parser::new(bootstrap).parse().unwrap();
   println!("parse {:?}", start.elapsed());
   // start = Instant::now();
   // ReverseProp::default().visit_root(&mut root);
   // println!("reverse {:?}", start.elapsed());
   let start = Instant::now();
-  let mut printer = SimplePrettier::new(Vec::with_capacity(bootstrap.len()));
+  let mut printer = SimplePrettier::new(String::with_capacity(bootstrap.len()));
   printer.visit_root(&mut root).unwrap();
   println!("stringify {:?}", start.elapsed());
-  println!("{}", String::from_utf8(printer.writer).unwrap());
+  println!("{}", printer.writer);
 }
 
 #[derive(Default)]
@@ -37,8 +38,8 @@ impl<W: Write> SimplePrettier<W> {
   }
 }
 
-impl<'a, W: std::io::Write> VisitMut<'a, std::io::Result<()>> for SimplePrettier<W> {
-  fn visit_root(&mut self, root: &mut Root<'a>) -> std::io::Result<()> {
+impl<'a, W: Write> VisitMut<'a, std::fmt::Result> for SimplePrettier<W> {
+  fn visit_root(&mut self, root: &mut Root<'a>) -> std::fmt::Result {
     for child in root.children.iter_mut() {
       match child {
         RuleOrAtRuleOrDecl::Rule(rule) => {
@@ -55,10 +56,13 @@ impl<'a, W: std::io::Write> VisitMut<'a, std::io::Result<()>> for SimplePrettier
     Ok(())
   }
 
-  fn visit_rule(&mut self, rule: &mut Rule<'a>) -> std::io::Result<()> {
-    self
-      .writer
-      .write(format!("{}{} {}\n", " ".repeat(self.level * 2), rule.selector, "{").as_bytes())?;
+  fn visit_rule(&mut self, rule: &mut Rule<'a>) -> std::fmt::Result {
+    writeln!(
+      self.writer,
+      "{}{} {{",
+      " ".repeat(self.level * 2),
+      rule.selector,
+    )?;
     self.level += 1;
     for child in rule.children.iter_mut() {
       match child {
@@ -74,18 +78,17 @@ impl<'a, W: std::io::Write> VisitMut<'a, std::io::Result<()>> for SimplePrettier
       }
     }
     self.level -= 1;
-    write!(self.writer, "{}{}\n", " ".repeat(self.level * 2), "}")?;
+    writeln!(self.writer, "{}}}", " ".repeat(self.level * 2),)?;
     Ok(())
   }
 
-  fn visit_at_rule(&mut self, at_rule: &mut AtRule<'a>) -> std::io::Result<()> {
-    write!(
+  fn visit_at_rule(&mut self, at_rule: &mut AtRule<'a>) -> std::fmt::Result {
+    writeln!(
       self.writer,
-      "{}@{} {} {}\n",
+      "{}@{} {} {{",
       " ".repeat(self.level * 2),
       at_rule.name,
       at_rule.params,
-      "{"
     )?;
     self.level += 1;
     for child in at_rule.children.iter_mut() {
@@ -102,13 +105,13 @@ impl<'a, W: std::io::Write> VisitMut<'a, std::io::Result<()>> for SimplePrettier
       }
     }
     self.level -= 1;
-    write!(self.writer, "{}{}\n", " ".repeat(self.level * 2), "}")
+    writeln!(self.writer, "{}}}", " ".repeat(self.level * 2))
   }
 
-  fn visit_declaration(&mut self, decl: &mut Declaration<'a>) -> std::io::Result<()> {
-    write!(
+  fn visit_declaration(&mut self, decl: &mut Declaration<'a>) -> std::fmt::Result {
+    writeln!(
       self.writer,
-      "{}{} : {};\n",
+      "{}{} : {};",
       " ".repeat(self.level * 2),
       decl.prop,
       decl.value

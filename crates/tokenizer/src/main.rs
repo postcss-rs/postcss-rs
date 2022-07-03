@@ -1,7 +1,7 @@
-use std::env::current_exe;
-use std::fs::read_to_string;
+// use std::env::current_exe;
+// use std::fs::read_to_string;
 use std::time::Instant;
-use tokenizer::{tokenize, Tokenizer};
+use tokenizer::tokenize;
 
 fn main() {
   let source = include_str!("../../../assets/bootstrap.css");

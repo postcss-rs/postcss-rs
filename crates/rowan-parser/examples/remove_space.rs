@@ -9,7 +9,7 @@ static GLOBAL_MIMALLOC: GlobalMiMalloc = GlobalMiMalloc;
 fn main() {
   let css = "#id { font-size: 12px; }";
   let root = Parser::new(css).parse();
-  let root_mut = root.clone_for_update().clone();
+  let root_mut = root.clone_for_update();
   remove_space_mut(&root_mut);
   let mut output = String::with_capacity(0);
   remove_space(&root, &mut output, css);
@@ -47,7 +47,7 @@ fn remove_space_mut(node: &SyntaxNode) {
     if child.kind() == SyntaxKind::Space {
       child.detach();
     }
-    child.as_node().map(|n| remove_space_mut(n));
+    child.as_node().map(remove_space_mut);
   }
 }
 

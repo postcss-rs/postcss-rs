@@ -4,7 +4,7 @@ use rowan_parser::{parser, syntax::SyntaxNode};
 const SMALL_CSS_FILE: &str = include_str!("../../../assets/bootstrap-reboot.css");
 const LARGE_CSS_FILE: &str = include_str!("../../../assets/bootstrap.css");
 
-fn parse<'a>(css: &'a str) -> SyntaxNode {
+fn parse(css: &str) -> SyntaxNode {
   let parser = parser::Parser::new(css);
   parser.parse()
 }

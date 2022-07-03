@@ -381,7 +381,7 @@ fn sub_str(s: &str, start: usize, end: usize) -> &str {
 
 #[inline]
 fn char_code_at(s: &str, n: usize) -> char {
-  s.bytes().nth(n).unwrap_or(b'\0') as char
+  *s.as_bytes().get(n).unwrap_or(&b'\0') as char
   // s[n..].bytes().next().unwrap_or(b'\0') as char
   // if n >= s.len() {
   //   '\0'
@@ -439,10 +439,8 @@ fn index_of_word_end(s: &str) -> usize {
     match INDEX_OF_WORD_END[ch as usize] {
       1 => return i,
       2 => {
-        if s.bytes().skip(i + 1).next() == Some(b'*') {
+        if s.as_bytes().get(i + 1) == Some(&b'*') {
           return i;
-        } else {
-          // i += 1;
         }
       }
       _ => continue,

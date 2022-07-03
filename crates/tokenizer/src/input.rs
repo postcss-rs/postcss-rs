@@ -28,7 +28,7 @@ impl fmt::Display for FilePosition {
 }
 
 static DEFAULT_INPUT: Lazy<Input> = Lazy::new(Input::default);
-#[derive(Debug, PartialEq, Clone, Default)]
+#[derive(Debug, PartialEq, Eq, Clone, Default)]
 pub struct Input<'a> {
   pub css: &'a str,
   // map: PreviousMap,

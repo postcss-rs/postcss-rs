@@ -26,7 +26,7 @@ mod test_ast {
       dbg!(&file_name);
       let expected_ast_path = format!(
         "./tests/fixtures/{}.ast",
-        file_name.rsplit_once(".").unwrap().0
+        file_name.rsplit_once('.').unwrap().0
       );
       let expected_ast = read_to_string(expected_ast_path)?;
       let parser = Parser::new(&file);
@@ -79,7 +79,7 @@ mod test_ast {
       let file = read_to_string(format!("./tests/official-cases/{}", file_name))?;
       let expected_ast_path = format!(
         "./tests/official-cases/{}.ast",
-        file_name.rsplit_once(".").unwrap().0
+        file_name.rsplit_once('.').unwrap().0
       );
       let expected_ast = read_to_string(expected_ast_path)?;
       let parser = Parser::new(&file);
