@@ -40,6 +40,16 @@ const INDEX_OF_WORD_END: [usize; 255] = [
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 ];
+const INDEX_OF_AT_END: [usize; 255] = [
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+];
 static FINDER_END_OF_COMMENT: Lazy<Finder<'static>> = Lazy::new(|| Finder::new("*/"));
 
 #[derive(Debug, Clone, Eq, PartialEq, Copy)]
@@ -382,12 +392,6 @@ fn sub_str(s: &str, start: usize, end: usize) -> &str {
 #[inline]
 fn char_code_at(s: &str, n: usize) -> char {
   *s.as_bytes().get(n).unwrap_or(&b'\0') as char
-  // s[n..].bytes().next().unwrap_or(b'\0') as char
-  // if n >= s.len() {
-  //   '\0'
-  // } else {
-  //   // SAFETY: We know that n should less than `s.len()`
-  // }
 }
 
 #[inline]
@@ -414,27 +418,19 @@ fn is_bad_bracket(s: &str) -> bool {
   false
 }
 
-// #[inline]
+#[inline]
 fn index_of_at_end(s: &str) -> usize {
   for (i, ch) in s.bytes().enumerate() {
-    match ch {
-      // '\u{c}' |
-      b'\t' | b'\n' | b'\r' | b' ' | b'"' | b'#' | b'\'' | b'(' | b')' | b'/' | b';' | b'['
-      | b'\\' | b']' | b'{' | b'}' => {
-        return i;
-      }
-      _ => {}
+    if let 1 = INDEX_OF_AT_END[ch as usize] {
+      return i;
     };
   }
 
   s.len()
 }
 
-// #[inline]
+#[inline]
 fn index_of_word_end(s: &str) -> usize {
-  // let bytes = s.as_bytes();
-  // let mut i = 0;
-  // let len = bytes.len();
   for (i, ch) in s.bytes().enumerate() {
     match INDEX_OF_WORD_END[ch as usize] {
       1 => return i,
@@ -445,26 +441,7 @@ fn index_of_word_end(s: &str) -> usize {
       }
       _ => continue,
     }
-    // if result == 1 {
-    //   return i;
-    // } else if result == 2 {
-    // }
-    // match ch {
-    //   '\t' | '\n' | '\u{c}' | '\r' | ' ' | '!' | '"' | '#' | '\'' | '(' | ')' | ':' | ';' | '@'
-    //   | '[' | '\\' | ']' | '{' | '}' => {
-    //     return i;
-    //   }
-    //   '/' => {
-    //     if s.bytes().skip(i + 1).next() == Some(b'*') {
-    //       return i;
-    //     } else {
-    //       // i += 1;
-    //     }
-    //   }
-    //   _ => {}
-    // };
   }
-  // while i < len {}
   s.len()
 }
 
@@ -491,7 +468,7 @@ mod test {
     let s = "0123456789abc";
     assert_eq!(char_code_at(s, 0), '0');
     assert_eq!(char_code_at(s, 1), '1');
-    // assert_eq!(char_code_at(s, 100), '\0');
+    assert_eq!(char_code_at(s, 100), '\0');
   }
 
   #[test]
@@ -503,19 +480,3 @@ mod test {
     assert_eq!(sub_str(s, 10, 100), "abc");
   }
 }
-
-// #[inline]
-// fn index_of_at_end(s: &str) -> usize {
-//   for (i, ch) in s.bytes().enumerate() {
-//     match ch {
-//       // '\u{c}' |
-//       b'\t' | b'\n' | b'\r' | b' ' | b'"' | b'#' | b'\'' | b'(' | b')' | b'/' | b';' | b'['
-//       | b'\\' | b']' | b'{' | b'}' => {
-//         return i;
-//       }
-//       _ => {}
-//     };
-//   }
-
-//   s.len()
-// }

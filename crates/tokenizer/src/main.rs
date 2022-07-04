@@ -2,7 +2,6 @@
 // use std::fs::read_to_string;
 use std::time::Instant;
 use tokenizer::tokenize;
-
 fn main() {
   let source = include_str!("../../../assets/bootstrap.css");
   let start = Instant::now();
@@ -11,12 +10,12 @@ fn main() {
   }
   println!("{:?}", start.elapsed());
   // let vec = vec![
+  //   b'\t', b'\n', b'\r', b' ', b'"', b'#', b'\'', b'(', b')', b'/', b';', b'[', b'\\', b']', b'{',
+  //   b'}',
+  // ];
   //   '\t', '\n', '\u{c}', '\r', ' ', '!', '"', '#', '\'', '(', ')', ':', ';', '@', '[', '\\', ']',
   //   '{', '}', '/',
   // ];
-  // for c in vec {
-  //   println!("{}", c as u32);
-  // }
   // let file_list = [
   //   // ("tailwind-components.css", "2.8K"),
   //   // ("bootstrap-reboot.css", "7.4K"),
