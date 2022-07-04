@@ -4,7 +4,7 @@ use recursive_parser::parser::{Parser, Root};
 const SMALL_CSS_FILE: &str = include_str!("../../../assets/bootstrap-reboot.css");
 const LARGE_CSS_FILE: &str = include_str!("../../../assets/bootstrap.css");
 
-fn parse<'a>(css: &'a str) -> Root {
+fn parse(css: &str) -> Root {
   let parser = Parser::new(css);
   parser.parse().unwrap()
 }

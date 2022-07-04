@@ -30,6 +30,26 @@ const AT: char = '@';
 
 const MAX_BUFFER: usize = 102400;
 
+const INDEX_OF_WORD_END: [usize; 255] = [
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0,
+  1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+];
+const INDEX_OF_AT_END: [usize; 255] = [
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+];
 static FINDER_END_OF_COMMENT: Lazy<Finder<'static>> = Lazy::new(|| Finder::new("*/"));
 
 #[derive(Debug, Clone, Eq, PartialEq, Copy)]
@@ -261,9 +281,13 @@ impl<'a> Tokenizer<'a> {
         self.pos.replace(next + 1);
       }
       AT => {
-        let next = index_of_at_end(self.css, self.position() + 1) - 1;
-        current_token = Token(TokenType::AtWord, self.position(), next + 1);
-        self.pos.replace(next + 1);
+        let next = index_of_at_end(&self.css[self.position() + 1..]);
+        current_token = Token(
+          TokenType::AtWord,
+          self.position(),
+          next + self.position() + 1,
+        );
+        self.pos.replace(next + self.position() + 1);
       }
       BACKSLASH => {
         let mut next = self.position();
@@ -311,11 +335,12 @@ impl<'a> Tokenizer<'a> {
             current_token = Token(TokenType::Comment, self.position(), next + 1);
             next
           } else {
-            let next = index_of_word_end(self.css, self.position() + 1) - 1;
-            let content = sub_str(self.css, self.position(), next + 1);
-            current_token = Token::new(TokenType::Word, self.position(), next + 1);
+            let position = self.position();
+            let next = index_of_word_end(&self.css[position + 1..]);
+            let content = sub_str(self.css, self.position(), next + position + 1);
+            current_token = Token::new(TokenType::Word, self.position(), next + position + 1);
             self.push(content);
-            next
+            next + position
           },
         );
         self.pos_plus_one();
@@ -366,11 +391,7 @@ fn sub_str(s: &str, start: usize, end: usize) -> &str {
 
 #[inline]
 fn char_code_at(s: &str, n: usize) -> char {
-  if n >= s.len() {
-    '\0'
-  } else {
-    s.as_bytes()[n] as char
-  }
+  *s.as_bytes().get(n).unwrap_or(&b'\0') as char
 }
 
 #[inline]
@@ -398,47 +419,30 @@ fn is_bad_bracket(s: &str) -> bool {
 }
 
 #[inline]
-fn index_of_at_end(s: &str, start: usize) -> usize {
-  let bytes = s.as_bytes();
-  let mut i = start;
-  let len = bytes.len();
-
-  while i < len {
-    match bytes[i] as char {
-      '\t' | '\n' | '\u{c}' | '\r' | ' ' | '"' | '#' | '\'' | '(' | ')' | '/' | ';' | '['
-      | '\\' | ']' | '{' | '}' => {
-        return i;
-      }
-      _ => i += 1,
+fn index_of_at_end(s: &str) -> usize {
+  for (i, ch) in s.bytes().enumerate() {
+    if let 1 = INDEX_OF_AT_END[ch as usize] {
+      return i;
     };
   }
 
-  i
+  s.len()
 }
 
 #[inline]
-fn index_of_word_end(s: &str, start: usize) -> usize {
-  let bytes = s.as_bytes();
-  let mut i = start;
-  let len = bytes.len();
-
-  while i < len {
-    match bytes[i] as char {
-      '\t' | '\n' | '\u{c}' | '\r' | ' ' | '!' | '"' | '#' | '\'' | '(' | ')' | ':' | ';' | '@'
-      | '[' | '\\' | ']' | '{' | '}' => {
-        return i;
-      }
-      '/' => {
-        if bytes[i + 1] as char == '*' {
+fn index_of_word_end(s: &str) -> usize {
+  for (i, ch) in s.bytes().enumerate() {
+    match INDEX_OF_WORD_END[ch as usize] {
+      1 => return i,
+      2 => {
+        if s.as_bytes().get(i + 1) == Some(&b'*') {
           return i;
-        } else {
-          i += 1;
         }
       }
-      _ => i += 1,
-    };
+      _ => continue,
+    }
   }
-  i
+  s.len()
 }
 
 /// SAFETY: YOU SHOULD NEVER CALL THIS FUNCTION WITH THE PARAM OTHER THAN THESE BELOW.
