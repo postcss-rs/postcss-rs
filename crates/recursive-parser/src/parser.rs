@@ -1,8 +1,6 @@
 use crate::error::{PostcssError, Result};
-use crate::syntax::Lexer;
 use std::borrow::Cow;
-use std::iter::Peekable;
-use tokenizer::{Token, TokenType};
+use tokenizer::{tokenize, Token, TokenType};
 
 pub struct Root<'a> {
   pub children: Vec<RuleOrAtRuleOrDecl<'a>>,
@@ -44,17 +42,19 @@ pub struct AtRule<'a> {
 }
 
 pub struct Parser<'a> {
-  lexer: Peekable<Lexer<'a>>,
+  lexer: Vec<Token>,
   source: &'a str,
   pos: usize,
+  cursor: usize,
 }
 
 impl<'a> Parser<'a> {
   pub fn new(input: &'a str) -> Self {
     Self {
-      lexer: Lexer::new(input).peekable(),
+      lexer: tokenize(input),
       source: input,
       pos: 0,
+      cursor: 0,
     }
   }
 
@@ -274,13 +274,43 @@ impl<'a> Parser<'a> {
             break;
           }
           _ => {
-            if rule {
-              // println!("parse rule -->");
-              ret.push(RuleOrAtRuleOrDecl::Rule(self.parse_rule()?));
+            let mut checkpoint = self.cursor;
+            let first_token = self.lexer[checkpoint];
+            if matches!(first_token.0, Word)
+              || potential_id_token(
+                self.source[first_token.1..first_token.1 + 1]
+                  .chars()
+                  .next()
+                  .unwrap(),
+              )
+            {
+              checkpoint += 1;
+              while checkpoint < self.lexer.len()
+                && matches!(self.lexer[checkpoint].0, Comment | Space)
+              {
+                checkpoint += 1;
+              }
+              let second_token = if checkpoint < self.lexer.len() {
+                self.lexer[checkpoint]
+              } else {
+                panic!("expected token found <EOF>");
+              };
+              match second_token.0 {
+                Colon => ret.push(RuleOrAtRuleOrDecl::Declaration(self.parse_declaration()?)),
+                _ => {
+                  ret.push(RuleOrAtRuleOrDecl::Rule(self.parse_rule()?));
+                }
+              }
             } else {
-              // println!("parse declaration");
-              ret.push(RuleOrAtRuleOrDecl::Declaration(self.parse_declaration()?));
+              ret.push(RuleOrAtRuleOrDecl::Rule(self.parse_rule()?));
             }
+            // if rule {
+            //   // println!("parse rule -->");
+            //   ret.push(RuleOrAtRuleOrDecl::Rule(self.parse_rule()?));
+            // } else {
+            //   // println!("parse declaration");
+            //   ret.push(RuleOrAtRuleOrDecl::Declaration(self.parse_declaration()?));
+            // }
           }
         },
         None => {
@@ -303,7 +333,7 @@ impl<'a> Parser<'a> {
         return Err(PostcssError::ParseError(
           format!("expected token word, found `{}`", other),
           self.pos,
-          self.lexer.peek().unwrap().2,
+          self.lexer[self.cursor].2,
         ));
       }
       None => {
@@ -325,7 +355,8 @@ impl<'a> Parser<'a> {
         return Err(PostcssError::ParseError(
           format!("expected `:`, found `{}`", other),
           self.pos,
-          self.lexer.peek().unwrap().2,
+          self.lexer[self.cursor].2,
+          // self.lexer.peek().unwrap().2,
         ));
       }
       None => {
@@ -364,7 +395,8 @@ impl<'a> Parser<'a> {
       value = Cow::Borrowed(&self.source[value_start..value_end]);
     }
     let end = if matches!(self.peek(), Some(Semicolon)) {
-      self.lexer.peek().unwrap().2
+      // self.lexer.peek().unwrap().2
+      self.lexer[self.cursor].2
     } else {
       value_end
     };
@@ -425,12 +457,30 @@ impl<'a> Parser<'a> {
 
   #[inline]
   pub fn peek(&mut self) -> Option<TokenType> {
-    self.lexer.peek().map(|token| token.0)
+    if self.cursor < self.lexer.len() {
+      Some(self.lexer[self.cursor].0)
+    } else {
+      None
+    }
+    // self.lexer.peek().map(|token| token.0)
+    // self.lexer[self.lexer]
   }
 
   pub fn bump(&mut self) -> Token {
-    let token = self.lexer.next().unwrap();
+    let token = self.lexer[self.cursor];
+    self.cursor += 1;
     self.pos = token.2;
     token
+  }
+}
+
+fn potential_id_token(content: char) -> bool {
+  match content {
+    'a'..='z' => true,
+    'A'..='Z' => true,
+    '-' => true,
+    '_' => true,
+    '\\' => true,
+    _ => false,
   }
 }
