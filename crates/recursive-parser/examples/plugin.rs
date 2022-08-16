@@ -12,7 +12,7 @@ fn main() {
     }
 }";
   let bootstrap = include_str!("../../../assets/bootstrap-reboot.css");
-  let mut start = Instant::now();
+  let start = Instant::now();
   let mut root = Parser::new(bootstrap).parse().unwrap();
   println!("parse {:?}", start.elapsed());
   // start = Instant::now();

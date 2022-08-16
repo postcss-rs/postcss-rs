@@ -1,7 +1,7 @@
+use crate::parser::Root;
 use crate::{parser, visitor::Visit};
-use std::io::Result;
-use std::io::Write;
-
+use std::fmt::Result;
+use std::fmt::Write;
 #[derive(Default)]
 pub struct AstPrinter<W: Write> {
   level: usize,
@@ -13,7 +13,7 @@ impl<W: Write> AstPrinter<W> {
     Self { level, writer }
   }
 
-  pub fn print<'a>(&mut self, root: &'a parser::Root<'a>) -> Result<()> {
+  pub fn print<'a>(&mut self, root: &'a parser::Root<'a>) -> Result {
     self.visit_root(root)?;
     Ok(())
   }
@@ -23,8 +23,8 @@ impl<W: Write> AstPrinter<W> {
   }
 }
 
-impl<'a, W: Write> Visit<'a, Result<()>> for AstPrinter<W> {
-  fn visit_root(&mut self, root: &parser::Root) -> Result<()> {
+impl<'a, W: Write> Visit<'a, Result> for AstPrinter<W> {
+  fn visit_root(&mut self, root: &parser::Root) -> Result {
     writeln!(
       self.writer,
       "{}Root@{:?}",
@@ -49,7 +49,7 @@ impl<'a, W: Write> Visit<'a, Result<()>> for AstPrinter<W> {
     Ok(())
   }
 
-  fn visit_rule(&mut self, rule: &parser::Rule) -> Result<()> {
+  fn visit_rule(&mut self, rule: &parser::Rule) -> Result {
     writeln!(
       self.writer,
       "{}Rule@{:?}",
@@ -80,7 +80,7 @@ impl<'a, W: Write> Visit<'a, Result<()>> for AstPrinter<W> {
     Ok(())
   }
 
-  fn visit_at_rule(&mut self, at_rule: &parser::AtRule) -> Result<()> {
+  fn visit_at_rule(&mut self, at_rule: &parser::AtRule) -> Result {
     writeln!(
       self.writer,
       "{}AtRule@{:?}",
@@ -117,7 +117,7 @@ impl<'a, W: Write> Visit<'a, Result<()>> for AstPrinter<W> {
     Ok(())
   }
 
-  fn visit_declaration(&mut self, decl: &parser::Declaration) -> Result<()> {
+  fn visit_declaration(&mut self, decl: &parser::Declaration) -> Result {
     writeln!(
       self.writer,
       "{}Declaration@{:?}",
@@ -142,27 +142,9 @@ impl<'a, W: Write> Visit<'a, Result<()>> for AstPrinter<W> {
   }
 }
 
-#[derive(Debug, Default)]
-pub struct WrapString(pub String);
-impl WrapString {
-  pub fn inner_string(self) -> String {
-    self.0
-  }
-}
-
-impl From<String> for WrapString {
-  fn from(string: String) -> Self {
-    Self(string)
-  }
-}
-
-impl Write for WrapString {
-  fn write(&mut self, buf: &[u8]) -> std::io::Result<usize> {
-    self.0 += std::str::from_utf8(buf).unwrap();
-    Ok(buf.len())
-  }
-
-  fn flush(&mut self) -> std::io::Result<()> {
-    Ok(())
-  }
+pub fn pretty_print_ast(root: &Root) -> String {
+  let mut printer = AstPrinter::new(0, String::default());
+  printer.print(&root).unwrap();
+  let ast_string = printer.result();
+  ast_string
 }
