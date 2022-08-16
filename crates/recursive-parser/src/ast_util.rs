@@ -144,7 +144,6 @@ impl<'a, W: Write> Visit<'a, Result> for AstPrinter<W> {
 
 pub fn pretty_print_ast(root: &Root) -> String {
   let mut printer = AstPrinter::new(0, String::default());
-  printer.print(&root).unwrap();
-  let ast_string = printer.result();
-  ast_string
+  printer.print(root).unwrap();
+  printer.result()
 }
