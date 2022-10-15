@@ -53,21 +53,21 @@ jobs:
         uses: ForAllSecure/mcode-action@v1
         with:
           mayhem-token: ${{ secrets.MAYHEM_TOKEN }}
-          args: --image ${{ steps.meta.outputs.tags }} --file ${{ env.TOKENIZE_MAYHEMFILE }} --duration 300
+          args: --image ${{ steps.meta.outputs.tags }} --file ${{ env.TOKENIZE_MAYHEMFILE }} --duration 1200
           sarif-output: sarif
 
       - name: Start analysis for space
         uses: ForAllSecure/mcode-action@v1
         with:
           mayhem-token: ${{ secrets.MAYHEM_TOKEN }}
-          args: --image ${{ steps.meta.outputs.tags }} --file ${{ env.SPACE_MAYHEMFILE }} --duration 300
+          args: --image ${{ steps.meta.outputs.tags }} --file ${{ env.SPACE_MAYHEMFILE }} --duration 1200
           sarif-output: sarif
 
       - name: Start analysis for comma
         uses: ForAllSecure/mcode-action@v1
         with:
           mayhem-token: ${{ secrets.MAYHEM_TOKEN }}
-          args: --image ${{ steps.meta.outputs.tags }} --file ${{ env.COMMA_MAYHEMFILE }} --duration 300
+          args: --image ${{ steps.meta.outputs.tags }} --file ${{ env.COMMA_MAYHEMFILE }} --duration 1200
           sarif-output: sarif
 
       - name: Upload SARIF file(s)
