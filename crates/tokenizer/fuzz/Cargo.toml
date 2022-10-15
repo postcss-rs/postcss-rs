@@ -18,12 +18,6 @@ path = ".."
 members = ["."]
 
 [[bin]]
-name = "fuzz_tokenize"
-path = "fuzz_targets/tokenize.rs"
-test = false
-doc = false
-
-[[bin]]
 name = "fuzz_comma"
 path = "fuzz_targets/comma.rs"
 test = false

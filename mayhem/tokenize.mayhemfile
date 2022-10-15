@@ -1,5 +1,0 @@
-project: postcss-rs
-target: tokenize
-
-cmds:
-  - cmd: /fuzzers/fuzz_tokenize

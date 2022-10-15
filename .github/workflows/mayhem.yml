@@ -7,7 +7,6 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  TOKENIZE_MAYHEMFILE: mayhem/tokenize.mayhemfile
   SPACE_MAYHEMFILE: mayhem/space.mayhemfile
   COMMA_MAYHEMFILE: mayhem/comma.mayhemfile
 
@@ -48,13 +47,6 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
-      - name: Start analysis for tokenize
-        uses: ForAllSecure/mcode-action@v1
-        with:
-          mayhem-token: ${{ secrets.MAYHEM_TOKEN }}
-          args: --image ${{ steps.meta.outputs.tags }} --file ${{ env.TOKENIZE_MAYHEMFILE }} --duration 1200
-          sarif-output: sarif
 
       - name: Start analysis for space
         uses: ForAllSecure/mcode-action@v1
