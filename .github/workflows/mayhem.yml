@@ -8,6 +8,8 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
   TOKENIZE_MAYHEMFILE: mayhem/tokenize.mayhemfile
+  SPACE_MAYHEMFILE: mayhem/space.mayhemfile
+  COMMA_MAYHEMFILE: mayhem/comma.mayhemfile
 
 jobs:
   build:
@@ -52,7 +54,21 @@ jobs:
         with:
           mayhem-token: ${{ secrets.MAYHEM_TOKEN }}
           args: --image ${{ steps.meta.outputs.tags }} --file ${{ env.TOKENIZE_MAYHEMFILE }} --duration 300
-          sarif-output: sarif     
+          sarif-output: sarif
+
+      - name: Start analysis for space
+        uses: ForAllSecure/mcode-action@v1
+        with:
+          mayhem-token: ${{ secrets.MAYHEM_TOKEN }}
+          args: --image ${{ steps.meta.outputs.tags }} --file ${{ env.SPACE_MAYHEMFILE }} --duration 300
+          sarif-output: sarif
+
+      - name: Start analysis for comma
+        uses: ForAllSecure/mcode-action@v1
+        with:
+          mayhem-token: ${{ secrets.MAYHEM_TOKEN }}
+          args: --image ${{ steps.meta.outputs.tags }} --file ${{ env.COMMA_MAYHEMFILE }} --duration 300
+          sarif-output: sarif
 
       - name: Upload SARIF file(s)
         uses: github/codeql-action/upload-sarif@v1
