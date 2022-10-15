@@ -1,5 +1,5 @@
 project: postcss-rs
-target: tokenize
+target: space
 
 cmds:
   - cmd: /fuzzers/fuzz_space
